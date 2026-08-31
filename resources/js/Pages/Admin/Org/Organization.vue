@@ -230,6 +230,10 @@ async function removeTeamMember(teamId: string, userId: string): Promise<void> {
     });
     reloadPage();
 }
+async function deactivateQueue(queue: Queue): Promise<void> {
+    const response = await post(`/admin/organization/queues/${queue.id}/deactivate`, {});
+    if (response.ok) reloadPage();
+}
 async function giveAccess(departmentId: string, userId: string): Promise<void> {
     await post(`/admin/organization/departments/${departmentId}/access`, { user_id: userId });
     window.location.reload();
@@ -250,7 +254,7 @@ function strategyLabel(strategy: string): string {
         <!-- J01: the 52px topbar, as drawn (static chrome; Doc 16 owns the live Backoffice shell). -->
         <header
             class="flex h-[52px] flex-none items-center gap-3.5 border-b px-4"
-            :style="{ background: 'var(--ds-surface)', borderColor: 'var(--ds-border)' }"
+            :style="{ background: 'var(--ds-panel-bg)', borderColor: 'var(--ds-border)' }"
         >
             <span
                 class="flex-none rounded-md border border-dashed px-2.5 py-1 text-xs font-semibold"
@@ -275,7 +279,10 @@ function strategyLabel(strategy: string): string {
                 <div class="flex flex-col gap-px text-[12.5px]">
                     <span
                         class="rounded-md px-2 py-1.5 font-semibold"
-                        :style="{ background: 'var(--ds-ink)', color: 'var(--ds-surface)' }"
+                        :style="{
+                            background: 'var(--ds-accent)',
+                            color: 'var(--ds-accent-contrast)',
+                        }"
                         aria-current="page"
                         >{{ t.nav.organization }}</span
                     >
@@ -308,7 +315,10 @@ function strategyLabel(strategy: string): string {
                             type="button"
                             data-testid="org-new-queue"
                             class="ml-auto flex-none rounded-lg px-3 py-2 text-xs font-semibold"
-                            :style="{ background: 'var(--ds-ink)', color: 'var(--ds-surface)' }"
+                            :style="{
+                                background: 'var(--ds-accent)',
+                                color: 'var(--ds-accent-contrast)',
+                            }"
                         >
                             {{ t.new_queue }}
                         </button>
@@ -331,7 +341,7 @@ function strategyLabel(strategy: string): string {
                                 tab === key
                                     ? {
                                           color: 'var(--ds-text-primary)',
-                                          borderColor: 'var(--ds-ink)',
+                                          borderColor: 'var(--ds-accent)',
                                       }
                                     : { color: 'var(--ds-text-secondary)' }
                             "
@@ -349,7 +359,7 @@ function strategyLabel(strategy: string): string {
                         class="mb-4 rounded-lg border p-3"
                         :style="{
                             borderColor: 'var(--ds-danger-border)',
-                            background: 'var(--ds-surface)',
+                            background: 'var(--ds-panel-bg)',
                         }"
                     >
                         <p
@@ -397,7 +407,7 @@ function strategyLabel(strategy: string): string {
                         <div
                             class="overflow-hidden rounded-lg border"
                             :style="{
-                                background: 'var(--ds-surface)',
+                                background: 'var(--ds-panel-bg)',
                                 borderColor: 'var(--ds-border)',
                             }"
                         >
@@ -438,7 +448,7 @@ function strategyLabel(strategy: string): string {
                                     :style="{
                                         background: 'var(--ds-warn-bg)',
                                         borderColor: 'var(--ds-warn-border)',
-                                        color: 'var(--ds-warn-strong)',
+                                        color: 'var(--ds-warn-text)',
                                     }"
                                     data-testid="dept-no-default"
                                     >{{ t.departments.no_default }}</span
@@ -466,7 +476,7 @@ function strategyLabel(strategy: string): string {
                                             ? {
                                                   background: 'var(--ds-inset-bg)',
                                                   borderColor: 'var(--ds-border)',
-                                                  color: 'var(--ds-text-disabled)',
+                                                  color: 'var(--ds-text-muted)',
                                               }
                                             : {
                                                   background: 'var(--ds-inset-bg)',
@@ -491,7 +501,7 @@ function strategyLabel(strategy: string): string {
                                             ? {
                                                   background: 'var(--ds-inset-bg)',
                                                   borderColor: 'var(--ds-border)',
-                                                  color: 'var(--ds-text-disabled)',
+                                                  color: 'var(--ds-text-muted)',
                                               }
                                             : {
                                                   background: 'var(--ds-inset-bg)',
@@ -513,7 +523,7 @@ function strategyLabel(strategy: string): string {
                                 v-if="openDept === dept.id"
                                 class="mt-3 rounded-lg border p-3.5"
                                 :style="{
-                                    background: 'var(--ds-surface)',
+                                    background: 'var(--ds-panel-bg)',
                                     borderColor: 'var(--ds-border)',
                                 }"
                                 :data-department-detail="dept.slug"
@@ -629,7 +639,11 @@ function strategyLabel(strategy: string): string {
                                         >
                                     </span>
                                     <a
-                                        :href="'/org/departments/' + dept.id + '/delete'"
+                                        :href="
+                                            '/admin/organization/departments/' +
+                                            dept.id +
+                                            '/delete-wizard'
+                                        "
                                         class="ml-auto flex-none rounded-md border px-2.5 py-1.5 text-[11.5px] font-semibold no-underline"
                                         :style="{
                                             borderColor: 'var(--ds-danger-border)',
@@ -654,13 +668,13 @@ function strategyLabel(strategy: string): string {
                         >
                             <p
                                 class="text-[13px] font-semibold"
-                                :style="{ color: 'var(--ds-warn-strong)' }"
+                                :style="{ color: 'var(--ds-warn-text)' }"
                             >
                                 {{ tr(t.departments.no_queues_title, { name: deptName(dept) }) }}
                             </p>
                             <p
                                 class="mt-1 text-xs leading-relaxed"
-                                :style="{ color: 'var(--ds-warn-strong)' }"
+                                :style="{ color: 'var(--ds-warn-text)' }"
                             >
                                 {{ t.departments.no_queues_body }}
                             </p>
@@ -678,7 +692,7 @@ function strategyLabel(strategy: string): string {
                             :key="team.id"
                             class="overflow-hidden rounded-lg border"
                             :style="{
-                                background: 'var(--ds-surface)',
+                                background: 'var(--ds-panel-bg)',
                                 borderColor: 'var(--ds-border)',
                             }"
                             :data-team-row="team.name"
@@ -743,12 +757,12 @@ function strategyLabel(strategy: string): string {
                                     <div class="flex items-start gap-2">
                                         <span
                                             aria-hidden="true"
-                                            :style="{ color: 'var(--ds-warn-strong)' }"
+                                            :style="{ color: 'var(--ds-warn-text)' }"
                                             >▲</span
                                         >
                                         <span
                                             class="min-w-0 text-[11.5px] leading-relaxed"
-                                            :style="{ color: 'var(--ds-warn-strong)' }"
+                                            :style="{ color: 'var(--ds-warn-text)' }"
                                         >
                                             <strong class="font-semibold">{{
                                                 tr(t.teams.warning, {
@@ -770,8 +784,8 @@ function strategyLabel(strategy: string): string {
                                             type="button"
                                             class="rounded-md px-2.5 py-1.5 text-[11.5px] font-semibold"
                                             :style="{
-                                                background: 'var(--ds-ink)',
-                                                color: 'var(--ds-surface)',
+                                                background: 'var(--ds-accent)',
+                                                color: 'var(--ds-accent-contrast)',
                                             }"
                                             :data-give-access="member.user_id"
                                             @click="
@@ -793,7 +807,7 @@ function strategyLabel(strategy: string): string {
                                             class="rounded-md border px-2.5 py-1.5 text-[11.5px] font-semibold"
                                             :style="{
                                                 borderColor: 'var(--ds-warn-border)',
-                                                color: 'var(--ds-warn-strong)',
+                                                color: 'var(--ds-warn-text)',
                                             }"
                                             @click="void removeTeamMember(team.id, member.user_id)"
                                         >
@@ -836,7 +850,7 @@ function strategyLabel(strategy: string): string {
                             >
                                 <p
                                     class="text-[13px] font-semibold"
-                                    :style="{ color: 'var(--ds-warn-strong)' }"
+                                    :style="{ color: 'var(--ds-warn-text)' }"
                                 >
                                     {{
                                         tr(t.departments.no_queues_title, { name: deptName(dept) })
@@ -844,7 +858,7 @@ function strategyLabel(strategy: string): string {
                                 </p>
                                 <p
                                     class="mt-1 text-xs leading-relaxed"
-                                    :style="{ color: 'var(--ds-warn-strong)' }"
+                                    :style="{ color: 'var(--ds-warn-text)' }"
                                 >
                                     {{ t.departments.no_queues_body }}
                                 </p>
@@ -854,7 +868,7 @@ function strategyLabel(strategy: string): string {
                                 :key="queue.id"
                                 class="mb-3 rounded-lg border"
                                 :style="{
-                                    background: 'var(--ds-surface)',
+                                    background: 'var(--ds-panel-bg)',
                                     borderColor: 'var(--ds-border)',
                                 }"
                                 :data-queue-card="queue.name"
@@ -902,7 +916,7 @@ function strategyLabel(strategy: string): string {
                                             class="inline-flex h-[22px] w-[22px] items-center justify-center rounded-full border text-[9px] font-semibold"
                                             :style="{
                                                 background: 'var(--ds-inset-bg)',
-                                                borderColor: 'var(--ds-surface)',
+                                                borderColor: 'var(--ds-panel-bg)',
                                                 color: 'var(--ds-text-secondary)',
                                             }"
                                             >{{ initials(member.name) }}</span
@@ -937,7 +951,7 @@ function strategyLabel(strategy: string): string {
                                         :style="{
                                             background: 'var(--ds-warn-bg)',
                                             borderColor: 'var(--ds-warn-border)',
-                                            color: 'var(--ds-warn-strong)',
+                                            color: 'var(--ds-warn-text)',
                                         }"
                                         :title="
                                             tr(t.queues.config_error, {
@@ -970,7 +984,7 @@ function strategyLabel(strategy: string): string {
                                         class="mb-3 rounded-md border-l-[3px] py-2 pl-3 pr-2 text-[11.5px] leading-relaxed"
                                         :style="{
                                             background: 'var(--ds-inset-bg)',
-                                            borderColor: 'var(--ds-ink)',
+                                            borderColor: 'var(--ds-accent)',
                                             color: 'var(--ds-text-secondary)',
                                         }"
                                         data-testid="rg-note"
@@ -1063,7 +1077,7 @@ function strategyLabel(strategy: string): string {
                                                                         )) *
                                                                         100,
                                                                 ) + '%',
-                                                            background: 'var(--ds-ink)',
+                                                            background: 'var(--ds-accent)',
                                                         }"
                                                     ></span
                                                 ></span>
@@ -1131,7 +1145,7 @@ function strategyLabel(strategy: string): string {
                                                 class="flex items-start gap-2 rounded-lg p-2.5"
                                                 :style="
                                                     queue.skill_fallback === 'wait'
-                                                        ? { border: '2px solid var(--ds-ink)' }
+                                                        ? { border: '2px solid var(--ds-accent)' }
                                                         : {
                                                               border: '1px solid var(--ds-border-strong)',
                                                           }
@@ -1155,7 +1169,7 @@ function strategyLabel(strategy: string): string {
                                                 class="flex items-start gap-2 rounded-lg p-2.5"
                                                 :style="
                                                     queue.skill_fallback === 'nearest_skill'
-                                                        ? { border: '2px solid var(--ds-ink)' }
+                                                        ? { border: '2px solid var(--ds-accent)' }
                                                         : {
                                                               border: '1px solid var(--ds-border-strong)',
                                                           }
@@ -1182,7 +1196,7 @@ function strategyLabel(strategy: string): string {
                                                 queue.breakdown.waiting > 0
                                             "
                                             class="mt-2 text-[11.5px] font-semibold"
-                                            :style="{ color: 'var(--ds-warn-strong)' }"
+                                            :style="{ color: 'var(--ds-warn-text)' }"
                                             data-testid="hold-state"
                                         >
                                             {{
@@ -1231,7 +1245,7 @@ function strategyLabel(strategy: string): string {
                                                 :style="{
                                                     background: 'var(--ds-warn-bg)',
                                                     borderColor: 'var(--ds-warn-border)',
-                                                    color: 'var(--ds-warn-strong)',
+                                                    color: 'var(--ds-warn-text)',
                                                 }"
                                                 data-testid="vip-source-warning"
                                                 >{{ t.queues.vip_warning }}</span
@@ -1244,7 +1258,7 @@ function strategyLabel(strategy: string): string {
                                                 :style="
                                                     index === 0
                                                         ? {
-                                                              color: 'var(--ds-text-disabled)',
+                                                              color: 'var(--ds-text-muted)',
                                                               borderColor: 'var(--ds-border)',
                                                           }
                                                         : { borderColor: 'var(--ds-border-strong)' }
@@ -1261,7 +1275,7 @@ function strategyLabel(strategy: string): string {
                                                 :style="
                                                     index === queue.boosts.length - 1
                                                         ? {
-                                                              color: 'var(--ds-text-disabled)',
+                                                              color: 'var(--ds-text-muted)',
                                                               borderColor: 'var(--ds-border)',
                                                           }
                                                         : { borderColor: 'var(--ds-border-strong)' }
@@ -1381,13 +1395,13 @@ function strategyLabel(strategy: string): string {
                                     >
                                         <p
                                             class="text-[12.5px] font-semibold"
-                                            :style="{ color: 'var(--ds-warn-strong)' }"
+                                            :style="{ color: 'var(--ds-warn-text)' }"
                                         >
                                             {{ t.queues.no_eligible_title }}
                                         </p>
                                         <p
                                             class="mt-1 text-[11.5px] leading-relaxed"
-                                            :style="{ color: 'var(--ds-warn-strong)' }"
+                                            :style="{ color: 'var(--ds-warn-text)' }"
                                         >
                                             {{
                                                 tr(t.queues.no_eligible_body, {
@@ -1407,8 +1421,8 @@ function strategyLabel(strategy: string): string {
                                                 type="button"
                                                 class="rounded-md px-2.5 py-1.5 text-[11.5px] font-semibold"
                                                 :style="{
-                                                    background: 'var(--ds-ink)',
-                                                    color: 'var(--ds-surface)',
+                                                    background: 'var(--ds-accent)',
+                                                    color: 'var(--ds-accent-contrast)',
                                                 }"
                                                 data-testid="pull-in-button"
                                             >
@@ -1419,7 +1433,7 @@ function strategyLabel(strategy: string): string {
                                                 class="rounded-md border px-2.5 py-1.5 text-[11.5px] font-semibold"
                                                 :style="{
                                                     borderColor: 'var(--ds-warn-border)',
-                                                    color: 'var(--ds-warn-strong)',
+                                                    color: 'var(--ds-warn-text)',
                                                 }"
                                             >
                                                 {{ t.queues.change_fallback }}
@@ -1459,12 +1473,99 @@ function strategyLabel(strategy: string): string {
                                             class="mt-1 rounded-r-lg border-l-[3px] py-2 pl-3 text-[11.5px] leading-relaxed"
                                             :style="{
                                                 background: 'var(--ds-inset-bg)',
-                                                borderColor: 'var(--ds-ink)',
+                                                borderColor: 'var(--ds-accent)',
                                                 color: 'var(--ds-text-secondary)',
                                             }"
                                         >
                                             {{ t.queues.estimate_note }}
                                         </p>
+                                    </div>
+
+                                    <!-- J17 (S11 step 13, B5-S10 §B): the REVERSIBLE option offered first; delete underneath -->
+                                    <div
+                                        v-if="queue.is_active"
+                                        class="mt-4 rounded-lg border-2 p-3"
+                                        :style="{ borderColor: 'var(--ds-accent)' }"
+                                        data-testid="queue-deactivate-card"
+                                    >
+                                        <p class="text-[12.5px] font-semibold">
+                                            {{
+                                                tr(t.queues.deactivate_title, { name: queue.name })
+                                            }}
+                                        </p>
+                                        <p
+                                            class="mt-1 text-[12px] leading-relaxed"
+                                            :style="{ color: 'var(--ds-text-secondary)' }"
+                                        >
+                                            {{
+                                                tr(t.queues.deactivate_body, {
+                                                    count: queue.breakdown.waiting,
+                                                })
+                                            }}
+                                        </p>
+                                        <div v-if="queue.rules_targeting.length > 0" class="mt-1.5">
+                                            <p
+                                                class="text-[11.5px]"
+                                                :style="{ color: 'var(--ds-text-secondary)' }"
+                                            >
+                                                {{ t.queues.deactivate_rules_note }}
+                                            </p>
+                                            <ul class="mt-0.5 list-none p-0">
+                                                <li
+                                                    v-for="rule in queue.rules_targeting"
+                                                    :key="rule.id"
+                                                    class="text-[11.5px]"
+                                                    :style="{ color: 'var(--ds-text-secondary)' }"
+                                                >
+                                                    · {{ rule.name }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            class="mt-2.5 rounded-md px-3 py-2 text-[12.5px] font-semibold"
+                                            :style="{
+                                                background: 'var(--ds-accent)',
+                                                color: 'var(--ds-accent-contrast)',
+                                            }"
+                                            data-testid="queue-deactivate-button"
+                                            @click="void deactivateQueue(queue)"
+                                        >
+                                            {{ t.queues.deactivate_button }}
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="mt-2.5 rounded-lg border p-3"
+                                        :style="{ borderColor: 'var(--ds-danger-border)' }"
+                                        data-testid="queue-danger-delete"
+                                    >
+                                        <p
+                                            class="text-[12.5px] font-semibold"
+                                            :style="{ color: 'var(--ds-danger-strong)' }"
+                                        >
+                                            {{ tr(t.queues.qdelete_title, { name: queue.name }) }}
+                                        </p>
+                                        <p
+                                            class="mt-1 text-[12px] leading-relaxed"
+                                            :style="{ color: 'var(--ds-text-secondary)' }"
+                                        >
+                                            {{ t.queues.qdelete_body }}
+                                        </p>
+                                        <a
+                                            :href="
+                                                '/admin/organization/queues/' +
+                                                queue.id +
+                                                '/delete-wizard'
+                                            "
+                                            class="mt-2.5 inline-block rounded-md border px-3 py-2 text-[12.5px] font-semibold no-underline"
+                                            :style="{
+                                                borderColor: 'var(--ds-danger-border)',
+                                                color: 'var(--ds-danger-strong)',
+                                            }"
+                                            data-testid="queue-delete-wizard-link"
+                                        >
+                                            {{ t.queues.qdelete_button }}
+                                        </a>
                                     </div>
                                 </div>
                             </div>

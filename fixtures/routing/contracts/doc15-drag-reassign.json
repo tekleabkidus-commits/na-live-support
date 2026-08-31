@@ -1,0 +1,12 @@
+{
+  "_comment": "Doc 11 §8 / BR-03 DRAG-REASSIGN → Doc 15/07 RENDER CONTRACT (S11 step 13; B5-S02 C01/C02 seam). `Supervision/DragReassign::context()` returns exactly these keys. router_would_pick = a DRY RUN of the queue's configured strategy (no assignment, no pointer move, no record) — the drawing's point: overriding is a CHOICE, so show what the router would have done. The COMMIT door stays Manual\\Reassign (SEC-01 two-scope re-check, manual_by, RG high-visibility audit). Ids only (SEC-02). Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc15/Supervision + Doc07/Workspace",
+  "shape": {
+    "ticket_id": "uuid",
+    "queue_id": "uuid|null",
+    "current_assignee_id": "uuid|null",
+    "waiting_seconds": "int|null (DB time)",
+    "router_would_pick": "uuid|null"
+  },
+  "keys": ["ticket_id", "queue_id", "current_assignee_id", "waiting_seconds", "router_would_pick"]
+}

@@ -51,6 +51,14 @@ Route::middleware([
         ->middleware(['permission:org.teams.manage', 'audit:org.team.member_added'])->name('org.screens.team.member.add');
     Route::post('organization/teams/{teamId}/members/remove', [App\Http\Controllers\Admin\OrgScreensController::class, 'teamMemberRemove'])
         ->middleware(['permission:org.teams.manage', 'audit:org.team.member_removed'])->name('org.screens.team.member.remove');
+    // Doc 11 FR-18 / §8 (S11 step 13): the delete-wizard PAGES (B5-S10 J16–J21; data = the step-10
+    // JSON doors) + the J17 queue deactivate door (QueueWriter::deactivate audits itself).
+    Route::get('organization/queues/{queueId}/delete-wizard', [App\Http\Controllers\Admin\OrgScreensController::class, 'queueWizard'])
+        ->middleware('permission:org.queues.manage')->name('org.screens.queue.wizard');
+    Route::get('organization/departments/{departmentId}/delete-wizard', [App\Http\Controllers\Admin\OrgScreensController::class, 'departmentWizard'])
+        ->middleware('permission:org.departments.manage')->name('org.screens.department.wizard');
+    Route::post('organization/queues/{queueId}/deactivate', [App\Http\Controllers\Admin\OrgScreensController::class, 'deactivateQueue'])
+        ->middleware(['permission:org.queues.manage', 'audit:org.queue.deactivated'])->name('org.screens.queue.deactivate');
     Route::get('roles', [App\Http\Controllers\Admin\RbacScreensController::class, 'roles'])
         ->middleware('permission:admin.roles.view')
         ->name('rbac.screens.roles');

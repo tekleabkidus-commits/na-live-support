@@ -1,0 +1,12 @@
+{
+  "_comment": "Doc 11 §8 / FR-15 / BR-07 PULL-IN DIALOG → Doc 15 RENDER CONTRACT (S11 step 13; B5-S02 C03/C04/C05 seam). `Supervision/PullInDialog::payload()` returns exactly these keys. Candidates are agents OUTSIDE the queue's effective membership, ids only; default_expires_at is SHIFT END (HoursContract); recurrence_hint non-null = the BR-07 third-pull-in-this-week nudge key (C05 — a hint, never a block). The COMMIT door stays PullIn::create (SEC-01 lives there). Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc15/Supervision",
+  "shape": {
+    "queue_id": "uuid",
+    "waiting": "int",
+    "eligible_online": "int",
+    "candidates": [{ "user_id": "uuid", "status": "online|away|offline", "load": "int", "capacity": "int", "recurrence_hint": "string|null (i18n key)" }],
+    "default_expires_at": "ISO-8601 (shift end)"
+  },
+  "keys": ["queue_id", "waiting", "eligible_online", "candidates", "default_expires_at"]
+}

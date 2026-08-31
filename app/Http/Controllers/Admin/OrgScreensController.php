@@ -215,6 +215,89 @@ final class OrgScreensController extends Controller
         return null;
     }
 
+    /**
+     * Doc 11 FR-18 (S11 step 13) — the delete-wizard PAGE (B5-S10 J16/J19). The page carries only
+     * the target's identity; the inventory, choices, confirmation and progress all come from the
+     * step-10 JSON doors (ONE truth — the wizard renders what the door answers).
+     */
+    public function queueWizard(Request $request, string $queueId): Response
+    {
+        /** @var object{id: string, name: string, department_id: string, is_rg: bool}|null $queue */
+        $queue = DB::table('queues')->where('id', $queueId)->whereNull('deleted_at')->first(['id', 'name', 'department_id', 'is_rg']);
+        abort_if($queue === null, 404);
+        /** @var User $user */
+        $user = $request->user();
+
+        return Inertia::render('Admin/Org/RestructureWizard', [
+            'can' => $this->capabilities->for($user, 'Admin/Org/RestructureWizard'),
+            'copy' => __('org'),
+            'kind' => 'queue',
+            'target' => ['id' => $queue->id, 'name' => $queue->name, 'department_id' => $queue->department_id, 'is_rg' => (bool) $queue->is_rg],
+            'targets' => $this->moveTargets($queue->id, null),
+        ]);
+    }
+
+    /** J18: the department wizard page (RG replacement handled by the door's own refusal). */
+    public function departmentWizard(Request $request, string $departmentId): Response
+    {
+        /** @var object{id: string, name: string}|null $department */
+        $department = DB::table('departments')->where('id', $departmentId)->whereNull('deleted_at')->first(['id', 'name']);
+        abort_if($department === null, 404);
+        /** @var array<string, string> $name */
+        $name = (array) json_decode($department->name, true);
+        /** @var User $user */
+        $user = $request->user();
+
+        return Inertia::render('Admin/Org/RestructureWizard', [
+            'can' => $this->capabilities->for($user, 'Admin/Org/RestructureWizard'),
+            'copy' => __('org'),
+            'kind' => 'department',
+            'target' => ['id' => $department->id, 'name' => $name['en'] ?? $department->id],
+            'targets' => $this->moveTargets(null, $department->id),
+        ]);
+    }
+
+    /**
+     * J17's reversible door (step 13): deactivate stops intake, keeps every ticket. The writer
+     * audits (org.queue.deactivated) and returns the [D12] rules now falling to the default.
+     */
+    public function deactivateQueue(Request $request, string $queueId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+        try {
+            $falling = app(QueueWriter::class)->deactivate($queueId, $user->identifier());
+        } catch (OrgRefused $e) {
+            return ProblemDetails::response(ErrorCode::RoutingRefused, 422, $e->getMessage(), extra: ['refusal_code' => $e->refusalCode]);
+        }
+
+        return new JsonResponse(['ok' => true, 'rules_falling_to_default' => $falling]);
+    }
+
+    /**
+     * The step-2 choice dropdowns\' candidates: every LIVE, ACTIVE queue except the target itself /
+     * the department being deleted (the door re-validates — this list is a convenience, not a law).
+     *
+     * @return list<array{id: string, name: string, department_id: string, department: string}>
+     */
+    private function moveTargets(?string $excludeQueueId, ?string $excludeDepartmentId): array
+    {
+        /** @var array<string, string> $departments */
+        $departments = DB::table('departments')->whereNull('deleted_at')->pluck('name', 'id')->all();
+        /** @var list<object{id: string, name: string, department_id: string}> $rows */
+        $rows = DB::table('queues')->whereNull('deleted_at')->where('is_active', true)
+            ->when($excludeQueueId !== null, fn ($q) => $q->where('id', '!=', $excludeQueueId))
+            ->when($excludeDepartmentId !== null, fn ($q) => $q->where('department_id', '!=', $excludeDepartmentId))
+            ->orderBy('name')->get(['id', 'name', 'department_id'])->all();
+
+        return array_map(static function (object $row) use ($departments): array {
+            /** @var array<string, string> $deptName */
+            $deptName = (array) json_decode($departments[$row->department_id] ?? '{}', true);
+
+            return ['id' => $row->id, 'name' => $row->name, 'department_id' => $row->department_id, 'department' => $deptName['en'] ?? ''];
+        }, $rows);
+    }
+
     public function updateDepartment(Request $request, string $departmentId): JsonResponse
     {
         /** @var array<string, mixed> $input */

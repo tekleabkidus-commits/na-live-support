@@ -558,6 +558,7 @@ PARTIAL outside a named bucket does not exist.
                   tests/Security/NoPollingLoopTest.php \
                   tests/Isolation/RoutingGrantPhysicsTest.php \
                   tests/Contract/RoutingEventConsumerContractsTest.php \
+                  tests/Contract/Routing/SupervisorSeamContractsTest.php \
                   tests/Contract/TicketEventConsumerContractsTest.php \
                   tests/Feature/Rbac/ScopeFixtureTest.php \
                   tests/Feature/Tickets/ChannelScopeReproofTest.php \
@@ -569,7 +570,7 @@ PARTIAL outside a named bucket does not exist.
                   tests/Feature/Inbox/PerViewerCountsTest.php \
                   tests/Security/InboxSecurityTest.php
 ```
-Run in-container (`$(COMPOSE) exec -T app …`, the S10 environment law). `CreationPathsTest.php` is in the list because it DEFINES the `creationFixture()` helper `ChannelScopeReproofTest` calls — Pest helpers are file-scoped; the S11 step-2b first run found the subset undefined (`S11-step2b/doc11-suites-01.txt`), a command-definition correction, not an enumeration change. `SystemReturnDoorTest.php` joins at step 9b (P-C6's HTTP-unreachability proof for the new Doc 06 door, the AssignBySystemDoorTest class — a countersigned packet's own proof, filed here as it lands). `AssignmentClaimTest.php` likewise (S11 resume of 2026-08-30, advisor-nodded): it DEFINES `assignmentFixture()`, which `Routing/AssignmentStatsConsumerTest` calls — the §8 list run verbatim went red on `Call to undefined function assignmentFixture()` (`S11-step7/resume-suites-02.txt` is the corrected run: 148/3465); the step-6 figure of record (109/2215) came from a step-scoped list that already carried it. Every step-commit: DOC 11 SUITES +
+Run in-container (`$(COMPOSE) exec -T app …`, the S10 environment law). `CreationPathsTest.php` is in the list because it DEFINES the `creationFixture()` helper `ChannelScopeReproofTest` calls — Pest helpers are file-scoped; the S11 step-2b first run found the subset undefined (`S11-step2b/doc11-suites-01.txt`), a command-definition correction, not an enumeration change. `SystemReturnDoorTest.php` joins at step 9b (P-C6's HTTP-unreachability proof for the new Doc 06 door, the AssignBySystemDoorTest class — a countersigned packet's own proof, filed here as it lands). `AssignmentClaimTest.php` likewise (S11 resume of 2026-08-30, advisor-nodded): it DEFINES `assignmentFixture()`, which `Routing/AssignmentStatsConsumerTest` calls — the §8 list run verbatim went red on `Call to undefined function assignmentFixture()` (`S11-step7/resume-suites-02.txt` is the corrected run: 148/3465); the step-6 figure of record (109/2215) came from a step-scoped list that already carried it. `Contract/Routing/SupervisorSeamContractsTest.php` joins at step 13 (the §8 supervisor data contracts' own proof — the C01–C08/C12–C14 seam fixtures land there), filed as it lands per the same rule. Every step-commit: DOC 11 SUITES +
 full battery + `make gates` + `make lint` (bare, `&&` chains) regardless of BAT1 (this machine reports no
 BAT1 node — wall power is stated per run from `/sys/class/power_supply`, "timing not taken" said plainly
 when it cannot be evidenced). CI once per checkpoint. `octane:reload` before every browser run. Never Pest

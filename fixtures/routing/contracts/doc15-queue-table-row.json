@@ -1,0 +1,15 @@
+{
+  "_comment": "Doc 11 §8 supervisor QUEUE-TABLE ROW → Doc 15 RENDER CONTRACT (S11 step 13; B5-S02 seam — rendering binds in Doc 15/07). `Supervision/QueueTableRow::row()` returns exactly these keys. IDS ONLY: no agent or customer name rides this shape (SEC-02/SEC-05) — Doc 15 resolves names at render under its own permissions. throughput_30m null = degraded counters (FS-03); oldest_wait_seconds null = empty queue. Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc15/Supervision",
+  "shape": {
+    "queue_id": "uuid",
+    "depth": "int (WaitingSets truth)",
+    "oldest_wait_seconds": "int|null (head ticket age, DB time)",
+    "eligible": "int (FR-05 breakdown)",
+    "online": "int",
+    "throughput_30m": "int|null (null = degraded, FS-03)",
+    "band": "short|medium|long|closed",
+    "degraded": "bool"
+  },
+  "keys": ["queue_id", "depth", "oldest_wait_seconds", "eligible", "online", "throughput_30m", "band", "degraded"]
+}

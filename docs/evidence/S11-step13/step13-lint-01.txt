@@ -1,0 +1,82 @@
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser
+
+/home/kidus/projects/na-live-support/resources/js/Components/Ai/CopilotTab.vue
+   97:36  warning  Replace `·article_ref:·string;·url?:·string;·title?:·string;·version_id?:·string·` with `⏎····article_ref:·string;⏎····url?:·string;⏎····title?:·string;⏎····version_id?:·string;⏎`                                                                                                                                                                                                                                                                                                                                                       prettier/prettier
+  108:23  warning  Replace `·'Content-Type':·'application/json',·Accept:·'application/json',·'X-Requested-With':·'XMLHttpRequest',·'X-XSRF-TOKEN':·decodeURIComponent(document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'')` with `⏎················'Content-Type':·'application/json',⏎················Accept:·'application/json',⏎················'X-Requested-With':·'XMLHttpRequest',⏎················'X-XSRF-TOKEN':·decodeURIComponent(⏎····················document.cookie.match(/XSRF-TOKEN=([^;]+)/)?.[1]·??·'',⏎················),⏎···········`  prettier/prettier
+  109:35  warning  Replace `·article_id:·item.article_ref,·version_id:·item.version_id,·conversation_id:·props.conversationId` with `⏎················article_id:·item.article_ref,⏎················version_id:·item.version_id,⏎················conversation_id:·props.conversationId,⏎···········`                                                                                                                                                                                                                                                         prettier/prettier
+  112:22  warning  Replace `data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,·'kb_link',·''` with `⏎············data.text·??·'📄·'·+·(item.title·??·item.article_ref)·+·'·'·+·item.url,⏎············'kb_link',⏎············'',⏎········`                                                                                                                                                                                                                                                                                               prettier/prettier
+  337:76  warning  Replace `><span·v-else·class="font-mono·text-[10px]">{{·item.article_ref·}}</span>·—` with `⏎····························><span·v-else·class="font-mono·text-[10px]">{{⏎································item.article_ref⏎····························}}</span>`                                                                                                                                                                                                                                                                           prettier/prettier
+  338:28  warning  Insert `·—`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Ai/copilotApi.ts
+  23:11  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+  39:10  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Customers/CustomerPanel.vue
+  433:38  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-text-muted)'` with `⏎································borderColor:·'var(--ds-border-strong)',⏎································color:·'var(--ds-text-muted)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/OperationDialog.vue
+   49:58  warning  Replace `·assignees:·{·id:·string;·name:·string·}[]` with `⏎····················assignees:·{·id:·string;·name:·string·}[];⏎···············`                                                                                                                                                                                         prettier/prettier
+  125:31  warning  Replace `·v-model="path"·type="radio"·value="supervisor_review"·data-testid="path-supervisor"` with `⏎····························v-model="path"⏎····························type="radio"⏎····························value="supervisor_review"⏎····························data-testid="path-supervisor"⏎·······················`  prettier/prettier
+  223:36  warning  Insert `⏎···························`                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/SplitUnmergeDialog.vue
+   68:28  warning  Replace `1,·Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000)` with `⏎········1,⏎········Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000),⏎····`                                  prettier/prettier
+   76:17  warning  Replace `·props.kind·===·'split'·?·`/inbox/t/${props.ticketId}/split`` with `⏎········props.kind·===·'split'⏎············?·`/inbox/t/${props.ticketId}/split`⏎···········`                                                                 prettier/prettier
+  313:38  warning  Replace `·background:·'var(--ds-text-ink)',·color:·'var(--ds-page-bg)'` with `⏎································background:·'var(--ds-text-ink)',⏎································color:·'var(--ds-page-bg)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/Thread/ThreadPane.vue
+  674:13  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/TicketPanel.vue
+  947:19  warning  Replace `(can.tickets_escalate·||·can.tickets_spam_mark)·&&·ticket.status·!==·'spam'·&&·ticket.status·!==·'closed'` with `⏎················(can.tickets_escalate·||·can.tickets_spam_mark)·&&⏎················ticket.status·!==·'spam'·&&⏎················ticket.status·!==·'closed'⏎············`  prettier/prettier
+  976:26  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-danger-strong)'` with `⏎····················borderColor:·'var(--ds-border-strong)',⏎····················color:·'var(--ds-danger-strong)',⏎···············`                                                                       prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/TicketTimeline.vue
+  251:34  warning  Replace `·class="text-[12.5px]·font-semibold"·:style="{·color:·'var(--ds-text-primary)'·}"·data-testid="record-title">{{·recordTitle()·}}</span` with `⏎································class="text-[12.5px]·font-semibold"⏎································:style="{·color:·'var(--ds-text-primary)'·}"⏎································data-testid="record-title"⏎································>{{·recordTitle()·}}</span⏎····························`  prettier/prettier
+  263:42  warning  Replace `·borderColor:·'var(--ds-border)',·color:·'var(--ds-text-primary)',·background:·'var(--ds-surface)'` with `⏎····································borderColor:·'var(--ds-border)',⏎····································color:·'var(--ds-text-primary)',⏎····································background:·'var(--ds-surface)',⏎·······························`                                                                                           prettier/prettier
+  271:32  warning  Replace `·v-for="(step,·index)·in·record.steps"·:key="index"·class="flex·gap-2.5"·:data-record-step="step.step"` with `⏎································v-for="(step,·index)·in·record.steps"⏎································:key="index"⏎································class="flex·gap-2.5"⏎································:data-record-step="step.step"⏎····························`                                                                   prettier/prettier
+  279:42  warning  Replace `·class="block·text-[12.5px]·leading-relaxed"·:style="{·color:·'var(--ds-text-primary)'·}">{{·step.outcome·}}</span` with `⏎········································class="block·text-[12.5px]·leading-relaxed"⏎········································:style="{·color:·'var(--ds-text-primary)'·}"⏎········································>{{·step.outcome·}}</span⏎····································`                                          prettier/prettier
+  292:38  warning  Replace `·borderColor:·'var(--ds-border)',·background:·'var(--ds-inset-bg)',·color:·'var(--ds-text-secondary)'` with `⏎································borderColor:·'var(--ds-border)',⏎································background:·'var(--ds-inset-bg)',⏎································color:·'var(--ds-text-secondary)',⏎···························`                                                                                                     prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Kb/Editor.vue
+  387:48  warning  Replace `⏎················{{·t.publish_outdated·}}·{{·outdatedLanguages·}}⏎············` with `{{·t.publish_outdated·}}·{{·outdatedLanguages·}}`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Inbox/Workspace.vue
+  1592:21  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+  1894:25  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Kb/Tombstone.vue
+   9:5  warning  Prop "article_id" is not in camelCase   vue/prop-name-casing
+  10:5  warning  Prop "version_id" is not in camelCase   vue/prop-name-casing
+  12:5  warning  Prop "current_url" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/tests/Browser/inbox-views.spec.ts
+  150:6  warning  Replace `'Doc·07·FR-05·REAL·(S11·step·11a,·STOP-H·—·the·seam·and·its·door·are·DELETED):·the·Queues·section·renders·the·agent\'s·effective-member·queue·with·the·waiting·depth;·clicking·it·serves·the·waiting·list·in·the·dispatcher\'s·order'` with `"Doc·07·FR-05·REAL·(S11·step·11a,·STOP-H·—·the·seam·and·its·door·are·DELETED):·the·Queues·section·renders·the·agent's·effective-member·queue·with·the·waiting·depth;·clicking·it·serves·the·waiting·list·in·the·dispatcher's·order"`  prettier/prettier
+
+/home/kidus/projects/na-live-support/tests/Browser/routing-record.spec.ts
+  23:10   warning  Replace `'compose',·'-f',·'docker/compose.yaml',·'-f',·'docker/compose.dev.yaml',·'exec',·'-T',·'app',·'php',·'artisan',·...args` with `⏎············'compose',⏎············'-f',⏎············'docker/compose.yaml',⏎············'-f',⏎············'docker/compose.dev.yaml',⏎············'exec',⏎············'-T',⏎············'app',⏎············'php',⏎············'artisan',⏎············...args,⏎········`  prettier/prettier
+  48:154  warning  Replace `·page·` with `⏎····page,⏎`                                                                                                                                                                                                                                                                                                                                                                              prettier/prettier
+  59:18   warning  Replace `card.locator('[data-record-step="wait"],·[data-record-step="assign"]').first()` with `⏎········card.locator('[data-record-step="wait"],·[data-record-step="assign"]').first(),⏎····`                                                                                                                                                                                                                    prettier/prettier
+  66:296  warning  Replace `·page,·browser·` with `⏎····page,⏎····browser,⏎`                                                                                                                                                                                                                                                                                                                                                        prettier/prettier
+  77:29   warning  Replace `'candidate=',·'pointer=',·'next=',·'assigned_to=',·'by=',·'candidates='` with `⏎········'candidate=',⏎········'pointer=',⏎········'next=',⏎········'assigned_to=',⏎········'by=',⏎········'candidates=',⏎····`                                                                                                                                                                                          prettier/prettier
+  81:53   warning  Replace `.include('[data-testid="routing-record-card"]')` with `⏎········.include('[data-testid="routing-record-card"]')⏎········`                                                                                                                                                                                                                                                                               prettier/prettier
+  89:62   warning  Replace `.include('[data-testid="routing-record-card"]')` with `⏎········.include('[data-testid="routing-record-card"]')⏎········`                                                                                                                                                                                                                                                                               prettier/prettier
+
+✖ 40 problems (0 errors, 40 warnings)
+  0 errors and 34 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+LINT EXIT=0

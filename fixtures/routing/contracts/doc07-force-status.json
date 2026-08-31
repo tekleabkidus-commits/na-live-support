@@ -1,0 +1,9 @@
+{
+  "_comment": "Doc 11 §8 / Doc 07 FR-28 FORCE-STATUS → RENDER CONTRACT (S11 step 13; B5-S02 C06 seam — the door EXISTS: POST /inbox/status/{userId}/force, permission supervision.agent_status.force, audit agent.status_forced). Input and response shapes pinned here for Doc 15's dialog. The drawn law: forcing a status is NEVER invisible to the agent — the response is the agent's own live status object, and Doc 07's status channel pushes it to them. Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc15/Supervision",
+  "shape": {
+    "request": { "status": "online|away|offline" },
+    "response": "AgentStatus::current(userId) — the same object the agent's own header renders"
+  },
+  "keys": ["request", "response"]
+}

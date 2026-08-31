@@ -138,6 +138,7 @@ final class InboxBrowserSeeder extends Seeder
         $healedTicketIds = $this->healListScene($agent);
         $this->seedQueueViewScene($agent);
         $this->seedStructureAdminScene($agent);
+        $this->seedWizardScene($agent);
 
         // CLOCK-BEARING fixture state decays between runs (a 45-minute
         // window seeded this morning is expired by lunch — the capture run
@@ -335,10 +336,52 @@ final class InboxBrowserSeeder extends Seeder
         }
         $live = DB::table('queue_members')->where('queue_id', $queueId)->where('user_id', $temp->identifier())->where('kind', 'temporary')->whereNull('ended_at')->whereRaw('expires_at > clock_timestamp()')->exists();
         if (! $live) {
+            // Heal: an expired temporary row can leave its override LIVE (revoked_at null) — the
+            // partial unique would refuse a twin. Revoke any survivor before minting the fresh pair.
+            DB::table('user_permission_overrides')->where('user_id', $temp->identifier())->where('permission', 'tickets.assign_self')->whereNull('revoked_at')->update(['revoked_at' => DB::raw('clock_timestamp()'), 'revoke_cause' => 'expired']);
             $oid = (string) Str::uuid7();
             DB::table('user_permission_overrides')->insert(['id' => $oid, 'tenant_id' => $tenantId, 'user_id' => $temp->identifier(), 'permission' => 'tickets.assign_self', 'effect' => 'allow', 'reason' => 'browser structure-admin scene', 'granted_by' => $agent->identifier(), 'expires_at' => DB::raw("clock_timestamp() + interval '2 hours'")]);
             DB::table('queue_members')->where('queue_id', $queueId)->where('user_id', $temp->identifier())->whereNull('ended_at')->update(['ended_at' => DB::raw('clock_timestamp()')]);
             DB::table('queue_members')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'queue_id' => $queueId, 'user_id' => $temp->identifier(), 'kind' => 'temporary', 'granted_by' => $agent->identifier(), 'override_id' => $oid, 'expires_at' => DB::raw("clock_timestamp() + interval '2 hours'")]);
+        }
+    }
+
+    /**
+     * S11 step 13 (B5-S10): the wizard scene — a DELETABLE queue (d017, NOT the department
+     * default) holding two open tickets so the typed phrase is "MOVE 2 TICKETS". The wizard
+     * spec REALLY deletes it; heal-by-reprojection (0l) resurrects the queue whole and
+     * re-routes its tickets back through the real pipeline every seed.
+     */
+    private function seedWizardScene(User $agent): void
+    {
+        $tenantId = app(TenantContext::class)->tenantId();
+        $dept2 = '00000000-0000-7000-8000-00000000d015';
+        $delQueue = '00000000-0000-7000-8000-00000000d017';
+        if (! DB::table('queues')->where('id', $delQueue)->exists()) {
+            DB::table('queues')->insert(['id' => $delQueue, 'tenant_id' => $tenantId, 'department_id' => $dept2, 'name' => 'Fixture deletable queue', 'position' => 1]);
+        }
+        // The heal: the spec tombstones it — every seed brings it back live, in its department.
+        DB::table('queues')->where('id', $delQueue)->update(['is_active' => true, 'deleted_at' => null, 'department_id' => $dept2, 'name' => 'Fixture deletable queue']);
+
+        $pipeline = app(\App\Domain\Routing\Pipeline\RoutingPipeline::class);
+        foreach ([4, 5] as $n) {
+            $ticketId = sprintf('00000000-0000-7000-8000-0000000d11%02d', $n);
+            $ticket = Ticket::query()->find($ticketId);
+            if (! $ticket instanceof Ticket) {
+                $conversation = $this->conversationForQueueScene($agent, $n);
+                $customerId = DB::table('conversations')->where('id', $conversation)->value('customer_id');
+                DB::table('tickets')->insert([
+                    'id' => $ticketId, 'tenant_id' => $tenantId, 'conversation_id' => $conversation, 'customer_id' => is_string($customerId) ? $customerId : '',
+                    'number' => 990000 + $n, 'status' => 'open', 'priority' => 'normal', 'source' => 'agent', 'subject' => sprintf('Wizard fixture %d', $n), 'subject_source' => 'staff',
+                ]);
+                $ticket = Ticket::query()->findOrFail($ticketId);
+            }
+            // Heal: the executed wizard moved them to the target queue — put them back and re-route
+            // through the real pipeline (records accumulate, INSERT-only; C-06: inside a transaction).
+            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => null, 'status' => 'open', 'department_id' => $dept2]);
+            $ticket = Ticket::query()->findOrFail($ticketId);
+            DB::transaction(static fn () => $pipeline->route($ticket, 'created', ['explicit_department_id' => $dept2, 'explicit_queue_id' => $delQueue]));
+            app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
         }
     }
 

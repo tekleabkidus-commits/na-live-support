@@ -1,0 +1,18 @@
+{
+  "_comment": "Doc 11 FR-16 / §8 RESCUE ALERTS → Doc 07/16 RENDER CONTRACT (S11 step 13; B5-S02 C12/C13/C14 seam). `Supervision/RescueAlerts::rows()` returns a list of exactly these keys, newest first. kind heartbeat_lost|orphaned come from rescue_flags (the grant-physics table); channel_unreachable from Doc 05's ticket column (auto_return ALWAYS false there — Doc 06 BR-07: never auto-acted). auto_return rides every row because that one setting decides whether the tickets are already safe or still stranded (C13's drawn law). Ids only (SEC-02). Synthetic per CLAUDE.md §8.",
+  "consumer": "Doc07/RescueView + Doc16/Bell",
+  "shape": {
+    "kind": "heartbeat_lost|orphaned|channel_unreachable",
+    "ticket_id": "uuid",
+    "assignee_id": "uuid|null",
+    "since_seconds": "int|null (DB time; null for channel_unreachable — Doc 05's column is a boolean, no timestamp)",
+    "auto_return": "bool (routing.rescue.auto; false for channel_unreachable)"
+  },
+  "keys": [
+    "kind",
+    "ticket_id",
+    "assignee_id",
+    "since_seconds",
+    "auto_return"
+  ]
+}

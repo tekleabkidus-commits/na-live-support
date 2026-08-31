@@ -34,6 +34,10 @@ final class PageCapabilities
         'Admin/Org/Organization' => [
             'org.departments.manage', 'org.teams.manage', 'org.queues.manage', 'org.queues.pull_in',
         ],
+        // Doc 11 FR-18 (S11 step 13): the delete wizards — both manage keys can reach a wizard page.
+        'Admin/Org/RestructureWizard' => [
+            'org.departments.manage', 'org.queues.manage',
+        ],
         'Conversations/DeadLetters' => [
             'tickets.reply',
         ],

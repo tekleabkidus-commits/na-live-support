@@ -32,7 +32,7 @@ final class ReferenceInventory
     ) {}
 
     /**
-     * @return array{target: array{type: string, id: string, department_id: string, is_rg: bool, is_department_default: bool}, rules: list<array{id: string, name: string, target_queue_id: string}>, bots: list<array{id: string, name: string, tag: string}>, sla_policies: list<array{id: string, name: string, target: string}>, views: array{count: int, items: list<array{id: string, name: ?string, redacted: bool}>}, tickets: array{open: int, total: int}}
+     * @return array{target: array{type: string, id: string, department_id: string, is_rg: bool, is_department_default: bool}, rules: list<array{id: string, name: string, target_queue_id: string}>, bots: list<array{id: string, name: string, tag: string}>, sla_policies: list<array{id: string, name: string, target: string}>, views: array{count: int, items: list<array{id: string, name: ?string, redacted: bool}>}, tickets: array{open: int, total: int}, checks: array<string, array{ok: bool, reason: ?string}>}
      */
     public function forQueue(string $queueId, User $viewer): array
     {
@@ -43,18 +43,30 @@ final class ReferenceInventory
         }
         $tags = $this->pgArray($queue->routing_tags);
 
+        // J19 (step 13): each REFERENCE system is checked separately — one failing check marks its
+        // row {ok:false} and leaves ITS list empty instead of sinking the whole inventory. The
+        // tickets count is the wizard's OWN query (AC-07's confirmation source) and is never caught.
+        $checks = [];
+        $rules = $this->section($checks, 'rules', fn (): array => $this->queues->rulesTargeting($queueId));
+        $bots = $this->section($checks, 'bots', fn (): array => $this->botsMatching($tags, $queue->department_id));
+        $sla = $this->section($checks, 'sla_policies', fn (): array => $this->slaPolicies($queueId, $queue->department_id));
+        $views = $this->section($checks, 'views', fn (): array => $this->views('queue_id', $queueId, $viewer), ['count' => 0, 'items' => []]);
+        $tickets = $this->ticketCounts($this->ticketsOfQueue($queueId));
+        $checks['tickets'] = ['ok' => true, 'reason' => null];
+
         return [
             'target' => ['type' => 'queue', 'id' => $queueId, 'department_id' => $queue->department_id, 'is_rg' => (bool) $queue->is_rg, 'is_department_default' => DB::table('departments')->where('default_queue_id', $queueId)->whereNull('deleted_at')->exists()],
-            'rules' => $this->queues->rulesTargeting($queueId),
-            'bots' => $this->botsMatching($tags, $queue->department_id),
-            'sla_policies' => $this->slaPolicies($queueId, $queue->department_id),
-            'views' => $this->views('queue_id', $queueId, $viewer),
-            'tickets' => $this->ticketCounts($this->ticketsOfQueue($queueId)),
+            'rules' => $rules,
+            'bots' => $bots,
+            'sla_policies' => $sla,
+            'views' => $views,
+            'tickets' => $tickets,
+            'checks' => $checks,
         ];
     }
 
     /**
-     * @return array{target: array{type: string, id: string, default_queue_id: ?string, holds_rg_queue: bool}, queues: list<array{id: string, name: string, is_rg: bool, is_active: bool}>, rules: list<array{id: string, name: string, target_queue_id: string}>, bots: list<array{id: string, name: string, tag: string}>, sla_policies: list<array{id: string, name: string, target: string}>, views: array{count: int, items: list<array{id: string, name: ?string, redacted: bool}>}, tickets: array{open: int, total: int}}
+     * @return array{target: array{type: string, id: string, default_queue_id: ?string, holds_rg_queue: bool}, queues: list<array{id: string, name: string, is_rg: bool, is_active: bool}>, rules: list<array{id: string, name: string, target_queue_id: string}>, bots: list<array{id: string, name: string, tag: string}>, sla_policies: list<array{id: string, name: string, target: string}>, views: array{count: int, items: list<array{id: string, name: ?string, redacted: bool}>}, tickets: array{open: int, total: int}, checks: array<string, array{ok: bool, reason: ?string}>}
      */
     public function forDepartment(string $departmentId, User $viewer): array
     {
@@ -65,14 +77,20 @@ final class ReferenceInventory
         }
         /** @var list<object{id: string, name: string, is_rg: bool, is_active: bool, routing_tags: string}> $queues */
         $queues = DB::table('queues')->where('department_id', $departmentId)->whereNull('deleted_at')->orderBy('position')->get(['id', 'name', 'is_rg', 'is_active', 'routing_tags'])->all();
-        $rules = [];
-        $bots = [];
+        $checks = [];
         $tags = [];
         foreach ($queues as $q) {
-            $rules = array_merge($rules, $this->queues->rulesTargeting($q->id));
             $tags = array_merge($tags, $this->pgArray($q->routing_tags));
         }
-        $bots = $this->botsMatching(array_values(array_unique($tags)), $departmentId);
+        $rules = $this->section($checks, 'rules', function () use ($queues): array {
+            $out = [];
+            foreach ($queues as $q) {
+                $out = array_merge($out, $this->queues->rulesTargeting($q->id));
+            }
+
+            return $out;
+        });
+        $bots = $this->section($checks, 'bots', fn (): array => $this->botsMatching(array_values(array_unique($tags)), $departmentId));
         $hasRg = false;
         foreach ($queues as $q) {
             $hasRg = $hasRg || (bool) $q->is_rg;
@@ -83,10 +101,39 @@ final class ReferenceInventory
             'queues' => array_map(static fn (object $q): array => ['id' => $q->id, 'name' => $q->name, 'is_rg' => (bool) $q->is_rg, 'is_active' => (bool) $q->is_active], $queues),
             'rules' => $rules,
             'bots' => $bots,
-            'sla_policies' => $this->slaPolicies(null, $departmentId),
-            'views' => $this->views('department_id', $departmentId, $viewer),
+            'sla_policies' => $this->section($checks, 'sla_policies', fn (): array => $this->slaPolicies(null, $departmentId)),
+            'views' => $this->section($checks, 'views', fn (): array => $this->views('department_id', $departmentId, $viewer), ['count' => 0, 'items' => []]),
             'tickets' => $this->ticketCounts($this->ticketsOfDepartment($departmentId)),
+            'checks' => $checks + ['tickets' => ['ok' => true, 'reason' => null]],
         ];
+    }
+
+    /**
+     * J19: run ONE reference-system check; a Throwable marks the row {ok:false} with a stable
+     * reason and yields the default. RestructureRefused always re-throws (a refusal is a verdict
+     * about the TARGET, never a reference-system outage).
+     *
+     * @template T of array
+     *
+     * @param  array<string, array{ok: bool, reason: ?string}>  $checks
+     * @param  callable(): T  $fn
+     * @param  T  $default
+     * @return T
+     */
+    private function section(array &$checks, string $key, callable $fn, array $default = []): array
+    {
+        try {
+            $value = $fn();
+            $checks[$key] = ['ok' => true, 'reason' => null];
+
+            return $value;
+        } catch (RestructureRefused $e) {
+            throw $e;
+        } catch (\Throwable) {
+            $checks[$key] = ['ok' => false, 'reason' => 'check_failed'];
+
+            return $default;
+        }
     }
 
     /** THE ONE QUERY the wizards act on (queue). */
