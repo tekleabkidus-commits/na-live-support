@@ -41,7 +41,7 @@ function mailUser(array $overrides = []): array
 
 function postForgotFor(string $email): void
 {
-    test()->withServerVariables(['REMOTE_ADDR' => '198.51.100.'.random_int(2, 250)])
+    test()->withServerVariables(['REMOTE_ADDR' => isolatedAuthIp()])
         ->postJson('https://localhost/forgot-password', ['email' => $email])
         ->assertOk();
 }

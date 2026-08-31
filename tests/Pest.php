@@ -1715,6 +1715,24 @@ function relayOutboxRow(string $name): string
  *
  * @return array{0: string, 1: App\Models\Conversation}
  */
+/**
+ * Doc 02 test-isolation side-row (S11 batch D; countersigned packet, batch-C checkpoint):
+ * the auth-ip limiter counts on the SHARED redis-volatile store across tests AND runs —
+ * a 249-address random pool eventually lands on a burned address (flake class 0k, 4
+ * sightings). Every auth-mail test now draws a PROCESS-UNIQUE TEST-NET-2 address
+ * (198.51.x.y — 65k of them) and clears ITS OWN limiter counter before use (the named
+ * throttle's key shape: md5(name.by)). Harness-level only; no assertion changed.
+ */
+function isolatedAuthIp(): string
+{
+    static $n = 0;
+    $n++;
+    $ip = sprintf('198.51.%d.%d', 2 + intdiv($n, 250), 2 + ($n % 250));
+    Illuminate\Support\Facades\RateLimiter::clear(md5('auth-ip'.$ip));
+
+    return $ip;
+}
+
 function conversationFixture(): array
 {
     $tenantId = app(TenantContext::class)->tenantId();

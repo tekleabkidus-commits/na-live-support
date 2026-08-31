@@ -176,6 +176,9 @@ it('returns a byte-identical body regardless of which TENANT the address exists 
 })->group('enumeration');
 
 it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner ruling R-3)', function () {
+    // @group timing rides below (the leg STAYS in the every-push battery — the packet's own
+    // demo clause re-runs it "inside one normal step battery"; the marker names it for the
+    // Doc 19 timing stage when that stage becomes real).
     // ─────────────────────────────────────────────────────────────────────────
     // WHY THIS MEASURES THE PROVIDER AND NOT THE HTTP RESPONSE.
     //
@@ -254,20 +257,28 @@ it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner 
         }
     }
 
-    // Nine samples, and the FLOOR of each set — see floorOf().
-    $measure = function (string $email) use ($provider): float {
-        return floorOf(timeRequests(
-            fn () => $provider->retrieveByCredentials([
-                'email' => $email,
-                'password' => 'the-wrong-password',
-            ]),
-            9,
-        ));
-    };
+    // Nine samples, and the FLOOR of each set — see floorOf(). S11 batch D (0m, the
+    // countersigned isolation packet): the three shapes are sampled ROUND-ROBIN, one of
+    // each per pass, instead of three sequential blocks — a battery-load transient (an
+    // Octane reload, autovacuum, a neighbouring container) now hits all three sets
+    // equally, so the floor-of-nine compares like with like. Nothing below this
+    // comment changed: same nine samples, same floors, same 50 ms bound.
+    $samples = [];
+    foreach (range(1, 9) as $ignoredPass) {
+        foreach (['none' => 'no.such.account@fixture.example', 'one' => 'real.account@fixture.example', 'many' => 'two.tenants@fixture.example'] as $key => $email) {
+            $samples[$key][] = timeRequests(
+                fn () => $provider->retrieveByCredentials([
+                    'email' => $email,
+                    'password' => 'the-wrong-password',
+                ]),
+                1,
+            )[0];
+        }
+    }
 
-    $none = $measure('no.such.account@fixture.example');   // 0 candidates
-    $one = $measure('real.account@fixture.example');       // 1 candidate
-    $many = $measure('two.tenants@fixture.example');       // 2 candidates
+    $none = floorOf($samples['none']);   // 0 candidates
+    $one = floorOf($samples['one']);     // 1 candidate
+    $many = floorOf($samples['many']);   // 2 candidates
 
     $report = sprintf('0-candidate %.1f ms | 1-candidate %.1f ms | N-candidate %.1f ms', $none, $one, $many);
 
@@ -294,7 +305,7 @@ it('spends the same work across 0, 1 and N candidate paths (AC-01 timing; owner 
     expect($none)->toBeGreaterThan(20.0,
         'the miss path is too cheap to be verifying anything — equalisation has been removed',
     );
-})->group('enumeration');
+})->group('enumeration', 'timing');
 
 it('does the password-verification work even when no account matches', function () {
     // The structural companion to the timing test above. Timing is a measurement
@@ -361,7 +372,7 @@ it('never reveals which of several tenants the address belongs to, even on SUCCE
 function postForgot(string $email): array
 {
     $response = test()
-        ->withServerVariables(['REMOTE_ADDR' => '198.51.100.'.random_int(2, 250)])
+        ->withServerVariables(['REMOTE_ADDR' => isolatedAuthIp()])
         ->postJson('https://localhost/forgot-password', ['email' => $email]);
 
     return [

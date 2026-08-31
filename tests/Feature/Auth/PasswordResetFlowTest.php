@@ -54,7 +54,7 @@ function resetLogin(string $email, string $password, ?string $ip = null): Illumi
 function requestReset(string $email, ?string $ip = null): Illuminate\Testing\TestResponse
 {
     return test()
-        ->withServerVariables(['REMOTE_ADDR' => $ip ?? '198.51.100.'.random_int(2, 250)])
+        ->withServerVariables(['REMOTE_ADDR' => $ip ?? isolatedAuthIp()])
         ->postJson('https://localhost/forgot-password', ['email' => $email]);
 }
 
@@ -79,7 +79,7 @@ function queuedResetTokens(): array
 function submitReset(string $token, string $password): Illuminate\Testing\TestResponse
 {
     return test()
-        ->withServerVariables(['REMOTE_ADDR' => '198.51.100.'.random_int(2, 250)])
+        ->withServerVariables(['REMOTE_ADDR' => isolatedAuthIp()])
         ->postJson('https://localhost/reset-password', [
             'token' => $token,
             'password' => $password,
