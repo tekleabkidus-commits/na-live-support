@@ -1,64 +1,1506 @@
 {
-  "doc": "Doc11",
-  "spec": "R-14 native-review queue — Doc 11's machine-authored Amharic (opened S11 step 8; step 14's §14 join grows it with the structure-admin/wizard strings and flags the destructive tier). Customer-facing band phrases are reviewed FIRST (SEC-05 vocabulary; culturally sane phrasing per the plan).",
-  "count": 8,
-  "destructive_count": 0,
-  "entries": [
-    {
-      "key": "foundation.problem.routing_refused",
-      "am": "የመስመር አሠራሩ ተከልክሏል",
-      "en": "The routing operation was refused",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.estimate.band.short",
-      "am": "ወደ 5 ደቂቃ ገደማ",
-      "en": "about 5 minutes",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.estimate.band.medium",
-      "am": "ወደ 20 ደቂቃ ገደማ",
-      "en": "about 20 minutes",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.estimate.band.long",
-      "am": "ከአንድ ሰዓት በላይ",
-      "en": "over an hour",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.estimate.band.off_hours",
-      "am": "በ :time ስንከፍት",
-      "en": "when we open at :time",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "ai.handoff.template",
-      "am": "ስለመልእክትዎ እናመሰግናለን። የቡድናችን አባል በቅርቡ ያነጋግርዎታል — :queue_wait።",
-      "en": "Thanks for your message. A member of our team will be with you shortly — :queue_wait.",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.system.routing_orphan_moved",
-      "am": "ወረፋው ስለተሰረዘ ወደ የክፍሉ ነባሪ ወረፋ ተዛውሯል",
-      "en": "Moved to the department default queue — its queue was deleted",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    },
-    {
-      "key": "routing.system.routing_rescue_returned",
-      "am": "የተመደበው ወኪል ግንኙነት ስላጣ ወደ ወረፋው ተመልሷል",
-      "en": "Returned to the queue — the assigned agent lost connection",
-      "tier": "standard",
-      "status": "machine-authored, awaiting native review"
-    }
-  ]
+    "doc": "Doc11",
+    "spec": "R-14 native-review queue — Doc 11 machine-authored Amharic (opened S11 step 8; GROWN at the S11 close with the FULL org.* + routing.* trees per the step-14 join). Customer-facing band phrases first (SEC-05 vocabulary); the destructive tier is flagged per entry.",
+    "count": 214,
+    "destructive_count": 20,
+    "entries": [
+        {
+            "key": "foundation.problem.routing_refused",
+            "am": "የመስመር አሠራሩ ተከልክሏል",
+            "en": "The routing operation was refused",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.estimate.band.short",
+            "am": "ወደ 5 ደቂቃ ገደማ",
+            "en": "about 5 minutes",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.estimate.band.medium",
+            "am": "ወደ 20 ደቂቃ ገደማ",
+            "en": "about 20 minutes",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.estimate.band.long",
+            "am": "ከአንድ ሰዓት በላይ",
+            "en": "over an hour",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.estimate.band.off_hours",
+            "am": "በ :time ስንከፍት",
+            "en": "when we open at :time",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "ai.handoff.template",
+            "am": "ስለመልእክትዎ እናመሰግናለን። የቡድናችን አባል በቅርቡ ያነጋግርዎታል — :queue_wait።",
+            "en": "Thanks for your message. A member of our team will be with you shortly — :queue_wait.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.system.routing_orphan_moved",
+            "am": "ወረፋው ስለተሰረዘ ወደ የክፍሉ ነባሪ ወረፋ ተዛውሯል",
+            "en": "Moved to the department default queue — its queue was deleted",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.system.routing_rescue_returned",
+            "am": "የተመደበው ወኪል ግንኙነት ስላጣ ወደ ወረፋው ተመልሷል",
+            "en": "Returned to the queue — the assigned agent lost connection",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.title",
+            "am": "ድርጅት",
+            "en": "Organization",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.summary",
+            "am": ":departments ክፍሎች · :teams ቡድኖች · :queues ወረፋዎች",
+            "en": ":departments departments · :teams teams · :queues queues",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.new_queue",
+            "am": "+ አዲስ ወረፋ",
+            "en": "+ New queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.backoffice",
+            "am": "የኋላ ቢሮ",
+            "en": "Backoffice",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.organization",
+            "am": "ድርጅት",
+            "en": "Organization",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.people",
+            "am": "ሰዎች እና ሚናዎች",
+            "en": "People & roles",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.channels",
+            "am": "ቻናሎች",
+            "en": "Channels",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.sla",
+            "am": "የSLA ፖሊሲዎች",
+            "en": "SLA policies",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.automation",
+            "am": "ራስ-ሰር ተግባር",
+            "en": "Automation",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.nav.hours",
+            "am": "የሥራ ሰዓታት",
+            "en": "Business hours",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.tabs.departments",
+            "am": "ክፍሎች",
+            "en": "Departments",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.tabs.teams",
+            "am": "ቡድኖች",
+            "en": "Teams",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.tabs.queues",
+            "am": "ወረፋዎች",
+            "en": "Queues",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.default_badge",
+            "am": "ነባሪ፦ :queue",
+            "en": "default: :queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.no_default",
+            "am": "▲ ነባሪ ወረፋ የለም",
+            "en": "▲ no default queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.queue_count",
+            "am": ":count ወረፋዎች",
+            "en": ":count queues",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.queue_count_one",
+            "am": "1 ወረፋ",
+            "en": "1 queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.move_up",
+            "am": ":name ወደ ላይ ውሰድ",
+            "en": "Move :name up",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.move_down",
+            "am": ":name ወደ ታች ውሰድ",
+            "en": "Move :name down",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.name",
+            "am": "ስም",
+            "en": "Name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.slug",
+            "am": "መለያ ስም",
+            "en": "Slug",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.description",
+            "am": "መግለጫ",
+            "en": "Description",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.default_queue",
+            "am": "ነባሪ ወረፋ",
+            "en": "Default queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.hours",
+            "am": "የሥራ ሰዓታት",
+            "en": "Business hours",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.hours_override",
+            "am": "ልዩ ማስተካከያ · :window",
+            "en": "Override · :window",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.hours_none",
+            "am": "የተከራይ ነባሪ",
+            "en": "Tenant default",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.active",
+            "am": "ንቁ — ለመስመር የሚደርስና የሚታይ",
+            "en": "Active — routable and visible",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.deactivate",
+            "am": "አቦዝን",
+            "en": "Deactivate",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.deactivate_hint",
+            "am": "መቀበልን ያቆማል፤ ያሉ ትኬቶች በተለመደው ይጠናቀቃሉ።",
+            "en": "Stops intake; existing tickets drain normally.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.delete",
+            "am": "ሰርዝ",
+            "en": "Delete",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.delete_hint",
+            "am": "መጀመሪያ እያንዳንዱ ወረፋ፣ ትኬትና ሕግ ማጣቀሻ እንደገና መመደብ አለበት። አዋቂውን ይከፍታል።",
+            "en": "Requires every queue, ticket and rule reference to be reassigned first. Opens the wizard.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.delete_button",
+            "am": "ሰርዝ…",
+            "en": "Delete…",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.no_queues_title",
+            "am": "▲ :name ወረፋ የለውም — መቀበያ ወደ ምንም ይወድቃል",
+            "en": "▲ :name has no queues — intake falls to nothing",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.no_queues_body",
+            "am": "ወደዚህ ክፍል የሚመራ ማንኛውም ትኬት የሚጠብቅበት ቦታና የሚደርሰው ሰው የለም። ወረፋ ይፍጠሩ ወይም የክፍሉን ነባሪ ወደ ሌላ ወረፋ ያመልክቱ።",
+            "en": "Any ticket routed to this department has nowhere to wait and no one to reach. Create a queue, or point the department's default at another queue.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.create_queue",
+            "am": "ወረፋ ፍጠር",
+            "en": "Create a queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.departments.set_default",
+            "am": "ነባሪ ወረፋ አዘጋጅ",
+            "en": "Set a default queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.members",
+            "am": ":count አባላት · :departments ያካልላል",
+            "en": ":count members · spans :departments",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.lead",
+            "am": "መሪ",
+            "en": "Lead",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.warning",
+            "am": ":name በዚህ ቡድን ውስጥ ነው ግን ወደ :department መዳረሻ የለውም።",
+            "en": ":name is in this team but has no access to :department.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.warning_body",
+            "am": "ወደ :team የሚመሩ የ:department ትኬቶች ያልፉታል፤ ስለዚህ ቡድኑ ከሚመስለው ያንሳል።",
+            "en": ":department tickets routed to :team will skip them, so the team is effectively smaller than it looks.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.give_access",
+            "am": "የ:department መዳረሻ ስጥ",
+            "en": "Give :department access",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.teams.remove",
+            "am": "ከቡድን አስወግድ",
+            "en": "Remove from team",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.strategy_round_robin",
+            "am": "ተራ በተራ",
+            "en": "Round robin",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.strategy_load_based",
+            "am": "በጫና መጠን",
+            "en": "Load based",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.strategy_skill_based",
+            "am": "በክህሎት",
+            "en": "Skill based",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.capacity",
+            "am": ":count/ወኪል",
+            "en": ":count/agent",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rg_note",
+            "am": "የRG ወረፋ ልዩ ነው። መስመር እዚህ ይቆማል — ማንም ትኬት ከኃላፊነት ጨዋታ ውጭ አይመራም። ምትክ የRG ዒላማ ሳይሰየም ሊሰረዝ አይችልም።",
+            "en": "The RG queue is special. Routing stops here — nothing re-routes a ticket out of Responsible Gaming. It cannot be deleted without naming a replacement RG target first.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rotation_title",
+            "am": "ቀጣዮቹ አራት ትኬቶች ወደ",
+            "en": "Next four tickets will go to",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rotation_next",
+            "am": "ቀጣይ",
+            "en": "next",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rotation_skip",
+            "am": "ዝለል",
+            "en": "skip",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rotation_then",
+            "am": "ከዚያ",
+            "en": "then",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.at_capacity",
+            "am": "በሙሉ አቅም ላይ",
+            "en": "at capacity",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.tiebreak",
+            "am": "መጀመሪያ ትንሹ ክፍት ትኬት ያለው፤ እኩል ከሆኑ ከረጅም ጊዜ በፊት የተመደበው፣ ከዚያ በመለያ ቅደም። መሠረቱ አይንቀሳቀስም።",
+            "en": "Least open tickets first; ties go to whoever was assigned longest ago, then by user id. The floor never moves.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.matcher_ticket",
+            "am": "የትኬት ቋንቋ",
+            "en": "Ticket language",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.matcher_must",
+            "am": "መዛመድ አለበት",
+            "en": "must match",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.matcher_agent",
+            "am": "የወኪል ቋንቋ",
+            "en": "Agent language",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.matcher_add",
+            "am": "+ ሕግ ጨምር",
+            "en": "+ Add a rule",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.fallback_title",
+            "am": "ማንም ካልተዛመደ",
+            "en": "If nobody matches",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.fallback_wait",
+            "am": "ለመዛመድ ያዝ",
+            "en": "Hold for a match",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.fallback_wait_body",
+            "am": "ትኬቱ ይጠብቃል እና የSLA ማንቂያ ያነሳል። የተሳሳተ-ቋንቋ መልስ ከዘገየ መልስ የከፋ በሆነበት ተገቢ ነው።",
+            "en": "The ticket waits and raises an SLA-aware alert. Right where a wrong-language reply is worse than a slow one.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.fallback_nearest",
+            "am": "ቅርብ ክህሎት",
+            "en": "Nearest skill",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.fallback_nearest_body",
+            "am": "የቋንቋ መስፈርቱ ይወርዳል፤ በትንሽ ጫና ያለው ወኪል ይወስዳል።",
+            "en": "The language requirement drops and the least-loaded agent takes it.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.holding_now",
+            "am": "አሁን :count ትኬቶች ለመዛመድ እየጠበቁ ናቸው።",
+            "en": ":count tickets are holding for a match right now.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.boosts_title",
+            "am": "የቅድሚያ ማበልጸጊያዎች",
+            "en": "Priority boosts",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.starvation_label",
+            "am": "የመራብ ገደብ",
+            "en": "starvation",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.starvation_caption",
+            "am": "ከ30 ደቂቃ ጥበቃ በኋላ ማንኛውም ትኬት ወረፋውን ይዘላል። ሁልጊዜ በርቷል።",
+            "en": "After 30 min waiting, any ticket jumps the line. Always on.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.vip_warning",
+            "am": "▲ ምንጩን ያረጋግጡ",
+            "en": "▲ check the source",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.members_title",
+            "am": "የ:queue አባላት",
+            "en": "Members of :queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.via_team",
+            "am": "በ:team በኩል",
+            "en": "via :team",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.direct",
+            "am": "ቀጥታ",
+            "en": "direct",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.temporary_prefix",
+            "am": "ይጠናቀቃል በ",
+            "en": "ends in",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.config_error",
+            "am": "▲ ወደ :department መዳረሻ የለም",
+            "en": "▲ no access to :department",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.tags_title",
+            "am": "የመስመር መለያዎች",
+            "en": "Routing tags",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.tag_remove",
+            "am": "መለያ :tag አስወግድ",
+            "en": "Remove tag :tag",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.no_eligible_title",
+            "am": "▲ አሁን ብቁ ወኪሎች የሉም",
+            "en": "▲ No eligible agents right now",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.no_eligible_body",
+            "am": ":members አባላት · :online በመስመር ላይ · :free ክፍት ቦታ ያላቸው:skill። :waiting ትኬቶች እየጠበቁ ናቸው።",
+            "en": ":members members · :online online · :free with a free slot:skill. :waiting tickets are holding.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.no_eligible_skill",
+            "am": " · ክህሎት ያስፈልጋል",
+            "en": " · skill required",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.pull_in",
+            "am": "ወኪል አስገባ",
+            "en": "Pull an agent in",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.change_fallback",
+            "am": "መጠባበቂያውን ቀይር",
+            "en": "Change the fallback",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_title",
+            "am": "የመጠበቂያ ግምት፣ ደንበኛው እንደሚያነበው",
+            "en": "The wait estimate, as the customer will read it",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_under",
+            "am": "ከ8 ደቂቃ በታች",
+            "en": "under 8 min",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_mid",
+            "am": "8–35 ደቂቃ",
+            "en": "8–35 min",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_over",
+            "am": "ከ35 ደቂቃ በላይ",
+            "en": "over 35 min",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_closed",
+            "am": "ዝግ",
+            "en": "closed",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_quote_short",
+            "am": "“የተለመደ ጥበቃ፦ ~5 ደቂቃ”",
+            "en": "“Typical wait: ~5 min”",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_quote_medium",
+            "am": "“የተለመደ ጥበቃ፦ ~20 ደቂቃ”",
+            "en": "“Typical wait: ~20 min”",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_quote_long",
+            "am": "“የተለመደ ጥበቃ፦ ከአንድ ሰዓት በላይ”",
+            "en": "“Typical wait: over an hour”",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_quote_closed",
+            "am": "“በ:time ስንከፍት እንመልሳለን”",
+            "en": "“We reply when we open at :time”",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.estimate_note",
+            "am": "ባንዶች ብቻ። ደንበኛ ከፊቱ ስንት ሰው እንዳለ ወይም ስንት ወኪሎች በመስመር ላይ እንዳሉ በጭራሽ አይነገረውም — ያ የወረፋ መረጃ ነው፣ ውስጥም ይቆያል።",
+            "en": "Bands only. A customer is never told how many people are ahead of them or how many agents are online — that is queue intelligence, and it stays inside.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.rules_targeting",
+            "am": "ይህን ወረፋ የሚያነጣጥሩ ሕጎች",
+            "en": "Rules targeting this queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.deactivate_title",
+            "am": ":name አቦዝን",
+            "en": "Deactivate :name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.deactivate_body",
+            "am": "አዲስ ትኬቶች መምጣት ያቆማሉ። እዚህ ያሉት :count ባሉበት ይቆያሉ፣ ወኪሎችም መስራታቸውን ይቀጥላሉ። በማንኛውም ጊዜ መልሰው ማብራት ይችላሉ።",
+            "en": "New tickets stop arriving. The :count already here stay exactly where they are, and agents keep working them. You can turn it back on any time.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.deactivate_rules_note",
+            "am": "እነዚህ ሕጎች ወደ ክፍሉ ነባሪ ይወርዳሉ፦",
+            "en": "These rules fall to the department default:",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.deactivate_button",
+            "am": "አቦዝን",
+            "en": "Deactivate",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.qdelete_title",
+            "am": ":name ሰርዝ",
+            "en": "Delete :name",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.qdelete_body",
+            "am": "ቋሚ ነው። እያንዳንዱ ትኬት ወደ ሌላ መዛወር፣ እያንዳንዱ ማጣቀሻም መቀየር አለበት — አዋቂው መንገዱን ያሳይዎታል።",
+            "en": "Permanent. Every ticket has to be moved somewhere and every reference repointed first — the wizard walks you through it.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.queues.qdelete_button",
+            "am": "የመሰረዣ አዋቂውን ጀምር…",
+            "en": "Start the delete wizard…",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.title_queue",
+            "am": "የ:name ወረፋን ሰርዝ",
+            "en": "Delete the :name queue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.title_department",
+            "am": ":name ሰርዝ",
+            "en": "Delete :name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step_of",
+            "am": "ደረጃ :n ከ4",
+            "en": "Step :n of 4",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step1_label",
+            "am": "ይህን የሚያመለክቱ",
+            "en": "what points at this",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step2_label",
+            "am": "ለእያንዳንዱ ምርጫ",
+            "en": "a choice for each",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step3_label",
+            "am": "ያረጋግጡ",
+            "en": "confirm",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step4_label",
+            "am": "በሂደት ላይ · ይህን መስኮት መዝጋት ይችላሉ",
+            "en": "in progress · you can close this window",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.step1_intro",
+            "am": "አምስት ሥርዓቶችን መርምረናል። ከመወገዱ በፊት ከዚህ በታች ያለው ሁሉ መፈታት አለበት።",
+            "en": "We checked five systems. Everything below has to be resolved before this can go.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.row_tickets",
+            "am": "ክፍት ትኬቶች",
+            "en": "open tickets",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.row_rules",
+            "am": "ራስ-ሰር ደንቦች ወደዚህ ይመራሉ",
+            "en": "automation rules point here",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.row_bots",
+            "am": "የቴሌግራም ቦቶች",
+            "en": "Telegram bots",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.row_sla",
+            "am": "የSLA ፖሊሲዎች",
+            "en": "SLA policies",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.row_views",
+            "am": "የተቀመጡ እይታዎች",
+            "en": "Saved views",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.badge_move",
+            "am": "መዛወር አለባቸው",
+            "en": "must move",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.badge_breaks",
+            "am": "ይሰበራል",
+            "en": "will break",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.view_link",
+            "am": "ይመልከቷቸው →",
+            "en": "See them →",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.check_failed",
+            "am": ":system — መመርመር አልተቻለም",
+            "en": ":system — could not check",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.check_failed_body",
+            "am": "አገልግሎቱ ምላሽ አልሰጠም",
+            "en": "The service did not respond",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.retry",
+            "am": "እንደገና ሞክር",
+            "en": "Retry",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.incomplete_title",
+            "am": "ይህ ቆጠራ ያልተሟላ ነው።",
+            "en": "This inventory is incomplete.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.incomplete_body",
+            "am": "ያላየናቸው ማጣቀሻዎች ሊኖሩ ይችላሉ። ያልተሳካውን ምርመራ እንደገና ይሞክሩ፣ ወይም ባልተሟላ ዝርዝር ይቀጥሉ — የተዘለለው ሁሉ ሲወገድ ይሰበራል።",
+            "en": "There may be references we could not see. Retry the failed check, or continue with a partial list — anything missed will break when this goes.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.continue_partial",
+            "am": "ባልተሟላ ዝርዝር ቀጥል",
+            "en": "Continue with a partial list",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choice_tickets",
+            "am": ":count ክፍት ትኬቶች",
+            "en": ":count open tickets",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.required",
+            "am": "ግዴታ",
+            "en": "required",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.move_to",
+            "am": "ወደዚህ አዛውራቸው",
+            "en": "Move them to",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choose",
+            "am": "ወረፋ ይምረጡ…",
+            "en": "Choose a queue…",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.keep_note",
+            "am": "ተመዳቢያቸውን፣ ቅድሚያቸውንና የSLA ሰዓታቸውን ይዘው ይቆያሉ። የሚቀየረው ወረፋው ብቻ ነው።",
+            "en": "They keep their assignee, priority and SLA clock. Only the queue changes.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choice_rules",
+            "am": ":count ራስ-ሰር ደንቦች",
+            "en": ":count automation rules",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choice_bots",
+            "am": ":count የቴሌግራም ቦቶች",
+            "en": ":count Telegram bots",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choice_sla",
+            "am": ":count የSLA ፖሊሲዎች",
+            "en": ":count SLA policies",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.choice_views",
+            "am": ":count የተቀመጡ እይታዎች (በራስ-ሰር ይቀየራሉ)",
+            "en": ":count saved views (repointed automatically)",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.repoint",
+            "am": "ወደ :name ቀይር",
+            "en": "Repoint to :name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.switch_off",
+            "am": "አጥፋ",
+            "en": "Switch off",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.rg_title",
+            "am": "ይህ ኃላፊነት የተሞላበት ጨዋታ ወረፋ ነው።",
+            "en": "This is the responsible-gaming queue.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.rg_body",
+            "am": "መስመሩ ሁልጊዜ አንዱን ማግኘት መቻል አለበት፤ ስለዚህ ይህ ክፍል ከመሄዱ በፊት ያን ሚና የሚወስደውን ወረፋ መሰየም አለብዎት።",
+            "en": "Routing must always be able to reach one, so you have to name which queue takes that role before this department can go.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.rg_label",
+            "am": "አዲስ የRG ወረፋ",
+            "en": "New RG queue",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.rg_blocked",
+            "am": "የRG ወረፋ እስኪሰየም መቀጠል አይቻልም",
+            "en": "Cannot continue until the RG queue is named",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.blocked_department_default",
+            "am": "ይህ ወረፋ የክፍሉ ነባሪ ነው። መጀመሪያ ክፍሉን ወደ ሌላ ነባሪ ወረፋ ያመልክቱ።",
+            "en": "This queue is the department default. Point the department at another default queue first.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_header",
+            "am": "የሚሆነው ይህ ነው",
+            "en": "What happens",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_tickets",
+            "am": ":count ትኬቶች ወደ :name ይዛወራሉ። ይህ በጥቅሎች ይሠራል።",
+            "en": ":count tickets move to :name. This runs in batches.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_rules_repoint",
+            "am": ":count ራስ-ሰር ደንቦች ይቀየራሉ።",
+            "en": ":count automation rules repoint.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_rules_off",
+            "am": ":count ራስ-ሰር ደንቦች ይጠፋሉ — እስኪጻፉ ድረስ መስራት ያቆማሉ።",
+            "en": ":count automation rules are switched off — they stop working until someone rewrites them.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_refs",
+            "am": ":count የSLA ፖሊሲዎች፣ ቦቶችና የተቀመጡ እይታዎች ይቀየራሉ።",
+            "en": ":count SLA policies, bots and saved views repoint.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_deleted_queue",
+            "am": "ወረፋው ይሰረዛል። የቁጥር ታሪኩና የኦዲት መዝገቡ ይቆያሉ።",
+            "en": "The queue is deleted. Its number history and audit trail stay.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.confirm_deleted_department",
+            "am": "ክፍሉና ወረፋዎቹ ይሰረዛሉ። የቁጥር ታሪክና የኦዲት መዝገብ ይቆያሉ።",
+            "en": "The department and its queues are deleted. Number history and audit trail stay.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.type_label",
+            "am": "ለመቀጠል :phrase ብለው ይተይቡ",
+            "en": "Type :phrase to continue",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.type_mismatch",
+            "am": "አልተዛመደም። :phrase ብለው በትክክል ይተይቡ።",
+            "en": "That does not match. Type :phrase exactly.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.stale",
+            "am": "ሲወስኑ የትኬት ቁጥሩ ተቀይሯል — አሁን :phrase ነው። ቁጥሮቹን አይተው እንደገና ይተይቡ።",
+            "en": "The ticket count changed while you were deciding — it is now :phrase. Check the numbers and type again.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.progress_title",
+            "am": ":name በመሰረዝ ላይ",
+            "en": "Deleting :name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.progress_rules",
+            "am": "ራስ-ሰር ደንቦች ተቀይረዋል",
+            "en": "Automation rules repointed",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.progress_refs",
+            "am": "የSLA ፖሊሲ፣ ቦቶችና እይታዎች ተቀይረዋል",
+            "en": "SLA policies, bots and views repointed",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.progress_tickets",
+            "am": "ትኬቶች ወደ :name በመዛወር ላይ",
+            "en": "Tickets moving to :name",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.chip_done",
+            "am": "✓ ተጠናቋል",
+            "en": "✓ Done",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.chip_moving",
+            "am": "በመዛወር ላይ",
+            "en": "Moving",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.chunks",
+            "am": ":moved ተዛውረዋል",
+            "en": ":moved moved",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.close_note",
+            "am": "ሲጠናቀቅ እናሳውቅዎታለን",
+            "en": "We will let you know when it finishes",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.close",
+            "am": "ዝጋ",
+            "en": "Close",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.stopped_operator_gone",
+            "am": "ቆሟል፦ የአስኪያጁ መለያ የለም። ሌላ ምንም አልተዛወረም።",
+            "en": "Stopped: the operator account is gone. Nothing else was moved.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.stopped_permission_lost",
+            "am": "ቆሟል፦ አስኪያጁ በሂደቱ መካከል ፈቃድ አጥቷል። ሌላ ምንም አልተዛወረም።",
+            "en": "Stopped: the operator lost permission mid-run. Nothing else was moved.",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.back",
+            "am": "ተመለስ",
+            "en": "Back",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.next",
+            "am": "ቀጥል",
+            "en": "Next",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.cancel",
+            "am": "ሰርዝ",
+            "en": "Cancel",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.wizard.execute",
+            "am": "ሰርዝ",
+            "en": "Delete",
+            "tier": "destructive",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.conflict.title",
+            "am": "▲ ለ:name ያደረጓቸው ለውጦች አልተቀመጡም",
+            "en": "▲ Your changes to :name were not saved",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.conflict.body",
+            "am": "እርስዎ በማረም ላይ ሳሉ ሌላ ሰው ይህን ቀይሯል። ምንም አልተጻፈም — የእነሱን ስሪት ለማየት እንደገና ይጫኑ፣ ወይም የእርስዎን ይዘው በላዩ ይቀምጡ።",
+            "en": "Someone else changed this while you were editing. Nothing has been overwritten — reload to see their version, or keep yours and save over it.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.conflict.reload",
+            "am": "የእነሱን ጫን",
+            "en": "Reload theirs",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.conflict.keep",
+            "am": "የእኔን ይዞ አስቀምጥ",
+            "en": "Keep mine and save",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.loading",
+            "am": "ድርጅት በመጫን ላይ…",
+            "en": "Loading organization…",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.load_failed",
+            "am": "ይህ ፓነል መጫን አልቻለም",
+            "en": "This panel failed to load",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "org.saved",
+            "am": "ተቀምጧል",
+            "en": "Saved",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.explicit",
+            "am": "ክፍሉ በጠሪው በግልጽ ተቀምጧል።",
+            "en": "Department set explicitly by the caller.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.ai_accepted",
+            "am": "የAI አስተያየት ተተግብሯል — ራስ-ተቀባይ በርቷል።",
+            "en": "AI suggestion applied — auto-accept is on.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.ai_flagged",
+            "am": "የAI አስተያየት አልተተገበረም (ራስ-ተቀባይ ጠፍቷል) — ለግምገማ ተመልክቷል።",
+            "en": "AI suggestion NOT applied (auto-accept off) — flagged for review.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.connection_tag",
+            "am": "ከግንኙነቱ የመስመር መለያ የመጣ የውይይት ነባሪ።",
+            "en": "Conversation default from the connection routing tag.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.connection_tag_miss",
+            "am": "የግንኙነቱ መለያ ክፍል አላገኘም — ወደ ቀጣዩ ምንጭ።",
+            "en": "The connection tag matched no department — next source.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.tenant_default",
+            "am": "የተከራይ ነባሪ ክፍል።",
+            "en": "Tenant default department.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.department.tenant_default_flagged",
+            "am": "የተከራይ ነባሪ ክፍል (የAI አስተያየቱ ለግምገማ ተመልክቶ ይቆያል)።",
+            "en": "Tenant default department (the AI suggestion stays flagged for review).",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.queue.explicit",
+            "am": "ወረፋው በጠሪው በግልጽ ተቀምጧል።",
+            "en": "Queue set explicitly by the caller.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.queue.routing_tag",
+            "am": "ሕግ የመስመር መለያውን አዛምዷል።",
+            "en": "A rule matched the routing tag.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.queue.department_default",
+            "am": "የክፍሉ ነባሪ ወረፋ።",
+            "en": "Department default queue.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.rg.forced",
+            "am": "የኃላፊነት ጨዋታ መግቢያ — ወደ RG ወረፋ ተገድዷል። ይህ መስመር የመጨረሻ ነው።",
+            "en": "Responsible-gambling intake — FORCED to the RG queue. This routing is final.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.rg.missing",
+            "am": "የኃላፊነት ጨዋታ መግቢያ፣ ግን RG ወረፋ የለም — የተፈታው ወረፋ ይቆያል።",
+            "en": "Responsible-gambling intake, but no RG queue exists — the resolved queue stands.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.position.scored",
+            "am": "የቅድሚያ ነጥብ :score (ማበልጸጊያዎች፦ :boosts)።",
+            "en": "Priority score :score (boosts: :boosts).",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.position.starved",
+            "am": "ከ:cap ደቂቃ ገደቡ በላይ ጠብቋል — ወደ ወረፋው ራስ ከፍ ተደርጓል፣ ሁሉንም ማበልጸጊያ ይበልጣል።",
+            "en": "Waited past the :cap-minute cap — promoted to the head of the queue, every boost outranked.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.eligibility.none",
+            "am": "ነጻ ቦታ ያለው ብቁ ወኪል በመስመር ላይ የለም።",
+            "en": "No eligible agent online with a free slot.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.eligibility.ok",
+            "am": ":count ተመዳቢ — :strategy",
+            "en": ":count routable — :strategy",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.none",
+            "am": "ተመዳቢ ወኪል የለም",
+            "en": "no routable agent",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.rr",
+            "am": ":count በዙር ውስጥ፣ ጠቋሚው ገፍቷል",
+            "en": ":count in the rotation, pointer advanced",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.load",
+            "am": "ትንሽ ክፍት ትኬት ያለው ቀዳሚ (:load ክፍት)",
+            "en": "least open tickets first (:load open)",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.first",
+            "am": "በተጠቃሚ መለያ ቅደም ተከተል የመጀመሪያው ብቁ",
+            "en": "first eligible by user id",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.skill.matched",
+            "am": "የክህሎት ማዛመድ፦ :language",
+            "en": "skill match: :language",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.skill.dropped_starved",
+            "am": "የክህሎት ማዛመድ፦ :language — በመስመር ላይ የለም፤ ከገደቡ በላይ ስለጠበቀ የቋንቋ መስፈርቱ ተትቷል",
+            "en": "skill match: :language — nobody online with it; waited past the cap, so the language requirement dropped",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.skill.dropped_nearest",
+            "am": "የክህሎት ማዛመድ፦ :language — በመስመር ላይ የለም፤ የቅርብ-ክህሎት አማራጭ፣ የቋንቋ መስፈርቱ ተትቷል",
+            "en": "skill match: :language — nobody online with it; nearest-skill fallback, language requirement dropped",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.skill.hold",
+            "am": "የክህሎት ማዛመድ፦ :language — :online በመስመር ላይ፣ ክህሎቱ ያለው 0 → የሚመጥን ወኪል በመጠበቅ ላይ",
+            "en": "skill match: :language — :online online, 0 with the skill → holding for a matching agent",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.strategy.skill.none",
+            "am": "የክህሎት መስፈርቶቹን የሚያሟላ የለም",
+            "en": "nobody satisfies the skill requirements",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.assign.ok",
+            "am": "በስርዓቱ ተመድቧል።",
+            "en": "Assigned by the system.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.assign.at_capacity",
+            "am": "በመፈጸሚያው ቅጽበት አቅም ሞልቷል — ወደ ቀጣዩ እጩ።",
+            "en": "At capacity at the moment of commit — next candidate.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.assign.claimed",
+            "am": "መጀመሪያ በሰው ተይዟል — መስመሩ ይተዋል።",
+            "en": "Claimed by a person first — routing yields.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.assign.out_of_scope",
+            "am": "እጩው ይህን ትኬት መድረስ አይችልም — ወደ ቀጣዩ እጩ።",
+            "en": "The candidate cannot reach this ticket — next candidate.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.wait",
+            "am": "በወረፋ በመጠበቅ ላይ — በሚቀጥለው የመገኘት ክስተት እንደገና ይገመገማል።",
+            "en": "Waiting in the queue — re-evaluated on the next availability event.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.engine_error",
+            "am": "የሞተር ስህተት — በክፍሉ ነባሪ ወረፋ ቆሟል። ምንም አልጠፋም፤ ቡድኑ ተነግሮታል።",
+            "en": "Engine error — parked in the department default queue. Nothing is lost; the team is alerted.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.courtesy_hold",
+            "am": "የቀድሞው ተመዳቢ :status ነው — ከመመለሱ በፊት :minutes ደቂቃ እየተጠበቀለት ነው።",
+            "en": "The previous assignee is :status — holding :minutes minutes for them before re-routing.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.manual_reassign",
+            "am": "በተቆጣጣሪ ተመድቧል — ስልቱ ታልፏል።",
+            "en": "Assigned by a supervisor — the strategy was bypassed.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.rescue_return",
+            "am": "ወኪሉ ግንኙነት ስላጣ በስርዓቱ ወደ ወረፋው ተመልሷል።",
+            "en": "Returned to the queue by the system after the agent lost connection.",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.record.no_boosts",
+            "am": "ምንም",
+            "en": "none",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.notify.broadcast",
+            "am": "ከተቆጣጣሪ የተላከ መልእክት",
+            "en": "Broadcast from a supervisor",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.notify.no_skill_match",
+            "am": "የክህሎት ወረፋ የሚመጥን ሰው ሳይኖር እየጠበቀ ነው",
+            "en": "A skill queue is holding with nobody to match",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.notify.rescue_flagged",
+            "am": "ትኬት ወደ ማዳን ገብቷል",
+            "en": "A ticket entered Rescue",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        },
+        {
+            "key": "routing.notify.pull_in_recurring",
+            "am": "ተመሳሳይ ጊዜያዊ መጨመር እየተደጋገመ ነው — ቋሚ ይደረግ?",
+            "en": "The same pull-in keeps recurring — make it permanent?",
+            "tier": "standard",
+            "status": "machine-authored, awaiting native review"
+        }
+    ]
 }
