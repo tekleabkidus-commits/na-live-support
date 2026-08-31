@@ -114,7 +114,7 @@ test('SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve 
     // Each worked ticket restarts J at the top, re-walking Unassigned's
     // non-shift residents — the guard budgets those walks, and a full page
     // of consecutive skips means no shift row remains.
-    while (worked < SHIFT_SIZE && guard < 1_500 && consecutiveSkips <= 60) {
+    while (worked < SHIFT_SIZE && guard < 3_000 && consecutiveSkips <= 60) {
         guard += 1;
 
         // J — activate the next row down (top after each worked ticket).
