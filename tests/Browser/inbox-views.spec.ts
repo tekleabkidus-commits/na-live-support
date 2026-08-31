@@ -169,19 +169,26 @@ test("Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELE
     await row.click();
     const list = page.getByTestId('ticket-list');
     await expect(list.locator('[data-ticket]')).toHaveCount(depth);
-    // The exact FIFO head is pinned SERVER-side (QueueViewsTest, isolated scene). Here the
-    // trio's ages sit within the starvation-age cap's tie band after a long CI suite, so the
-    // head among them is timeline-sensitive — the browser law asserted: the served FIRST row
-    // IS one of the dispatcher's fixtures (never a stranger), and all three render.
-    await expect(list.locator('[data-ticket]').first()).toHaveAttribute(
-        'data-ticket',
-        /00000000-0000-7000-8000-0000000d11(01|02|03)/,
-    );
+    // The exact head is pinned SERVER-side (QueueViewsTest, isolated scene). On CI's shared
+    // suite DB the dispatcher's first-come order legitimately serves suite-born tickets —
+    // earlier specs' ticket.created events route into this tenant-default queue — so even a
+    // STRANGER at the head is truth (look 5 proved one there). The browser law that holds on
+    // any census: all three fixtures render, and their RELATIVE order is FIFO (their scores
+    // ascend by construction; strangers may interleave).
     for (const n of ['01', '02', '03']) {
         await expect(
             list.locator(`[data-ticket="00000000-0000-7000-8000-0000000d11${n}"]`),
         ).toBeVisible();
     }
+    const servedOrder = await list
+        .locator('[data-ticket]')
+        .evaluateAll((rows) => rows.map((r) => r.getAttribute('data-ticket') ?? ''));
+    const trioIndexes = ['01', '02', '03'].map((n) =>
+        servedOrder.indexOf(`00000000-0000-7000-8000-0000000d11${n}`),
+    );
+    expect(trioIndexes[0]).toBeGreaterThanOrEqual(0);
+    expect(trioIndexes[0]).toBeLessThan(trioIndexes[1]);
+    expect(trioIndexes[1]).toBeLessThan(trioIndexes[2]);
 
     // The retired seam door is gone: the query flag renders NOTHING extra (the section is the
     // real one). Same session — a second /login visit would bounce an authenticated user.
