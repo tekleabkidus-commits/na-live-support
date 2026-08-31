@@ -363,7 +363,6 @@ final class InboxBrowserSeeder extends Seeder
         // The heal: the spec tombstones it — every seed brings it back live, in its department.
         DB::table('queues')->where('id', $delQueue)->update(['is_active' => true, 'deleted_at' => null, 'department_id' => $dept2, 'name' => 'Fixture deletable queue']);
 
-        $pipeline = app(\App\Domain\Routing\Pipeline\RoutingPipeline::class);
         foreach ([4, 5] as $n) {
             $ticketId = sprintf('00000000-0000-7000-8000-0000000d11%02d', $n);
             $ticket = Ticket::query()->find($ticketId);
@@ -376,11 +375,13 @@ final class InboxBrowserSeeder extends Seeder
                 ]);
                 $ticket = Ticket::query()->findOrFail($ticketId);
             }
-            // Heal: the executed wizard moved them to the target queue — put them back and re-route
-            // through the real pipeline (records accumulate, INSERT-only; C-06: inside a transaction).
-            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => null, 'status' => 'open', 'department_id' => $dept2]);
-            $ticket = Ticket::query()->findOrFail($ticketId);
-            DB::transaction(static fn () => $pipeline->route($ticket, 'created', ['explicit_department_id' => $dept2, 'explicit_queue_id' => $delQueue]));
+            // Heal: the executed wizard moved them to the target queue — put them back. They are
+            // ASSIGNED open tickets (not waiting): the wizard's count and move take the whole open
+            // family, and an assigned pair keeps the inbox-keyboard-shift spec's Unassigned J-walk
+            // budget intact (the CI-red diagnosis of 2026-08-31: five new WAITING fixtures from the
+            // S11 scenes lengthened its guarded walk past 1500 presses — this scene's two now stay
+            // out of Unassigned; the queue-view trio must remain waiting, its spec's whole point).
+            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => $agent->identifier(), 'status' => 'open', 'department_id' => $dept2, 'queue_id' => $delQueue]);
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
         }
     }
