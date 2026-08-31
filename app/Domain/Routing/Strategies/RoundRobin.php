@@ -35,7 +35,7 @@ final class RoundRobin implements AssignmentStrategy
     {
         $ids = array_column($routable, 'user_id');   // already sorted by user id (the ring)
         if ($ids === []) {
-            return ['candidates' => [], 'note' => 'no routable agent'];
+            return ['candidates' => [], 'note' => 'no routable agent', 'note_code' => 'strategy.none', 'note_slots' => []];
         }
         $pointer = $this->pointer($queueId);
         $start = 0;
@@ -55,7 +55,7 @@ final class RoundRobin implements AssignmentStrategy
 
         // SEC-02 (S11 step 11b honest trail): the pointer/next AGENT IDS travel as FACTS —
         // step-input keys the record reader elides per role — never inside the prose note.
-        return ['candidates' => $ring, 'note' => sprintf('%d in the ring, pointer advanced', count($ring)), 'facts' => ['pointer' => $pointer, 'next' => $ring[0]]];
+        return ['candidates' => $ring, 'note' => sprintf('%d in the ring, pointer advanced', count($ring)), 'facts' => ['pointer' => $pointer, 'next' => $ring[0]], 'note_code' => 'strategy.rr', 'note_slots' => ['count' => count($ring)]];
     }
 
     /** The persisted pointer: Redis first, the DB checkpoint when Redis has nothing (FS-01 — a fairness restart is noted by the caller). */

@@ -8,6 +8,7 @@ use App\Domain\Tickets\Storage\TicketScope;
 use App\Models\User;
 use App\Support\Rbac\CapabilityMapProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Doc 11 FR-17 / SEC-02 / AC-08 — ONE reader for routing records, elision by ROLE:
@@ -49,7 +50,11 @@ final class RecordReader
                     unset($input[$k]);
                 }
             }
-            $steps[] = ['step' => $step['step'], 'input' => $input, 'outcome' => $step['outcome']];
+            // §14 (S11 step 14): the localized SENTENCE, composed server-side in the viewer's
+            // locale from routing.record.* ICU keys — variant from the stored code or derived
+            // from the step's own input; null when neither answers (old records) and the UI
+            // falls back to the stored English prose. Slots are counts/codes only, never ids.
+            $steps[] = ['step' => $step['step'], 'input' => $input, 'outcome' => $step['outcome'], 'sentence' => $this->sentence($step)];
         }
 
         $out = [
@@ -90,5 +95,103 @@ final class RecordReader
         }
 
         return $out;
+    }
+
+    /**
+     * @param  array{step: string, input: array<string, mixed>, outcome: string, code?: string}  $step
+     */
+    private function sentence(array $step): ?string
+    {
+        $in = $step['input'];
+        $key = $step['code'] ?? $this->derive($step['step'], $in);
+        if ($key === null) {
+            return null;
+        }
+        if (! Lang::has('routing.record.'.$key)) {
+            return null;
+        }
+
+        return (string) __('routing.record.'.$key, $this->scalar($this->slots($key, $in)));
+    }
+
+    /**
+     * The variants the stored INPUT alone can tell apart (older records carry no code).
+     *
+     * @param  array<string, mixed>  $in
+     */
+    private function derive(string $step, array $in): ?string
+    {
+        return match ($step) {
+            'department' => match ($in['source'] ?? null) {
+                'explicit' => 'department.explicit',
+                'ai_suggestion' => ($in['autoaccept'] ?? false) ? 'department.ai_accepted' : 'department.ai_flagged',
+                'connection_tag' => isset($in['department_id']) ? 'department.connection_tag' : 'department.connection_tag_miss',
+                'tenant_default' => ($in['ai_flagged'] ?? false) ? 'department.tenant_default_flagged' : 'department.tenant_default',
+                default => null,
+            },
+            'queue' => match ($in['source'] ?? null) {
+                'explicit' => 'queue.explicit', 'routing_tag' => 'queue.routing_tag', 'department_default' => 'queue.department_default', default => null,
+            },
+            'rg_override' => isset($in['queue_id']) ? 'rg.forced' : 'rg.missing',
+            'position' => isset($in['starved']) ? (($in['starved'] === true) ? 'position.starved' : 'position.scored') : null,
+            'eligibility' => ($in['routable'] ?? null) === 0 ? 'eligibility.none' : (isset($in['note_code']) ? 'eligibility.ok' : null),
+            'assign' => isset($in['by']) ? 'assign.claimed' : null,
+            'wait' => 'wait',
+            'engine_error' => 'engine_error',
+            'courtesy_hold' => 'courtesy_hold',
+            'manual_reassign' => 'manual_reassign',
+            'rescue_return' => 'rescue_return',
+            default => null,
+        };
+    }
+
+    /**
+     * @param  array<string, mixed>  $in
+     * @return array<string, mixed>
+     */
+    private function slots(string $key, array $in): array
+    {
+        $slots = match (true) {
+            $key === 'position.scored' => ['score' => $in['score'] ?? '', 'boosts' => ($in['matched'] ?? []) === [] ? __('routing.record.no_boosts') : implode(', ', array_map(static fn (mixed $m): string => is_scalar($m) ? (string) $m : '', (array) ($in['matched'] ?? [])))],
+            $key === 'position.starved' => ['cap' => $in['cap_minutes'] ?? ''],
+            $key === 'eligibility.ok' => ['count' => $in['routable'] ?? ''],
+            $key === 'courtesy_hold' => ['status' => $in['assignee_status'] ?? '', 'minutes' => $in['minutes'] ?? ''],
+            default => [],
+        };
+        if ($key === 'eligibility.ok' && isset($in['note_code']) && is_string($in['note_code'])) {
+            $slots['strategy'] = $this->noteSentence($in['note_code'], $this->scalar((array) ($in['note_slots'] ?? [])));
+            if (isset($in['then_code']) && is_string($in['then_code'])) {
+                $slots['strategy'] .= ' — '.$this->noteSentence($in['then_code'], $this->scalar((array) ($in['then_slots'] ?? [])));
+            }
+        }
+
+        return $slots;
+    }
+
+    /**
+     * Slot values flattened to display scalars (a non-scalar slot renders empty, never leaks).
+     *
+     * @param  array<mixed, mixed>  $values
+     * @return array<string, string>
+     */
+    private function scalar(array $values): array
+    {
+        $out = [];
+        foreach ($values as $key => $value) {
+            $out[(string) $key] = is_scalar($value) ? (string) $value : '';
+        }
+
+        return $out;
+    }
+
+    /** @param  array<string, string>  $slots */
+    private function noteSentence(string $code, array $slots): string
+    {
+        // §14's last clause: the skill LANGUAGE renders as its localized name (ref.language).
+        if (isset($slots['language']) && Lang::has('ref.language.'.$slots['language'])) {
+            $slots['language'] = (string) __('ref.language.'.$slots['language']);
+        }
+
+        return Lang::has('routing.record.'.$code) ? (string) __('routing.record.'.$code, $slots) : $code;
     }
 }

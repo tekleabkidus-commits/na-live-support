@@ -50,9 +50,20 @@ final class RoutingDecisionRecord
     }
 
     /** @param  array<string, mixed>  $input */
-    public function step(string $step, array $input, string $outcome): void
+    /**
+     * S11 step 14 (§14): `$code` names the sentence variant when the input alone cannot —
+     * ADDITIVE: old records carry no code and the reader falls back to the stored prose.
+     * The prose third argument stays the record's own canonical English (INSERT-only data).
+     *
+     * @param  array<string, mixed>  $input
+     */
+    public function step(string $step, array $input, string $outcome, ?string $code = null): void
     {
-        $this->steps[] = ['step' => $step, 'input' => $input, 'outcome' => $outcome];
+        $entry = ['step' => $step, 'input' => $input, 'outcome' => $outcome];
+        if ($code !== null) {
+            $entry['code'] = $code;
+        }
+        $this->steps[] = $entry;
     }
 
     /** @param  list<string>  $applied */

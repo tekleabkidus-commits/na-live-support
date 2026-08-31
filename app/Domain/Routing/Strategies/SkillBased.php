@@ -45,26 +45,37 @@ final class SkillBased implements AssignmentStrategy
         $matching = $this->matcher->satisfying($ids, $requirements);
 
         $note = sprintf('required %s', json_encode(array_filter($requirements), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+        // §14 slots: the language CODE (the reader localizes it via ref.language) + counts. Never ids.
+        $slots = ['language' => $requirements['language'], 'online' => count($ids)];
+        $code = 'strategy.skill.matched';
         if ($matching === [] && $requirements['language'] !== null) {
             if ($starved) {
                 // EC-04: the cap fired — the language requirement drops (BR-01 over matching).
                 $matching = $this->matcher->satisfying($ids, ['language' => null, 'department_id' => $requirements['department_id']]);
                 $note .= ' — no language match; STARVED past the cap → language requirement DROPPED (EC-04/BR-01)';
+                $code = 'strategy.skill.dropped_starved';
             } elseif ($fallback === 'nearest_skill') {
                 $matching = $this->matcher->satisfying($ids, ['language' => null, 'department_id' => $requirements['department_id']]);
                 $note .= ' — no language match; fallback nearest_skill: language requirement dropped';
+                $code = 'strategy.skill.dropped_nearest';
             } else {
                 $note .= sprintf(' — %d online, 0 with the skill → fallback wait: HOLD for a matching agent', count($ids));
 
-                return ['candidates' => [], 'note' => $note];
+                return ['candidates' => [], 'note' => $note, 'note_code' => 'strategy.skill.hold', 'note_slots' => $slots];
             }
         }
         if ($matching === []) {
-            return ['candidates' => [], 'note' => $note.' — nobody satisfies the requirements'];
+            return ['candidates' => [], 'note' => $note.' — nobody satisfies the requirements', 'note_code' => 'strategy.skill.none', 'note_slots' => $slots];
         }
         $subset = array_values(array_filter($routable, static fn (array $r): bool => in_array($r['user_id'], $matching, true)));
         $ordered = $this->loadBased->order($queueId, $subset, $ticket);
 
-        return ['candidates' => $ordered['candidates'], 'note' => $note.'; then '.$ordered['note'], 'facts' => $ordered['facts'] ?? []];
+        $out = ['candidates' => $ordered['candidates'], 'note' => $note.'; then '.$ordered['note'], 'facts' => $ordered['facts'] ?? [], 'note_code' => $code, 'note_slots' => $slots];
+        if (isset($ordered['note_code'])) {
+            $out['then_code'] = $ordered['note_code'];
+            $out['then_slots'] = $ordered['note_slots'] ?? [];
+        }
+
+        return $out;
     }
 }

@@ -22,7 +22,7 @@ final class LoadBased implements AssignmentStrategy
     public function order(string $queueId, array $routable, array $ticket): array
     {
         if ($routable === []) {
-            return ['candidates' => [], 'note' => 'no routable agent'];
+            return ['candidates' => [], 'note' => 'no routable agent', 'note_code' => 'strategy.none', 'note_slots' => []];
         }
         $ids = array_column($routable, 'user_id');
         /** @var array<string, ?string> $lastAssigned */
@@ -49,6 +49,6 @@ final class LoadBased implements AssignmentStrategy
         });
         $candidates = array_column($rows, 'user_id');
 
-        return ['candidates' => $candidates, 'note' => sprintf('least open-assigned (%d) → least-recently-assigned → user id', $rows[0]['load'])];
+        return ['candidates' => $candidates, 'note' => sprintf('least open-assigned (%d) → least-recently-assigned → user id', $rows[0]['load']), 'note_code' => 'strategy.load', 'note_slots' => ['load' => $rows[0]['load']]];
     }
 }

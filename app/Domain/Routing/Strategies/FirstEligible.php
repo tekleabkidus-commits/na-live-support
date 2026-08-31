@@ -19,6 +19,6 @@ final class FirstEligible implements AssignmentStrategy
 
     public function order(string $queueId, array $routable, array $ticket): array
     {
-        return ['candidates' => array_column($routable, 'user_id'), 'note' => 'user-id order (the documented tiebreak floor)'];
+        return ['candidates' => array_column($routable, 'user_id'), 'note' => 'user-id order (the documented tiebreak floor)', 'note_code' => 'strategy.first', 'note_slots' => []];
     }
 }

@@ -42,7 +42,12 @@ type RoutingRecord = {
     strategy: string | null;
     boosts_applied: string[];
     waiting: boolean;
-    steps: { step: string; input: Record<string, unknown>; outcome: string }[];
+    steps: {
+        step: string;
+        input: Record<string, unknown>;
+        outcome: string;
+        sentence?: string | null;
+    }[];
     at: string;
     assigned_to?: string | null;
     names?: Record<string, string>;
@@ -91,7 +96,7 @@ function copyRecord(): void {
     const r = record.value;
     if (r === null) return;
     const lines = r.steps.map(
-        (step, i) => `${i + 1}. ${step.outcome}\n   ${inputLine(step.input)}`,
+        (step, i) => `${i + 1}. ${step.sentence ?? step.outcome}\n   ${inputLine(step.input)}`,
     );
     void navigator.clipboard?.writeText(`${recordTitle()}\n${lines.join('\n')}`);
 }
@@ -248,7 +253,12 @@ function showEarlier(): void {
                             class="flex items-center gap-2 border-b px-3 py-2"
                             :style="{ borderColor: 'var(--ds-border-soft)' }"
                         >
-                            <span class="text-[12.5px] font-semibold" :style="{ color: 'var(--ds-text-primary)' }" data-testid="record-title">{{ recordTitle() }}</span>
+                            <span
+                                class="text-[12.5px] font-semibold"
+                                :style="{ color: 'var(--ds-text-primary)' }"
+                                data-testid="record-title"
+                                >{{ recordTitle() }}</span
+                            >
                             <span
                                 v-if="!record.names"
                                 class="ml-auto inline-flex flex-none items-center gap-1 whitespace-nowrap text-[10.5px]"
@@ -260,7 +270,11 @@ function showEarlier(): void {
                                 type="button"
                                 class="flex-none rounded-md border px-2 py-1 text-[11px] font-semibold"
                                 :class="record.names ? 'ml-auto' : ''"
-                                :style="{ borderColor: 'var(--ds-border)', color: 'var(--ds-text-primary)', background: 'var(--ds-surface)' }"
+                                :style="{
+                                    borderColor: 'var(--ds-border)',
+                                    color: 'var(--ds-text-primary)',
+                                    background: 'var(--ds-surface)',
+                                }"
                                 data-testid="record-copy"
                                 @click="copyRecord"
                             >
@@ -268,7 +282,12 @@ function showEarlier(): void {
                             </button>
                         </div>
                         <ol class="flex flex-col gap-2 p-3">
-                            <li v-for="(step, index) in record.steps" :key="index" class="flex gap-2.5" :data-record-step="step.step">
+                            <li
+                                v-for="(step, index) in record.steps"
+                                :key="index"
+                                class="flex gap-2.5"
+                                :data-record-step="step.step"
+                            >
                                 <span
                                     class="w-[18px] flex-none font-mono text-[11px] font-semibold"
                                     :style="{ color: 'var(--ds-text-muted)' }"
@@ -276,7 +295,12 @@ function showEarlier(): void {
                                     >{{ index + 1 }}</span
                                 >
                                 <span class="min-w-0">
-                                    <span class="block text-[12.5px] leading-relaxed" :style="{ color: 'var(--ds-text-primary)' }">{{ step.outcome }}</span>
+                                    <!-- §14: the localized sentence when the record answers one; the stored prose otherwise -->
+                                    <span
+                                        class="block text-[12.5px] leading-relaxed"
+                                        :style="{ color: 'var(--ds-text-primary)' }"
+                                        >{{ step.sentence ?? step.outcome }}</span
+                                    >
                                     <span
                                         v-if="inputLine(step.input) !== ''"
                                         class="mt-0.5 block break-all font-mono text-[10.5px]"
@@ -289,7 +313,11 @@ function showEarlier(): void {
                         <div
                             v-if="!record.names"
                             class="mx-3 mb-3 rounded-md border p-2.5 text-[11.5px] leading-relaxed"
-                            :style="{ borderColor: 'var(--ds-border)', background: 'var(--ds-inset-bg)', color: 'var(--ds-text-secondary)' }"
+                            :style="{
+                                borderColor: 'var(--ds-border)',
+                                background: 'var(--ds-inset-bg)',
+                                color: 'var(--ds-text-secondary)',
+                            }"
                             data-testid="record-elision-note"
                         >
                             {{ t.record_elision_note }}

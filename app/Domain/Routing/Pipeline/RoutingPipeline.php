@@ -186,7 +186,7 @@ final class RoutingPipeline
         ];
         $pos = $this->position->compute($queueId, $ticketFacts);
         $record->boosts($pos['boosts_applied']);
-        $record->step('position', ['matched' => $pos['matched'], 'age_seconds' => $pos['age_seconds'], 'cap_minutes' => $pos['cap_minutes']],
+        $record->step('position', ['matched' => $pos['matched'], 'age_seconds' => $pos['age_seconds'], 'cap_minutes' => $pos['cap_minutes'], 'starved' => $pos['starved'], 'score' => $pos['score']],
             $pos['starved'] ? sprintf('STARVED past %d min — promoted to the queue head, every boost outranked (NFR-06)', $pos['cap_minutes']) : sprintf('score %d (boosts: %s)', $pos['score'], $pos['boosts_applied'] === [] ? 'none' : implode(', ', $pos['boosts_applied'])));
         if ($pos['starved']) {
             $this->events->publish('routing.starvation_boosted', ['tenant_id' => $this->context->tenantId(), 'ticket_id' => $ticket->identifier(), 'queue_id' => $queueId, 'waited_seconds' => $pos['age_seconds'], 'cap_minutes' => $pos['cap_minutes']]);
@@ -198,7 +198,11 @@ final class RoutingPipeline
         $ordered = $this->strategy->order($queueId, $routable, $ticketFacts + ['department_id' => $departmentId, 'starved' => $pos['starved']]);
         $record->strategy($this->strategy->name(), count($routable));
         $record->snapshot(['routable' => $routable, 'candidates' => $ordered['candidates'], 'position' => $pos, 'queue_id' => $queueId, 'department_id' => $departmentId]);
-        $record->step('eligibility', ['members' => count($this->members->eligible($queueId)), 'routable' => count($routable)] + (array) ($ordered['facts'] ?? []), $routable === [] ? 'no eligible agent online with a free slot' : sprintf('%d routable — %s', count($routable), $ordered['note']));
+        $noteCodes = array_filter([
+            'note_code' => $ordered['note_code'] ?? null, 'note_slots' => $ordered['note_slots'] ?? null,
+            'then_code' => $ordered['then_code'] ?? null, 'then_slots' => $ordered['then_slots'] ?? null,
+        ], static fn ($v): bool => $v !== null);
+        $record->step('eligibility', ['members' => count($this->members->eligible($queueId)), 'routable' => count($routable)] + $noteCodes + (array) ($ordered['facts'] ?? []), $routable === [] ? 'no eligible agent online with a free slot' : sprintf('%d routable — %s', count($routable), $ordered['note']));
 
         foreach ($ordered['candidates'] as $userId) {
             $agent = User::query()->find($userId);
@@ -207,21 +211,21 @@ final class RoutingPipeline
             }
             try {
                 $this->assign->assignBySystem($ticket->fresh() ?? $ticket, $agent, $this->capacity->commitFor($record->id, $queueId));
-                $record->step('assign', ['candidate' => $userId], 'assigned (actor=system, Doc 06 door)');
+                $record->step('assign', ['candidate' => $userId], 'assigned (actor=system, Doc 06 door)', 'assign.ok');
                 $this->waiting->remove($queueId, $ticket->identifier());   // FS-02: removal ONLY after the commit
                 $this->roundRobin->advance($queueId, $userId);              // T-04: the pointer follows the assignment
                 $recordId = $record->close('assigned', $queueId, $departmentId, $userId);
 
                 return ['record_id' => $recordId, 'outcome' => 'assigned', 'queue_id' => $queueId, 'department_id' => $departmentId, 'assigned_to' => $userId];
             } catch (AtCapacity $e) {
-                $record->step('assign', ['candidate' => $userId], 'at capacity at commit (EC-03) — next candidate');
+                $record->step('assign', ['candidate' => $userId], 'at capacity at commit (EC-03) — next candidate', 'assign.at_capacity');
             } catch (AlreadyClaimed $e) {
-                $record->step('assign', ['candidate' => $userId, 'by' => $e->by], 'claimed by a human first (BR-03) — routing yields');
+                $record->step('assign', ['candidate' => $userId, 'by' => $e->by], 'claimed by a human first (BR-03) — routing yields', 'assign.claimed');
                 $recordId = $record->close('manual', $queueId, $departmentId, $e->by);
 
                 return ['record_id' => $recordId, 'outcome' => 'manual', 'queue_id' => $queueId, 'department_id' => $departmentId, 'assigned_to' => $e->by];
             } catch (AssigneeOutOfScope $e) {
-                $record->step('assign', ['candidate' => $userId], 'assignee out of scope (FR-15) — next candidate');
+                $record->step('assign', ['candidate' => $userId], 'assignee out of scope (FR-15) — next candidate', 'assign.out_of_scope');
             }
         }
 
