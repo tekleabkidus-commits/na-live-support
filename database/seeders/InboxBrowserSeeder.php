@@ -381,7 +381,11 @@ final class InboxBrowserSeeder extends Seeder
             // budget intact (the CI-red diagnosis of 2026-08-31: five new WAITING fixtures from the
             // S11 scenes lengthened its guarded walk past 1500 presses — this scene's two now stay
             // out of Unassigned; the queue-view trio must remain waiting, its spec's whole point).
-            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => $agent->identifier(), 'status' => 'open', 'department_id' => $dept2, 'queue_id' => $delQueue]);
+            // Assigned to the TEMP fixture user, never the agent: agent-assigned rows enter every
+            // My-Open assertion (the second CI red, 2026-08-31 — eight specs); org-temp's My Open
+            // is asserted by no spec. The temp user exists from the structure scene (seeded first).
+            $wizardOwner = User::query()->where('email', 'org-temp@fixture.example')->firstOrFail();
+            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => $wizardOwner->identifier(), 'status' => 'open', 'department_id' => $dept2, 'queue_id' => $delQueue]);
             app(\App\Domain\Inbox\ReadModels\ListProjector::class)->recomputeTicket($ticketId);
         }
     }
