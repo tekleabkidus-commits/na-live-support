@@ -1,0 +1,56 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the p[39m[90m…[39m [90m10.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\SubmissionSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: a submission names its exact version forever — a later pu[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 server truth: a COMPLETE submission missing a required-and-[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\TelegramFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit US-04 end-to-end (direct mode): one field per message, buttons f[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 retries: three friendly failures then the human offer; /hu[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06: a version published MID-FLOW never moves the running flow[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04 DRILL: Redis state killed mid-flow → the next message resu[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: one live flow per conversation — a second start supersedes[39m[90m…[39m [90m0.34s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\Forms\DualRenderConformanceTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit one schema, three renders, ONE submission shape: widget-path, di[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 language resolution is ONE chain for both renderers: custome[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\AutomationGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per automation table and priv[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every automation table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18 physics (countersign obligation 1): a field key/type/entit[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4): the activation stamp fi[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\Forms\DualRenderConforma[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  unknown form version[39;22m
+
+  at [32mapp/Domain/Forms/VersionReader.php[39m:[32m35[39m
+     31▕         return $this->cache->remember('form:version:'.$versionId, self::VERSION_TTL_SECONDS, 'form.changed', function () use ($versionId): array {
+     32▕             /** @var object{form_id: string, version: int, schema: string}|null $row */
+     33▕             $row = DB::table('form_versions')->where('id', $versionId)->first(['form_id', 'version', 'schema']);
+     34▕             if ($row === null) {
+  ➜  35▕                 throw new InvalidArgumentException('unknown form version');
+     36▕             }
+     37▕             /** @var array<string, mixed> $schema */
+     38▕             $schema = json_decode($row->schema, true, 32, JSON_THROW_ON_ERROR);
+     39▕
+
+  [33m1   [39m[39;1mapp/Domain/Forms/VersionReader.php[39;22m:[39;1m35[39;22m
+  [33m2   [39m[39;1mapp/Support/Cache/TenantCache.php[39;22m:[39;1m65[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m19 passed[39;22m[90m (211 assertions)[39m
+  [90mDuration:[39m [39m14.42s[39m
+
+EXIT=2

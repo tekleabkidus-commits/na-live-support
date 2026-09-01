@@ -3029,3 +3029,44 @@ to all-but-action_outcomes in the same commit.
 
 END OF RIDER 2 — nothing follows this line.
 
+
+### SCHEMA AMENDMENT 6 — RIDER 3 (filed at S12 step 11, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+
+T-07 states the flow store in full ("per-conversation flow state in Redis with
+24 h TTL + DB checkpoint at step boundaries — a crashed flow resumes at the last
+checkpoint") but the amendment-6 filing carried no table for the DB half, and no
+existing table can hold it: conversations has no jsonb column, tickets.form_data
+requires a ticket that does not exist mid-flow (tickets arrive at handoff or
+completion, never before), and ticket_handoff_packets is an immutable one-shot.
+RIDER: **`form_flow_checkpoints`** (T-07, EC-06, SS-03, FS-04) —
+
+- `id` uuid PK; `tenant_id` uuid NOT NULL FK tenants.
+- `conversation_id` uuid NOT NULL FK conversations; partial unique
+  `(tenant_id, conversation_id) WHERE outcome IS NULL` — ONE live flow per
+  conversation (starting a second flow supersedes the first honestly, by
+  outcome, never by delete).
+- `form_id` uuid NOT NULL FK forms; `version_id` uuid NOT NULL FK
+  form_versions — **stamped at flow START and immutable by grant (EC-06's pin:
+  a mid-form publish never moves a running flow; BR-06 physics already
+  guarantees the schema behind the ref cannot change either).**
+- `step_index` integer NOT NULL DEFAULT 0 (the last COMPLETED step boundary);
+  `answers` jsonb NOT NULL DEFAULT '{}' (answers up to that boundary);
+  `language` text NOT NULL (the FR-20/§14 resolution, resolved once at start);
+  `mode` text NOT NULL CHECK (direct|business).
+- `outcome` text NULL CHECK (completed|handed_off|abandoned|superseded) +
+  `finished_at` timestamptz(6) NULL, both app-writable (the close is an app
+  decision, not a metric stamp).
+- `created_at`/`updated_at` timestamptz(6) DEFAULT clock_timestamp(), created_at
+  app-DENIED (R-19b hygiene); updated_at app-writable (the checkpoint write).
+- GRANTS: INSERT (id, tenant_id, conversation_id, form_id, version_id,
+  step_index, answers, language, mode); UPDATE (step_index, answers, outcome,
+  finished_at, updated_at) — **form_id/version_id/conversation_id/language/mode
+  immutable by grant**; **NO DELETE.** FORCED RLS + tenant_isolation. The
+  grant-physics denied sets land in tests/Isolation/AutomationGrantPhysicsTest
+  in the same commit, with the version_id-UPDATE-dies-42501 leg as EC-06's
+  fail-first control.
+- Redis half: redis-volatile via TenantCache (`flow:{conversation}` suffix,
+  24 h TTL, invalidation event form.submitted) — cache is never the source of
+  truth (C-07); the DB row is what FS-04's drill resumes from.
+
+END OF RIDER 3 — nothing follows this line.

@@ -73,17 +73,17 @@ final class SubmissionWriter
             if (! is_array($step) || ! is_array($step['fields'] ?? null)) {
                 continue;
             }
-            if (is_array($step['visible_when'] ?? null) && ! $this->holds($step['visible_when'], $answers)) {
+            if (is_array($step['visible_when'] ?? null) && ! ConditionEval::holds($step['visible_when'], $answers)) {
                 continue;
             }
             foreach ($step['fields'] as $field) {
                 if (! is_array($field) || ($field['required'] ?? false) !== true) {
                     continue;
                 }
-                if (is_array($field['visible_when'] ?? null) && ! $this->holds($field['visible_when'], $answers)) {
+                if (! ConditionEval::visible($field, $answers)) {
                     continue;
                 }
-                $key = is_string($field['ref'] ?? null) ? $field['ref'] : (is_string($field['key'] ?? null) ? $field['key'] : null);
+                $key = ConditionEval::keyOf($field);
                 $value = $key !== null ? ($answers[$key] ?? null) : null;
                 if ($key !== null && ($value === null || $value === '' || $value === [])) {
                     $missing[] = $key;
@@ -92,29 +92,5 @@ final class SubmissionWriter
         }
 
         return $missing;
-    }
-
-    /** @param array<mixed> $when  untrusted schema JSON — every read is guarded
-     * @param array<string, mixed> $answers */
-    private function holds(array $when, array $answers): bool
-    {
-        $field = is_string($when['field'] ?? null) ? $when['field'] : '';
-        $value = $answers[$field] ?? null;
-        $target = $when['value'] ?? null;
-
-        return match ($when['op'] ?? null) {
-            'equals' => $value === $target,
-            'not_equals' => $value !== $target,
-            'in' => is_array($target) && in_array($value, $target, false),
-            'contains' => is_string($value) && is_string($target) && str_contains($value, $target),
-            'gt' => is_numeric($value) && is_numeric($target) && (float) $value > (float) $target,
-            'lt' => is_numeric($value) && is_numeric($target) && (float) $value < (float) $target,
-            'between' => is_numeric($value) && is_array($target) && count($target) === 2
-                && is_numeric($target[0] ?? null) && is_numeric($target[1] ?? null)
-                && (float) $value >= (float) $target[0] && (float) $value <= (float) $target[1],
-            'is_empty' => $value === null || $value === '' || $value === [],
-            'not_empty' => ! ($value === null || $value === '' || $value === []),
-            default => false,
-        };
     }
 }

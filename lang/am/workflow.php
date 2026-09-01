@@ -27,6 +27,14 @@ return [
             'widget_shortcuts' => 'የዊጀት አቋራጮች',
         ],
     ],
+    'flow' => [
+        // FR-21: the conversational renderer's own voice (friendly retries,
+        // the offer of a person, numbered-choice instruction, FS-04's recap).
+        'retry' => 'ይቅርታ፣ ያ ትክክል አይመስልም — እባክዎ እንደገና ይሞክሩ።',
+        'offer_human' => 'ይህ አስቸጋሪ ይመስላል። በማንኛውም ጊዜ /human ብለው ይመልሱ — ሰው ከዚህ ይቀጥላል፤ የጻፉት ሁሉ ተያይዞ ይቆያል።',
+        'choose_number' => 'የምርጫዎን ቁጥር ይመልሱ።',
+        'resumed_recap' => 'ካቆምንበት እንቀጥላለን — ቀደም ያሉ መልሶችዎ ተቀምጠዋል።',
+    ],
     'macros' => [
         'bundled_skipped' => 'የማክሮው ጽሁፍ ገብቷል፣ ነገር ግን ":type" ተዘሏል — ያ ፈቃድ የለዎትም።',
         'bundled_failed' => 'የማክሮው ጽሁፍ ገብቷል፣ ነገር ግን ":type" እዚህ ሊተገበር አልቻለም።',

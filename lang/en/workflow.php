@@ -27,6 +27,14 @@ return [
             'widget_shortcuts' => 'Widget shortcuts',
         ],
     ],
+    'flow' => [
+        // FR-21: the conversational renderer's own voice (friendly retries,
+        // the offer of a person, numbered-choice instruction, FS-04's recap).
+        'retry' => "Sorry, that doesn't look right — could you try again?",
+        'offer_human' => 'This seems tricky. Reply /human any time and a person will take it from here — everything you typed stays attached.',
+        'choose_number' => 'Reply with the number of your choice.',
+        'resumed_recap' => 'Picking up where we left off — your earlier answers are saved.',
+    ],
     'macros' => [
         // EC-09: the inline notices when a bundled action cannot apply.
         'bundled_skipped' => 'The macro text was inserted, but ":type" was skipped — you do not have that permission.',

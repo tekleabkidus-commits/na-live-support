@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 const DOC12_AUTOMATION_TABLES = [
     'automation_rules', 'automation_rule_revisions', 'automation_rule_executions',
     'automation_keyword_sets', 'field_definitions', 'field_definition_options',
-    'forms', 'form_versions',
+    'forms', 'form_versions', 'form_flow_checkpoints',
 ];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). '*' = every column. */
@@ -62,6 +62,12 @@ const DOC12_AUTOMATION_DENIED = [
         // published_at is ORDERING-RELEVANT (version history) — R-19b.
         'INSERT' => ['created_at', 'published_at'],
         'UPDATE' => '*',
+    ],
+    'form_flow_checkpoints' => [
+        // RIDER 3: born live — outcome/finished arrive at the close, never at birth.
+        'INSERT' => ['created_at', 'finished_at', 'outcome', 'updated_at'],
+        // EC-06's pin as physics: the flow's version (and identity) never moves.
+        'UPDATE' => ['conversation_id', 'created_at', 'form_id', 'id', 'language', 'mode', 'tenant_id', 'version_id'],
     ],
 ];
 
@@ -131,6 +137,8 @@ it('FR-18 physics (countersign obligation 1): a field key/type/entity UPDATE and
     ]);
     DB::table('field_definitions')->where('id', $fieldId)->update(['position' => 3]);
     expect(DB::table('field_definitions')->where('id', $fieldId)->value('position'))->toBe(3);
+    // RIDER 3 positive control: the checkpoint write columns ARE granted.
+    DB::statement('UPDATE form_flow_checkpoints SET step_index = step_index');
 
     foreach ([
         "UPDATE field_definitions SET key = 'renamed_key'",
@@ -139,6 +147,8 @@ it('FR-18 physics (countersign obligation 1): a field key/type/entity UPDATE and
         "UPDATE form_versions SET schema = '{}'::jsonb",
         "UPDATE automation_rule_revisions SET definition = '{}'::jsonb",
         'UPDATE automation_rule_executions SET matched = false',
+        // RIDER 3 / EC-06's fail-first control: a running flow's version can never move.
+        "UPDATE form_flow_checkpoints SET version_id = '00000000-0000-0000-0000-000000000000'",
     ] as $sql) {
         try {
             DB::transaction(static fn () => DB::statement($sql));

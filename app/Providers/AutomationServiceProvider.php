@@ -41,5 +41,9 @@ final class AutomationServiceProvider extends ServiceProvider
 
             return $registry;
         });
+        // Step 11: Doc 09 FR-08's seam filled — the AppServiceProvider default
+        // (NullFlowState, "Doc 12 forms bind theirs") is overridden here, later
+        // in the register order, so the Doc 09 file stays byte-untouched.
+        $this->app->bind(\App\Domain\Ai\Pipeline\FlowStateProvider::class, \App\Domain\Forms\Runtime\ActiveFlowProvider::class);
     }
 }

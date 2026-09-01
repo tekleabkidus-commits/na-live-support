@@ -428,6 +428,9 @@ lines. Landed and added: `tests/Feature/Hours/CalendarTest.php`,
 (in the listed `tests/Contract/Automation` dir), `tests/Feature/Macros/*` (listed dir).
 Step 10: `tests/Contract/Forms/FormPreChatContractTest.php` (NEW dir — add
 `tests/Contract/Forms` to the run list), `tests/Feature/Forms/*` (listed dir).
+Step 11: `tests/Feature/Forms/TelegramFlowTest.php` (listed dir),
+`tests/Contract/Forms/DualRenderConformanceTest.php` (added dir); RIDER 3's
+grant legs ride the already-listed AutomationGrantPhysicsTest.
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 
