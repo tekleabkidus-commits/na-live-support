@@ -3014,3 +3014,18 @@ Growth beyond this list = a further filed amendment, never a silent catalog edit
 
 END OF EVENT-FAMILY AMENDMENT — nothing follows this line.
 
+### SCHEMA AMENDMENT 6 — RIDER 2 (filed at S12 step 5, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+
+The step-5 build surfaced what the item-3 filing missed, and the grant physics
+caught it live (a 42501 on the chain's own write — the second time this
+session's physics refused this session's code): FR-06's per-action outcomes
+arrive from the QUEUED chain after the evaluation row's INSERT — they cannot
+ride the INSERT. RIDER: `automation_rule_executions` gains **UPDATE granted to
+EXACTLY (action_outcomes)** — the chain's one landing write. Everything else
+stays immutable (rule/revision/event/conditions/trips/executed_at untouched by
+grant); a retried chain re-lands outcomes wholesale (tries=3 — the last landing
+is the honest record of what ran). The grant-physics denied sets move from '*'
+to all-but-action_outcomes in the same commit.
+
+END OF RIDER 2 — nothing follows this line.
+
