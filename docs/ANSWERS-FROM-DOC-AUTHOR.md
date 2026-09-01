@@ -2672,3 +2672,53 @@ second-live-flag refusal executes). Index `(tenant_id, flagged_at) WHERE cleared
 records that `routing.rescue.auto` returned it. `rescue.flagged{reason}` on INSERT;
 `rescue.auto_returned` on the return. Hot-table rule: not a hot table (no CONCURRENTLY needed).
 
+## S12 (Doc 12) — plan-approval rulings and filed interpretations (advisor-ruled, owner-witnessed, 2026-09-01; plan of record docs/SESSION-12-APPROVED-PLAN.md)
+
+Filed at plan approval, before implementation. The doc author has NOT been consulted.
+This record is canonical over any restatement in commits or BUILD-STATUS. Ruled at
+approval: 97 ids family-exact; closing set 12/12; STOP-B connection-tag = NEIGHBOR
+(the reopener stays on Doc 05's FR-08 row, un-absorbed); STOP-D amendment outline
+approved with the full R-19b countersign owed at step 2a BEFORE any migration;
+STOP-E P-A53 shape approved, countersign at landing; STOP-F P-ESC approved as an
+escalate-first packet, countersign before landing; STOP-H design verification
+confirmed. The step-0 v1-strike offer was REFUSED: the frozen listing holds multiple
+versions throughout (B12-S01 v1/v2/v3, B12-S02 v1/v2, B5-S02 v1/v2, B6-S14 v1/v2);
+highest version binds; the moved v1s stay; the session's "one version per screen"
+claim was a defective-regex finding, corrected as honest trail on the [B8] row.
+
+### A-59 (FILED INTERPRETATION, approved at S12 plan approval). FR-19 storage: no rival table — customer values ride `customer_field_values` (canonical-string + definition-driven types), ticket values ride Doc 06's jsonb
+
+FR-19's own text ("stored per Doc 01: customer_fields / ticket form_data+custom
+fields jsonb per Doc 06 FR-01") + the existing substrate decide storage:
+1. **Customer entity** → the existing `customer_field_values` EAV table (SCHEMA
+   AMENDMENT 2 ADDITION 9), shape unchanged. Its Countersign Condition 2 reopener is
+   hereby answered: `value` stays **text** holding a canonical string serialization
+   per type; the field DEFINITION's type (Doc 12 `field_definitions`) drives
+   validation at the ONE write door and rendering at read. No new column on the
+   Doc 08 table; zero Doc 08 core edits.
+2. **Ticket entity** → the existing `tickets` custom-fields jsonb (Doc 06 FR-01's
+   storage); form submissions snapshot `{version_id + answers}` into `form_data`
+   (BR-06), as Doc 06 FR-01 anticipates.
+3. **Definitions** are Doc 12's new tables (`field_definitions` + options, T-01).
+   Choice-type label snapshots (FR-18/EC-08) live in the definition's OPTION rows
+   (label snapshot captured on removal); the stored value is the stable option
+   value; renders join the snapshot.
+4. FR-19 expression indexes on hot keys: ops-managed list, migrator-owned DDL,
+   filed per index; none speculative in v1.
+REOPENER: if a future document needs typed comparison at SQL level on customer
+values (range scans on numbers/dates), a typed sidecar column set on
+`customer_field_values` is THAT document's amendment; the canonical-string choice
+here is deliberate and recorded.
+
+### A-60 (FILED INTERPRETATION, approved at S12 plan approval). The outbound-webhook machinery is built BY Doc 12, consuming Doc 01's conventions
+
+Verified at plan time: `tenant.outbound_webhook_secret` exists in
+`registries/settings.php` (Doc 01); no outbound-webhook sender exists anywhere in
+`app/`. Doc 12 FR-03/SEC-02/EC-13 say "webhook out (Doc 01 signed)" and "Doc 01
+webhook semantics reused" — semantics specified, never built. INTERPRETATION: Doc 12
+builds the platform's outbound webhook arm (`Automation/Actions/WebhookOut` + its
+delivery job): HMAC signing with the Doc 01 secret convention, per-tenant
+admin-managed destination allowlist, SSRF egress through the egress proxy (Doc 04
+SEC-03 family), retry ×8 backoff → auto-disable + alert (EC-13). Future documents
+consume this arm; its contract is Doc 12's to freeze.
+
