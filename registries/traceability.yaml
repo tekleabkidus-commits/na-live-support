@@ -2551,7 +2551,14 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED-MANUAL: dual-render conformance (schema to widget contract + both Telegram modes), EC-07 required-when-visible, versioned submissions (EC-06), publish validations, SS-03 partial-data handoff, FS-04 checkpoint-resume drill. Flips at steps 10-11.
+      PLANNED-MANUAL, publish/version halves EXECUTED (S12 step 10): all FR-22
+      publish blocks incl. EC-07 required-when-visible with the auto-suggest +
+      the R-03 forward wall (tests/Feature/Forms/FormPublishTest.php), versioned
+      submissions + SS-03 partial snapshot (SubmissionSnapshotTest), B3-S05
+      pre-chat/offline contract + NFR-04 budget
+      (tests/Contract/Forms/FormPreChatContractTest.php). Flips at step 11 when
+      the Telegram flow halves (both modes, EC-06 mid-form version pin, FS-04
+      checkpoint-resume drill) land in this suite_path.
   - ac_ref: "Doc12 AC-08"
     suite_path: tests/Feature/Csat/TriggerMatrixTest.php
     type: manual

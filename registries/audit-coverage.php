@@ -1699,6 +1699,30 @@ return [
         'owning_doc' => 'Doc12',
     ],
     [
+        // FR-20: form shell changes (created|updated).
+        'action_key' => 'form.changed',
+        'entity' => 'form',
+        'actor_types' => ['staff'],
+        'required_fields' => ['form_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-22/SEC-06: publish mints an immutable version — HIGH-RISK (Doc 17 classes it).
+        'action_key' => 'form.published',
+        'entity' => 'form',
+        'actor_types' => ['staff'],
+        'required_fields' => ['form_id', 'version_id'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-22/BR-06: a submission snapshot landed on its ticket ({version_id + answers}).
+        'action_key' => 'form.submitted',
+        'entity' => 'ticket',
+        'actor_types' => ['customer'],
+        'required_fields' => ['version_id', 'channel', 'complete'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
         // FR-02: keyword-set changes — the audit carries the id, never the list (SEC-03).
         'action_key' => 'automation.keyword_set.changed',
         'entity' => 'automation_keyword_set',

@@ -1227,6 +1227,20 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting'],
             'description' => 'Doc 12 FR-16: a macro was inserted (usage drives palette ranking here and the Doc 15 macro report there).',
         ],
+        'form.changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'form_id', 'version_id', 'kind'],
+            'producers' => ['Doc12/Forms'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-20/FR-22: a form changed (kind: created|updated|published). version_id is set exactly when kind=published — BR-06\'s immutable version was minted.',
+        ],
+        'form.submitted' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'form_id', 'version_id', 'ticket_id', 'channel', 'complete'],
+            'producers' => ['Doc12/Forms', 'Doc05/Flows'],
+            'consumers' => ['Doc12/Automation', 'Doc09/Handoff', 'Doc15/Reporting'],
+            'description' => 'Doc 12 FR-22 / SS-03: a submission snapshotted {version_id + answers} onto its ticket. complete=false is the mid-form handoff (Doc 09 FR-12 partial form_data). The FR-01 trigger.',
+        ],
         'hours.calendar.updated' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'calendar_id', 'kind'],

@@ -424,7 +424,10 @@ lines. Landed and added: `tests/Feature/Hours/CalendarTest.php`,
 `tests/Feature/Sla/ExampleSentenceTest.php`, `tests/Feature/Foundation/EnvelopeMetadataTest.php`
 (packet #3), `tests/Feature/Automation/{EngineOrderTest,RuleDefinitionTest,ConditionTreeTest,AutomationConsumerDrillTest}.php`,
 `tests/Property/AutomationGuardCapsTest.php`, `tests/Security/AutomationNoBypassTest.php`,
-`tests/Security/ActivatorFloorTest.php`.
+`tests/Security/ActivatorFloorTest.php`. Step 9: `tests/Contract/Automation/MacroPaletteContractTest.php`
+(in the listed `tests/Contract/Automation` dir), `tests/Feature/Macros/*` (listed dir).
+Step 10: `tests/Contract/Forms/FormPreChatContractTest.php` (NEW dir — add
+`tests/Contract/Forms` to the run list), `tests/Feature/Forms/*` (listed dir).
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 

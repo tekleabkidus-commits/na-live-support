@@ -1,0 +1,34 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the p[39m[90m…[39m [90m10.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\SubmissionSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: a submission names its exact version forever — a later pu[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 server truth: a COMPLETE submission missing a required-and-[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\DefinitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/FR-19: the 13-type matrix — definition, canonical storage,[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: number min/max and text regex validation rules bind; the[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\LifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: deactivate → writes refuse + values stand; reactivate res[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: option removal snapshots the label; the stored value stan[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: the where-used answer is COMPLETE — the referencing rule[39m[90m… [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\ValueStorageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-59 customer half: the seeded trio stores through Doc 08's door[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02 live: a stored ticket custom value drives a rule condition[39m[90m…[39m [90m0.11s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (126 assertions)[39m
+  [90mDuration:[39m [39m11.96s[39m
+
+EXIT=0

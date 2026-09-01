@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-144 event(s).
+146 event(s).
 
 ## `agent.status_changed`
 
@@ -418,6 +418,24 @@ Doc 12 FR-17/FR-18: a field definition changed (kind: created|updated|deactivate
 - **Payload:** `tenant_id`, `field_id`, `kind`
 - **Producers:** Doc12/Fields
 - **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `form.changed`
+
+Doc 12 FR-20/FR-22: a form changed (kind: created|updated|published). version_id is set exactly when kind=published — BR-06's immutable version was minted.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `form_id`, `version_id`, `kind`
+- **Producers:** Doc12/Forms
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `form.submitted`
+
+Doc 12 FR-22 / SS-03: a submission snapshotted {version_id + answers} onto its ticket. complete=false is the mid-form handoff (Doc 09 FR-12 partial form_data). The FR-01 trigger.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `form_id`, `version_id`, `ticket_id`, `channel`, `complete`
+- **Producers:** Doc12/Forms, Doc05/Flows
+- **Consumers:** Doc12/Automation, Doc09/Handoff, Doc15/Reporting
 
 ## `hours.calendar.updated`
 

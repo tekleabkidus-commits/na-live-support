@@ -9,6 +9,24 @@ return [
         // R-04: the tenant-wide rules-pause switch (features registry label).
         'rules_pause' => 'Pause all automation rules',
     ],
+    'forms' => [
+        // FR-22: the publish-validation block labels (SchemaValidator's codes).
+        'block' => [
+            'invalid_shape' => 'The form definition is malformed: :detail',
+            'forward_reference' => '":at" points at ":field", which lives in a LATER step — conditions may only look back.',
+            'unknown_field' => '":field" does not exist as a field.',
+            'retired_field' => '":field" is retired — edit the form before publishing.',
+            'required_hidden' => '":field" is required but sometimes hidden. Make it "required when visible" instead.',
+            'incomplete_language' => ':at is missing its :language text.',
+            'upload_unsupported' => 'A required file field cannot be answered on ":channel" — that channel accepts no uploads.',
+        ],
+        // FR-22: the usage-banner section headings.
+        'usage' => [
+            'bot_menus' => 'Bot menus',
+            'rules' => 'Automation rules',
+            'widget_shortcuts' => 'Widget shortcuts',
+        ],
+    ],
     'macros' => [
         // EC-09: the inline notices when a bundled action cannot apply.
         'bundled_skipped' => 'The macro text was inserted, but ":type" was skipped — you do not have that permission.',

@@ -1851,3 +1851,31 @@ function macroScene(): array
 
     return [$tenant, $ticket, $agent, app(App\Domain\Macros\MacroWriter::class)];
 }
+
+/** Doc 12 (S12 step 10): forms test scene — bound tenant + open ticket + a full-map agent + the two form doors. */
+function formScene(): array
+{
+    [$tenant, , $ticket] = ticketFixture('open');
+    $agent = grantAllPermissions(ticketActor([]));
+
+    return [$tenant, $ticket, $agent, app(App\Domain\Forms\FormWriter::class), app(App\Domain\Forms\FormPublisher::class)];
+}
+
+/**
+ * Doc 12 (S12 step 10): a minimal PUBLISHABLE schema (en+am complete) the form
+ * tests bend per-leg.
+ *
+ * @param  array<string, mixed>  $overrides  merged over the top level
+ */
+function minimalFormSchema(array $overrides = []): array
+{
+    return array_merge([
+        'languages' => ['en', 'am'],
+        'steps' => [
+            ['key' => 'main', 'title' => ['en' => 'About it', 'am' => 'ስለ ጉዳዩ'], 'fields' => [
+                ['key' => 'summary', 'type' => 'text', 'required' => true, 'label' => ['en' => 'Summary', 'am' => 'ማጠቃለያ']],
+            ]],
+        ],
+        'completion' => ['tags' => ['fixture-form']],
+    ], $overrides);
+}
