@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Domain\Automation\Engine\Evaluator;
-use App\Domain\Automation\Rules\RuleWriter;
 use App\Jobs\Automation\ActionChainJob;
 use App\Support\Cache\TenantCache;
 use Illuminate\Support\Facades\DB;
@@ -28,22 +27,6 @@ use Laravel\Pennant\Feature;
 |   state and logs untouched (RulesPauseTest's deeper legs ride step 7; the
 |   switch's evaluation effect is pinned here where the evaluator lives).
 */
-
-function engineScene(): array
-{
-    [$tenant, , $ticket] = ticketFixture('open');
-    $author = grantAllPermissions(ticketActor([]));
-
-    return [$tenant, $ticket, $author, app(RuleWriter::class)];
-}
-
-function activeRule(RuleWriter $writer, object $author, string $name, string $trigger = 'ticket.created', int $cooldown = 0, array $conditions = ['all' => []]): array
-{
-    $made = $writer->create(['name' => $name, 'trigger' => $trigger, 'conditions' => $conditions, 'actions' => [['type' => 'add_tags', 'tags' => [$name]]], 'cooldown_seconds' => $cooldown], $author);
-    $writer->activate($made['rule_id'], $made['revision_id'], $author);
-
-    return $made;
-}
 
 it('BR-01: rules evaluate and dispatch in position order — the admin\'s list IS the execution order', function (): void {
     Queue::fake([ActionChainJob::class]);

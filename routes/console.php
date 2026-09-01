@@ -59,6 +59,9 @@ Schedule::command('automation:schedule-sweep')->everyMinute()->withoutOverlappin
 // re-verified against row truth + the clock library (the T-03 posture).
 Schedule::command('sla:timers-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 12 FR-06: execution-log retention (90 d) — platform role, app holds no DELETE.
+Schedule::command('automation:executions-prune')->dailyAt('03:20')->timezone('UTC');
+
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();

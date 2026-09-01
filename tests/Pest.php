@@ -1795,3 +1795,21 @@ function timerScene(int $firstResponseSeconds = 60): array
 
     return [$tenant, $ticket, $instance];
 }
+
+/** Doc 12 (S12): the engine test scene — bound tenant + open ticket + a full-map author. */
+function engineScene(): array
+{
+    [$tenant, , $ticket] = ticketFixture('open');
+    $author = grantAllPermissions(ticketActor([]));
+
+    return [$tenant, $ticket, $author, app(App\Domain\Automation\Rules\RuleWriter::class)];
+}
+
+/** Doc 12 (S12): create + activate a rule in one move (shared across the automation suites). */
+function activeRule(App\Domain\Automation\Rules\RuleWriter $writer, object $author, string $name, string $trigger = 'ticket.created', int $cooldown = 0, array $conditions = ['all' => []]): array
+{
+    $made = $writer->create(['name' => $name, 'trigger' => $trigger, 'conditions' => $conditions, 'actions' => [['type' => 'add_tags', 'tags' => [$name]]], 'cooldown_seconds' => $cooldown], $author);
+    $writer->activate($made['rule_id'], $made['revision_id'], $author);
+
+    return $made;
+}

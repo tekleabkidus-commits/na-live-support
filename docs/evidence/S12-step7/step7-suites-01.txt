@@ -1,0 +1,69 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's[39m[90m… [39m [90m10.80s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the unbuilt arms answer honestly until their steps/packets: tran[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\AutomationConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer evaluates once, and a re-driven delivery[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the doc12.json read-slice conformance: every payload key the con[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ConditionTreeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: the operator matrix over every fact type[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: nested all/any groups with the full trace — no short-circ[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets resolve the managed list at evaluation; a re[39m[90m…[39m [90m0.08s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\DryRunParityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-02: replayed corpus verdicts are EQUAL, and the dry-run write[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05/§9: the drawer's data — per-condition badges with evaluate[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\EngineOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-01: rules evaluate and dispatch in position order — the admin[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the trigger index: a rule wakes only for its own trigger[39m[90m         [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event inserts nothing and dispatches nothing[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: cooldown keys on (rule, ticket) — the same ticket suppres[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a corrupt compiled cache falls back to interpretive evalu[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: the rules-pause switch stops evaluation instantly and dest[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\LogElisionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03 role fixtures: message-fact prose elides to markers for t[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\RuleDefinitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: create drafts, activate swaps atomically, an edit to an a[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/FR-03 walls: unknown trigger, unknown action type and a su[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets are managed lists — created, updated, retire[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ScheduleSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit arms without firing, then fires ONCE when due and re-arms in the[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: a paused tenant's due schedule rule re-arms silently — not[39m[90m…[39m [90m0.19s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DryRunParityTest[22m [90m>[39m it AC-02: replayed co…   
+[39;1m  The following jobs were pushed unexpectedly:
+
+- App\Jobs\Automation\ActionChainJob
+
+Failed asserting that an array is empty.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Support/Testing/Fakes/QueueFake.php[39m:[32m376[39m
+    372▕     public function assertNothingPushed()
+    373▕     {
+    374▕         $pushedJobs = implode("\n- ", array_keys($this->jobs));
+    375▕ 
+  ➜ 376▕         PHPUnit::assertEmpty($this->jobs, "The following jobs were pushed unexpectedly:\n\n- $pushedJobs\n");
+    377▕     }
+    378▕ 
+    379▕     /**
+    380▕      * Get all of the jobs matching a truth-test callback.
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Feature/Automation/DryRunParityTest.php[39;22m:[39;1m64[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m24 passed[39;22m[90m (150 assertions)[39m
+  [90mDuration:[39m [39m14.75s[39m
+
+EXIT=1

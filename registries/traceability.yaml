@@ -2488,24 +2488,24 @@ entries:
       GROWN AT S12 STEP 6: the property suite + goldens (step 1) PLUS SnapshotImmutabilityTest (BR-03 against LIVE policy/calendar/holiday edits, both layers), TimerTest (next-fire candidates, due fires with computed due_at, the FS-02 wipe-and-rebuild DRILL with late_fired honesty, pause = no candidate) and the EC-03 retarget record. REMAINING HALF: the +-30 s accuracy figure is a TIMING leg — not taken on battery power (the session's standing law); structural inverse-consistency (P5: next-fire == the clock's own answer, exactly) stands in its place until a wall-power run or Doc 19's [D19] profile.
   - ac_ref: "Doc12 AC-01"
     suite_path: tests/Feature/Automation/EngineOrderTest.php
-    type: manual
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED-MANUAL (S12 plan paragraph 9; the S08 seeding pattern — flips to automated WITH its suite): rule semantics — position order, per-action isolation (a transition-service rejection continues the chain), all guards (10/20/depth-3/cooldown) fixture-proven incl. EC-01/EC-12. Flips at steps 4-5.
+      FLIPPED AT S12 STEPS 4-5: EngineOrderTest (BR-01 position order; trigger index; C-09 redelivery; EC-12 cooldown on (rule, ticket) with the second-ticket-fresh fixture; FS-03 fallback; R-04 pause) + AutomationGuardCapsTest (10/20/depth-3 blast bounds, every trip evented) + ActionsTest (per-action isolation RUNTIME: an illegal transition fails THAT action with the door's own reason and the chain continues; EC-01 superseded_state).
   - ac_ref: "Doc12 AC-02"
     suite_path: tests/Feature/Automation/DryRunParityTest.php
-    type: manual
+    type: automated
     tier: contract
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED-MANUAL: dry-run verdicts equal live evaluation over a replayed event corpus (the Doc 09 AC-03 simulation-vs-replay pattern); zero side effects proven. Flips at step 7.
+      FLIPPED AT S12 STEP 7: replayed-corpus verdict equality over the SHARED evaluator (parity by construction, proven by replay against recorded executions); zero side effects COUNTED (outbox, execution rows, queued chains — deltas all zero); the paragraph-9 per-condition badges + floor/guard would-run notes proven.
   - ac_ref: "Doc12 AC-04"
     suite_path: tests/Feature/Hours/CalendarTest.php
     type: automated
@@ -2565,4 +2565,4 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED-MANUAL: SEC-01 activator-capability floor enforced and drift-flagged; webhook allowlist + SSRF egress; SEC-03 log elision per role fixtures. Flips at steps 5 and 13.
+      GROWN AT S12 STEPS 4-7 (type stays manual until the webhook half): SEC-01 floor REAL (ActivatorFloorTest — capture, demoted-author floor_refused, drift) and SEC-03 elision REAL (LogElisionTest role fixtures — keyword markers for the unprivileged). REMAINING: the SEC-02 webhook allowlist + SSRF legs land at step 13 with the webhook arm; the row flips to automated there.
