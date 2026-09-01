@@ -59,6 +59,7 @@ use Throwable;
  *     payload: string,
  *     correlation_id: string|null,
  *     causation_id: string|null,
+ *     metadata: string|null,
  *     occurred_at: string,
  *     relayed_at: string|null,
  *     relay_attempts: int
@@ -146,6 +147,9 @@ final class OutboxRelay
                     'payload' => $row->payload,
                     'correlation_id' => $row->correlation_id,
                     'causation_id' => $row->causation_id,
+                    // Packet #3 (amendment 6): envelope metadata copies byte-identically,
+                    // like every other envelope field — the relay knows nothing about keys.
+                    'metadata' => $row->metadata,
                     // THE COPY IS THE CONTRACT (A-33, ruled at the S07 step-1 checkpoint;
                     // BUILD-STATUS row 9 corrected there): this value is outbox.occurred_at —
                     // DB time at publish (the outbox default now()), copied byte-identically so

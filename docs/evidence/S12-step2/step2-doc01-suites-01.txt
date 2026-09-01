@@ -1,0 +1,139 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\ColdSummaryRetentionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit stamps every lifecycle timestamp from its single writer, in DB t[39m[90m…[39m [90m7.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit accrues in full inside the retention window and cold beyond it ([39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit moves the boundary when the platform changes the retention setti[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never cold-summarises a tenant that is not suspended, however ol[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a suspended tenant with NO suspended_at to full accrual[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps exactly count + last pointer, per channel, atomically (BR-[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to record with no tenant bound[39m[90m                           [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\CursorPaginationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit walks an entire collection in strictly ascending UUIDv7 order wi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit shapes the page as data + next_cursor, with next_cursor null on[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects offset-family parameters BY NAME (C-05: offset paginatio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('101')[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('0')[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('-5')[39m[90m   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('abc')[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a limit above 100, below 1, or non-integer with ('3.5')[39m[90m  [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('not-base64!!!')[39m[90m    [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('aGVsbG8')[39m[90m          [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rejects a cursor this API never issued with ('djE6bm90LWEtdXVpZA[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit renders pagination misuse as a 400 invalid_pagination problem (C[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the cursor opaque: the row id never appears in the cursor[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\EnvelopeMetadataTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (1): a publish WITHOUT metadata is byte-compatible — N[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (2): envelope metadata lands on the outbox row and the[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (3), the smuggled-key control: automation_depth INSIDE[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Foundation\FeatureRegistryTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit enumerates every registered flag with the full schema Doc 16 ren[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a registered flag to its default for the bound tenant[39m[90m   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws on an unregistered flag — shadow flags cannot ship[39m[90m        [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound — a flag dec[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scopes flag decisions per tenant: activating for tenant A change[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a registered flag key appear in a migration (N-19: fl[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\I18nFallbackTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders EVERY shipped key in Amharic: no key leakage, telemetry[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back user → TENANT DEFAULT → English, in that order (C-08)[39m[90m [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit records telemetry per key and locale when a hop misses, then ser[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit dedupes telemetry per process so a hot loop cannot flood the log[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the key and records EVERY hop when nothing can serve it[39m[90m  [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is the translator actually bound — the chain is not an opt-in he[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\PartitionMaintenanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit agrees with the migration about partition names, for the months[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit creates only the missing future months, idempotently (EC-10)[39m[90m     [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drops partitions beyond the 13-month retention, with a logged me[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs partitions:maintain end-to-end, idempotently[39m[90m                [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\PartitionMonitorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit monitor passes on a healthy window (EC-10)[39m[90m                       [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when a future partition is missing, and maintai[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when any row sits in the DEFAULT partition (EC-[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\QuotaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit admits under the limit and refuses over it with a 429 naming the[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit does not let a refused attempt consume capacity[39m[90m                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit raises the internal alert exactly once per window, at 80% (NFR-0[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit blocks forward writes and destroys nothing when a limit drops be[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforces the cumulative storage quota from the durable ledger, i[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit persists counters to the ledger and repairs a flushed counter fr[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fails OPEN for staff and CLOSED for public ingestion when meteri[39m[90m…[39m [90m0.03s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Feature\Foundation\SettingsApiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit lists every setting with its i18n keys and default flag[39m[90m          [39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit writes a setting and returns the new version token[39m[90m               [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns RFC 9457 problem-details for an unregistered key[39m[90m         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 422 problem-details with per-field errors on invalid inp[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 403 when a tenant surface writes a platform-owned settin[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns 409 with the winning value on a concurrent write (EC-06)[39m[90m [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resets a setting to its registered default[39m[90m                       [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit records the audit entry a mutating route declares[39m[90m                [39m [90m0.08s[39m  
+  [33;1m-[39;22m[90m [39m[90mit fails loudly if a declared audit action is not written[39m[90m [39m[33m→ The sta[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\SettingsEngineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns the registered default when a tenant has no override[39m[90m     [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the override once written, and the default again after r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to read or write an unregistered key (FR-07)[39m[90m             [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a tenant-surface write to a platform-owned setting[39m[90m       [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit validates against the registered rule[39m[90m                            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every change old to new (FR-07)[39m[90m                           [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encrypts an encrypted-string at rest and never exposes it in bul[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps settings isolated between tenants[39m[90m                          [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit detects a concurrent write, audits both, and signals the loser ([39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back to the database when Redis is unreachable, and never[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encodes and decodes every registered type[39m[90m                        [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\TenantCacheTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit prefixes every key with the bound tenant, so two tenants cannot[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is never the source of truth: a lost entry reloads from the load[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write with no TTL worth the name (C-07: TTL mandatory)[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a write that does not name its invalidation event (C-07:[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a suffix that tries to smuggle its own prefix[39m[90m            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound — there is n[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit confines the pre-context exception to the t:keymap: namespace[39m[90m    [39m [90m0.02s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit never publishes an event for a write that rolled back (T-03)[39m[90m     [39m [90m0.04s[39m  
+  [33;1m-[39;22m[90m [39m[90mit refuses to publish outside a transaction (T-03)[39m[90m [39m[33m→ The test harne[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit delivers a committed event even though the relay crashed before[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit produces one event, not two, when a crashed relay re-processes t[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit relays in UUIDv7 order, which is causal order without a wall clo[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit reports lag from the OLDEST unrelayed row, so a stuck row is vis[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\EventsOccurredAtTreatmentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit diff assertion (A-33/B-3, row 9): the relay supplies EXACTLY the[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-33 byte-identical proof: every relayed event carries ITS outbo[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B-1 positive control: the PK refusal ITSELF — a duplicate (id, o[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the app role writes events only through the default: naming occu[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Foundation\FeatureRegistryTest[22m [90m>[39m it enumerates ever…   
+[39;1m  Expecting 'workflow.feature.rules_pause' not to be 'workflow.feature.rules_pause'.[39;22m
+
+  at [32mtests/Feature/Foundation/FeatureRegistryTest.php[39m:[32m26[39m
+     22▕             ->and($entry['default'])->toBeBool()
+     23▕             ->and($entry['tenant_toggleable'])->toBeBool()
+     24▕             // N-03: the label is an i18n key with entries in BOTH launch languages,
+     25▕             // not copy — Doc 16 will render it to operators.
+  ➜  26▕             ->and(__($entry['label_i18n_key'], [], 'en'))->not->toBe($entry['label_i18n_key'])
+     27▕             ->and(__($entry['label_i18n_key'], [], 'am'))->not->toBe($entry['label_i18n_key']);
+     28▕     }
+     29▕ });
+     30▕
+
+  [33m1   [39m[39;1mtests/Feature/Foundation/FeatureRegistryTest.php[39;22m:[39;1m26[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[33;1m2 skipped[39;22m[90m,[39m[39m [39m[32;1m87 passed[39;22m[90m (7025 assertions)[39m
+  [90mDuration:[39m [39m12.14s[39m
+
+EXIT=1

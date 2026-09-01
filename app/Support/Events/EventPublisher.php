@@ -41,9 +41,15 @@ final class EventPublisher
 
     /**
      * @param  array<string, mixed>  $payload  must match the catalog entry exactly
+     * @param  array<string, mixed>|null  $metadata  ENVELOPE metadata (SCHEMA AMENDMENT 6
+     *                                               packet #3, additive): rides beside
+     *                                               correlation/causation, never inside the
+     *                                               payload — the closed-payload law is
+     *                                               untouched. Doc 12 T-03's automation_depth
+     *                                               is its first key; absent = no metadata.
      * @return string the event id, which is every consumer's idempotency key (C-09)
      */
-    public function publish(string $name, array $payload, ?string $causationId = null): string
+    public function publish(string $name, array $payload, ?string $causationId = null, ?array $metadata = null): string
     {
         $definition = EventCatalog::definition($name);
         EventCatalog::assertPayloadMatches($name, $payload);
@@ -68,6 +74,7 @@ final class EventPublisher
             'payload' => json_encode($payload, JSON_THROW_ON_ERROR),
             'correlation_id' => $this->context->correlationId(),
             'causation_id' => $causationId,
+            'metadata' => $metadata === null ? null : json_encode($metadata, JSON_THROW_ON_ERROR),
             // occurred_at defaults to now() in the database (EC-08/C-11).
         ]);
 
