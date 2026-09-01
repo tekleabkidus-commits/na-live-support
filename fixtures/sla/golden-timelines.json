@@ -1,0 +1,118 @@
+{
+  "_comment": "Doc 12 AC-03 / T-04 / T-09 — golden SLA timelines, THE SHARED CONTRACT with Doc 15 (the Doc 06 AC-09 pattern): reporting must reproduce these numbers from the same instants or the 'two numbers' argument returns (R-02). Expected values are HAND-COMPUTED (weekday/offset arithmetic verified independently of the library, S12 step 1); the library is verified AGAINST them, never the reverse. Synthetic per CLAUDE.md §8. Instants are UTC ISO-8601; durations in seconds; calendars are the T-05 snapshot contract shape (the exact jsonb an armed instance embeds).",
+  "calendars": {
+    "addis_weekdays": {
+      "timezone": "Africa/Addis_Ababa",
+      "weekdays": {
+        "1": [{"open": "08:00", "close": "17:00"}],
+        "2": [{"open": "08:00", "close": "17:00"}],
+        "3": [{"open": "08:00", "close": "17:00"}],
+        "4": [{"open": "08:00", "close": "17:00"}],
+        "5": [{"open": "08:00", "close": "17:00"}]
+      },
+      "holidays": [{"date": "2025-09-11", "recurring": true}]
+    },
+    "utc_split_shift": {
+      "timezone": "UTC",
+      "weekdays": {
+        "1": [{"open": "08:00", "close": "12:00"}, {"open": "14:00", "close": "18:00"}]
+      },
+      "holidays": []
+    },
+    "berlin_all_days": {
+      "timezone": "Europe/Berlin",
+      "weekdays": {
+        "1": [{"open": "08:00", "close": "17:00"}],
+        "2": [{"open": "08:00", "close": "17:00"}],
+        "3": [{"open": "08:00", "close": "17:00"}],
+        "4": [{"open": "08:00", "close": "17:00"}],
+        "5": [{"open": "08:00", "close": "17:00"}],
+        "6": [{"open": "08:00", "close": "17:00"}],
+        "7": [{"open": "08:00", "close": "17:00"}]
+      },
+      "holidays": []
+    }
+  },
+  "timelines": [
+    {
+      "name": "us02-first-response-overnight",
+      "_why": "Doc 12 §8's example-sentence arithmetic (AC-04 reuses this): created Tue 17:00 Addis (hours closed), 40-min business-hours target -> first response due Wed 08:40 local = 05:40 UTC; warning at 80% = 08:32 local.",
+      "calendar": "addis_weekdays",
+      "clock_start": "2026-09-01T14:00:00Z",
+      "pauses": [],
+      "target_s": 2400,
+      "warning_pct": 80,
+      "expected_warning_at": "2026-09-02T05:32:00Z",
+      "expected_breach_at": "2026-09-02T05:40:00Z",
+      "probes": [
+        {"at": "2026-09-01T20:00:00Z", "expected_elapsed_s": 0},
+        {"at": "2026-09-02T05:20:00Z", "expected_elapsed_s": 1200}
+      ]
+    },
+    {
+      "name": "split-shift-monday",
+      "_why": "FR-12 split shifts (AC-04): active spans a Monday 07:00-19:00 UTC over an 08-12 + 14-18 split; lunch never counts.",
+      "calendar": "utc_split_shift",
+      "clock_start": "2026-08-31T07:00:00Z",
+      "pauses": [],
+      "target_s": 999999,
+      "warning_pct": 80,
+      "expected_warning_at": null,
+      "expected_breach_at": null,
+      "probes": [
+        {"at": "2026-08-31T13:00:00Z", "expected_elapsed_s": 14400},
+        {"at": "2026-08-31T19:00:00Z", "expected_elapsed_s": 28800}
+      ]
+    },
+    {
+      "name": "recurring-holiday-enkutatash",
+      "_why": "FR-12 recurring holidays (AC-04): holiday stored for 2025-09-11 recurring must remove Fri 2026-09-11 too. Thu full day counts (9h), Fri holiday 0, Sat undrawn 0.",
+      "calendar": "addis_weekdays",
+      "clock_start": "2026-09-10T00:00:00Z",
+      "pauses": [],
+      "target_s": 36000,
+      "warning_pct": 80,
+      "expected_warning_at": "2026-09-10T13:00:00Z",
+      "expected_breach_at": "2026-09-14T06:00:00Z",
+      "probes": [
+        {"at": "2026-09-12T21:00:00Z", "expected_elapsed_s": 32400}
+      ]
+    },
+    {
+      "name": "pause-union-ec04",
+      "_why": "EC-04: pending_customer [T0+1h,T0+4h] overlaps channel_unreachable [T0+2h,T0+5h]; the union [1h,5h] subtracts ONCE. Calendar-time mode (null calendar).",
+      "calendar": null,
+      "clock_start": "2026-09-01T00:00:00Z",
+      "pauses": [
+        {"from": "2026-09-01T01:00:00Z", "until": "2026-09-01T04:00:00Z"},
+        {"from": "2026-09-01T02:00:00Z", "until": "2026-09-01T05:00:00Z"}
+      ],
+      "target_s": 25200,
+      "warning_pct": 80,
+      "expected_warning_at": "2026-09-01T09:36:00Z",
+      "expected_breach_at": "2026-09-01T11:00:00Z",
+      "probes": [
+        {"at": "2026-09-01T10:00:00Z", "expected_elapsed_s": 21600}
+      ]
+    },
+    {
+      "name": "dst-window-length-berlin",
+      "_why": "The drawn local window keeps its drawn length across a DST switch: Sat 2026-03-28 (+01) = 07:00-16:00 UTC, Sun 2026-03-29 (+02, spring-forward) = 06:00-15:00 UTC; both 9h.",
+      "calendar": "berlin_all_days",
+      "clock_start": "2026-03-28T00:00:00Z",
+      "pauses": [],
+      "target_s": 64800,
+      "warning_pct": 80,
+      "expected_warning_at": "2026-03-29T11:24:00Z",
+      "expected_breach_at": "2026-03-29T15:00:00Z",
+      "probes": [
+        {"at": "2026-03-30T00:00:00Z", "expected_elapsed_s": 64800}
+      ]
+    }
+  ],
+  "retarget_cases": [
+    {"name": "ec03-quarter-remaining", "remaining_s": 900, "old_target_s": 3600, "new_target_s": 600, "expected_remaining_s": 150},
+    {"name": "ec03-raise-priority-shrinks", "remaining_s": 1800, "old_target_s": 3600, "new_target_s": 1200, "expected_remaining_s": 600},
+    {"name": "ec03-lower-priority-grows", "remaining_s": 600, "old_target_s": 1200, "new_target_s": 7200, "expected_remaining_s": 3600}
+  ]
+}
