@@ -9,6 +9,11 @@ return [
         // R-04: the tenant-wide rules-pause switch (features registry label).
         'rules_pause' => 'Pause all automation rules',
     ],
+    'macros' => [
+        // EC-09: the inline notices when a bundled action cannot apply.
+        'bundled_skipped' => 'The macro text was inserted, but ":type" was skipped — you do not have that permission.',
+        'bundled_failed' => 'The macro text was inserted, but ":type" could not be applied here.',
+    ],
     'sla' => [
         // §8/§13/§14: the policy editor's live example — ICU-templated, the
         // accessible explanation of clock math. Placeholders: :created, :target

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-142 event(s).
+144 event(s).
 
 ## `agent.status_changed`
 
@@ -517,6 +517,24 @@ Doc 10 FR-07: a variant entered review — reviewers (kb.articles.publish holder
 - **Payload:** `tenant_id`, `article_id`, `variant_id`, `actor_id`
 - **Producers:** Doc10/Transitions
 - **Consumers:** Doc07/Inbox
+
+## `macro.changed`
+
+Doc 12 FR-14: a macro or saved reply changed (kind: created|updated). Retirement is active=false — rows never delete.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `macro_id`, `kind`
+- **Producers:** Doc12/Macros
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `macro.used`
+
+Doc 12 FR-16: a macro was inserted (usage drives palette ranking here and the Doc 15 macro report there).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `macro_id`, `ticket_id`
+- **Producers:** Doc12/Macros
+- **Consumers:** Doc15/Reporting
 
 ## `media.infected`
 

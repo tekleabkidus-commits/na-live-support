@@ -1691,6 +1691,14 @@ return [
         'owning_doc' => 'Doc12',
     ],
     [
+        // FR-14: macro/saved-reply changes (created|updated; retire = active=false).
+        'action_key' => 'macro.changed',
+        'entity' => 'macro',
+        'actor_types' => ['staff'],
+        'required_fields' => ['macro_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
         // FR-02: keyword-set changes — the audit carries the id, never the list (SEC-03).
         'action_key' => 'automation.keyword_set.changed',
         'entity' => 'automation_keyword_set',

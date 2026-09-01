@@ -9,6 +9,10 @@ return [
     'feature' => [
         'rules_pause' => 'ሁሉንም አውቶማቲክ ህጎች ለጊዜው አቁም',
     ],
+    'macros' => [
+        'bundled_skipped' => 'የማክሮው ጽሁፍ ገብቷል፣ ነገር ግን ":type" ተዘሏል — ያ ፈቃድ የለዎትም።',
+        'bundled_failed' => 'የማክሮው ጽሁፍ ገብቷል፣ ነገር ግን ":type" እዚህ ሊተገበር አልቻለም።',
+    ],
     'sla' => [
         'example' => ':created የተከፈተ ቲኬት የመጀመሪያ ምላሽ ዒላማው :target ይሆናል (:zone)።',
         'example_unreachable' => 'ይህ የስራ ሰዓት መርሃ ግብር በጭራሽ አይከፈትም — ቢያንስ አንድ ሳምንታዊ ክፍተት ይሳሉ።',

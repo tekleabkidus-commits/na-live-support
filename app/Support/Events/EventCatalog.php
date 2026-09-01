@@ -1213,6 +1213,20 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'Doc 12 FR-17/FR-18: a field definition changed (kind: created|updated|deactivated|reactivated|option_changed). Keys never reuse; types never change — grant physics.',
         ],
+        'macro.changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'macro_id', 'kind'],
+            'producers' => ['Doc12/Macros'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-14: a macro or saved reply changed (kind: created|updated). Retirement is active=false — rows never delete.',
+        ],
+        'macro.used' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'macro_id', 'ticket_id'],
+            'producers' => ['Doc12/Macros'],
+            'consumers' => ['Doc15/Reporting'],
+            'description' => 'Doc 12 FR-16: a macro was inserted (usage drives palette ranking here and the Doc 15 macro report there).',
+        ],
         'hours.calendar.updated' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'calendar_id', 'kind'],

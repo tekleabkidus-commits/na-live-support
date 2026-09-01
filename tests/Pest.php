@@ -1842,3 +1842,12 @@ function runChain(string $executionId, array $actions, array $basis = []): array
 
     return $outcomes;
 }
+
+/** Doc 12 (S12): the macros test scene — bound tenant + open ticket + a full-map agent + the writer. */
+function macroScene(): array
+{
+    [$tenant, , $ticket] = ticketFixture('open');
+    $agent = grantAllPermissions(ticketActor([]));
+
+    return [$tenant, $ticket, $agent, app(App\Domain\Macros\MacroWriter::class)];
+}

@@ -36,6 +36,8 @@ final class AutomationServiceProvider extends ServiceProvider
             $registry->bind('escalate', $app->make(\App\Domain\Automation\Actions\EscalateAction::class));
             // Step 8: A-59's ticket value door.
             $registry->bind('set_custom_field', $app->make(\App\Domain\Automation\Actions\SetCustomFieldAction::class));
+            // Step 9: the resolver-guarded system reply (T-06's automation half).
+            $registry->bind('send_macro_reply', $app->make(\App\Domain\Automation\Actions\SendMacroReplyAction::class));
 
             return $registry;
         });

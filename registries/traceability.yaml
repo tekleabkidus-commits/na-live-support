@@ -2518,14 +2518,20 @@ entries:
       FLIPPED AT S12 STEP 3: CalendarTest (writer validated through the clock's OWN parser; split shifts; recurring holidays; tenant-default uniqueness physics; EC-05 prospective-only; EC-10 timezone recompute; P-A53 PRE + REAL source legs with Doc 11 HoursTest byte-untouched as the control) + ExampleSentenceTest (golden timeline #1 arithmetic through the ONE implementation; ICU en+am; unreachable-calendar honesty).
   - ac_ref: "Doc12 AC-05"
     suite_path: tests/Feature/Macros/ResolverParityTest.php
-    type: manual
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
-    justification: >-
-      PLANNED-MANUAL: variable resolution parity (preview = send), no-blank enforcement at the API (T-06), bundled-action permission honesty (EC-09), palette budget (NFR-05, dev-scale). Flips at step 9.
+    status: covered
+    gap: >-
+      EXECUTED (S12 step 9): parity by identity through THE ONE VariableResolver
+      (ResolverParityTest); no-blank refusal at the automation send arm + the
+      MacroGuard grammar (tests/Security/MacroNoBlankSendTest.php — the STAFF
+      compose half is packet P-SEND's, its pre-state pinned there); EC-09
+      per-capability honesty (BundledActionHonestyTest); NFR-05 budget leg
+      dev-scale WITHIN 50 ms p95 at 1k macros (PaletteBudgetTest; load-hardware
+      p-value is [D19]); B12-S03 seam contract (MacroPaletteContractTest).
   - ac_ref: "Doc12 AC-06"
     suite_path: tests/Feature/Fields/DefinitionMatrixTest.php
     type: automated
