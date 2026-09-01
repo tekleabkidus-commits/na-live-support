@@ -1,0 +1,132 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's[39m[90m… [39m [90m10.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.15s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the unbuilt arms answer honestly until their steps/packets: tran[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ScheduleSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit arms without firing, then fires ONCE when due and re-arms in the[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: a paused tenant's due schedule rule re-arms silently — not[39m[90m…[39m [90m0.12s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it AC-01:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"set_status","outcome":"failed","reason":"illegal_transition","detail":"illegal_transition: new -> closed is not an edge of the FR-04 state machine.","superseded_state":false},{"action":"add_note","outcome":"ok"}] where "id" = 01a05dc3-1105-7109-a7ff-9868e58a42a5)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it set_sta… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"set_status","outcome":"ok"}] where "id" = 01a05dc3-11b9-70b3-9d8a-592e09fe850e)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it set_pri… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"set_priority","outcome":"ok"},{"action":"set_priority","outcome":"failed","reason":"unknown_priority","detail":"unknown priority \"apocalyptic\" \u2014 FR-17 fixes four."}] where "id" = 01a05dc3-124c-7388-bd19-4133659a4aa5)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it assign…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"assign","outcome":"ok","routing_outcome":"waiting"}] where "id" = 01a05dc3-12dd-7176-958d-22bc4ee8e7a4)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it EC-01:…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"set_priority","outcome":"ok","superseded_state":true}] where "id" = 01a05dc3-1372-73f4-ad56-931d8184b7a5)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it the unb… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42501]: Insufficient privilege: 7 ERROR:  permission denied for table automation_rule_executions (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "automation_rule_executions" set "action_outcomes" = [{"action":"transfer_department","outcome":"failed","reason":"unbuilt_action"},{"action":"add_tags","outcome":"failed","reason":"unbuilt_action"},{"action":"escalate","outcome":"failed","reason":"unbuilt_action"},{"action":"assign","outcome":"failed","reason":"unbuilt_directed_assign"}] where "id" = 01a05dc3-142e-71e3-aab2-d412447a7142)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Automation/ActionChainJob.php[39;22m:[39;1m65[39;22m
+  [33m8   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m51[39;22m
+
+
+  [90mTests:[39m    [31;1m6 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (9 assertions)[39m
+  [90mDuration:[39m [39m11.33s[39m
+
+EXIT=2

@@ -51,6 +51,10 @@ Schedule::command('routing:expiry-sweep')->everyMinute()->withoutOverlapping();
 // reopen courtesy holds — a timer, not a poll; allowlisted by the filed amendment.
 Schedule::command('routing:rescue-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 12 FR-01: the schedule-trigger sweep (min interval 5 min is the WRITER's
+// floor; the sweep's 1-minute cadence is resolution, not rate). Late-not-early.
+Schedule::command('automation:schedule-sweep')->everyMinute()->withoutOverlapping();
+
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();

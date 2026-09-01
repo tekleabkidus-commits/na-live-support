@@ -31,11 +31,15 @@ final class ActionChainJob implements ShouldQueue
 
     public int $tries = 3;
 
-    /** @param list<array<string, mixed>> $actions */
+    /**
+     * @param  list<array<string, mixed>>  $actions
+     * @param  array<string, mixed>  $basis  EC-01: the facts the rule matched on
+     */
     public function __construct(
         public readonly string $executionId,
         public readonly array $actions,
         public readonly int $automationDepth,
+        public readonly array $basis = [],
     ) {
         $this->captureTenant();
     }
@@ -46,7 +50,7 @@ final class ActionChainJob implements ShouldQueue
         foreach ($this->actions as $index => $action) {
             $type = is_string($action['type'] ?? null) ? $action['type'] : 'unknown';
             try {
-                $outcomes[$index] = $registry->execute($type, $action, $this->executionId, $this->automationDepth);
+                $outcomes[$index] = $registry->execute($type, $action, $this->executionId, $this->automationDepth, $this->basis);
             } catch (\Throwable $e) {
                 // Per-action isolation (AC-01): log, continue. Never rethrow — a
                 // chain that dies mid-way would retry the ALREADY-RUN head.

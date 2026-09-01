@@ -36,7 +36,8 @@ const DOC12_AUTOMATION_DENIED = [
     ],
     'automation_rule_executions' => [
         'INSERT' => ['created_at', 'executed_at'],
-        'UPDATE' => '*',
+        // RIDER 2: the queued chain's ONE landing write — everything else immutable.
+        'UPDATE' => ['condition_results', 'context_ref', 'created_at', 'event_id', 'executed_at', 'guard_trips', 'id', 'matched', 'revision_id', 'rule_id', 'tenant_id'],
     ],
     'automation_keyword_sets' => [
         'INSERT' => ['created_at', 'updated_at'],

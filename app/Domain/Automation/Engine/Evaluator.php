@@ -108,7 +108,12 @@ final class Evaluator
                 $this->trip($eventId, $rule['id'], $context->ticketId, $guard);
             }
             if ($actions !== []) {
-                ActionChainJob::dispatch($executionId, $actions, $context->automationDepth + 1)->onQueue('automation');
+                // EC-01's honesty basis: the state the rule MATCHED on — an arm
+                // finding the world already moved reports superseded_state.
+                $basis = array_intersect_key($context->facts, array_flip([
+                    'ticket.status', 'ticket.priority', 'ticket.queue_id', 'ticket.department_id',
+                ]));
+                ActionChainJob::dispatch($executionId, $actions, $context->automationDepth + 1, $basis)->onQueue('automation');
             }
         }
     }

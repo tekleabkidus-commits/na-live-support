@@ -47,9 +47,10 @@ final class ActionRegistry
 
     /**
      * @param  array<string, mixed>  $action
+     * @param  array<string, mixed>  $basis  EC-01: the facts the rule matched on
      * @return array<string, mixed> the honest outcome
      */
-    public function execute(string $type, array $action, string $executionId, int $automationDepth): array
+    public function execute(string $type, array $action, string $executionId, int $automationDepth, array $basis = []): array
     {
         if (! in_array($type, self::TYPES, true)) {
             return ['action' => $type, 'outcome' => 'failed', 'reason' => 'unknown_action'];
@@ -64,6 +65,6 @@ final class ActionRegistry
             return ['action' => $type, 'outcome' => 'failed', 'reason' => 'unbuilt_action'];
         }
 
-        return $arm->run($action, $executionId, $automationDepth);
+        return $arm->run($action, $executionId, $automationDepth, $basis);
     }
 }

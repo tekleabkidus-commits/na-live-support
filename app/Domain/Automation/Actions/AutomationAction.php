@@ -13,7 +13,8 @@ interface AutomationAction
 {
     /**
      * @param  array<string, mixed>  $action  the configured action card
+     * @param  array<string, mixed>  $basis  EC-01: the facts the rule matched on
      * @return array<string, mixed> {action, outcome, reason?, superseded_state?}
      */
-    public function run(array $action, string $executionId, int $automationDepth): array;
+    public function run(array $action, string $executionId, int $automationDepth, array $basis = []): array;
 }
