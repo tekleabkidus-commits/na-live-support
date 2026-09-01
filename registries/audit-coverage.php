@@ -1665,6 +1665,32 @@ return [
         'owning_doc' => 'Doc12',
     ],
     [
+        // FR-17: field-definition changes (created|updated|reactivated|option_changed).
+        'action_key' => 'field.changed',
+        'entity' => 'field_definition',
+        'actor_types' => ['staff'],
+        'required_fields' => ['field_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // SEC-06 HIGH-RISK: field deactivation — ripples everywhere (FR-17's own
+        // words); the EC-14 where-used counts travel in the entry. [D17] class.
+        'action_key' => 'field.deactivated',
+        'entity' => 'field_definition',
+        'actor_types' => ['staff'],
+        'required_fields' => ['field_id', 'kind', 'where_used'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-19 (A-59): a ticket custom-field value changed (keys only — values
+        // are player content and ride the row, not the audit prose).
+        'action_key' => 'field.value.changed',
+        'entity' => 'ticket',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['entity', 'entity_id', 'keys'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
         // FR-02: keyword-set changes — the audit carries the id, never the list (SEC-03).
         'action_key' => 'automation.keyword_set.changed',
         'entity' => 'automation_keyword_set',

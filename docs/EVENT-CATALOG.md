@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-141 event(s).
+142 event(s).
 
 ## `agent.status_changed`
 
@@ -409,6 +409,15 @@ FR-22/FR-01: profile attributes changed (display_name, language, country, tags�
 - **Payload:** `tenant_id`, `customer_id`, `changed`
 - **Producers:** Doc08/CustomerProfile
 - **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
+
+## `field.changed`
+
+Doc 12 FR-17/FR-18: a field definition changed (kind: created|updated|deactivated|reactivated|option_changed). Keys never reuse; types never change — grant physics.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `field_id`, `kind`
+- **Producers:** Doc12/Fields
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `hours.calendar.updated`
 

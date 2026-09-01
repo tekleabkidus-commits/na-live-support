@@ -34,6 +34,8 @@ final class AutomationServiceProvider extends ServiceProvider
             $registry->bind('add_tags', new \App\Domain\Automation\Actions\TagsAction($app->make(\App\Domain\Tickets\Tags\TicketTags::class), adding: true));
             $registry->bind('remove_tags', new \App\Domain\Automation\Actions\TagsAction($app->make(\App\Domain\Tickets\Tags\TicketTags::class), adding: false));
             $registry->bind('escalate', $app->make(\App\Domain\Automation\Actions\EscalateAction::class));
+            // Step 8: A-59's ticket value door.
+            $registry->bind('set_custom_field', $app->make(\App\Domain\Automation\Actions\SetCustomFieldAction::class));
 
             return $registry;
         });

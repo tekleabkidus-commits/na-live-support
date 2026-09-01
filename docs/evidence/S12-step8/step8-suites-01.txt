@@ -1,0 +1,107 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Fields\DefinitionMatrixTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-17/FR-19: the 13-type matrix — definition, canonical storage[39m[90m…[39m [90m10.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: number min/max and text regex validation rules bind; the[39m[90m… [39m [90m0.12s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Fields\LifecycleTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-18: deactivate → writes refuse + values stand; reactivate res[39m[90m…[39m [90m0.14s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-08: option removal snapshots the label; the stored value stan[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: the where-used answer is COMPLETE — the referencing rule[39m[90m… [39m [90m0.36s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Fields\ValueStorageTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit A-59 customer half: the seeded trio stores through Doc 08's door[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-02 live: a stored ticket custom value drives a rule condition[39m[90m…[39m [90m0.13s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\DefinitionMatrixTest[22m [90m>[39m it FR… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "custom"[39;22m
+
+  at [32mtests/Feature/Fields/DefinitionMatrixTest.php[39m:[32m68[39m
+     64▕     // The canonical strings landed under form_data.custom — the SAME keys FR-02's
+     65▕     // condition facts read (EventContext's ticket.custom.<key>).
+     66▕     /** @var array{custom: array<string, string>} $formData */
+     67▕     $formData = json_decode((string) DB::table('tickets')->where('id', $ticket->identifier())->value('form_data'), true);
+  ➜  68▕     expect($formData['custom']['field_number'])->toBe('2500')
+     69▕         ->and($formData['custom']['field_checkbox'])->toBe('true')
+     70▕         ->and(json_decode($formData['custom']['field_multi_select'], true))->toBe(['telebirr', 'cbe']);
+     71▕ 
+     72▕     // NFR-06: evented + audited.
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\LifecycleTest[22m [90m>[39m it FR-18: de… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "custom"[39;22m
+
+  at [32mtests/Feature/Fields/LifecycleTest.php[39m:[32m39[39m
+     35▕     expect(fn () => $values->setTicketField($ticket->identifier(), 'payment_method', 'cbe', $actor))
+     36▕         ->toThrow(InvalidArgumentException::class, 'retired');
+     37▕     /** @var array{custom: array<string, string>} $formData */
+     38▕     $formData = json_decode((string) DB::table('tickets')->where('id', $ticket->identifier())->value('form_data'), true);
+  ➜  39▕     expect($formData['custom']['payment_method'])->toBe('telebirr', 'the definition went, the fact should stay (EC-09)');
+     40▕     // SEC-06: the deactivation audit is its own high-risk action with the where-used counts.
+     41▕     /** @var array{where_used: array{forms: int, rules: int, views: int}} $audit */
+     42▕     $audit = json_decode((string) DB::table('audit_log')->where('action_key', 'field.deactivated')->orderByDesc('id')->value('payload'), true);
+     43▕     expect($audit['where_used'])->toHaveKeys(['forms', 'rules', 'views']);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\LifecycleTest[22m [90m>[39m it EC-08: option removal sna…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m+    'am' => 'ሲቢኢ ብር',[39m[39;1m
+  [39;22m[32m     'en' => 'CBE Birr',[39m[39;1m
+  [39;22m[31m-    'am' => 'ሲቢኢ ብር',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Fields/LifecycleTest.php[39m:[32m73[39m
+     69▕ 
+     70▕     /** @var object{active: bool, label_snapshot: ?string} $option */
+     71▕     $option = DB::table('field_definition_options')->where('id', $optionId)->first(['active', 'label_snapshot']);
+     72▕     expect($option->active)->toBeFalse()
+  ➜  73▕         ->and(json_decode((string) $option->label_snapshot, true))->toBe(['en' => 'CBE Birr', 'am' => 'ሲቢኢ ብር']);
+     74▕     // The stored value stands; a NEW write of the removed value refuses.
+     75▕     expect(json_decode((string) DB::table('tickets')->where('id', $ticket->identifier())->value('form_data'), true)['custom']['channel_pref'])->toBe('cbe');
+     76▕     expect(fn () => $values->setTicketField($ticket->identifier(), 'channel_pref', 'cbe', $actor))
+     77▕         ->toThrow(InvalidArgumentException::class);
+
+  [33m1   [39m[39;1mtests/Feature/Fields/LifecycleTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\ValueStorageTest[22m [90m>[39m it A-59 customer half: th…   
+[39;1m  Expected: [39;22m[31mfield 'loyalty_tier' is retired — the definition went, the fact stays read-only (EC-09)[39m[39;1m
+
+  To contain: [39;22m[32munknown customer field[39m
+
+  at [32mtests/Feature/Fields/ValueStorageTest.php[39m:[32m40[39m
+     36▕     // A NEW customer definition: MY validation passes, Doc 08's fixture door
+     37▕     // refuses — the P-FIELDS packet's fail-first, pinned until the countersigned swap.
+     38▕     $definitions->create(['entity' => 'customer', 'key' => 'loyalty_tier', 'label' => ['en' => 'Tier', 'am' => 'ደረጃ'], 'type' => 'text'], $actor);
+     39▕     expect(fn () => $values->setCustomerField($customerId, 'loyalty_tier', 'gold', $actor))
+  ➜  40▕         ->toThrow(InvalidArgumentException::class, 'unknown customer field');
+     41▕ });
+     42▕ 
+     43▕ it('FR-02 live: a stored ticket custom value drives a rule condition end-to-end (US-05\'s "usable in rule conditions")', function (): void {
+     44▕     [$tenant, $ticket, $author, $writer] = engineScene();
+
+  [33m1   [39m[39;1mtests/Feature/Fields/ValueStorageTest.php[39;22m:[39;1m40[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\ValueStorageTest[22m [90m>[39m it FR-02 live: a stored t…   
+[39;1m  the stored custom value never reached the condition facts (US-05)
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Feature/Fields/ValueStorageTest.php[39m:[32m55[39m
+     51▕     $eventId = publishTicketCreated($tenant, $ticket);
+     52▕     app(App\Domain\Automation\Engine\Evaluator::class)->evaluate($eventId, 'ticket.created');
+     53▕ 
+     54▕     expect((bool) DB::table('automation_rule_executions')->where('rule_id', $rule['rule_id'])->where('event_id', $eventId)->value('matched'))
+  ➜  55▕         ->toBeTrue('the stored custom value never reached the condition facts (US-05)');
+     56▕ });
+     57▕
+
+  [33m1   [39m[39;1mtests/Feature/Fields/ValueStorageTest.php[39;22m:[39;1m55[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (36 assertions)[39m
+  [90mDuration:[39m [39m11.30s[39m
+
+EXIT=2

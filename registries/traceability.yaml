@@ -2528,14 +2528,14 @@ entries:
       PLANNED-MANUAL: variable resolution parity (preview = send), no-blank enforcement at the API (T-06), bundled-action permission honesty (EC-09), palette budget (NFR-05, dev-scale). Flips at step 9.
   - ac_ref: "Doc12 AC-06"
     suite_path: tests/Feature/Fields/DefinitionMatrixTest.php
-    type: manual
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED-MANUAL: the 13-type matrix, lifecycle physics (retire/reactivate/no-reuse/no-type-change — the last two ALREADY grant physics at step 2b, tests/Isolation/AutomationGrantPhysicsTest.php), option snapshots (EC-08), where-used completeness (EC-14). Flips at step 8.
+      FLIPPED AT S12 STEP 8: the full 13-type matrix (definition x canonical storage x refusal vocabulary + choice options), lifecycle behavior over the step-2b physics (retire refuses writes + values stand — Doc 08 EC-09's rule OWNED here; reactivate; never-reuse on the unscoped unique; type-change already 42501), EC-08 option label snapshots with the stored value standing, EC-14 where-used COMPLETE (forms+rules+views, counts in the SEC-06 deactivation audit) with the flagged rule evaluating is-empty live. The render-in-forms/filters halves grow at steps 10+14 (stated).
   - ac_ref: "Doc12 AC-07"
     suite_path: tests/Contract/Forms/DualRenderConformanceTest.php
     type: manual

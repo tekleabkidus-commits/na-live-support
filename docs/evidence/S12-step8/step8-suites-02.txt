@@ -1,0 +1,38 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\DefinitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/FR-19: the 13-type matrix — definition, canonical storage[39m[90m…[39m [90m10.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: number min/max and text regex validation rules bind; the[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\LifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: deactivate → writes refuse + values stand; reactivate res[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: option removal snapshots the label; the stored value stan[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: the where-used answer is COMPLETE — the referencing rule[39m[90m… [39m [90m0.35s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Fields\ValueStorageTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit A-59 customer half: the seeded trio stores through Doc 08's door[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02 live: a stored ticket custom value drives a rule condition[39m[90m…[39m [90m0.22s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Fields\ValueStorageTest[22m [90m>[39m it A-59 customer half: th…   
+[39;1m  Expected: [39;22m[31mfield 'loyalty_tier' is retired — the definition went, the fact stays read-only (EC-09)[39m[39;1m
+
+  To contain: [39;22m[32munknown customer field[39m
+
+  at [32mtests/Feature/Fields/ValueStorageTest.php[39m:[32m40[39m
+     36▕     // A NEW customer definition: MY validation passes, Doc 08's fixture door
+     37▕     // refuses — the P-FIELDS packet's fail-first, pinned until the countersigned swap.
+     38▕     $definitions->create(['entity' => 'customer', 'key' => 'loyalty_tier', 'label' => ['en' => 'Tier', 'am' => 'ደረጃ'], 'type' => 'text'], $actor);
+     39▕     expect(fn () => $values->setCustomerField($customerId, 'loyalty_tier', 'gold', $actor))
+  ➜  40▕         ->toThrow(InvalidArgumentException::class, 'unknown customer field');
+     41▕ });
+     42▕ 
+     43▕ it('FR-02 live: a stored ticket custom value drives a rule condition end-to-end (US-05\'s "usable in rule conditions")', function (): void {
+     44▕     [$tenant, $ticket, $author, $writer] = engineScene();
+
+  [33m1   [39m[39;1mtests/Feature/Fields/ValueStorageTest.php[39;22m:[39;1m40[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (50 assertions)[39m
+  [90mDuration:[39m [39m11.83s[39m
+
+EXIT=1

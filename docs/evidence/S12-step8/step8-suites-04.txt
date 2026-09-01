@@ -1,0 +1,47 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\DefinitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/FR-19: the 13-type matrix — definition, canonical storage,[39m[90m…[39m [90m6.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: number min/max and text regex validation rules bind; the[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\LifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: deactivate → writes refuse + values stand; reactivate res[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: option removal snapshots the label; the stored value stan[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: the where-used answer is COMPLETE — the referencing rule[39m[90m… [39m [90m0.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\ValueStorageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-59 customer half: the seeded trio stores through Doc 08's door[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02 live: a stored ticket custom value drives a rule condition[39m[90m…[39m [90m0.11s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's o[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the STILL-unbuilt arms answer honestly until their steps: macros[39m[90m…[39m [90m0.09s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ActionsTest[22m [90m>[39m it the STILL-unbuilt arms…    
+[39;1m  {"action":"set_custom_field","detail":"unknown ticket field \"x\" (FR-17)","reason":"field_refused","outcome":"failed"}
+Failed asserting that two strings are identical.
+  [39;22m[31m-'unbuilt_action'[39m[39;1m
+  [39;22m[32m+'field_refused'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/ActionsTest.php[39m:[32m124[39m
+    120▕ 
+    121▕     $outcomes = runChain($executionId, $actions);
+    122▕ 
+    123▕     foreach ($outcomes as $outcome) {
+  ➜ 124▕         expect($outcome['reason'])->toBe('unbuilt_action', json_encode($outcome));
+    125▕     }
+    126▕ });
+    127▕
+
+  [33m1   [39m[39;1mtests/Feature/Automation/ActionsTest.php[39;22m:[39;1m124[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m12 passed[39;22m[90m (72 assertions)[39m
+  [90mDuration:[39m [39m7.72s[39m
+
+EXIT=1

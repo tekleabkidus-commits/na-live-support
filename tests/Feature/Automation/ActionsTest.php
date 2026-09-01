@@ -105,11 +105,10 @@ it('EC-01: the second rule\'s arm reports superseded_state when the fact moved a
         ->and($outcomes[0]['superseded_state'])->toBeTrue('the arm acted on moved state silently — EC-01 honesty gone');
 });
 
-it('the STILL-unbuilt arms answer honestly until their steps: macros/fields/external arms = unbuilt_action (P-DOORS flipped transfer/tags/escalate/directed-assign to REAL — DoorArmsTest)', function (): void {
+it('the STILL-unbuilt arms answer honestly until their steps: macro/external arms = unbuilt_action (P-DOORS + step 8 flipped the rest to REAL)', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $actions = [
         ['type' => 'send_macro_reply', 'macro_id' => (string) Str::uuid7()],
-        ['type' => 'set_custom_field', 'key' => 'x', 'value' => 'y'],
         ['type' => 'notify', 'user_ids' => []],
         ['type' => 'webhook_out', 'url' => 'https://example.test'],
         ['type' => 'send_sms_template', 'template_ref' => 't1'],

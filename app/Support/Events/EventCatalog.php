@@ -1206,6 +1206,13 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/Automation', 'Doc15/Reporting'],
             'description' => 'Doc 12 FR-10: a stage reached 100% of its target. Same honesty shape as sla.warned; the FR-08 breach-escalation hook consumes it.',
         ],
+        'field.changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'field_id', 'kind'],
+            'producers' => ['Doc12/Fields'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-17/FR-18: a field definition changed (kind: created|updated|deactivated|reactivated|option_changed). Keys never reuse; types never change — grant physics.',
+        ],
         'hours.calendar.updated' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'calendar_id', 'kind'],
