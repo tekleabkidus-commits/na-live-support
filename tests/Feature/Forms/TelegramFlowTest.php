@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 */
 
 /** @return array{0: mixed, 1: string, 2: mixed, 3: TelegramFlowEngine} tenant, conversationId, agent, engine */
-function flowScene(): array
+function formFlowScene(): array
 {
     $tenant = createTenant();
     [, $conversation] = conversationFixture();
@@ -31,7 +31,7 @@ function flowScene(): array
 }
 
 it('US-04 end-to-end (direct mode): one field per message, buttons for choices, native file, regex validation — completed product lands via the handoff door with everything attached', function (): void {
-    [, $conversationId, $agent, $engine] = flowScene();
+    [, $conversationId, $agent, $engine] = formFlowScene();
     $depositId = (string) DB::table('forms')->where('name', 'Deposit Issue')->value('id');
 
     $prompt = $engine->start($conversationId, $depositId, 'direct', 'en');
@@ -75,7 +75,7 @@ it('US-04 end-to-end (direct mode): one field per message, buttons for choices, 
 });
 
 it('FR-21 retries: three friendly failures then the human offer; /human hands off PARTIAL data flagged incomplete (SS-03)', function (): void {
-    [, $conversationId, , $engine] = flowScene();
+    [, $conversationId, , $engine] = formFlowScene();
     $depositId = (string) DB::table('forms')->where('name', 'Deposit Issue')->value('id');
     $engine->start($conversationId, $depositId, 'direct', 'am');
 
@@ -96,7 +96,7 @@ it('FR-21 retries: three friendly failures then the human offer; /human hands of
 });
 
 it('EC-06: a version published MID-FLOW never moves the running flow — it completes on ITS checkpointed version', function (): void {
-    [, $conversationId, $agent, $engine] = flowScene();
+    [, $conversationId, $agent, $engine] = formFlowScene();
     [$publisher, $writer] = [app(App\Domain\Forms\FormPublisher::class), app(App\Domain\Forms\FormWriter::class)];
     $formId = $writer->create(['name' => 'Fixture Midflow Form'], $agent->identifier());
     $v1 = $publisher->publish($formId, minimalFormSchema(), $agent->identifier());
@@ -111,7 +111,7 @@ it('EC-06: a version published MID-FLOW never moves the running flow — it comp
 });
 
 it('FS-04 DRILL: Redis state killed mid-flow → the next message resumes from the DB checkpoint with the recap, boundary answers intact', function (): void {
-    [, $conversationId, $agent, $engine] = flowScene();
+    [, $conversationId, $agent, $engine] = formFlowScene();
     $depositId = (string) DB::table('forms')->where('name', 'Deposit Issue')->value('id');
     $engine->start($conversationId, $depositId, 'direct', 'en');
     // Cross the first step boundary (amount, currency, method, reference, time) so a checkpoint exists.
@@ -139,7 +139,7 @@ it('FS-04 DRILL: Redis state killed mid-flow → the next message resumes from t
 });
 
 it('T-07: one live flow per conversation — a second start supersedes the first by outcome, never by delete', function (): void {
-    [, $conversationId, , $engine] = flowScene();
+    [, $conversationId, , $engine] = formFlowScene();
     $depositId = (string) DB::table('forms')->where('name', 'Deposit Issue')->value('id');
     $withdrawalId = (string) DB::table('forms')->where('name', 'Withdrawal Issue')->value('id');
     $engine->start($conversationId, $depositId, 'direct', 'en');
