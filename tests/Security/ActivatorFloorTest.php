@@ -74,8 +74,10 @@ it('SEC-01 (2+3): the demoted-author falsification — set_priority is floor_ref
     expect($refused['outcome'])->toBe('failed')
         ->and($refused['reason'])->toBe('floor_refused', 'the floor did not refuse — a demoted author\'s rule can out-privilege the org (SEC-01 broken)');
 
+    // Since step 5 the add_note arm is BOUND, so the ordering proof is stronger:
+    // the floored-and-allowed type passes the gate and the REAL arm runs.
     $reached = $registry->execute('add_note', ['type' => 'add_note', 'body' => 'x'], $executionId, 1);
-    expect($reached['reason'] ?? null)->toBe('unbuilt_action', 'the allowed type never reached the arm layer — the gate is a dead registry, not a floor');
+    expect($reached['outcome'])->toBe('ok', 'the allowed type never reached the arm — the gate is a dead registry, not a floor');
 });
 
 it('SEC-01 (4): revoking the activator\'s key after activation surfaces DRIFT; the captured floor is untouched', function (): void {
