@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 */
 
 /** An activated rule + a matched execution row for the given ticket, floor = the author's full map. */
-function actionScene(object $tenant, object $ticket, array $actions): string
+function automationActionScene(object $tenant, object $ticket, array $actions): string
 {
     $author = grantAllPermissions(ticketActor([]));
     $writer = app(RuleWriter::class);
@@ -61,7 +61,7 @@ it('AC-01: an illegal transition fails THAT action with the door\'s own reason a
         ['type' => 'set_status', 'status' => 'closed'],   // new → closed is not an FR-04 edge
         ['type' => 'add_note', 'body' => 'chain survived the refusal'],
     ];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions);
 
@@ -75,7 +75,7 @@ it('AC-01: an illegal transition fails THAT action with the door\'s own reason a
 it('set_status through the service: a LEGAL edge lands with actor system', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $actions = [['type' => 'set_status', 'status' => 'pending_customer']];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions);
 
@@ -91,7 +91,7 @@ it('set_status through the service: a LEGAL edge lands with actor system', funct
 it('set_priority through ChangePriority(null): the door publishes actor_type=system; an unknown level fails honestly', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $actions = [['type' => 'set_priority', 'priority' => 'urgent'], ['type' => 'set_priority', 'priority' => 'apocalyptic']];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions);
 
@@ -106,7 +106,7 @@ it('assign via Doc 11: the pipeline routes with trigger=automation and the recor
     departmentFixture('Automation Dept');
     $queueId = (string) DB::table('queues')->orderBy('position')->value('id');
     $actions = [['type' => 'assign', 'queue_id' => $queueId]];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions, ['ticket.queue_id' => null]);
 
@@ -118,7 +118,7 @@ it('assign via Doc 11: the pipeline routes with trigger=automation and the recor
 
     // BR-03's spirit: a ticket a human already claimed is not re-litigated.
     DB::table('tickets')->where('id', $ticket->identifier())->update(['assignee_id' => grantAllPermissions(ticketActor([], 'Claimer Role'))->identifier()]);
-    $secondExecution = actionScene($tenant, $ticket, $actions);
+    $secondExecution = automationActionScene($tenant, $ticket, $actions);
     $second = runChain($secondExecution, $actions);
     expect($second[0]['reason'])->toBe('already_assigned')
         ->and($second[0]['superseded_state'])->toBeTrue();
@@ -127,7 +127,7 @@ it('assign via Doc 11: the pipeline routes with trigger=automation and the recor
 it('EC-01: the second rule\'s arm reports superseded_state when the fact moved after the match', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $actions = [['type' => 'set_priority', 'priority' => 'high']];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     // The basis says the rule matched priority=normal; a rival chain moved it first.
     DB::table('tickets')->where('id', $ticket->identifier())->update(['priority' => 'low']);
@@ -145,7 +145,7 @@ it('the unbuilt arms answer honestly until their steps/packets: transfer/tags/es
         ['type' => 'escalate', 'reason' => 'rule-authored reason'],
         ['type' => 'assign', 'assignee_id' => (string) Str::uuid7()],
     ];
-    $executionId = actionScene($tenant, $ticket, $actions);
+    $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions);
 
