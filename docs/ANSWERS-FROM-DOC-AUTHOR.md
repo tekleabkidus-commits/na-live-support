@@ -2950,3 +2950,27 @@ Doc 09's kill switches).
 END OF AMENDMENT 6 FILING — awaiting the advisor's countersign; NO migration exists
 or will exist before it.
 
+### SCHEMA AMENDMENT 6 — RIDER 1 (filed at S12 step 2b, BEFORE the migration commit — the S08 backfill-rider precedent; rides the granted countersign's obligation-4 clause, flagged for the advisor's next-checkpoint confirmation)
+
+The countersign's obligation 4 accepts the two fill-only trigger designs; implementing
+them surfaces one unnamed necessity and one reading, both filed here rather than slipped:
+
+1. **The flip carriers on `sla_instance_stages`.** A fill-only trigger needs an
+   app-writable transition to fire on (the R-20 shape fires on `activated_by`
+   NULL→value for revisions; tickets' triggers fire on status). The filing said
+   "stamped by FILL-ONLY triggers on the warned/breached state flips" without naming
+   the flip columns. RIDER: `warned` boolean NOT NULL DEFAULT false and `breached`
+   boolean NOT NULL DEFAULT false, both app-writable on UPDATE; the triggers stamp
+   `warned_at`/`breached_at` := clock_timestamp() on false→true and restore OLD on
+   any later write (never re-stamped, never un-flipped — the booleans are also
+   fill-only by trigger). Two columns, no other change to item 7.
+2. **FS-02's "honest backdating", the reading implemented:** the ROW's
+   `warned_at`/`breached_at` carry the DB-time instant the flip was DETECTED (the
+   trigger's clock — after an outage this is late, and `late_fired=true` says so);
+   the EVENTS (`sla.warned|breached`) carry the COMPUTED true instant in their
+   payload (`due_at`), which the row's snapshot + `target_at` already derive. Events
+   get the true timeline, the row keeps honest detection time, the flag reconciles
+   the two — "honest backdating in events, flagged late_fired" read literally.
+
+END OF RIDER 1 — nothing follows this line.
+
