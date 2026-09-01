@@ -1,0 +1,34 @@
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              FAIL
+      traceability: 70 AC(s) PENDING across 7 not-started document(s) — not enforced until their BUILD-STATUS row leaves NOT STARTED (ADR 0004).
+      traceability: FAIL unmapped AC: Doc12 AC-01
+      traceability: FAIL unmapped AC: Doc12 AC-02
+      traceability: FAIL unmapped AC: Doc12 AC-04
+      traceability: FAIL unmapped AC: Doc12 AC-05
+      traceability: FAIL unmapped AC: Doc12 AC-06
+      traceability: FAIL unmapped AC: Doc12 AC-07
+      traceability: FAIL unmapped AC: Doc12 AC-08
+      traceability: FAIL unmapped AC: Doc12 AC-09
+      traceability: FAIL (8 unmapped AC(s) in 12 in-progress document(s)). Every AC of a document being built maps to a test or a justified manual/drill entry (Doc 19 FR-02).
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 1 failed, 0 skipped.
+FAILED: traceability
+make: *** [Makefile:97: gates] Error 1
+EXIT=2

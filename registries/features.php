@@ -47,4 +47,16 @@ return [
         'tenant_toggleable' => true,
         'owning_doc' => 'Doc07',
     ],
+    [
+        // Doc 12 R-04: the tenant-wide "pause all rules" switch — instant, an
+        // evaluation short-circuit only (N-19: it hides behavior, destroys
+        // nothing; armed SLA instances and logs are untouched). Lives in the
+        // incident runbook beside Doc 09's AI kill switches. default false =
+        // rules RUN; true = paused.
+        'key' => 'automation.rules_pause',
+        'label_i18n_key' => 'workflow.feature.rules_pause',
+        'default' => false,
+        'tenant_toggleable' => true,
+        'owning_doc' => 'Doc12',
+    ],
 ];

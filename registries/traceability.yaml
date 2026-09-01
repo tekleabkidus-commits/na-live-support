@@ -2476,3 +2476,93 @@ entries:
     status: covered
     justification: >-
       FLIPPED AT THE S11 BATCH-C CHECKPOINT (registry lag): the harness landed at step 6 (d60eac3) — 300 generated snapshots + streams replayed twice, shuffled inputs; the SAME-SECOND TIE case added at step 9 (e92bf57, advisor-ordered) with its control; runs in CI's routing package on every push.
+  - ac_ref: "Doc12 AC-03"
+    suite_path: tests/Property/SlaClockTest.php
+    type: automated
+    tier: property
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PARTIAL ALREADY REAL (S12 step 1, ccace0a): the clock property suite + golden timelines (interval math, EC-04 pause union, EC-03 retarget) are green — 7 passed / 4840 assertions. The remaining halves (timer accuracy +-30 s measured; BR-03 snapshot immutability against live edits) flip at step 6. The other eight Doc12 AC rows land WITH their suites (the registry-check gate requires existing paths; ADR 0004's flip-time gate enforces completeness at document close) — plan of record docs/SESSION-12-APPROVED-PLAN.md paragraph 9.
+  - ac_ref: "Doc12 AC-01"
+    suite_path: tests/Feature/Automation/EngineOrderTest.php
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL (S12 plan paragraph 9; the S08 seeding pattern — flips to automated WITH its suite): rule semantics — position order, per-action isolation (a transition-service rejection continues the chain), all guards (10/20/depth-3/cooldown) fixture-proven incl. EC-01/EC-12. Flips at steps 4-5.
+  - ac_ref: "Doc12 AC-02"
+    suite_path: tests/Feature/Automation/DryRunParityTest.php
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: dry-run verdicts equal live evaluation over a replayed event corpus (the Doc 09 AC-03 simulation-vs-replay pattern); zero side effects proven. Flips at step 7.
+  - ac_ref: "Doc12 AC-04"
+    suite_path: tests/Feature/Hours/CalendarTest.php
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: split shifts, recurring holidays, department overrides, and the paragraph-8 example-sentence computation verified against the ONE clock library. Flips at step 3.
+  - ac_ref: "Doc12 AC-05"
+    suite_path: tests/Feature/Macros/ResolverParityTest.php
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: variable resolution parity (preview = send), no-blank enforcement at the API (T-06), bundled-action permission honesty (EC-09), palette budget (NFR-05, dev-scale). Flips at step 9.
+  - ac_ref: "Doc12 AC-06"
+    suite_path: tests/Feature/Fields/DefinitionMatrixTest.php
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: the 13-type matrix, lifecycle physics (retire/reactivate/no-reuse/no-type-change — the last two ALREADY grant physics at step 2b, tests/Isolation/AutomationGrantPhysicsTest.php), option snapshots (EC-08), where-used completeness (EC-14). Flips at step 8.
+  - ac_ref: "Doc12 AC-07"
+    suite_path: tests/Contract/Forms/DualRenderConformanceTest.php
+    type: manual
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: dual-render conformance (schema to widget contract + both Telegram modes), EC-07 required-when-visible, versioned submissions (EC-06), publish validations, SS-03 partial-data handoff, FS-04 checkpoint-resume drill. Flips at steps 10-11.
+  - ac_ref: "Doc12 AC-08"
+    suite_path: tests/Feature/Csat/TriggerMatrixTest.php
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: the human/AI trigger matrix, cooldown + RG suppression, single-response with the edit window (the unique ALREADY physics at step 2b, tests/Isolation/SlaGrantPhysicsTest.php), expiry (EC-11), event completeness for Doc 15. Flips at step 12.
+  - ac_ref: "Doc12 AC-09"
+    suite_path: tests/Security/ActivatorFloorTest.php
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED-MANUAL: SEC-01 activator-capability floor enforced and drift-flagged; webhook allowlist + SSRF egress; SEC-03 log elision per role fixtures. Flips at steps 5 and 13.

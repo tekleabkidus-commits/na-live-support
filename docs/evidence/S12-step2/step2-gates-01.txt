@@ -1,0 +1,37 @@
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            FAIL
+      registry-check: traceability[133]: suite_path "tests/Feature/Automation/EngineOrderTest.php" does not exist
+      registry-check: traceability[134]: suite_path "tests/Feature/Automation/DryRunParityTest.php" does not exist
+      registry-check: traceability[136]: suite_path "tests/Feature/Hours/CalendarTest.php" does not exist
+      registry-check: traceability[136]: tier must be one of unit|contract|integration|isolation|security|property|browser
+      registry-check: traceability[137]: suite_path "tests/Feature/Macros/ResolverParityTest.php" does not exist
+      registry-check: traceability[137]: tier must be one of unit|contract|integration|isolation|security|property|browser
+      registry-check: traceability[138]: suite_path "tests/Feature/Fields/DefinitionMatrixTest.php" does not exist
+      registry-check: traceability[138]: tier must be one of unit|contract|integration|isolation|security|property|browser
+      registry-check: traceability[139]: suite_path "tests/Contract/Forms/DualRenderConformanceTest.php" does not exist
+      registry-check: traceability[140]: suite_path "tests/Feature/Csat/TriggerMatrixTest.php" does not exist
+      registry-check: traceability[140]: tier must be one of unit|contract|integration|isolation|security|property|browser
+      registry-check: traceability[141]: suite_path "tests/Security/ActivatorFloorTest.php" does not exist
+      registry-check: FAIL (12 violation(s))
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 1 failed, 0 skipped.
+FAILED: registry-check
+make: *** [Makefile:97: gates] Error 1
+EXIT=2

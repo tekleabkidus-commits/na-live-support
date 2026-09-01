@@ -928,4 +928,40 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc11',
     ],
+
+    // ── Doc 12 (Automation, SLA, Forms & Custom Fields) — SCHEMA AMENDMENT 6's
+    //    settings section (countersigned 2026-09-01). The FR-04 guard caps
+    //    (10 rules / 20 actions / depth 3) are deliberately ABSENT here: they are
+    //    platform constants in code (BR-05 — a cap configurable above the platform
+    //    limit is not a cap). Per-rule cooldown is a COLUMN (0..86400 CHECK), not a
+    //    setting.
+    [
+        // FR-24: suppress a survey when the same customer received one within this
+        // window (BR-07 — measurement, not marketing).
+        'key' => 'csat.cooldown.hours',
+        'type' => 'int',
+        'default' => 24,
+        'validation' => 'required|integer|min:1|max:168',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-25: the response window; armed surveys MATERIALIZE their expires_at at
+        // arming, so a change here never re-targets one (the SS-03 immunity law).
+        'key' => 'csat.window.hours',
+        'type' => 'int',
+        'default' => 72,
+        'validation' => 'required|integer|min:1|max:336',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-25: whether the optional comment prompt follows the 1-tap score.
+        'key' => 'csat.comment_prompt.enabled',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc12',
+    ],
 ];
