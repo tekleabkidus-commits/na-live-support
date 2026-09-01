@@ -1,0 +1,104 @@
+
+Running 10 tests using 1 worker
+
+  ✘   1 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:93:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) (30.1s)
+  ✓   2 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:195:1 › B9 render gate: without tickets.status.change the status control does not exist — the panel stays read-only truth (N-19: flags and grants hide, they never lie) (2.6s)
+  ✘   3 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:223:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) (30.1s)
+  ✓   4 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:263:1 › D5/D6/D1: the drawn empties offer the act (Assign to me claims through the real door), the timeline fails ALONE with Try again recovering, and a switching panel shows a SKELETON, never a stale ticket (5.6s)
+  ✘   5 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:334:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves (30.1s)
+  ✘   6 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:425:1 › THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast (30.0s)
+  ✓   7 [chromium] › tests/Browser/inbox-views.spec.ts:64:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) (2.2s)
+  ✓   8 [chromium] › tests/Browser/inbox-views.spec.ts:102:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows (2.1s)
+  ✓   9 [chromium] › tests/Browser/inbox-views.spec.ts:133:1 › FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned copy and opens the editor on it (1.4s)
+  ✓  10 [chromium] › tests/Browser/inbox-views.spec.ts:150:1 › Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order (2.2s)
+
+
+  1) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:93:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      87 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      88 |         .locator('[data-role="row-open"]')
+    > 89 |         .click();
+         |          ^
+      90 |     await expect(page.getByTestId('composer')).toBeVisible();
+      91 | }
+      92 |
+        at openYonasThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:89:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:96:5
+
+    Error Context: test-results/inbox-ticket-panel-B9-the--eaa0a-l-truth-AND-database-truth--chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:223:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      237 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      238 |         .locator('[data-role="row-open"]')
+    > 239 |         .click();
+          |          ^
+      240 |     // The R4 bottom sheet with the same three tabs (B2-S01's contract).
+      241 |     await page.getByTestId('mobile-context-trigger').click();
+      242 |     await expect(page.getByTestId('mobile-context-sheet')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:239:10
+
+    Error Context: test-results/inbox-ticket-panel-B14-375-4c735-controls-not-a-reduced-set--chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:334:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Yonas Tesfaye' }).locator('[data-role="row-open"]')
+
+
+      87 |         .locator('[data-ticket]', { hasText: 'Yonas Tesfaye' })
+      88 |         .locator('[data-role="row-open"]')
+    > 89 |         .click();
+         |          ^
+      90 |     await expect(page.getByTestId('composer')).toBeVisible();
+      91 | }
+      92 |
+        at openYonasThread (/home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:89:10)
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:338:5
+
+    Error Context: test-results/inbox-ticket-panel-D7–D10--0e5af-fallback-explain-themselves-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:425:1 › THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="row-open"]')
+
+
+      440 |         .locator('[data-ticket]', { hasText: 'አበበ ታደሰ' })
+      441 |         .locator('[data-role="row-open"]')
+    > 442 |         .click();
+          |          ^
+      443 |     await expect(page.getByTestId('ticket-panel-number')).toHaveText('#4801');
+      444 |     await expect(page.getByTestId('panel-sla-chip')).toBeVisible();
+      445 |
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-ticket-panel.spec.ts:442:10
+
+    Error Context: test-results/inbox-ticket-panel-THE-PRO-cac99-n-the-panel-—-never-a-toast-chromium/error-context.md
+
+  4 failed
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:93:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:223:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:334:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves 
+    [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:425:1 › THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast 
+  6 passed (2.7m)
+EXIT=1

@@ -264,7 +264,17 @@ final class InboxBrowserSeeder extends Seeder
                 ]);
                 $ticket = Ticket::query()->findOrFail($ticketId);
             }
-            DB::table('tickets')->where('id', $ticketId)->update(['assignee_id' => null, 'status' => 'open', 'department_id' => $deptId]);
+            // The FIFO canon is queued_at's (BoostScorer's base term), and the
+            // tickets_stamp_placement trigger owns that stamp ("never app-supplied").
+            // A spec that claimed a SUBSET of the trio leaves the untouched member's
+            // ORIGINAL stamp while the healed ones re-stamp at heal time — 03,01,02
+            // forever, and views:150's relative-FIFO law can never hold (the
+            // 2026-09-01 batch-C CI red, run 33566117952). Heal THROUGH the trigger's
+            // own physics: clear queue_id too, so each re-route's placement re-fires
+            // the branch-1 stamp — all three re-stamp fresh, ascending in loop order.
+            DB::table('tickets')->where('id', $ticketId)->update([
+                'assignee_id' => null, 'status' => 'open', 'department_id' => $deptId, 'queue_id' => null,
+            ]);
             $ticket = Ticket::query()->findOrFail($ticketId);
             // C-06: domain events publish inside a transaction (the outbox law) — a bare seeder
             // call would park the ticket as an FS-04 engine error (the honest net, doing its job).
