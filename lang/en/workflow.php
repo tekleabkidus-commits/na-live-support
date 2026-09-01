@@ -15,5 +15,11 @@ return [
         // (both "Day HH:MM" in the display timezone), :zone.
         'example' => 'A ticket created :created would target first response :target (:zone).',
         'example_unreachable' => 'This calendar never opens, so no target can be computed — draw at least one weekly interval.',
+        // FR-11: the chip's stage labels (Doc 07 renders the contract).
+        'stage' => [
+            'first_response' => 'First response',
+            'next_response' => 'Next response',
+            'resolution' => 'Resolution',
+        ],
     ],
 ];

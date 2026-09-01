@@ -55,6 +55,10 @@ Schedule::command('routing:rescue-sweep')->everyMinute()->withoutOverlapping();
 // floor; the sweep's 1-minute cadence is resolution, not rate). Late-not-early.
 Schedule::command('automation:schedule-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 12 FR-10/NFR-02: the SLA warn/breach sweep — next-fire-at candidates
+// re-verified against row truth + the clock library (the T-03 posture).
+Schedule::command('sla:timers-sweep')->everyMinute()->withoutOverlapping();
+
 // Doc 06 T-04: unmerge snapshots pruned after their 24 h window. Hourly is hygiene,
 // not correctness — FS-04's window check refuses a stale-but-unpruned row identically.
 Schedule::command('tickets:merge-snapshots-prune')->hourly();

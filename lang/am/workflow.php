@@ -12,5 +12,10 @@ return [
     'sla' => [
         'example' => ':created የተከፈተ ቲኬት የመጀመሪያ ምላሽ ዒላማው :target ይሆናል (:zone)።',
         'example_unreachable' => 'ይህ የስራ ሰዓት መርሃ ግብር በጭራሽ አይከፈትም — ቢያንስ አንድ ሳምንታዊ ክፍተት ይሳሉ።',
+        'stage' => [
+            'first_response' => 'የመጀመሪያ ምላሽ',
+            'next_response' => 'ቀጣይ ምላሽ',
+            'resolution' => 'መፍትሄ',
+        ],
     ],
 ];

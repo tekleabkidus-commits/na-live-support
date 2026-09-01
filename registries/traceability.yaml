@@ -2485,7 +2485,7 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      PARTIAL ALREADY REAL (S12 step 1, ccace0a): the clock property suite + golden timelines (interval math, EC-04 pause union, EC-03 retarget) are green — 7 passed / 4840 assertions. The remaining halves (timer accuracy +-30 s measured; BR-03 snapshot immutability against live edits) flip at step 6. The other eight Doc12 AC rows land WITH their suites (the registry-check gate requires existing paths; ADR 0004's flip-time gate enforces completeness at document close) — plan of record docs/SESSION-12-APPROVED-PLAN.md paragraph 9.
+      GROWN AT S12 STEP 6: the property suite + goldens (step 1) PLUS SnapshotImmutabilityTest (BR-03 against LIVE policy/calendar/holiday edits, both layers), TimerTest (next-fire candidates, due fires with computed due_at, the FS-02 wipe-and-rebuild DRILL with late_fired honesty, pause = no candidate) and the EC-03 retarget record. REMAINING HALF: the +-30 s accuracy figure is a TIMING leg — not taken on battery power (the session's standing law); structural inverse-consistency (P5: next-fire == the clock's own answer, exactly) stands in its place until a wall-power run or Doc 19's [D19] profile.
   - ac_ref: "Doc12 AC-01"
     suite_path: tests/Feature/Automation/EngineOrderTest.php
     type: manual

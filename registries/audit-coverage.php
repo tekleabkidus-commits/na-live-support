@@ -1656,6 +1656,15 @@ return [
         'owning_doc' => 'Doc12',
     ],
     [
+        // SEC-06 HIGH-RISK: SLA policy changes (kind: created|updated) — BR-03 keeps
+        // them prospective; the audit is the dispute record's config half. [D17] class.
+        'action_key' => 'sla.policy.changed',
+        'entity' => 'sla_policy',
+        'actor_types' => ['staff'],
+        'required_fields' => ['policy_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
         // FR-02: keyword-set changes — the audit carries the id, never the list (SEC-03).
         'action_key' => 'automation.keyword_set.changed',
         'entity' => 'automation_keyword_set',

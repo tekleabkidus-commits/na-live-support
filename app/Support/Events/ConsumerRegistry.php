@@ -46,7 +46,7 @@ final class ConsumerRegistry
         //    (Doc 04's fan-out contract; batch-tail debounced; idempotent on
         //    the message's existing classify decision). The ReopenConsumerDrillTest
         //    pin moves in THIS commit (the routine line).
-        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
 
         // Doc 09 FR-05 (S09 step 6): the T-05 media hooks' subscribers —
         //    transcript/OCR write-back through the Doc 04 repository door;
@@ -70,7 +70,7 @@ final class ConsumerRegistry
         'ai.killswitch.changed' => [ListProjectorConsumer::class],
         'ai.anomaly.detected' => [ListProjectorConsumer::class],
         'ai.digest.ready' => [ListProjectorConsumer::class],
-        'message.sent' => [ListProjectorConsumer::class],
+        'message.sent' => [ListProjectorConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'note.mentioned' => [ListProjectorConsumer::class],
         // Doc 08 T-04 (S08 step 8): CustomerSearchIndexer rides the ticket
         //    events that change a customer's SCOPE arrays (assignee_ids /
@@ -79,7 +79,7 @@ final class ConsumerRegistry
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         // Doc 11 (S11 step 5): the five FR-07 trigger routers (TicketCreated/Transferred/Unassigned,
         // AssigneeDeactivated, TicketReopened) join DELIBERATELY — durable, idempotent on event_id.
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
@@ -96,7 +96,7 @@ final class ConsumerRegistry
         'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Routing\RescueConsumer::class],
         'queue.membership_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
-        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
         //    kb.article.published — chunk → sanitize (the one door) → embed changed
         //    chunks → ONE-statement generation swap → kb.retrieval.updated. Idempotent
@@ -114,7 +114,7 @@ final class ConsumerRegistry
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
-        'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
         'ticket.tagged' => [ListProjectorConsumer::class],
         'ticket.untagged' => [ListProjectorConsumer::class],
@@ -136,7 +136,7 @@ final class ConsumerRegistry
         'ticket.follower_added' => [ListProjectorConsumer::class],
         'ticket.follower_removed' => [ListProjectorConsumer::class],
         'telegram.window.closing' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
-        'telegram.window.expired' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'telegram.window.expired' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         // ── Doc 12 FR-01/FR-04 (S12 step 4, ADR 0011): AutomationEventConsumer joins
         //    the eight EXISTING trigger events DELIBERATELY (the FR-01 vocabulary;
         //    sla.*/csat.received/form.submitted join at their landing steps WITH their
@@ -144,7 +144,13 @@ final class ConsumerRegistry
         //    read-slices conform to fixtures/tickets/consumers/doc12.json (tightened
         //    this commit); drill: AutomationConsumerDrillTest, same commit.
         'customer.rg_flag.set' => [\App\Jobs\Automation\AutomationEventConsumer::class],
-        'telegram.window.reopened' => [ListProjectorConsumer::class],
+        // ── Doc 12 FR-09/FR-10 (S12 step 6): SlaLifecycleConsumer joins the seven
+        //    state events DELIBERATELY (arming, EC-02 re-arm, clears, pauses,
+        //    EC-03 retarget, the window-unreachable pause); sla.warned/breached
+        //    now EXIST, so the automation trigger consumer joins them too.
+        'sla.warned' => [\App\Jobs\Automation\AutomationEventConsumer::class],
+        'sla.breached' => [\App\Jobs\Automation\AutomationEventConsumer::class],
+        'telegram.window.reopened' => [ListProjectorConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'telegram.connection.revoked' => [ListProjectorConsumer::class],
         'telegram.connection.active' => [ListProjectorConsumer::class],
 

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-137 event(s).
+141 event(s).
 
 ## `agent.status_changed`
 
@@ -877,6 +877,42 @@ Doc 11 FR-12/NFR-06/SEC-06: the age cap promoted a ticket to the queue head — 
 - **Payload:** `tenant_id`, `ticket_id`, `queue_id`, `waited_seconds`, `cap_minutes`
 - **Producers:** Doc11/Routing
 - **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `sla.breached`
+
+Doc 12 FR-10: a stage reached 100% of its target. Same honesty shape as sla.warned; the FR-08 breach-escalation hook consumes it.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `instance_id`, `stage`, `due_at`, `late_fired`
+- **Producers:** Doc12/Sla
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/Automation, Doc15/Reporting
+
+## `sla.instance.armed`
+
+Doc 12 FR-09: the first matching policy armed an instance on ticket creation (snapshots embedded; one per ticket).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `instance_id`, `policy_id`
+- **Producers:** Doc12/Sla
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `sla.policy.changed`
+
+Doc 12 FR-08: an SLA policy changed (kind: created|updated). Prospective-only — armed instances keep their snapshots (BR-03).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `policy_id`, `kind`
+- **Producers:** Doc12/Sla
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `sla.warned`
+
+Doc 12 FR-10: a stage crossed its warning threshold. due_at is the COMPUTED instant (RIDER 1: events carry the true timeline; the row carries detection time); late_fired flags a recovery fire (FS-02).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `ticket_id`, `instance_id`, `stage`, `due_at`, `late_fired`
+- **Producers:** Doc12/Sla
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/Automation, Doc15/Reporting
 
 ## `telegram.bot_blocked`
 

@@ -1,0 +1,225 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sla\ExampleSentenceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the §8 example reproduces golden timeline #1 through the[39m[90m… [39m [90m6.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: ICU-rendered in both languages with the display timezone ex[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sla\InstanceLifecycleTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-08/FR-09: the FIRST matching policy arms one instance with sn[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-08 walls: a queue key is refused (the vocabulary is closed);[39m[90m… [39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-02: five rapid customer messages hold ONE live next_response[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit pauses per the snapshot toggles: pending_customer opens/closes a[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-03: retarget_remaining stores the documented formula record;[39m[90m… [39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sla\SnapshotImmutabilityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit BR-03 physics: the direct armed-instance falsification dies 4250[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit BR-03/EC-05: policy edits, calendar edits and holiday adds are A[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sla\TimerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit T-04: arming computes next-fire candidates; a paused stage carri[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-10/NFR-02 structural + FS-02 honesty: a due warn AND breach f[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FS-02 DRILL: the ZSET is wiped — nothing fires early; rebuild re[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit closing row 11: BoostMatcher's sla_at_risk reads the REAL warned[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\InstanceLifecycleTest[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\InstanceLifecycleTest[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\InstanceLifecycleTest[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\InstanceLifecycleTest[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\InstanceLifecycleTest[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\SnapshotImmutabilityT[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\SnapshotImmutabilityT[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\TimerTest[22m [90m>[39m it T-04:…  [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\TimerTest[22m [90m>[39m it FR-10/… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\TimerTest[22m [90m>[39m it FS-02…  [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sla\TimerTest[22m [90m>[39m it closin… [41;1m InvalidArgumentException [49;22m  
+[39;1m  Audit action "sla.policy.changed" is not registered in registries/audit-coverage.php (CLAUDE.md §2). Register it — with its entity, actor types and required payload fields — before emitting it; an unregistered mutation is a build failure at the audit-coverage gate.[39;22m
+
+  at [32mapp/Support/Audit/AuditLogger.php[39m:[32m103[39m
+     99▕     {
+    100▕         self::$registry ??= $this->loadRegistry();
+    101▕ 
+    102▕         if (! array_key_exists($actionKey, self::$registry)) {
+  ➜ 103▕             throw new InvalidArgumentException(sprintf(
+    104▕                 'Audit action "%s" is not registered in registries/audit-coverage.php (CLAUDE.md §2). '
+    105▕                 .'Register it — with its entity, actor types and required payload fields — before '
+    106▕                 .'emitting it; an unregistered mutation is a build failure at the audit-coverage gate.',
+    107▕                 $actionKey,
+
+  [33m1   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m103[39;22m
+  [33m2   [39m[39;1mapp/Support/Audit/AuditLogger.php[39;22m:[39;1m72[39;22m
+
+
+  [90mTests:[39m    [31;1m11 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (10 assertions)[39m
+  [90mDuration:[39m [39m6.97s[39m
+
+EXIT=2

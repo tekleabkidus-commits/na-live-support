@@ -195,17 +195,20 @@ final class ReferenceInventory
     /** @return list<array{id: string, name: string, target: string}> */
     private function slaPolicies(?string $queueId, string $departmentId): array
     {
-        $path = base_path('fixtures/routing/seams/doc12-rules.json');
-        if (! app()->environment(['local', 'testing', 'ci']) || ! is_file($path)) {
-            return [];
-        }
-        /** @var array{sla_policies?: list<array{id: string, name: string, target_queue_id?: string, target_department_id?: string}>} $seam */
-        $seam = json_decode((string) file_get_contents($path), true, 8, JSON_THROW_ON_ERROR);
+        // [D12] closing row 10 (S12 step 6): REAL sla_policies rows replace the
+        // fixture slice. FR-08's match vocabulary carries departments, never
+        // queues — so a QUEUE deletion can strand no policy (the fixture's
+        // queue-targeting row was synthetic; stated at the flip) and the
+        // inventory lists the policies matching the DEPARTMENT being touched.
+        unset($queueId);
+        /** @var list<object{id: string, name: string}> $rows */
+        $rows = DB::select(
+            "SELECT id, name FROM sla_policies WHERE active AND match_conditions->>'department_id' = ? ORDER BY position, id",
+            [$departmentId],
+        );
         $out = [];
-        foreach ($seam['sla_policies'] ?? [] as $p) {
-            if (($queueId !== null && ($p['target_queue_id'] ?? null) === $queueId) || ($p['target_department_id'] ?? null) === $departmentId) {
-                $out[] = ['id' => $p['id'], 'name' => $p['name'], 'target' => (string) ($p['target_queue_id'] ?? $p['target_department_id'] ?? '')];
-            }
+        foreach ($rows as $p) {
+            $out[] = ['id' => $p->id, 'name' => $p->name, 'target' => $departmentId];
         }
 
         return $out;

@@ -1757,3 +1757,41 @@ function conversationFixture(): array
 
     return [$tenantId, $conversation];
 }
+
+/**
+ * Doc 12 (S12): a catalog-exact ticket.created publish for the bound tenant —
+ * the automation/SLA suites' trigger signal. Shared here because Pest test-file
+ * functions load per-file (the S11 isolatedAuthIp precedent).
+ */
+function publishTicketCreated(object $tenant, object $ticket, ?array $metadata = null): string
+{
+    return DB::transaction(fn (): string => app(App\Support\Events\EventPublisher::class)->publish('ticket.created', [
+        'tenant_id' => $tenant->identifier(),
+        'ticket_id' => $ticket->identifier(),
+        'conversation_id' => (string) DB::table('tickets')->where('id', $ticket->identifier())->value('conversation_id'),
+        'actor_type' => 'system',
+        'actor_id' => null,
+        'source' => 'agent',
+        'customer_id' => (string) DB::table('tickets')->where('id', $ticket->identifier())->value('customer_id'),
+    ], null, $metadata));
+}
+
+/**
+ * Doc 12 (S12): an armed SLA scene — calendar-mode policy + instance + the
+ * first_response/resolution stages, for the timer/chip suites (shared here,
+ * the per-file-loading law).
+ */
+function timerScene(int $firstResponseSeconds = 60): array
+{
+    [$tenant, , $ticket] = ticketFixture('new');
+    app(App\Domain\Sla\Policies\PolicyWriter::class)->create([
+        'name' => 'Fast', 'match_conditions' => [],
+        'targets' => ['normal' => ['first_response_s' => $firstResponseSeconds, 'resolution_s' => 86400]],
+        'clock_mode' => 'calendar',
+    ], (string) Str::uuid7());
+    $eventId = publishTicketCreated($tenant, $ticket);
+    app(App\Domain\Sla\Instances\InstanceArmer::class)->armForTicket($ticket->identifier(), $eventId);
+    $instance = DB::table('sla_instances')->where('ticket_id', $ticket->identifier())->first();
+
+    return [$tenant, $ticket, $instance];
+}

@@ -33,8 +33,8 @@ final class BoostMatcher
             $matched[] = 'vip';
         }
         $ticketId = $ticket['id'] ?? null;
-        /** @var object{window_expires_at: ?string, sla_state: ?string}|null $projected */
-        $projected = is_string($ticketId) ? DB::table('ticket_list_items')->where('ticket_id', $ticketId)->first(['window_expires_at', 'sla_state']) : null;
+        /** @var object{window_expires_at: ?string}|null $projected */
+        $projected = is_string($ticketId) ? DB::table('ticket_list_items')->where('ticket_id', $ticketId)->first(['window_expires_at']) : null;
         if ($projected !== null && $projected->window_expires_at !== null) {
             /** @var object{closing: bool} $w */
             $w = DB::selectOne("SELECT (?::timestamptz - clock_timestamp()) BETWEEN interval '0' AND interval '15 minutes' AS closing", [$projected->window_expires_at]);
@@ -42,7 +42,17 @@ final class BoostMatcher
                 $matched[] = 'window_closing';
             }
         }
-        if ($projected !== null && in_array($projected->sla_state, ['warned', 'breached'], true)) {
+        // [D12] closing row 11 (S12 step 6): sla_at_risk reads REAL SLA instance
+        // state — a live warned/breached stage (Doc 12 FR-10) — instead of the
+        // fixture-fed projection field. The projection's chip feed is packet
+        // P-CHIP's (Doc 07 render side).
+        $atRisk = is_string($ticketId) && DB::table('sla_instance_stages')
+            ->join('sla_instances', 'sla_instances.id', '=', 'sla_instance_stages.instance_id')
+            ->where('sla_instances.ticket_id', $ticketId)
+            ->whereNull('sla_instance_stages.cleared_at')
+            ->where(static fn (\Illuminate\Database\Query\Builder $q): \Illuminate\Database\Query\Builder => $q->where('sla_instance_stages.warned', true)->orWhere('sla_instance_stages.breached', true))
+            ->exists();
+        if ($atRisk) {
             $matched[] = 'sla_at_risk';
         }
         $reopened = $ticket['reopened_count'] ?? 0;

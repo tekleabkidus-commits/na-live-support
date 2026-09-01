@@ -1,0 +1,229 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Sla\SlaChipContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11: shape, step states, pause reason and most-urgent selecti[39m[90m…[39m [90m10.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignBySystemDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is UNREACHABLE from HTTP: no route action names assignBySystem,[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assigns as the SYSTEM: assignee set, FR-05 new → open through th[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries FR-15's as-if-assigned check exactly as the staff path:[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit loses the FR-16 race to a manual claim that landed first (BR-03:[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\AssignmentStatsConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is registered as a DURABLE consumer of the four assignment-shape[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit recomputes FROM TRUTH: a manual claim, a pending move and an una[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a redelivered event whose ticket no longer names the agent still[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\CapacityRaceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (1): capacity C admits exactly C assignments; the C+1th an[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (2): the commit path WAITS on the stats row lock held by a[39m[90m…[39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: pending_customer does not consume a slot unless count_pen[39m[90m…[39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\ConnectionRoutingTagSeamTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reads the fixture in local/testing and returns null for unknown[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\DecisionOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "ex[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "AI[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "AI[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "co[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "te[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "ru[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "de[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "RG[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: FR-08's order holds for the fixture case with dataset "RG[39m[90m…[39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\DecisionRecordTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/BR-06: every automatic routing writes a COMPLETE record —[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit waits honestly (BR-05): no online agent → outcome waiting, the t[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: an engine exception PARKS the ticket in the department de[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: the read door ELIDES per-agent facts for a viewer withou[39m[90m…[39m [90m0.49s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\DispatcherTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: the head is READ, not removed — a dying worker leaves the[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01/EC-03: two waiting tickets, one free slot — exactly one is[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the AvailabilityConsumer is the dispatcher's ONLY trigger (durab[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\EligibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05/BR-05: only ONLINE members with a free slot are routable;[39m[90m… [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/US-07: capacity = queue rule ?? routing.capacity.default;[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14/EC-09: hours never touch eligibility — an Online agent at[39m[90m… [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\EstimatorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 / A-52: bands from the raw estimate — position × 30 / assi[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04 hysteresis: the shown band moves only when the raw estima[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a corrupted counter bucket → depth-only heuristic with de[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06: the cached endpoint answers {band, degraded} — nothing els[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 / US-01: the {{queue_wait}} provider gives the localized B[39m[90m…[39m [90m0.39s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\HoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 / A-53: the fixture-shaped contract — default always open,[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09 NO CLIFF: outside the department's hours an Online agent i[39m[90m…[39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\LoadBasedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit orders by load, then by last_assigned_at (never-assigned first),[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RebuildDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: after the ZSETs and pointers are FLUSHED, routing:rebuild[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\ReopenHoldTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: a reopened ticket whose retained assignee is Away gets a[39m[90m… [39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08 expiry — THE REAL PATH (9b, P-C6 landed; CONVERTED from st[39m[90m…[39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RescueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16a with routing.rescue.auto ON — THE REAL PATH (9b, P-C6 lan[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16b / AC-06 unreachable fixture: channel_unreachable populate[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-C1 physics: one LIVE flag per ticket (the second refused by th[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RgFinalityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 table: no rule, boost, strategy, bulk action, AI suggestio[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RoundRobinSpliceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates fairly, splices on join/leave without resetting, and ski[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\RoutingI18nParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14: routing.* and org.* have FULL en↔am parity — both direction[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: the destructive tier is PRESENT in both languages — typed c[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: every record sentence code the writers emit has a routing.r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 END-TO-END: a routed ticket's record steps carry LOCALIZED s[39m[90m…[39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\SkillBasedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit filters to skill-matching agents then load-based among them (US-[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit nearest_skill: no language match → the language requirement drop[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit wait: no language match → HOLD (no candidates) with the online/s[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\SupervisorOpsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06 / BR-02's one exception: a ticket in the RG queue is reas[39m[90m…[39m [90m0.47s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 force status is Doc 07's door, CONSUMED not re-implemented[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\TemporaryMembershipTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-50 obligation 3 shape for the pull-in: a failure on the LAST r[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end[39m[90m… [39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01: pull-in requires org.queues.pull_in AND the queue within[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-07: expiry mid-conversation — the assignment already made PER[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit manual end: the Doc 03 override is removed THROUGH its door (rba[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit order-independence with Doc 03's tidy (rbac:expire-overrides end[39m[90m…[39m [90m0.67s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\TriggersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is registered DURABLY on the five trigger events (ADR 0011) — ex[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit created: a new ticket with no department reaches the tenant defa[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit transferred: the new department is explicit; the router assigns[39m[90m… [39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit unassigned: a manual unassign (ticket.assigned with a null new a[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit deactivation hand-back (EC-06) and reopened-with-inactive-assign[39m[90m…[39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\DepartmentAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit grants department access AND default-queue membership in ONE tra[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a partial write is IMPOSSIBLE: a failure at the queue half rolls[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit revoke ENDS both direct rows (never deletes) under org.departmen[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a department without a default queue (EC-10) — nothing w[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\EffectiveMembersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-50 obligation 1: department access without queue membership is[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: effective agents = direct ∪ via-team ∪ unexpired temporar[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\OrgAdminScreensTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §8: the Organization payload carries the three tabs' truth — ord[39m[90m…[39m [90m0.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit J20: a stale expected_updated_at is REFUSED 409 edit_conflict wi[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit J04: "Give access" grants department access through Doc 03's ONE[39m[90m…[39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\OrganizationSeederTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds EXACTLY FR-01's nine departments, in order, each with one[39m[90m… [39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent and never overwrites an operator-edited seed: a re[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rides ProvisioningStep::Organization — ordered after DefaultRole[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit runs inside a real provisioning: a tenant provisioned through Te[39m[90m…[39m [90m0.31s[39m  
+
+[dev-hardware-indicative] NFR-05 10k move: 78.3 s in 20 chunks; sibling decision baseline 172.6 ms, during (n=4) max 226.9 ms
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\RestructureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 / R-05 inventory-first: the queue preview discovers EVERY[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 "the SAME query": a confirmation typed for a stale count i[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18 delete queue (empty-or-reassign): tickets move to the chos[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01 / FR-18 RG special-case: deleting the RG queue REQUIRES a[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SS-03 / FR-18 delete department (the reorg): every ticket transf[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the operator's permissions are re-resolved PER CHUNK — r[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 dev-scale: a 10,000-ticket queue moves in chunks of 500[39m[90m… [39m [90m97.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the wizard doors: preview 200 (computed confirmation), execute 2[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\RestructureWizardUiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: the wizard pages render with target identity + move targe[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit J19: the preview payload carries the per-system checks map — eve[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit J17: the deactivate door stops intake through QueueWriter (audit[39m[90m…[39m [90m0.39s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Org\StructureWritersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/EC-10: a department is created WITH its default queue in o[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03/BR-01/FLAG B: the boost list is ordered, known and duplica[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: is_rg is at most one per tenant — the second is refused w[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/EC-10: deactivating a department's DEFAULT queue is refuse[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: teams span departments through queues; members added/remo[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Routing\SupervisorSeamContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §8: QueueTableRow::row() answers EXACTLY the doc15-queue-table-r[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §8/FR-15: PullInDialog::payload() answers EXACTLY the doc15-pull[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §8/BR-03: DragReassign::context() answers EXACTLY the doc15-drag[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16/§8: RescueAlerts::rows() answers EXACTLY the doc07-rescue-[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C06: the force-status door the doc07-force-status contract cites[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C07/[D16]: the broadcast contract fixture stands (P-C5 — cited,[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\RoutingGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app role denied set per table and privilege[39m[90m… [39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/BR-06 physics: routing_decisions carries NO app UPDATE gra[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0003 / FLAG C: app holds no DELETE on departments, teams, qu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every Doc 11 table is FORCED row-level security with the t[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03 physics: is_rg is at most one per tenant (partial unique),[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG F / FLAG G: the two stamping triggers exist as PLAIN plpgsq[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\AssignmentClaimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-16/US-01: the loser of a claim race is told WHO won, not just th[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: the same person claiming twice is a double-click, not a race[39m[90m [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: the first assignment opens a [39m[37mnew[39m[90m ticket, through the transit[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: an assignee who cannot see the ticket is refused with assign[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: every change emits ticket.assigned {old, new, by} — includin[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/BR-03/R-04: a reply IS a claim, and the per-tenant toggle tur[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05: an implicit claim never fails the reply it rode in on[39m[90m        [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: a deactivated assignee hands back every OPEN-family ticket,[39m[90m… [39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\TransferEscalateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a transfer changes the department, keeps the status, retains[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped assigne[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-01 INVERTED (S11 step 3, Packet 3 — A-50): a Dept-scoped ACTOR[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: escalation writes the {path, reason, target, at, by} payload[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23/BR-06: a short reason is refused by the edge (reason_too_shor[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: a named target who is disabled is refused escalation_target_[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: de-escalation returns to open with the actor's note, clears[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: deactivating a named target re-routes the escalation to supe[39m[90m…[39m [90m0.20s[39m  
+
+  [90mTests:[39m    [32;1m153 passed[39;22m[90m (2358 assertions)[39m
+  [90mDuration:[39m [39m144.91s[39m
+
+EXIT=0

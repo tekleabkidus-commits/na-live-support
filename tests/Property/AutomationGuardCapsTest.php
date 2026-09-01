@@ -6,7 +6,6 @@ use App\Domain\Automation\Engine\Evaluator;
 use App\Domain\Automation\Engine\Guards;
 use App\Domain\Automation\Rules\RuleWriter;
 use App\Jobs\Automation\ActionChainJob;
-use App\Support\Events\EventPublisher;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -43,19 +42,6 @@ function guardScene(): array
     $author = grantAllPermissions(ticketActor([]));
 
     return [$tenant, $ticket, $author];
-}
-
-function publishTicketCreated(object $tenant, object $ticket, ?array $metadata = null): string
-{
-    return DB::transaction(fn (): string => app(EventPublisher::class)->publish('ticket.created', [
-        'tenant_id' => $tenant->identifier(),
-        'ticket_id' => $ticket->identifier(),
-        'conversation_id' => (string) DB::table('tickets')->where('id', $ticket->identifier())->value('conversation_id'),
-        'actor_type' => 'system',
-        'actor_id' => null,
-        'source' => 'agent',
-        'customer_id' => (string) DB::table('tickets')->where('id', $ticket->identifier())->value('customer_id'),
-    ], null, $metadata));
 }
 
 it('P1: the caps are code constants — no settings key names them, and they hold the document numbers', function (): void {

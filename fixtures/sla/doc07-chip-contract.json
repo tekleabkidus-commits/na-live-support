@@ -1,0 +1,15 @@
+{
+  "_comment": "Doc 12 FR-11 — the SLA chip contract Doc 07/06 render (SlaChipContractTest holds Chips::forTicket to this shape). state changes are STEPS (green -> amber at warned -> red at breached; pulsing prohibited, section 9/11 reduced-motion); paused shows the glyph + reason tooltip; several live stages render the MOST URGENT only. Synthetic per CLAUDE.md section 8.",
+  "shape": {
+    "stage": "first_response | next_response | resolution",
+    "label_key": "workflow.sla.stage.<stage> (en+am)",
+    "state": "green | amber | red",
+    "target_at": "ISO instant | null (null while paused)",
+    "paused": "{reason: pending_customer|pending_internal|channel_unreachable} | null"
+  },
+  "examples": [
+    {"stage": "first_response", "label_key": "workflow.sla.stage.first_response", "state": "green", "target_at": "2026-09-02T05:40:00+00:00", "paused": null},
+    {"stage": "next_response", "label_key": "workflow.sla.stage.next_response", "state": "amber", "target_at": "2026-09-02T06:00:00+00:00", "paused": null},
+    {"stage": "resolution", "label_key": "workflow.sla.stage.resolution", "state": "red", "target_at": null, "paused": {"reason": "pending_customer"}}
+  ]
+}
