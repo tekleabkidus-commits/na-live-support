@@ -2974,3 +2974,43 @@ them surfaces one unnamed necessity and one reading, both filed here rather than
 
 END OF RIDER 1 — nothing follows this line.
 
+### S12 EVENT-FAMILY AMENDMENT (filed at step 3, BEFORE any Doc 12 event exists in the catalog — the enumeration law; events land in EventCatalog.php per step citing this filing; payloads CLOSED per entry)
+
+Doc 12's NFR-06 ("all five subsystems' writes are evented; zero configuration change
+is silent") + the document's named events. The complete planned set — sixteen:
+
+1.  `hours.calendar.updated` {tenant_id, calendar_id, kind} — kind ∈ created|updated|
+    holiday_added|holiday_updated|holiday_removed|deactivated. → Doc15/Doc17. (step 3)
+2.  `automation.rule.changed` {tenant_id, rule_id, revision_id, kind} — kind ∈
+    created|updated|activated|deactivated. (step 4)
+3.  `automation.rule.executed` {tenant_id, rule_id, revision_id, event_id, ticket_id,
+    matched} — emitted for MATCHED evaluations (the full per-evaluation log is the
+    executions TABLE; Doc 15's rule report reads these). (step 4)
+4.  `automation.loop_guard.tripped` {tenant_id, rule_id, ticket_id, guard} — FR-04's
+    alert arm. (step 4)
+5.  `sla.policy.changed` {tenant_id, policy_id, kind}. (step 6)
+6.  `sla.instance.armed` {tenant_id, ticket_id, instance_id, policy_id}. (step 6)
+7.  `sla.warned` {tenant_id, ticket_id, instance_id, stage, due_at, late_fired} —
+    FR-10; due_at = the COMPUTED instant (RIDER 1's reading). → Doc 07 chips,
+    Doc 11 boosts, FR-01 triggers, Doc 15. (step 6)
+8.  `sla.breached` — same shape. (step 6)
+9.  `macro.changed` {tenant_id, macro_id, kind}. (step 9)
+10. `macro.used` {tenant_id, macro_id, ticket_id} — FR-16 usage → Doc 15. (step 9)
+11. `field.changed` {tenant_id, field_id, kind} — kind ∈ created|updated|deactivated|
+    reactivated|option_changed. (step 8)
+12. `form.changed` {tenant_id, form_id, version_id, kind} — kind ∈ created|updated|
+    published; version_id nullable. (step 10)
+13. `form.submitted` {tenant_id, form_id, version_id, ticket_id, channel, complete} —
+    the FR-01 trigger; complete=false is SS-03's mid-form handoff. (steps 10–11)
+14. `csat.sent` {tenant_id, survey_id, ticket_id, customer_id, resolver_type}. (step 12)
+15. `csat.received` {tenant_id, survey_id, ticket_id, customer_id, score, comment,
+    resolver_type} — FR-25's shape verbatim; comment nullable. (step 12)
+16. `csat.expired` {tenant_id, survey_id, ticket_id}. (step 12)
+Plus ONE cross-document flag event: `customer.suppression.set` {tenant_id,
+customer_id, rule_id, reason} — the FR-03 suppress action's product, Doc 08 FR-15's
+[D12] consumer contract. (steps 5+12)
+
+Growth beyond this list = a further filed amendment, never a silent catalog edit.
+
+END OF EVENT-FAMILY AMENDMENT — nothing follows this line.
+
