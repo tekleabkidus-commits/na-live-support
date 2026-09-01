@@ -1157,6 +1157,27 @@ final class EventCatalog
         // ── Doc 12 (Automation, SLA, Forms & Custom Fields) — the S12
         //    EVENT-FAMILY AMENDMENT (ANSWERS, 28a2e67); events land per step,
         //    each citing the filing. NFR-06: zero configuration change is silent.
+        'automation.rule.changed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'rule_id', 'revision_id', 'kind'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-07: a rule changed (kind: created|updated|activated|deactivated). Activation swaps the revision pointer atomically; activated/deactivated are the SEC-06 high-risk pair.',
+        ],
+        'automation.rule.executed' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'rule_id', 'revision_id', 'event_id', 'ticket_id', 'matched'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-06: a rule MATCHED an event and its action chain dispatched. The full per-evaluation detail (condition truth, action outcomes) is the executions table; Doc 15 counts these.',
+        ],
+        'automation.loop_guard.tripped' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'rule_id', 'ticket_id', 'guard'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-04/T-03: a guard cap stopped evaluation (guard: max_rules|max_actions|chain_depth) — the alert arm; rule_id null on a depth skip.',
+        ],
         'hours.calendar.updated' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'calendar_id', 'kind'],

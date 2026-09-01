@@ -1623,4 +1623,44 @@ return [
         'required_fields' => ['calendar_id', 'kind'],
         'owning_doc' => 'Doc12',
     ],
+    [
+        // FR-01/FR-07: rule created (a draft revision exists from birth).
+        'action_key' => 'automation.rule.created',
+        'entity' => 'automation_rule',
+        'actor_types' => ['staff'],
+        'required_fields' => ['rule_id', 'revision_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-07: an edit drafts a new revision; the active one is never mutated.
+        'action_key' => 'automation.rule.updated',
+        'entity' => 'automation_rule',
+        'actor_types' => ['staff'],
+        'required_fields' => ['rule_id', 'revision_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // SEC-06 HIGH-RISK: activation (atomic swap + SEC-01 floor capture). [D17] class.
+        'action_key' => 'automation.rule.activated',
+        'entity' => 'automation_rule',
+        'actor_types' => ['staff'],
+        'required_fields' => ['rule_id', 'revision_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // SEC-06 HIGH-RISK: deactivation (the FS-05 kill path). [D17] class.
+        'action_key' => 'automation.rule.deactivated',
+        'entity' => 'automation_rule',
+        'actor_types' => ['staff'],
+        'required_fields' => ['rule_id', 'revision_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // FR-02: keyword-set changes — the audit carries the id, never the list (SEC-03).
+        'action_key' => 'automation.keyword_set.changed',
+        'entity' => 'automation_keyword_set',
+        'actor_types' => ['staff'],
+        'required_fields' => ['keyword_set_id'],
+        'owning_doc' => 'Doc12',
+    ],
 ];

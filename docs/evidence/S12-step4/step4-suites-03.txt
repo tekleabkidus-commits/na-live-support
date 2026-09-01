@@ -1,0 +1,43 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\AutomationGuardCapsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P1: the caps are code constants — no settings key names them, an[39m[90m…[39m [90m9.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: the cooldown column CHECK is the tuning boundary — 86401 and[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: twelve matching rules, one event — exactly ten fire and the[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4: one rule with twenty-five actions — its chain carries exactl[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P5: an event carrying automation_depth 3 evaluates NOTHING and t[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AutomationNoBypassTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02: the automation namespace holds NO ticket write and NO tra[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\ActivatorFloorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (1): activation captures the activator's floor on the rev[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (2+3): the demoted-author falsification — set_priority is[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (4): revoking the activator's key after activation surfac[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\AutomationConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer evaluates once, and a re-driven delivery[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the doc12.json read-slice conformance: every payload key the con[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ConditionTreeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: the operator matrix over every fact type[39m[90m                  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: nested all/any groups with the full trace — no short-circ[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets resolve the managed list at evaluation; a re[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\EngineOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-01: rules evaluate and dispatch in position order — the admin[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the trigger index: a rule wakes only for its own trigger[39m[90m         [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event inserts nothing and dispatches nothing[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: cooldown keys on (rule, ticket) — the same ticket suppres[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a corrupt compiled cache falls back to interpretive evalu[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: the rules-pause switch stops evaluation instantly and dest[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\RuleDefinitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: create drafts, activate swaps atomically, an edit to an a[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/FR-03 walls: unknown trigger, unknown action type and a su[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets are managed lists — created, updated, retire[39m[90m…[39m [90m0.07s[39m  
+
+  [90mTests:[39m    [32;1m23 passed[39;22m[90m (219 assertions)[39m
+  [90mDuration:[39m [39m12.94s[39m
+
+EXIT=0

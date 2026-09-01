@@ -46,7 +46,7 @@ final class ConsumerRegistry
         //    (Doc 04's fan-out contract; batch-tail debounced; idempotent on
         //    the message's existing classify decision). The ReopenConsumerDrillTest
         //    pin moves in THIS commit (the routine line).
-        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class],
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class, \App\Jobs\Automation\AutomationEventConsumer::class],
 
         // Doc 09 FR-05 (S09 step 6): the T-05 media hooks' subscribers —
         //    transcript/OCR write-back through the Doc 04 repository door;
@@ -79,7 +79,7 @@ final class ConsumerRegistry
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class],
         // Doc 11 (S11 step 5): the five FR-07 trigger routers (TicketCreated/Transferred/Unassigned,
         // AssigneeDeactivated, TicketReopened) join DELIBERATELY — durable, idempotent on event_id.
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
@@ -96,7 +96,7 @@ final class ConsumerRegistry
         'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Routing\RescueConsumer::class],
         'queue.membership_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
-        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class],
+        'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
         //    kb.article.published — chunk → sanitize (the one door) → embed changed
         //    chunks → ONE-statement generation swap → kb.retrieval.updated. Idempotent
@@ -114,11 +114,11 @@ final class ConsumerRegistry
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
-        'ticket.priority_changed' => [ListProjectorConsumer::class],
+        'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
         'ticket.tagged' => [ListProjectorConsumer::class],
         'ticket.untagged' => [ListProjectorConsumer::class],
-        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketTransferredRouter::class],
+        'ticket.transferred' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketTransferredRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class],
         'ticket.escalated' => [ListProjectorConsumer::class],
         'ticket.deescalated' => [ListProjectorConsumer::class],
         'ticket.merged' => [ListProjectorConsumer::class],
@@ -135,8 +135,15 @@ final class ConsumerRegistry
         'ticket.closed' => [ListProjectorConsumer::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],
         'ticket.follower_removed' => [ListProjectorConsumer::class],
-        'telegram.window.closing' => [ListProjectorConsumer::class],
-        'telegram.window.expired' => [ListProjectorConsumer::class],
+        'telegram.window.closing' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        'telegram.window.expired' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
+        // ── Doc 12 FR-01/FR-04 (S12 step 4, ADR 0011): AutomationEventConsumer joins
+        //    the eight EXISTING trigger events DELIBERATELY (the FR-01 vocabulary;
+        //    sla.*/csat.received/form.submitted join at their landing steps WITH their
+        //    events). Idempotent on event_id by the executions (rule, event) unique;
+        //    read-slices conform to fixtures/tickets/consumers/doc12.json (tightened
+        //    this commit); drill: AutomationConsumerDrillTest, same commit.
+        'customer.rg_flag.set' => [\App\Jobs\Automation\AutomationEventConsumer::class],
         'telegram.window.reopened' => [ListProjectorConsumer::class],
         'telegram.connection.revoked' => [ListProjectorConsumer::class],
         'telegram.connection.active' => [ListProjectorConsumer::class],

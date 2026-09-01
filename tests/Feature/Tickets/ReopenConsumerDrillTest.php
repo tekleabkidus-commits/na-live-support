@@ -59,6 +59,10 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // the FR-10 step-6 subscriber; the pin moves WITH the registry
         // change, again (the routine line's fourth application).
         App\Jobs\Ai\ClassifyInboundMessage::class,
+        // Doc 12 (S12 step 4): AutomationEventConsumer joined DELIBERATELY —
+        // the FR-01 message.received trigger (ADR 0011; fixture doc12.json);
+        // the pin moves WITH the registry change, the routine line again.
+        App\Jobs\Automation\AutomationEventConsumer::class,
     ])
         // S07/S08: ticket.created carries the projector + the Doc 08 rollup
         // maintainer — the "no silent growth" posture continues, new baseline pinned.
@@ -69,7 +73,7 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // S09 step 11: GenerateTicketSubject joined ticket.created (Doc 06 FR-03's generation half) — the pin moves WITH the registry, same commit.
         // S11 step 5: TicketCreatedRouter joined ticket.created DELIBERATELY (Doc 11 FR-07's created trigger,
         // durable per ADR 0011; contract fixture doc11.json) — the pin moves WITH the registry change, again.
-        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class, App\Jobs\Routing\TicketCreatedRouter::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator + the Doc 11 created router (S07 step 2 / S08 steps 3 and 8 / S09 step 11 / S11 step 5)')
+        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class, App\Jobs\Routing\TicketCreatedRouter::class, App\Jobs\Automation\AutomationEventConsumer::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator + the Doc 11 created router + the Doc 12 automation consumer (S07 step 2 / S08 steps 3 and 8 / S09 step 11 / S11 step 5 / S12 step 4)')
         ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class], 'S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
 });
 

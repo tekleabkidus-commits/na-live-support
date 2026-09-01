@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-134 event(s).
+137 event(s).
 
 ## `agent.status_changed`
 
@@ -229,6 +229,33 @@ A token-authenticated request failed the T-05 intersection for the named permiss
 - **Payload:** `tenant_id`, `user_id`, `token_id`, `permission`
 - **Producers:** Doc02/RequirePermission
 - **Consumers:** Doc17/Audit, Doc18/SecurityMonitoring
+
+## `automation.loop_guard.tripped`
+
+Doc 12 FR-04/T-03: a guard cap stopped evaluation (guard: max_rules|max_actions|chain_depth) — the alert arm; rule_id null on a depth skip.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `rule_id`, `ticket_id`, `guard`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `automation.rule.changed`
+
+Doc 12 FR-07: a rule changed (kind: created|updated|activated|deactivated). Activation swaps the revision pointer atomically; activated/deactivated are the SEC-06 high-risk pair.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `rule_id`, `revision_id`, `kind`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `automation.rule.executed`
+
+Doc 12 FR-06: a rule MATCHED an event and its action chain dispatched. The full per-evaluation detail (condition truth, action outcomes) is the executions table; Doc 15 counts these.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `rule_id`, `revision_id`, `event_id`, `ticket_id`, `matched`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `channel.health.changed`
 

@@ -416,6 +416,16 @@ docker compose exec -T app php artisan test \
 ```
 Exact file list amended in-plan as files land (the S11 §8 rule). Never beside gates.
 
+_§8 amendments (filed as files land):_ the grant-physics pair lives in
+`tests/Isolation/` (the KbGrantPhysicsTest house shape; the isolation-suite gate
+re-runs them) — `tests/Isolation/AutomationGrantPhysicsTest.php` +
+`tests/Isolation/SlaGrantPhysicsTest.php` replace the two `tests/Security/*GrantPhysics*`
+lines. Landed and added: `tests/Feature/Hours/CalendarTest.php`,
+`tests/Feature/Sla/ExampleSentenceTest.php`, `tests/Feature/Foundation/EnvelopeMetadataTest.php`
+(packet #3), `tests/Feature/Automation/{EngineOrderTest,RuleDefinitionTest,ConditionTreeTest,AutomationConsumerDrillTest}.php`,
+`tests/Property/AutomationGuardCapsTest.php`, `tests/Security/AutomationNoBypassTest.php`,
+`tests/Security/ActivatorFloorTest.php`.
+
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 
 | Id | File(s) | Proving test |
