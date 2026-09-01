@@ -1,0 +1,49 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\DoorArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit clause 1: transfer_department moves the ticket with actor syste[39m[90m…[39m [90m11.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 2: tags add/remove through the system arms with rule_ref;[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 4: escalate lands through the ONE system door (actor syst[39m[90m…[39m [90m0.27s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 (option a): the DIRECTED agent is tried FIRST — with th[39m[90m…[39m [90m0.23s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 CONTROL (the countersign's addition): RG finality BEATS[39m[90m…[39m [90m0.24s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Routing\Availability\AgentStatus] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m112[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 3 C… [41;1m OrgRefused [49;22m  
+[39;1m  queue_rg_already_exists: this tenant already has its responsible-gaming queue — at most one (FR-03).[39;22m
+
+  at [32mapp/Domain/Org/Structure/QueueWriter.php[39m:[32m162[39m
+    158▕                 }
+    159▕             });
+    160▕         } catch (UniqueConstraintViolationException $e) {
+    161▕             if (str_contains($e->getMessage(), 'queues_one_rg_per_tenant')) {
+  ➜ 162▕                 throw new OrgRefused('queue_rg_already_exists', 'this tenant already has its responsible-gaming queue — at most one (FR-03).');
+    163▕             }
+    164▕             throw $e;
+    165▕         }
+    166▕
+
+  [33m1   [39m[39;1mapp/Domain/Org/Structure/QueueWriter.php[39;22m:[39;1m162[39;22m
+  [33m2   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m135[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (16 assertions)[39m
+  [90mDuration:[39m [39m12.08s[39m
+
+EXIT=2

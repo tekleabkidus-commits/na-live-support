@@ -1,0 +1,33 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\DoorArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit clause 1: transfer_department moves the ticket with actor syste[39m[90m…[39m [90m11.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 2: tags add/remove through the system arms with rule_ref;[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 4: escalate lands through the ONE system door (actor syst[39m[90m…[39m [90m0.33s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 (option a): the DIRECTED agent is tried FIRST — with th[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 3 CONTROL (the countersign's addition): RG finality BEATS[39m[90m…[39m [90m0.36s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[42703]: Undefined column: 7 ERROR:  column "steps" does not exist
+LINE 1: select "steps" from "routing_decisions" where "ticket_id" = ...
+               ^ (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select "steps" from "routing_decisions" where "ticket_id" = 01a05e90-cb04-7244-a8b4-1040ce473013 order by "at" desc limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+7 vendor frames [22m
+  [33m8   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m127[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (22 assertions)[39m
+  [90mDuration:[39m [39m12.71s[39m
+
+EXIT=2

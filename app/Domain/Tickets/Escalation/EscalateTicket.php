@@ -141,6 +141,83 @@ final class EscalateTicket
         });
     }
 
+    /**
+     * PACKET P-DOORS clause 4 (S12, countersigned; the plan-approved P-ESC shape):
+     * the SYSTEM escalation — Doc 12 FR-03's arm AND FR-08's breach-escalation
+     * hook share this ONE door. The named-target validation, the escalation
+     * payload, the machine edge (TransitionContext::system — the reason still
+     * travels), the auto-follow and the event all ride the staff path's own
+     * internals; actor system + rule_ref on the record.
+     */
+    public function escalateBySystem(Ticket $ticket, EscalationPath $path, string $reason, string $ruleRef): Ticket
+    {
+        if ($path->kind === EscalationPath::NAMED) {
+            $target = User::query()->find($path->targetId);
+
+            if (! $target instanceof User || $target->isDisabled() || ! $this->scope->visibleOnceAssignedTo($target, $ticket)) {
+                throw new TransitionRefused(
+                    'escalation_target_invalid',
+                    'the named escalation target is disabled or cannot see this ticket (FR-23) — pick another target or supervisor review.',
+                );
+            }
+        }
+
+        return DB::transaction(function () use ($ticket, $path, $reason, $ruleRef): Ticket {
+            DB::update(
+                "UPDATE tickets
+                    SET escalation = jsonb_build_object(
+                            'path', ?::text,
+                            'reason', ?::text,
+                            'target', ?::text,
+                            'at', to_char(clock_timestamp() AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'),
+                            'by', 'system'
+                        ),
+                        updated_at = clock_timestamp()
+                  WHERE id = ?",
+                [$path->kind, $reason, $path->targetId, $ticket->identifier()],
+            );
+            $ticket->refresh();
+
+            $this->transitions->transition($ticket, TicketStatus::Escalated, TransitionContext::system($reason));
+            $ticket->refresh();
+
+            $assigneeId = $ticket->assignee_id;
+            if ($assigneeId !== null) {
+                $assignee = User::query()->find($assigneeId);
+                if ($assignee instanceof User) {
+                    $this->followers->autoFollow($ticket, $assignee);
+                }
+            }
+
+            $this->events->publish('ticket.escalated', [
+                'tenant_id' => $ticket->getAttribute('tenant_id'),
+                'ticket_id' => $ticket->identifier(),
+                'conversation_id' => $ticket->conversation_id,
+                'path' => $path->kind,
+                'target_id' => $path->targetId,
+                'reason' => $reason,
+                'actor_type' => 'system',
+                'actor_id' => null,
+            ]);
+
+            $this->audit->record(
+                actionKey: 'ticket.escalated',
+                entity: 'ticket',
+                entityId: $ticket->identifier(),
+                actorType: AuditActor::System,
+                payload: [
+                    'ticket_id' => $ticket->identifier(),
+                    'path' => $path->kind,
+                    'target_id' => $path->targetId,
+                    'reason' => $reason,
+                    'rule_ref' => $ruleRef,
+                ],
+            );
+
+            return $ticket;
+        });
+    }
+
     /** FR-23: "de-escalation returns to open with a note." */
     public function deescalate(Ticket $ticket, User $actor, string $note): Ticket
     {

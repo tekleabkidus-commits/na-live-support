@@ -1,0 +1,118 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\DoorArmsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit clause 1: transfer_department moves the ticket with actor syste[39m[90m…[39m [90m11.92s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 2: tags add/remove through the system arms with rule_ref;[39m[90m…[39m [90m0.26s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 4: escalate lands through the ONE system door (actor syst[39m[90m…[39m [90m0.25s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 (option a): the DIRECTED agent is tried FIRST — with th[39m[90m…[39m [90m0.24s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 CONTROL (the countersign's addition): RG finality BEATS[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's o[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the STILL-unbuilt arms answer honestly until their steps: macros[39m[90m…[39m [90m0.14s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 1: transfer_dep…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'ok'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/DoorArmsTest.php[39m:[32m50[39m
+     46▕ 
+     47▕     $outcomes = runChain($executionId, $actions);
+     48▕ 
+     49▕     expect($outcomes[0]['reason'])->toBe('transfer_refused')
+  ➜  50▕         ->and($outcomes[1]['outcome'])->toBe('ok')
+     51▕         ->and($outcomes[2]['outcome'])->toBe('ok');
+     52▕     expect(DB::table('tickets')->where('id', $ticket->identifier())->value('department_id'))->toBe($payments);
+     53▕     /** @var array{actor_type: string} $event */
+     54▕     $event = json_decode((string) DB::table('outbox')->where('name', 'ticket.transferred')->orderByDesc('id')->value('payload'), true);
+
+  [33m1   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m50[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 2: tags add/rem…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'ok'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/DoorArmsTest.php[39m:[32m72[39m
+     68▕     $executionId = automationActionScene($tenant, $ticket, $actions);
+     69▕ 
+     70▕     $outcomes = runChain($executionId, $actions);
+     71▕ 
+  ➜  72▕     expect($outcomes[0]['outcome'])->toBe('ok')
+     73▕         ->and($outcomes[1]['outcome'])->toBe('ok')
+     74▕         ->and($outcomes[2]['reason'])->toBe('no_tags');
+     75▕     /** @var object{tags: string} $row */
+     76▕     $row = DB::selectOne('SELECT array_to_json(tags)::text AS tags FROM tickets WHERE id = ?', [$ticket->identifier()]);
+
+  [33m1   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 4: escalate lan…   
+[39;1m  {"action":"escalate","reason":"Audit entry \"ticket.escalated\" was recorded with actor type \"system\", which the registry does not allow (permitted: staff). Either the caller is wrong about who it is, or the registry is out of date \u2014 both are worth stopping for.","outcome":"failed"}
+Failed asserting that two strings are identical.
+  [39;22m[31m-'ok'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/DoorArmsTest.php[39m:[32m95[39m
+     91▕ 
+     92▕     $outcomes = runChain($executionId, $actions);
+     93▕ 
+     94▕     expect($outcomes[0]['reason'])->toBe('escalation_refused')
+  ➜  95▕         ->and($outcomes[1]['outcome'])->toBe('ok', json_encode($outcomes[1]));
+     96▕     expect(DB::table('tickets')->where('id', $ticket->identifier())->value('status'))->toBe('escalated');
+     97▕     /** @var array{actor_type: string} $event */
+     98▕     $event = json_decode((string) DB::table('outbox')->where('name', 'ticket.escalated')->orderByDesc('id')->value('payload'), true);
+     99▕     expect($event['actor_type'])->toBe('system');
+
+  [33m1   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m95[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Routing\Availability\AgentStatus] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m112[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 3 C… [41;1m OrgRefused [49;22m  
+[39;1m  queue_rg_already_exists: this tenant already has its responsible-gaming queue — at most one (FR-03).[39;22m
+
+  at [32mapp/Domain/Org/Structure/QueueWriter.php[39m:[32m162[39m
+    158▕                 }
+    159▕             });
+    160▕         } catch (UniqueConstraintViolationException $e) {
+    161▕             if (str_contains($e->getMessage(), 'queues_one_rg_per_tenant')) {
+  ➜ 162▕                 throw new OrgRefused('queue_rg_already_exists', 'this tenant already has its responsible-gaming queue — at most one (FR-03).');
+    163▕             }
+    164▕             throw $e;
+    165▕         }
+    166▕
+
+  [33m1   [39m[39;1mapp/Domain/Org/Structure/QueueWriter.php[39;22m:[39;1m162[39;22m
+  [33m2   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m135[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (31 assertions)[39m
+  [90mDuration:[39m [39m14.02s[39m
+
+EXIT=2

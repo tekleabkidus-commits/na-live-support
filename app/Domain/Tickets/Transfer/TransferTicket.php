@@ -75,11 +75,32 @@ final class TransferTicket
             );
         }
 
+        return $this->perform($ticket, $departmentId, $actor, null, $queueId);
+    }
+
+    /**
+     * PACKET P-DOORS clause 1 (S12, countersigned at the batch-B acceptance):
+     * the SYSTEM transfer — Doc 12 FR-03's arm. No User travels (the
+     * TransitionContext misattribution law); the SEC-01 activator floor is the
+     * rule's own gate; staff scope is a staff concept and does not apply to a
+     * tenant-scoped rule (stated). Events/audits carry actor system + rule_ref.
+     */
+    public function transferBySystem(Ticket $ticket, string $departmentId, string $ruleRef, ?string $queueId = null): Ticket
+    {
+        if (trim($departmentId) === '') {
+            throw new DomainException('a transfer names a destination department (FR-22).');
+        }
+
+        return $this->perform($ticket, $departmentId, null, $ruleRef, $queueId);
+    }
+
+    private function perform(Ticket $ticket, string $departmentId, ?User $actor, ?string $ruleRef, ?string $queueId): Ticket
+    {
         $oldDepartmentId = $ticket->department_id;
         $assigneeId = $ticket->assignee_id;
         $retained = $assigneeId !== null && $this->assigneeRetained($assigneeId, $departmentId);
 
-        return DB::transaction(function () use ($ticket, $departmentId, $actor, $oldDepartmentId, $assigneeId, $retained, $queueId): Ticket {
+        return DB::transaction(function () use ($ticket, $departmentId, $actor, $ruleRef, $oldDepartmentId, $assigneeId, $retained, $queueId): Ticket {
             $update = ['department_id' => $departmentId, 'updated_at' => DB::raw('clock_timestamp()')];
 
             if ($assigneeId !== null && ! $retained) {
@@ -101,20 +122,20 @@ final class TransferTicket
                     'conversation_id' => $ticket->conversation_id,
                     'old_assignee_id' => $assigneeId,
                     'new_assignee_id' => null,
-                    'by' => $actor->identifier(),
+                    'by' => $actor?->identifier(),
                 ]);
 
                 $this->audit->record(
                     actionKey: 'ticket.assigned',
                     entity: 'ticket',
                     entityId: $ticket->identifier(),
-                    actorType: AuditActor::Staff,
+                    actorType: $actor instanceof User ? AuditActor::Staff : AuditActor::System,
                     payload: [
                         'ticket_id' => $ticket->identifier(),
                         'old_assignee_id' => $assigneeId,
                         'new_assignee_id' => null,
-                    ],
-                    actorId: $actor->identifier(),
+                    ] + ($ruleRef === null ? [] : ['rule_ref' => $ruleRef]),
+                    actorId: $actor?->identifier(),
                 );
             }
 
@@ -125,22 +146,22 @@ final class TransferTicket
                 'old_department_id' => $oldDepartmentId,
                 'new_department_id' => $departmentId,
                 'assignee_retained' => $retained,
-                'actor_type' => 'staff',
-                'actor_id' => $actor->identifier(),
+                'actor_type' => $actor instanceof User ? 'staff' : 'system',
+                'actor_id' => $actor?->identifier(),
             ]);
 
             $this->audit->record(
                 actionKey: 'ticket.transferred',
                 entity: 'ticket',
                 entityId: $ticket->identifier(),
-                actorType: AuditActor::Staff,
+                actorType: $actor instanceof User ? AuditActor::Staff : AuditActor::System,
                 payload: [
                     'ticket_id' => $ticket->identifier(),
                     'old_department_id' => $oldDepartmentId,
                     'new_department_id' => $departmentId,
                     'assignee_retained' => $retained,
-                ],
-                actorId: $actor->identifier(),
+                ] + ($ruleRef === null ? [] : ['rule_ref' => $ruleRef]),
+                actorId: $actor?->identifier(),
             );
 
             return $ticket;

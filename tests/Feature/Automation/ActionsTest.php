@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Domain\Automation\Actions\ActionRegistry;
-use App\Domain\Automation\Rules\RuleWriter;
-use App\Jobs\Automation\ActionChainJob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -25,35 +22,6 @@ use Illuminate\Support\Str;
 | transfer/tags/directed-assign/escalate stay `unbuilt_action`/`unbuilt_directed_assign`
 | until packet P-DOORS' countersign — asserted, not assumed.
 */
-
-/** An activated rule + a matched execution row for the given ticket, floor = the author's full map. */
-function automationActionScene(object $tenant, object $ticket, array $actions): string
-{
-    $author = grantAllPermissions(ticketActor([]));
-    $writer = app(RuleWriter::class);
-    $made = $writer->create(['name' => 'Action scene '.Str::random(4), 'trigger' => 'ticket.created', 'conditions' => ['all' => []], 'actions' => $actions, 'cooldown_seconds' => 0], $author);
-    $writer->activate($made['rule_id'], $made['revision_id'], $author);
-    $executionId = (string) Str::uuid7();
-    DB::table('automation_rule_executions')->insert([
-        'id' => $executionId, 'tenant_id' => $tenant->identifier(),
-        'rule_id' => $made['rule_id'], 'revision_id' => $made['revision_id'],
-        'event_id' => (string) Str::uuid7(),
-        'context_ref' => json_encode(['ticket_id' => $ticket->identifier()]),
-        'matched' => true,
-    ]);
-
-    return $executionId;
-}
-
-/** @return list<array<string, mixed>> the recorded outcomes */
-function runChain(string $executionId, array $actions, array $basis = []): array
-{
-    (new ActionChainJob($executionId, $actions, 1, $basis))->handle(app(ActionRegistry::class));
-    /** @var list<array<string, mixed>> $outcomes */
-    $outcomes = json_decode((string) DB::table('automation_rule_executions')->where('id', $executionId)->value('action_outcomes'), true, 8);
-
-    return $outcomes;
-}
 
 it('AC-01: an illegal transition fails THAT action with the door\'s own reason and the chain continues', function (): void {
     [$tenant, , $ticket] = ticketFixture('new');
@@ -137,20 +105,22 @@ it('EC-01: the second rule\'s arm reports superseded_state when the fact moved a
         ->and($outcomes[0]['superseded_state'])->toBeTrue('the arm acted on moved state silently — EC-01 honesty gone');
 });
 
-it('the unbuilt arms answer honestly until their steps/packets: transfer/tags/escalate = unbuilt_action, directed assign = unbuilt_directed_assign', function (): void {
+it('the STILL-unbuilt arms answer honestly until their steps: macros/fields/external arms = unbuilt_action (P-DOORS flipped transfer/tags/escalate/directed-assign to REAL — DoorArmsTest)', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $actions = [
-        ['type' => 'transfer_department', 'department_id' => (string) Str::uuid7()],
-        ['type' => 'add_tags', 'tags' => ['x']],
-        ['type' => 'escalate', 'reason' => 'rule-authored reason'],
-        ['type' => 'assign', 'assignee_id' => (string) Str::uuid7()],
+        ['type' => 'send_macro_reply', 'macro_id' => (string) Str::uuid7()],
+        ['type' => 'set_custom_field', 'key' => 'x', 'value' => 'y'],
+        ['type' => 'notify', 'user_ids' => []],
+        ['type' => 'webhook_out', 'url' => 'https://example.test'],
+        ['type' => 'send_sms_template', 'template_ref' => 't1'],
+        ['type' => 'run_ai_task', 'task' => 'summarize_thread'],
+        ['type' => 'suppress', 'reason' => 'rule'],
     ];
     $executionId = automationActionScene($tenant, $ticket, $actions);
 
     $outcomes = runChain($executionId, $actions);
 
-    expect($outcomes[0]['reason'])->toBe('unbuilt_action')
-        ->and($outcomes[1]['reason'])->toBe('unbuilt_action')
-        ->and($outcomes[2]['reason'])->toBe('unbuilt_action')
-        ->and($outcomes[3]['reason'])->toBe('unbuilt_directed_assign');
+    foreach ($outcomes as $outcome) {
+        expect($outcome['reason'])->toBe('unbuilt_action', json_encode($outcome));
+    }
 });

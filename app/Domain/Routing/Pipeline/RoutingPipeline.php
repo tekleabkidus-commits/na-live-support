@@ -74,7 +74,7 @@ final class RoutingPipeline
     ) {}
 
     /**
-     * @param  array{explicit_department_id?: ?string, explicit_queue_id?: ?string, connection_id?: ?string}  $inputs
+     * @param  array{explicit_department_id?: ?string, explicit_queue_id?: ?string, connection_id?: ?string, explicit_assignee_id?: ?string}  $inputs
      * @return array{record_id: string, outcome: string, queue_id: ?string, department_id: ?string, assigned_to: ?string}
      */
     public function route(Ticket $ticket, string $trigger, array $inputs = []): array
@@ -88,7 +88,7 @@ final class RoutingPipeline
     }
 
     /**
-     * @param  array{explicit_department_id?: ?string, explicit_queue_id?: ?string, connection_id?: ?string}  $inputs
+     * @param  array{explicit_department_id?: ?string, explicit_queue_id?: ?string, connection_id?: ?string, explicit_assignee_id?: ?string}  $inputs
      * @return array{record_id: string, outcome: string, queue_id: ?string, department_id: ?string, assigned_to: ?string}
      */
     private function run(Ticket $ticket, RoutingDecisionRecord $record, array $inputs): array
@@ -196,6 +196,22 @@ final class RoutingPipeline
         // ── 4. Assignment attempt ───────────────────────────────────────────────
         $routable = $this->routable->forQueue($queueId);
         $ordered = $this->strategy->order($queueId, $routable, $ticketFacts + ['department_id' => $departmentId, 'starved' => $pos['starved']]);
+        // P-DOORS clause 3, option (a) (S12, countersigned): a rule-DIRECTED assignee
+        // is tried FIRST — never instead. It must already be ROUTABLE (online, free
+        // slot, effective member — FR-05), the commit-time capacity/scope checks
+        // apply unchanged, and queue resolution (RG finality included) happened
+        // ABOVE, untouched: directing an agent cannot move an RG-flagged ticket out
+        // of the RG queue, and an agent outside that queue's routable set is simply
+        // not tried (the countersign's own control).
+        $directed = $inputs['explicit_assignee_id'] ?? null;
+        if (is_string($directed)) {
+            if (in_array($directed, array_column($routable, 'user_id'), true)) {
+                $ordered['candidates'] = array_values(array_unique([$directed, ...$ordered['candidates']]));
+                $record->step('directed', ['candidate' => $directed], 'rule-directed assignee tried first (Doc 12 FR-03; every guard applies)');
+            } else {
+                $record->step('directed', ['candidate' => $directed], 'rule-directed assignee not routable here — strategy order stands (honesty, not force)');
+            }
+        }
         $record->strategy($this->strategy->name(), count($routable));
         $record->snapshot(['routable' => $routable, 'candidates' => $ordered['candidates'], 'position' => $pos, 'queue_id' => $queueId, 'department_id' => $departmentId]);
         $noteCodes = array_filter([

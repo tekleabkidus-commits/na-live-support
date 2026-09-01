@@ -29,6 +29,11 @@ final class AutomationServiceProvider extends ServiceProvider
             $registry->bind('set_priority', $app->make(SetPriorityAction::class));
             $registry->bind('add_note', $app->make(AddNoteAction::class));
             $registry->bind('assign', $app->make(AssignAction::class));
+            // P-DOORS (countersigned at the batch-B acceptance): the system-door arms.
+            $registry->bind('transfer_department', $app->make(\App\Domain\Automation\Actions\TransferDepartmentAction::class));
+            $registry->bind('add_tags', new \App\Domain\Automation\Actions\TagsAction($app->make(\App\Domain\Tickets\Tags\TicketTags::class), adding: true));
+            $registry->bind('remove_tags', new \App\Domain\Automation\Actions\TagsAction($app->make(\App\Domain\Tickets\Tags\TicketTags::class), adding: false));
+            $registry->bind('escalate', $app->make(\App\Domain\Automation\Actions\EscalateAction::class));
 
             return $registry;
         });

@@ -61,6 +61,24 @@ final class TicketTags
     }
 
     /**
+     * PACKET P-DOORS clause 2 (S12, countersigned): the SYSTEM tag arms — Doc 12
+     * FR-03's add/remove. No User travels; the SEC-01 floor is the gate; the
+     * audit carries actor system + rule_ref.
+     *
+     * @param  list<string>  $tags
+     */
+    public function addBySystem(Ticket $ticket, array $tags, string $ruleRef): Ticket
+    {
+        return $this->apply($ticket, $this->normalise($tags), null, 'ticket.tagged', $ruleRef);
+    }
+
+    /** @param list<string> $tags */
+    public function removeBySystem(Ticket $ticket, array $tags, string $ruleRef): Ticket
+    {
+        return $this->apply($ticket, $this->normalise($tags), null, 'ticket.untagged', $ruleRef);
+    }
+
+    /**
      * FR-19's autocomplete source: the tenant's distinct tags, prefix-matched.
      *
      * Reads only this tenant's tickets — RLS makes that structural rather than a
@@ -197,9 +215,9 @@ final class TicketTags
     }
 
     /** @param list<string> $tags */
-    private function apply(Ticket $ticket, array $tags, User $actor, string $event): Ticket
+    private function apply(Ticket $ticket, array $tags, ?User $actor, string $event, ?string $ruleRef = null): Ticket
     {
-        return DB::transaction(function () use ($ticket, $tags, $actor, $event): Ticket {
+        return DB::transaction(function () use ($ticket, $tags, $actor, $event, $ruleRef): Ticket {
             $placeholders = implode(', ', array_fill(0, count($tags), '?'));
 
             // Set arithmetic in the DATABASE, not in PHP: a read-modify-write here
@@ -220,16 +238,16 @@ final class TicketTags
                 // (Q7's posture). The event says THAT tagging changed; the audit says
                 // what to.
                 'count' => count($tags),
-                'actor_id' => $actor->identifier(),
+                'actor_id' => $actor?->identifier(),
             ]);
 
             $this->audit->record(
                 actionKey: $event,
                 entity: 'ticket',
                 entityId: $ticket->identifier(),
-                actorType: AuditActor::Staff,
-                payload: ['ticket_id' => $ticket->identifier(), 'tags' => $tags],
-                actorId: $actor->identifier(),
+                actorType: $actor instanceof User ? AuditActor::Staff : AuditActor::System,
+                payload: ['ticket_id' => $ticket->identifier(), 'tags' => $tags] + ($ruleRef === null ? [] : ['rule_ref' => $ruleRef]),
+                actorId: $actor?->identifier(),
             );
 
             return $ticket;

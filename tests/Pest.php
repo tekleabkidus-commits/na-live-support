@@ -1813,3 +1813,32 @@ function activeRule(App\Domain\Automation\Rules\RuleWriter $writer, object $auth
 
     return $made;
 }
+
+/** Doc 12 (S12): an activated rule + a matched execution row for the given ticket (floor = the author's full map). */
+function automationActionScene(object $tenant, object $ticket, array $actions): string
+{
+    $author = grantAllPermissions(ticketActor([]));
+    $writer = app(App\Domain\Automation\Rules\RuleWriter::class);
+    $made = $writer->create(['name' => 'Action scene '.Str::random(4), 'trigger' => 'ticket.created', 'conditions' => ['all' => []], 'actions' => $actions, 'cooldown_seconds' => 0], $author);
+    $writer->activate($made['rule_id'], $made['revision_id'], $author);
+    $executionId = (string) Str::uuid7();
+    DB::table('automation_rule_executions')->insert([
+        'id' => $executionId, 'tenant_id' => $tenant->identifier(),
+        'rule_id' => $made['rule_id'], 'revision_id' => $made['revision_id'],
+        'event_id' => (string) Str::uuid7(),
+        'context_ref' => json_encode(['ticket_id' => $ticket->identifier()]),
+        'matched' => true,
+    ]);
+
+    return $executionId;
+}
+
+/** Doc 12 (S12): run one action chain synchronously and return the recorded outcomes. */
+function runChain(string $executionId, array $actions, array $basis = []): array
+{
+    (new App\Jobs\Automation\ActionChainJob($executionId, $actions, 1, $basis))->handle(app(App\Domain\Automation\Actions\ActionRegistry::class));
+    /** @var list<array<string, mixed>> $outcomes */
+    $outcomes = json_decode((string) DB::table('automation_rule_executions')->where('id', $executionId)->value('action_outcomes'), true, 8);
+
+    return $outcomes;
+}

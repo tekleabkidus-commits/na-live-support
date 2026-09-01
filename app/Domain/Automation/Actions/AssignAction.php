@@ -14,9 +14,10 @@ use App\Models\Ticket;
  * and the EXPLICIT QUEUE as FR-08 step 2's first rung. Placement, ranking,
  * strategy assignment, capacity, RG finality and the record all belong to the
  * engine — this arm re-implements NONE of it (EC-01's superseded honesty rides
- * the queue fact). A DIRECTED-AGENT assignment has no lawful system door yet —
- * that is packet P-DOORS' clause 3 (countersign pending); until it lands the
- * config {assignee_id} answers `unbuilt_directed_assign` honestly.
+ * the queue fact). A DIRECTED-AGENT assignment rides P-DOORS clause 3's
+ * pipeline hint (countersigned, option a): tried FIRST, never instead — the
+ * engine stays the one assigner and every guard (capacity, eligibility, RG
+ * finality) applies unchanged.
  */
 final class AssignAction implements AutomationAction
 {
@@ -30,11 +31,9 @@ final class AssignAction implements AutomationAction
         if (! $ticket instanceof Ticket) {
             return ['action' => 'assign', 'outcome' => 'failed', 'reason' => 'no_ticket'];
         }
-        if (is_string($action['assignee_id'] ?? null)) {
-            return ['action' => 'assign', 'outcome' => 'failed', 'reason' => 'unbuilt_directed_assign'];
-        }
+        $directed = is_string($action['assignee_id'] ?? null) ? $action['assignee_id'] : null;
         $queueId = is_string($action['queue_id'] ?? null) ? $action['queue_id'] : null;
-        if ($queueId === null) {
+        if ($queueId === null && $directed === null) {
             return ['action' => 'assign', 'outcome' => 'failed', 'reason' => 'no_target'];
         }
         if ($ticket->getAttribute('assignee_id') !== null) {
@@ -43,7 +42,12 @@ final class AssignAction implements AutomationAction
             return ['action' => 'assign', 'outcome' => 'failed', 'reason' => 'already_assigned', 'superseded_state' => true];
         }
         $superseded = $this->superseded($basis, 'ticket.queue_id', $ticket->getAttribute('queue_id'));
-        $result = $this->pipeline->route($ticket, 'automation', ['explicit_queue_id' => $queueId]);
+        // P-DOORS clause 3 (countersigned, option a): the directed assignee is a
+        // PIPELINE HINT — tried first, every guard applies, RG finality upstream.
+        $result = $this->pipeline->route($ticket, 'automation', array_filter([
+            'explicit_queue_id' => $queueId,
+            'explicit_assignee_id' => $directed,
+        ], static fn ($v): bool => $v !== null));
 
         $outcome = ['action' => 'assign', 'outcome' => $result['outcome'] === 'parked_error' ? 'failed' : 'ok', 'routing_outcome' => $result['outcome']];
         if ($result['outcome'] === 'parked_error') {

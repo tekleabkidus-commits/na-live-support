@@ -793,7 +793,7 @@ return [
         // FR-19: the tag TEXT lives here rather than on the event stream (Q7).
         'action_key' => 'ticket.tagged',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'tags'],
         'owning_doc' => 'Doc06',
     ],
@@ -862,7 +862,7 @@ return [
         // FR-22: the department change with its retention outcome.
         'action_key' => 'ticket.transferred',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'old_department_id', 'new_department_id', 'assignee_retained'],
         'owning_doc' => 'Doc06',
     ],
@@ -870,7 +870,7 @@ return [
         // SEC-03: "escalation reasons always audited with actor + old/new."
         'action_key' => 'ticket.escalated',
         'entity' => 'ticket',
-        'actor_types' => ['staff'],
+        'actor_types' => ['staff', 'system'],
         'required_fields' => ['ticket_id', 'path', 'reason'],
         'owning_doc' => 'Doc06',
     ],

@@ -1,0 +1,31 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\DoorArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit clause 1: transfer_department moves the ticket with actor syste[39m[90m…[39m [90m10.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 2: tags add/remove through the system arms with rule_ref;[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 4: escalate lands through the ONE system door (actor syst[39m[90m…[39m [90m0.25s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit clause 3 (option a): the DIRECTED agent is tried FIRST — with th[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 3 CONTROL (the countersign's addition): RG finality BEATS[39m[90m…[39m [90m0.36s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\DoorArmsTest[22m [90m>[39m it clause 3 (option a): t…   
+[39;1m  the strategy outranked the directed hint — clause 3 is not first
+Failed asserting that null is identical to '01a05e8f-e163-7253-8b66-7e8fe056a41a'.[39;22m
+
+  at [32mtests/Feature/Automation/DoorArmsTest.php[39m:[32m122[39m
+    118▕     $outcomes = runChain($executionId, $actions, ['ticket.queue_id' => null]);
+    119▕ 
+    120▕     expect($outcomes[0]['outcome'])->toBe('ok', json_encode($outcomes[0]));
+    121▕     expect(DB::table('tickets')->where('id', $ticket->identifier())->value('assignee_id'))
+  ➜ 122▕         ->toBe($directed->identifier(), 'the strategy outranked the directed hint — clause 3 is not first');
+    123▕     /** @var object{steps: string} $record */
+    124▕     $record = DB::table('routing_decisions')->where('ticket_id', $ticket->identifier())->orderByDesc('at')->first(['steps']);
+    125▕     expect($record->steps)->toContain('"directed"');
+    126▕ });
+
+  [33m1   [39m[39;1mtests/Feature/Automation/DoorArmsTest.php[39;22m:[39;1m122[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (22 assertions)[39m
+  [90mDuration:[39m [39m12.14s[39m
+
+EXIT=1
