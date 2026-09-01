@@ -2722,3 +2722,231 @@ admin-managed destination allowlist, SSRF egress through the egress proxy (Doc 0
 SEC-03 family), retry ×8 backoff → auto-disable + alert (EC-13). Future documents
 consume this arm; its contract is Doc 12's to freeze.
 
+## S12 (Doc 12) — SCHEMA AMENDMENT 6 (filed at step 2a, BEFORE any migration exists — the B1-split law; needs advisor countersign; the STOP-D outline approved at plan approval, this is the full R-19b filing)
+
+House laws applied to every table below: UUIDv7 `id` PK (C-01); non-null `tenant_id`
+FK (C-02); FORCED RLS + `tenant_isolation` policy; `timestamptz(6)` UTC;
+`created_at`/`updated_at` hygiene columns `DEFAULT clock_timestamp()` with the R-19b
+app-denied set asserted per table in `AutomationGrantPhysicsTest` /
+`SlaGrantPhysicsTest` (information_schema loops + 42501 controls, the house shape);
+`APP_WRITABLE_COLUMNS` split-comment discipline in every migration; migrator-owned
+DDL. Sixteen items.
+
+**1. `automation_rules` (FR-01, FR-04, FR-07, BR-01).** `name` text NOT NULL;
+`description` text NULL; `trigger` text NOT NULL CHECK IN the 13 v1 literals
+('ticket.created','ticket.status_changed','ticket.priority_changed',
+'ticket.transferred','message.received','form.submitted','sla.warned','sla.breached',
+'csat.received','telegram.window.closing','telegram.window.expired',
+'customer.rg_flag.set','schedule'); `position` integer NOT NULL, index
+`(tenant_id, position)` — NOT unique: BR-01 determinism = ORDER BY position, id (the
+UUIDv7 tiebreak, C-11 family), reorder stays a plain transactional write;
+`active` boolean NOT NULL DEFAULT false; `active_revision_id` uuid NULL FK
+`automation_rule_revisions` (the FR-07 atomic swap: one UPDATE flips the pointer);
+`run_window` jsonb NULL; `schedule_cron` text NULL + `schedule_next_run_at`
+timestamptz(6) NULL (EC-10: recomputed on timezone change; the editor's next-run
+preview reads it); `cooldown_seconds` integer NOT NULL DEFAULT 300 CHECK (0 ≤ x ≤
+86400) — R-05: tunable to zero WITHIN the platform cap; the caps themselves (10
+rules / 20 actions / depth 3) are CODE CONSTANTS, deliberately not columns or
+settings (BR-05). R-19b: no ordering/metric-bearing business column (list order =
+position); hygiene columns app-denied. GRANTS: INSERT (business columns); UPDATE
+(business columns + updated_at); **NO DELETE** — rules are history-bearing (FR-06's
+log, SS-04's living manual); retirement = active false. 42501 control executes.
+
+**2. `automation_rule_revisions` (FR-07, SEC-01).** `rule_id` uuid NOT NULL FK;
+`definition` jsonb NOT NULL (the full {trigger, conditions, actions[], run_window}
+shape — revision diff is jsonb compare); `author_id` uuid NOT NULL; `activated_by`
+uuid NULL; `activated_at` timestamptz(6) NULL — **app-UNWRITABLE on INSERT and
+UPDATE, stamped by a FILL-ONLY trigger when `activated_by` transitions NULL→value
+(the R-20 metric-timestamp shape; it can never re-stamp)**; `activator_capability_floor`
+jsonb NULL (SEC-01: the action-type→capability map captured AT activation; NULL while
+draft; the drift warning recomputes against it at read). `created_at`
+clock_timestamp() app-DENIED (revision history ordering — R-19b). GRANTS: INSERT
+(id, tenant_id, rule_id, definition, author_id); UPDATE granted to EXACTLY
+(activated_by, activator_capability_floor) — definition/author/rule immutable by
+grant (history physics); **NO DELETE**.
+
+**3. `automation_rule_executions` (FR-06, SEC-03, R-05).** `rule_id`, `revision_id`
+uuid NOT NULL FKs; `event_id` uuid NOT NULL — unique `(tenant_id, rule_id,
+event_id)` (C-09: one execution row per rule per event, redelivery writes nothing);
+`context_ref` jsonb (IDS ONLY — ticket/customer/message ids; message CONTENT never
+lands here, SEC-03's elision is then subtractive at read, never scrubbing at write);
+`condition_results` jsonb; `action_outcomes` jsonb (per-action {action, outcome,
+reason?, superseded_state?} — EC-01's honesty lives here); `guard_trips` jsonb;
+`matched` boolean NOT NULL. `executed_at` timestamptz(6) DEFAULT clock_timestamp()
+app-DENIED (ordering + Doc 15 metrics — R-19b). **INSERT-only: NO UPDATE, NO DELETE
+for app**; the 90-day retention purge runs on the platform role (the Doc 04
+partition-purge precedent), never the app's. Indexes `(tenant_id, rule_id,
+executed_at DESC)`; `(tenant_id, event_id)`.
+
+**4. `automation_keyword_sets` (FR-02).** `name` text NOT NULL; `keywords` jsonb
+NOT NULL (list<string>); `active` boolean NOT NULL DEFAULT true. GRANTS:
+INSERT/UPDATE (name, keywords, active, updated_at); **NO DELETE** (rules reference
+by id; retire via active — EC-08's warning pattern applies when a referenced set
+retires).
+
+**5. `sla_policies` (FR-08, BR-01).** `name`; `position` integer (first-match order,
+same ORDER BY position, id law); `match_conditions` jsonb (the FR-08 subset:
+department, priority, channel, tags, VIP source); `targets` jsonb (per-priority
+{first_response_s, next_response_s, resolution_s}); `clock_mode` text CHECK IN
+('business_hours','calendar'); `calendar_id` uuid NULL FK `business_calendars` +
+CHECK (clock_mode='calendar' OR calendar_id IS NOT NULL); `warning_pct` smallint
+NOT NULL DEFAULT 80 CHECK (1..100); `pause_conditions` jsonb NOT NULL DEFAULT the
+FR-08 defaults ({"pending_customer":true,"pending_internal":false,
+"channel_unreachable":true}); `retarget_mode` text CHECK IN
+('keep','retarget_remaining') NOT NULL DEFAULT 'keep'; `breach_escalation` jsonb
+NULL ({path, reason}); `active` boolean. GRANTS: INSERT/UPDATE business columns;
+**NO DELETE** (instances carry `policy_id` provenance; BR-03 is snapshot-protected
+regardless — deactivate, never delete). Closes the ReferenceInventory `sla_policies`
+fixture slice ([D12] row 10) when the inventory reads these rows.
+
+**6. `sla_instances` (FR-09, BR-03, T-05, SS-02).** `ticket_id` uuid NOT NULL FK,
+unique `(tenant_id, ticket_id)` — ONE instance per ticket, first matching policy;
+`policy_id` uuid NOT NULL (provenance ref, never re-read for math); `policy_snapshot`
+jsonb NOT NULL; `calendar_snapshot` jsonb NULL (null = calendar-time mode; the
+`CalendarSnapshot::fromArray` contract shape landed at step 1); `armed_at`
+timestamptz(6) DEFAULT clock_timestamp() app-DENIED (metric — SS-02's record).
+GRANTS: **INSERT only (id, tenant_id, ticket_id, policy_id, policy_snapshot,
+calendar_snapshot); NO UPDATE AT ALL; NO DELETE** — BR-03's "armed instances are
+contracts" is grant physics: the sabotage-(d) falsification is an UPDATE that dies
+42501, and the application NEVER holds a lawful mutation path to a snapshot.
+
+**7. `sla_instance_stages` (FR-09, FR-10, EC-02/03, NFR-02, FS-02).** `instance_id`
+uuid NOT NULL FK; `stage` text CHECK IN ('first_response','next_response',
+'resolution'); `target_us` bigint NOT NULL (the stage's snapshot target, µs);
+`clock_start_at` timestamptz(6) NOT NULL — written by the arming service FROM THE
+TRIGGERING EVENT'S DB instant (EC-02: the first unanswered message's occurred_at),
+app-writable on INSERT only; `target_at` timestamptz(6) NULL (the computed
+next-fire instant — recomputed on every state-affecting event, app-writable UPDATE);
+`warned_at` / `breached_at` timestamptz(6) NULL — **METRIC timestamps (Doc 15):
+app-DENIED, stamped by FILL-ONLY triggers on the warned/breached state flips (the
+R-20 shape); FS-02's honest backdating flows through the trigger too — the flag
+`late_fired` boolean NOT NULL DEFAULT false is app-writable and says so**;
+`cleared_at` timestamptz(6) NULL app-writable (state flip, the rescue_flags
+precedent); `pauses` jsonb NOT NULL DEFAULT '[]' (accumulated {from, until, reason}
+intervals — SS-02's checkable arithmetic; the clock library unions them);
+`retargeted` jsonb NULL (EC-03's badge record {old_target_us, new_target_us,
+remaining_before_us, remaining_after_us, at}). Partial unique `(tenant_id,
+instance_id, stage) WHERE cleared_at IS NULL` — one LIVE row per stage (EC-02's
+idempotent re-arm = the live row simply stands). Index `(tenant_id, target_at)
+WHERE cleared_at IS NULL AND target_at IS NOT NULL` (the sweep's due-scan backstop —
+the ZSET is the candidate list, this index is the rebuild truth, the T-03 division
+of authority verbatim). **NO DELETE.**
+
+**8. `business_calendars` (FR-12).** `name`; `timezone` text NOT NULL; `weekdays`
+jsonb NOT NULL (the step-1 CalendarSnapshot contract shape — one shape from editor
+to armed snapshot, no translation layer); `is_tenant_default` boolean, partial
+unique `(tenant_id) WHERE is_tenant_default` (A-55's family: exactly one default);
+`department_id` uuid NULL FK departments, partial unique `(tenant_id, department_id)
+WHERE department_id IS NOT NULL` — a department's override calendar: **this makes
+Doc 11's stored-never-read hours-override REF readable ([D12] closing row 8, with
+P-A53)**; `active` boolean. GRANTS: INSERT/UPDATE; **NO DELETE** (policies and
+department refs point at it; BR-03 protects armed instances by snapshot; retire via
+active).
+
+**9. `business_calendar_holidays` (FR-12, EC-05).** `calendar_id` uuid NOT NULL FK;
+`date` date NOT NULL; `name` text NOT NULL; `recurring_yearly` boolean NOT NULL
+DEFAULT false. GRANTS: INSERT/UPDATE **and DELETE — a deliberately RARE delete
+grant, justified here: holidays are prospective-only list content (EC-05: armed
+instances hold their snapshot calendar, so removing a holiday row can never touch a
+running clock), and a mis-typed holiday has no history obligation. The migration
+comment carries this sentence.**
+
+**10. `macros` (FR-14, FR-16).** `scope` text CHECK IN ('personal','team','tenant')
+with CHECKs (personal ⇒ owner_id NOT NULL; team ⇒ team_id NOT NULL); `owner_id` uuid
+NULL; `team_id` uuid NULL FK teams; `kind` text CHECK IN ('macro','saved_reply')
+(B12-S03's one-list-with-type-tag, same storage — FR-14's own words); `name`; `body`
+text (rich-lite per Doc 07 FR-18); `variables` jsonb (the declared set the resolver
+validates against); `bundled_actions` jsonb NULL (the palette chips' source);
+`usage_count` integer NOT NULL DEFAULT 0 (FR-16 palette ranking; Doc 15's report
+reads EVENTS, never this counter); `active` boolean. GRANTS: INSERT/UPDATE;
+**NO DELETE** (retire via active; usage history references by id).
+
+**11. `field_definitions` (FR-17, FR-18).** `entity` text CHECK IN
+('ticket','customer'); `key` text NOT NULL (snake_case CHECK via regex), **UNIQUE
+`(tenant_id, entity, key)` over live AND retired rows — "keys never reused" is the
+unique's absence of any active-scoping, stated so no future author narrows it**;
+`label` jsonb (i18n map); `type` text CHECK IN the 13 FR-17 literals; `validation`
+jsonb; `agent_editable` boolean; `customer_visible` boolean; `position` integer;
+`active` boolean; `deactivated_at` timestamptz(6) NULL app-writable. **UPDATE
+granted to EXACTLY (label, validation, agent_editable, customer_visible, position,
+active, deactivated_at, updated_at) — `key`/`type`/`entity` are IMMUTABLE BY GRANT:
+FR-18's "type changes prohibited" is column physics, sabotage (h)'s 42501 target.**
+**NO DELETE** (Doc 08 EC-09's retired render depends on the row forever).
+
+**12. `field_definition_options` (FR-17, FR-18, EC-08).** `field_id` uuid NOT NULL
+FK; `value` text NOT NULL (the stable value — unique `(tenant_id, field_id, value)`);
+`label` jsonb; `position` integer; `active` boolean; `label_snapshot` jsonb NULL —
+captured at removal (EC-08: historic renders join this snapshot; stored values stay
+the stable `value`). UPDATE granted to (label, position, active, label_snapshot,
+updated_at) — `value` immutable by grant. **NO DELETE.**
+
+**13. `forms` (FR-20).** `name`; `entity_bindings` jsonb ({department_id,
+priority?} — completion actions live per-version in the schema); `active` boolean;
+`current_version_id` uuid NULL FK form_versions (the published pointer). GRANTS:
+INSERT/UPDATE; **NO DELETE.**
+
+**14. `form_versions` (FR-22, BR-06, EC-06).** `form_id` uuid NOT NULL FK;
+`version` integer NOT NULL, unique `(tenant_id, form_id, version)`; `schema` jsonb
+NOT NULL (steps[], fields[], conditional logic, completion actions, per-language
+labels/help — the ONE versioned contract both renderers consume); `published_by`
+uuid NOT NULL; `published_at` timestamptz(6) DEFAULT clock_timestamp() app-DENIED
+(version-history ordering). **INSERT-only: NO UPDATE, NO DELETE — BR-06's immutable
+version is grant physics; a mid-form Telegram flow's checkpointed version ref
+(EC-06) can never find its schema changed.** Submissions snapshot {version_id +
+answers} into Doc 06's `form_data` (A-59) — no new submission table: the ticket IS
+the submission record, per FR-22's own "Doc 06 form_data" cite.
+
+**15. `surveys` (FR-24, FR-25, T-08, SEC-05).** `ticket_id` uuid NOT NULL;
+`customer_id` uuid NOT NULL; `resolution_event_id` uuid NOT NULL, unique
+`(tenant_id, resolution_event_id)` — ONE survey per resolution EVENT (FR-24's
+idempotency anchor, C-09 for the arming consumer); `resolver_type` text CHECK IN
+('human','ai'); `token_hash` text NOT NULL UNIQUE — **the raw unguessable token is
+sent, never stored (the Doc 02 recovery-code precedent); SEC-05's endpoint binds by
+hash compare**; `channel` text; `sent_at` timestamptz(6) DEFAULT clock_timestamp()
+app-DENIED (metric); `expires_at` timestamptz(6) NOT NULL — MATERIALIZED at arming
+(sent_at + csat.window.hours; the SS-03/Doc 06 settings-change-immunity law: a later
+window change never re-targets an armed survey); `expired_at` timestamptz(6) NULL
+app-writable (the sweep's flip, EC-11). GRANTS: INSERT (business columns); UPDATE
+granted to EXACTLY (expired_at); **NO DELETE.**
+
+**16. `survey_responses` (FR-25, SEC-05).** `survey_id` uuid NOT NULL FK, **UNIQUE —
+single response per survey as table physics; the FR-25 edit window is an UPDATE on
+the one row, never a second row (sabotage (g)'s target: a second INSERT dies on the
+unique)**; `score` smallint NOT NULL CHECK (1..5); `comment` text NULL;
+`responded_at` timestamptz(6) DEFAULT clock_timestamp() app-DENIED (Doc 15's CSAT
+metric instant); `edited_at` timestamptz(6) NULL app-writable (the 1 h window is
+enforced at the door by DB-time comparison against responded_at). GRANTS: INSERT
+(id, tenant_id, survey_id, score, comment); UPDATE (score, comment, edited_at);
+**NO DELETE.**
+
+### The T-03 envelope extension (Doc 01 core edit — packet #3, inside THIS countersign)
+
+VERIFIED against the code at filing: the outbox row (`EventPublisher::publish`)
+carries no metadata field, and payload keys are EXHAUSTIVE AND ENFORCED
+(`EventCatalog::assertPayloadMatches` rejects extra keys) — so `automation_depth`
+cannot ride any payload without breaking the closed-payload law, and T-03's own
+words ("Doc 01 event schema extension") name the lawful mechanism. THE EXTENSION:
+`outbox` and `events` tables gain nullable `metadata` jsonb (envelope, beside
+correlation/causation — never inside payload); `EventPublisher::publish` gains an
+optional trailing `?array $metadata = null` (additive — every existing caller
+compiles untouched); the relay copies it row→row. The engine stamps
+`{"automation_depth": n}` on events its ACTIONS cause; absent metadata = depth 0.
+The catalog, its gate, and every existing event definition are BYTE-UNTOUCHED.
+Lands as its own commit with a fail-first control (an over-depth event refused by
+the engine's guard BEFORE the column exists = red), Doc 01's suites green in the
+same commit.
+
+### Settings registered at step 2b (registries/settings.php)
+`csat.cooldown.hours` (int, default 24, tenant_editable), `csat.window.hours` (int,
+default 72, tenant_editable), `csat.comment_prompt.enabled` (bool, default true,
+tenant_editable). The guard caps are NOT settings (BR-05 — platform constants in
+code; a cap configurable above the platform limit is not a cap).
+
+### Feature flag registered at step 2b (registries/features.php)
+`automation.rules_pause` — owning doc 12, default false, tenant_toggleable true
+(R-04: the tenant-wide instant pause; evaluation short-circuit; runbook page beside
+Doc 09's kill switches).
+
+END OF AMENDMENT 6 FILING — awaiting the advisor's countersign; NO migration exists
+or will exist before it.
+
