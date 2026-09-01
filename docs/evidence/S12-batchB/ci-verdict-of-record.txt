@@ -1,0 +1,12 @@
+=== S12 BATCH B — CI VERDICT OF RECORD (2026-09-01) ===
+First look: run 33541383460 on 23e4f0a — Stages 1/2/3/3b green; Stage 4 RED:
+1 failed / 211 passed — inbox-views.spec.ts:150 FAILED BOTH ATTEMPTS (not 0i):
+the live list re-keyed rows between the visibility waits and the one-shot
+evaluateAll order snapshot (trio index [1] = -1 with visibility green lines
+above; deterministic on the fresh runner; local 4/4 green before AND after —
+the S11 bench-of-record law). No product path involved; no billing annotation.
+FIX (c296f0f, wait-shape only, the R-D11-1 class): the SAME law — all three
+fixtures present, relative FIFO — asserted on ONE consistent snapshot via
+expect.poll. THE FIX'S RUN IS THE VERDICT (rule 15):
+run 33545567491 on c296f0f — SUCCESS, Stages 1,2,3,3b,4,5,6 ALL GREEN
+(Stage 4: no failures, no flakes reported in the summary line).
