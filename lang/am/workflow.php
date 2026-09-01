@@ -9,4 +9,8 @@ return [
     'feature' => [
         'rules_pause' => 'ሁሉንም አውቶማቲክ ህጎች ለጊዜው አቁም',
     ],
+    'sla' => [
+        'example' => ':created የተከፈተ ቲኬት የመጀመሪያ ምላሽ ዒላማው :target ይሆናል (:zone)።',
+        'example_unreachable' => 'ይህ የስራ ሰዓት መርሃ ግብር በጭራሽ አይከፈትም — ቢያንስ አንድ ሳምንታዊ ክፍተት ይሳሉ።',
+    ],
 ];

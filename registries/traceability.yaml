@@ -2508,14 +2508,14 @@ entries:
       PLANNED-MANUAL: dry-run verdicts equal live evaluation over a replayed event corpus (the Doc 09 AC-03 simulation-vs-replay pattern); zero side effects proven. Flips at step 7.
   - ac_ref: "Doc12 AC-04"
     suite_path: tests/Feature/Hours/CalendarTest.php
-    type: manual
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED-MANUAL: split shifts, recurring holidays, department overrides, and the paragraph-8 example-sentence computation verified against the ONE clock library. Flips at step 3.
+      FLIPPED AT S12 STEP 3: CalendarTest (writer validated through the clock's OWN parser; split shifts; recurring holidays; tenant-default uniqueness physics; EC-05 prospective-only; EC-10 timezone recompute; P-A53 PRE + REAL source legs with Doc 11 HoursTest byte-untouched as the control) + ExampleSentenceTest (golden timeline #1 arithmetic through the ONE implementation; ICU en+am; unreachable-calendar honesty).
   - ac_ref: "Doc12 AC-05"
     suite_path: tests/Feature/Macros/ResolverParityTest.php
     type: manual

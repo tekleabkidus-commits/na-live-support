@@ -4,36 +4,53 @@ declare(strict_types=1);
 
 namespace App\Domain\Routing\Hours;
 
+use App\Domain\Hours\CalendarReader;
+use App\Domain\Sla\Clock\CalendarSnapshot;
+use App\Domain\Sla\Clock\IntervalSet;
 use App\Support\Settings\SettingsRepository;
 use DateTimeImmutable;
 use DateTimeZone;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Doc 11 FR-14 / FR-15 / EC-09 — the BUSINESS-HOURS SEAM, [D12] (A-53, filed).
+ * Doc 11 FR-14 / FR-15 / EC-09 — the BUSINESS-HOURS contract. P-A53 LANDED
+ * (S12 step 3, the countersigned source swap): Doc 12's real calendars are now
+ * the FIRST source — department override > tenant default (CalendarReader) —
+ * computed EXACTLY (split shifts + holidays) through the same CalendarSnapshot
+ * the SLA clock reads. Where a tenant has painted NOTHING the behavior is
+ * byte-identical to the seam: local/testing/ci read
+ * `fixtures/routing/seams/doc12-hours.json`, production is ALWAYS OPEN — the
+ * fixture PRE state is the packet's control (Doc 11 HoursTest's legs run
+ * unchanged on a calendar-less tenant).
  *
- * Doc 12's calendars are unbuilt. This fixture-shaped contract is what routing reads:
- * local/testing/ci read `fixtures/routing/seams/doc12-hours.json`; production is
- * ALWAYS OPEN (no calendar) until Doc 12 lands — then the SOURCE of the window swaps
- * and no caller changes. Hours NEVER touch eligibility (EC-09 — `RoutableAgents` takes
- * no HoursContract, EligibilityTest pins it): they feed the estimator band (step 8) and
- * the pull-in expiry default (FR-15: "expiry default shift-end via business hours").
- *
- * A-53's default: the tenant-timezone END OF THE CURRENT DAY — the window's close when
- * one is drawn and still ahead, 23:59:59 tenant-local otherwise. "Now" is the DATABASE's
- * clock (C-11), never the app server's; the tenant timezone is Doc 01's
- * `tenant.display_timezone` setting (UTC when unset or invalid — a fallback, logged by
- * the setting layer, never a silent shift of the stored UTC instant).
+ * The SURFACE is unchanged — six methods, same signatures, same semantics:
+ * hours NEVER touch eligibility (EC-09); they feed the estimator band and the
+ * pull-in expiry default (A-53: shift end = the drawn close of the current
+ * tenant-local day when ahead, else 23:59:59 — with a real split-shift
+ * calendar, "drawn close" is the LAST drawn close of today still ahead).
+ * `timezone()` stays Doc 01's `tenant.display_timezone` (presentation);
+ * calendar math runs in the CALENDAR's own timezone inside CalendarSnapshot.
+ * `windowFor()` keeps its simple {open, close, days} projection — real
+ * calendars project today's first open / last close; exact split-shift truth
+ * lives in isOpen/nextOpen/shiftEnd, which every precise consumer uses.
  */
 final class HoursContract
 {
-    public function __construct(private readonly SettingsRepository $settings) {}
+    public function __construct(
+        private readonly SettingsRepository $settings,
+        private readonly CalendarReader $calendars,
+    ) {}
 
     /**
      * @return array{open: string, close: string, days: list<int>}
      */
     public function windowFor(?string $departmentId): array
     {
+        $snapshot = $this->resolved($departmentId);
+        if ($snapshot !== null) {
+            return $this->projectSimpleWindow($snapshot);
+        }
+
         $alwaysOpen = ['open' => '00:00', 'close' => '24:00', 'days' => [1, 2, 3, 4, 5, 6, 7]];
         if (! app()->environment(['local', 'testing', 'ci'])) {
             return $alwaysOpen;
@@ -81,11 +98,28 @@ final class HoursContract
      */
     public function shiftEnd(?string $departmentId): DateTimeImmutable
     {
+        $now = $this->now();
         $tz = $this->timezone();
-        $nowLocal = $this->now()->setTimezone($tz);
-        $window = $this->windowFor($departmentId);
+        $nowLocal = $now->setTimezone($tz);
+        $endOfDay = $nowLocal->setTime(23, 59, 59)->setTimezone(new DateTimeZone('UTC'));
 
-        $endOfDay = $nowLocal->setTime(23, 59, 59);
+        $snapshot = $this->resolved($departmentId);
+        if ($snapshot !== null) {
+            // Today's drawn windows in the CALENDAR's zone; the last close still ahead.
+            $calTz = $snapshot->timezone();
+            $dayStart = $now->setTimezone($calTz)->setTime(0, 0);
+            $windows = $snapshot->windowsBetween(IntervalSet::us($dayStart), IntervalSet::us($dayStart->modify('+1 day')));
+            $nowUs = IntervalSet::us($now);
+            foreach (array_reverse($windows->ranges()) as [, $end]) {
+                if ($end > $nowUs) {
+                    return IntervalSet::fromUs($end);
+                }
+            }
+
+            return $endOfDay;
+        }
+
+        $window = $this->windowFor($departmentId);
         $close = $window['close'];
         if ($close !== '24:00' && preg_match('/^(\d{2}):(\d{2})$/', $close, $m) === 1) {
             $closeLocal = $nowLocal->setTime((int) $m[1], (int) $m[2], 0);
@@ -94,12 +128,19 @@ final class HoursContract
             }
         }
 
-        return $endOfDay->setTimezone(new DateTimeZone('UTC'));
+        return $endOfDay;
     }
 
     /** Whether the window is open at the given instant (tenant-local evaluation). */
     public function isOpen(?string $departmentId, DateTimeImmutable $at): bool
     {
+        $snapshot = $this->resolved($departmentId);
+        if ($snapshot !== null) {
+            $us = IntervalSet::us($at);
+
+            return ! $snapshot->windowsBetween($us, $us + 1)->isEmpty();
+        }
+
         $window = $this->windowFor($departmentId);
         $local = $at->setTimezone($this->timezone());
         if (! in_array((int) $local->format('N'), $window['days'], true)) {
@@ -117,6 +158,24 @@ final class HoursContract
      */
     public function nextOpen(?string $departmentId, DateTimeImmutable $at): DateTimeImmutable
     {
+        $snapshot = $this->resolved($departmentId);
+        if ($snapshot !== null) {
+            if ($this->isOpen($departmentId, $at)) {
+                return $at;
+            }
+            $us = IntervalSet::us($at);
+            // 400 days covers any holiday run; an empty calendar answers $at (the
+            // always-open posture — nothing drawn means nothing to wait for).
+            $windows = $snapshot->windowsBetween($us, $us + 400 * 86_400 * 1_000_000);
+            foreach ($windows->ranges() as [$start]) {
+                if ($start >= $us) {
+                    return IntervalSet::fromUs($start);
+                }
+            }
+
+            return $at;
+        }
+
         $window = $this->windowFor($departmentId);
         $tz = $this->timezone();
         $local = $at->setTimezone($tz);
@@ -134,5 +193,39 @@ final class HoursContract
         }
 
         return $at;
+    }
+
+    private function resolved(?string $departmentId): ?CalendarSnapshot
+    {
+        $snapshot = $this->calendars->resolvedFor($departmentId);
+
+        return $snapshot === null ? null : CalendarSnapshot::fromArray($snapshot);
+    }
+
+    /**
+     * @return array{open: string, close: string, days: list<int>}
+     */
+    private function projectSimpleWindow(CalendarSnapshot $snapshot): array
+    {
+        $calTz = $snapshot->timezone();
+        $today = $this->now()->setTimezone($calTz)->setTime(0, 0);
+        $windows = $snapshot->windowsBetween(IntervalSet::us($today), IntervalSet::us($today->modify('+1 day')));
+        $ranges = $windows->ranges();
+        $open = '00:00';
+        $close = '24:00';
+        if ($ranges !== []) {
+            $open = IntervalSet::fromUs($ranges[0][0])->setTimezone($calTz)->format('H:i');
+            $lastEnd = IntervalSet::fromUs($ranges[count($ranges) - 1][1])->setTimezone($calTz);
+            $close = $lastEnd->format('H:i') === '00:00' ? '24:00' : $lastEnd->format('H:i');
+        }
+        $days = [];
+        for ($n = 1; $n <= 7; $n++) {
+            $probe = $today->modify(sprintf('+%d day', ($n - (int) $today->format('N') + 7) % 7));
+            if (! $snapshot->windowsBetween(IntervalSet::us($probe), IntervalSet::us($probe->modify('+1 day')))->isEmpty()) {
+                $days[] = $n;
+            }
+        }
+
+        return ['open' => $open, 'close' => $close, 'days' => $days];
     }
 }

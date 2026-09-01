@@ -1611,4 +1611,16 @@ return [
         'required_fields' => ['user_id', 'languages', 'department_ids'],
         'owning_doc' => 'Doc11',
     ],
+
+    // ── Doc 12 (S12) — every configuration write audited (NFR-06); the SEC-06
+    //    high-risk classes (rule activation, policy change, field deactivation,
+    //    form publish) register with their steps and class in Doc 17 ([D17]).
+    [
+        // FR-12: calendar/holiday changes (kind names the change; prospective-only).
+        'action_key' => 'hours.calendar.updated',
+        'entity' => 'calendar',
+        'actor_types' => ['staff'],
+        'required_fields' => ['calendar_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
 ];

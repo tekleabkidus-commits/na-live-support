@@ -9,4 +9,11 @@ return [
         // R-04: the tenant-wide rules-pause switch (features registry label).
         'rules_pause' => 'Pause all automation rules',
     ],
+    'sla' => [
+        // §8/§13/§14: the policy editor's live example — ICU-templated, the
+        // accessible explanation of clock math. Placeholders: :created, :target
+        // (both "Day HH:MM" in the display timezone), :zone.
+        'example' => 'A ticket created :created would target first response :target (:zone).',
+        'example_unreachable' => 'This calendar never opens, so no target can be computed — draw at least one weekly interval.',
+    ],
 ];

@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-133 event(s).
+134 event(s).
 
 ## `agent.status_changed`
 
@@ -382,6 +382,15 @@ FR-22/FR-01: profile attributes changed (display_name, language, country, tags�
 - **Payload:** `tenant_id`, `customer_id`, `changed`
 - **Producers:** Doc08/CustomerProfile
 - **Consumers:** Doc08/SearchIndexer, Doc07/ListProjector, Doc17/Audit
+
+## `hours.calendar.updated`
+
+Doc 12 FR-12: a business calendar changed (kind: created|updated|holiday_added|holiday_updated|holiday_removed|deactivated). Prospective-only — armed SLA instances keep their snapshots (BR-03/EC-05).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `calendar_id`, `kind`
+- **Producers:** Doc12/Hours
+- **Consumers:** Doc15/Reporting, Doc17/Audit
 
 ## `kb.article.cited_by_ai`
 

@@ -1154,6 +1154,16 @@ final class EventCatalog
             'consumers' => ['Doc07/Inbox', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
             'description' => 'Doc 11 FR-16: a ticket entered the Rescue view (reason = heartbeat_lost|channel_unreachable|orphaned).',
         ],
+        // ── Doc 12 (Automation, SLA, Forms & Custom Fields) — the S12
+        //    EVENT-FAMILY AMENDMENT (ANSWERS, 28a2e67); events land per step,
+        //    each citing the filing. NFR-06: zero configuration change is silent.
+        'hours.calendar.updated' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'calendar_id', 'kind'],
+            'producers' => ['Doc12/Hours'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-12: a business calendar changed (kind: created|updated|holiday_added|holiday_updated|holiday_removed|deactivated). Prospective-only — armed SLA instances keep their snapshots (BR-03/EC-05).',
+        ],
         'rescue.auto_returned' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'queue_id', 'previous_assignee_id'],
