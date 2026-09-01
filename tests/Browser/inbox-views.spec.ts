@@ -180,16 +180,29 @@ test("Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELE
             list.locator(`[data-ticket="00000000-0000-7000-8000-0000000d11${n}"]`),
         ).toBeVisible();
     }
-    const servedOrder = await list
-        .locator('[data-ticket]')
-        .evaluateAll((rows) => rows.map((r) => r.getAttribute('data-ticket') ?? ''));
-    const trioIndexes = ['01', '02', '03'].map((n) =>
-        servedOrder.indexOf(`00000000-0000-7000-8000-0000000d11${n}`),
-    );
-    expect(trioIndexes[0]).toBeGreaterThanOrEqual(0);
-    // ?? -1 satisfies noUncheckedIndexedAccess and still fails LOUDLY if a row went missing.
-    expect(trioIndexes[0]).toBeLessThan(trioIndexes[1] ?? -1);
-    expect(trioIndexes[1]).toBeLessThan(trioIndexes[2] ?? -1);
+    // S12 hardening (wait-shape only; the law is unchanged): the list is LIVE —
+    // relay deltas can re-key rows between a visibility wait and a one-shot
+    // evaluateAll (the batch-B CI red caught exactly that window; local and the
+    // retry saw the same). The SAME truth — all three fixtures present, their
+    // RELATIVE order FIFO — is asserted on ONE CONSISTENT snapshot via poll.
+    await expect
+        .poll(
+            async () => {
+                const served = await list
+                    .locator('[data-ticket]')
+                    .evaluateAll((rows) => rows.map((r) => r.getAttribute('data-ticket') ?? ''));
+                const trio = ['01', '02', '03'].map((n) =>
+                    served.indexOf(`00000000-0000-7000-8000-0000000d11${n}`),
+                );
+                return (
+                    trio.every((i) => i >= 0) &&
+                    (trio[0] ?? -1) < (trio[1] ?? -1) &&
+                    (trio[1] ?? -1) < (trio[2] ?? -1)
+                );
+            },
+            { timeout: 15_000 },
+        )
+        .toBe(true);
 
     // The retired seam door is gone: the query flag renders NOTHING extra (the section is the
     // real one). Same session — a second /login visit would bounce an authenticated user.
