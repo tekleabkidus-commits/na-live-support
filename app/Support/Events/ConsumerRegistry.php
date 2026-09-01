@@ -131,7 +131,8 @@ final class ConsumerRegistry
         //    contract fixture fixtures/tickets/consumers/doc09.json; the
         //    ReopenConsumerDrillTest pin moves in THIS commit.
         'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Routing\TicketReopenedRouter::class, \App\Jobs\Routing\RescueConsumer::class],   // S11 step 9: EC-08 courtesy hold
-        'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class],
+        'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Csat\CsatArmConsumer::class],
+        'ai.resolved' => [\App\Jobs\Csat\CsatArmConsumer::class],
         'ticket.closed' => [ListProjectorConsumer::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],
         'ticket.follower_removed' => [ListProjectorConsumer::class],

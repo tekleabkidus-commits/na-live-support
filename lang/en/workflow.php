@@ -27,6 +27,14 @@ return [
             'widget_shortcuts' => 'Widget shortcuts',
         ],
     ],
+    'csat' => [
+        // FR-25: the 1-tap prompt, the polite hour-73 refusal (EC-11), the
+        // optional comment prompt, and the thanks.
+        'prompt' => 'How did we do? Tap a star — 1 (poor) to 5 (great).',
+        'window_closed' => 'Thanks — this rating window has closed, but your feedback is always welcome in the chat.',
+        'comment_prompt' => 'Thank you! Anything you want to add?',
+        'thanks' => 'Thanks for the feedback!',
+    ],
     'flow' => [
         // FR-21: the conversational renderer's own voice (friendly retries,
         // the offer of a person, numbered-choice instruction, FS-04's recap).

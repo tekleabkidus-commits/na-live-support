@@ -1,0 +1,127 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Csat\CaptureTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-25: the 1-tap score lands, prompts for a comment, and an in-[39m[90m…[39m [90m10.47s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-11: an hour-73 tap records NOTHING, answers the polite window[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closing rows 2/4: an AI-resolver score lands csat_scored on the[39m[90m… [39m [90m0.09s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Csat\TriggerMatrixTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-24: a human resolution arms ONE survey (idempotent on the res[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-24 cooldown: the SAME customer resolved again within csat.coo[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-24 RG suppression (Doc 08 FR-15's contract): an RG-flagged pl[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER 4: an ai.resolved conversation with NO ticket arms a CONVE[39m[90m…[39m [90m0.13s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\CsatSingleResponseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: the RAW token exists only in the delivery — the row hold[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: the door rate-limits per token before touching any row[39m[90m   [39m [90m0.28s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-25: beyond the 1 h edit window the response is LOCKED — the s[39m[90m…[39m [90m0.15s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\SlaGrantPhysicsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per SLA/hours/CSAT table and[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01 + the delete split: FORCED RLS with tenant_isolation everyw[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03 physics (countersign obligation 1): an UPDATE against a RE[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4, RIDER 1): warned/breache[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 physics (countersign obligation 1): a second response for[39m[90m…[39m [90m0.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Csat\CaptureTest[22m [90m>[39m it FR-25: the 1-… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "ai_decisions_2026_09" violates check constraint "ai_decisions_task_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (review_item, ?, ?, ?, ?, ?, ?, 01a05f0b-7bcb-7b4f-b606-4b32ecac8bcd, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2"}, ?, none, none, ?, {"survey_id":"01a05f0b-7b7f-72df-9666-507fe46ca358","score":2,"resolver_type":"human"}, ?, supervisor, low_csat_review, 01a05f0b-7b0d-7112-96e4-b629da19e771, 01a05f0b-7b51-7296-8b9b-af69723e118e, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Csat\CaptureTest[22m [90m>[39m it EC-11: an hour-73 tap records…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'window_closed'[39m[39;1m
+  [39;22m[32m+'scored'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Csat/CaptureTest.php[39m:[32m54[39m
+     50▕     DB::connection('pgsql_migrator')->statement("SELECT set_config('app.tenant_id', ?, false)", [$tenant->identifier()]);
+     51▕     DB::connection('pgsql_migrator')->statement("UPDATE surveys SET expires_at = clock_timestamp() - interval '1 hour'");
+     52▕ 
+     53▕     $result = app(ResponseIngest::class)->capture($token, 5);
+  ➜  54▕     expect($result['state'])->toBe('window_closed')
+     55▕         ->and($result['text_key'])->toBe('workflow.csat.window_closed')
+     56▕         ->and(__('workflow.csat.window_closed', [], 'en'))->not->toBe('workflow.csat.window_closed')
+     57▕         ->and(__('workflow.csat.window_closed', [], 'am'))->not->toBe('workflow.csat.window_closed');
+     58▕     expect((int) DB::table('survey_responses')->count())->toBe(0)
+
+  [33m1   [39m[39;1mtests/Feature/Csat/CaptureTest.php[39;22m:[39;1m54[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Csat\TriggerMatrixTest[22m [90m>[39m it FR-24: a human resoluti…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     'armed' => false,[39m[39;1m
+  [39;22m[31m-    'reason' => 'already_armed',[39m[39;1m
+  [39;22m[32m+    'reason' => 'cooldown_suppressed',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Csat/TriggerMatrixTest.php[39m:[32m25[39m
+     21▕ 
+     22▕     $first = $armer->armFromEvent($eventId);
+     23▕     expect($first['armed'])->toBeTrue();
+     24▕     // C-09: a re-driven consumer changes nothing.
+  ➜  25▕     expect($armer->armFromEvent($eventId))->toBe(['armed' => false, 'reason' => 'already_armed']);
+     26▕     expect((int) DB::table('surveys')->count())->toBe(1)
+     27▕         ->and((int) DB::table('outbox')->where('name', 'csat.sent')->count())->toBe(1);
+     28▕ 
+     29▕     /** @var object{resolver_type: string, token_hash: string, ticket_id: string, in_window: bool} $survey */
+
+  [33m1   [39m[39;1mtests/Feature/Csat/TriggerMatrixTest.php[39;22m:[39;1m25[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\CsatSingleResponseTest[22m [90m>[39m it FR-25:… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "ai_decisions_2026_09" violates check constraint "ai_decisions_task_check" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: insert into "ai_decisions" ("action", "confidence", "config_version_id", "conversation_id", "customer_id", "endpoint_ref", "error_category", "id", "intent", "language", "latency_ms", "layer_hashes", "message_id", "model", "provider", "request_payload", "response_payload", "rg_risk", "surface", "task", "tenant_id", "ticket_id", "tokens_in", "tokens_out") values (review_item, ?, ?, ?, ?, ?, ?, 01a05f0b-81e5-7445-9fad-23fcd985a8ca, ?, ?, 0, {"immutable":"5031532da897b08e84a44f92c581e33ff4cca3ea2e614467ae2e01f4802c2db2"}, ?, none, none, ?, {"survey_id":"01a05f0b-81ad-715f-b990-33930b35e7fe","score":1,"resolver_type":"human"}, ?, supervisor, low_csat_review, 01a05f0b-817f-7201-bc4b-c102574dd6b5, 01a05f0b-8190-729a-934f-d34065b7b3be, 0, 0))[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m601[39m
+    597▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    598▕ 
+    599▕             $this->recordsHaveBeenModified();
+    600▕ 
+  ➜ 601▕             return $statement->execute();
+    602▕         });
+    603▕     }
+    604▕ 
+    605▕     /**
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mapp/Jobs/Ai/PersistAiDecisions.php[39;22m:[39;1m79[39;22m
+  [33m8   [39m[39;1mapp/Support/Tenancy/RunsWithinTenant.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SlaGrantPhysicsTest[22m [90m>[39m it R-19b/ADR-0003: t… [41;1m Error [49;22m  
+[39;1m  Call to undefined function doc12Columns()[39;22m
+
+  at [32mtests/Isolation/SlaGrantPhysicsTest.php[39m:[32m67[39m
+     63▕ ];
+     64▕ 
+     65▕ it('R-19b/ADR-0003: the app denied set per SLA/hours/CSAT table and privilege is EXACTLY the amendment-6 filing', function (): void {
+     66▕     foreach (DOC12_SLA_TABLES as $table) {
+  ➜  67▕         $columns = doc12Columns($table);
+     68▕         expect($columns)->not->toBeEmpty("information_schema knows no columns for {$table}");
+     69▕         foreach (['INSERT', 'UPDATE'] as $privilege) {
+     70▕             $expected = DOC12_SLA_DENIED[$table][$privilege];
+     71▕             $denied = doc12DeniedSet($table, $privilege);
+
+  [33m1   [39m[39;1mtests/Isolation/SlaGrantPhysicsTest.php[39;22m:[39;1m67[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (77 assertions)[39m
+  [90mDuration:[39m [39m12.40s[39m
+
+EXIT=2

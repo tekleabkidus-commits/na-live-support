@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-146 event(s).
+149 event(s).
 
 ## `agent.status_changed`
 
@@ -301,6 +301,33 @@ A blocked conversation returned to active. Nothing retro-fans-out (FR-11): quara
 - **Payload:** `tenant_id`, `conversation_id`
 - **Producers:** Doc04/ConversationBlocking
 - **Consumers:** Doc06/SpamDisposition, Doc07/Inbox
+
+## `csat.expired`
+
+Doc 12 EC-11: the 72 h window closed with no response — non-response is data, recorded honestly.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `survey_id`, `ticket_id`
+- **Producers:** Doc12/Csat
+- **Consumers:** Doc15/Reporting
+
+## `csat.received`
+
+Doc 12 FR-25: a response landed (or an in-window edit replaced one — same shape, C-09 idempotent consumers). Doc 15's CSAT source of truth; the FR-01 trigger; score ≤2 raised the FR-20 review item.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `survey_id`, `ticket_id`, `customer_id`, `score`, `comment`, `resolver_type`
+- **Producers:** Doc12/Csat
+- **Consumers:** Doc15/Reporting, Doc12/Automation, Doc09/OutcomeEnrichment
+
+## `csat.sent`
+
+Doc 12 FR-24: a survey armed and its 1-tap prompt sent (one per resolution event; cooldown- and RG-suppressed arming never emits). ticket_id is null for a conversation-anchored AI resolution (RIDER 4).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `survey_id`, `ticket_id`, `customer_id`, `resolver_type`
+- **Producers:** Doc12/Csat
+- **Consumers:** Doc15/Reporting
 
 ## `customer.blocked`
 

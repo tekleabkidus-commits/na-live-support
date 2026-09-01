@@ -27,6 +27,14 @@ return [
             'widget_shortcuts' => 'የዊጀት አቋራጮች',
         ],
     ],
+    'csat' => [
+        // FR-25: the 1-tap prompt, the polite hour-73 refusal (EC-11), the
+        // optional comment prompt, and the thanks.
+        'prompt' => 'እንዴት ነበርን? ኮከብ ይንኩ — 1 (ደካማ) እስከ 5 (በጣም ጥሩ)።',
+        'window_closed' => 'እናመሰግናለን — የዚህ ደረጃ መስጫ ጊዜ አልፏል፣ ግን አስተያየትዎ በውይይቱ ውስጥ ሁሌም እንኳን ደህና መጣ።',
+        'comment_prompt' => 'እናመሰግናለን! መጨመር የሚፈልጉት ነገር አለ?',
+        'thanks' => 'ስለ አስተያየትዎ እናመሰግናለን!',
+    ],
     'flow' => [
         // FR-21: the conversational renderer's own voice (friendly retries,
         // the offer of a person, numbered-choice instruction, FS-04's recap).

@@ -1879,3 +1879,60 @@ function minimalFormSchema(array $overrides = []): array
         'completion' => ['tags' => ['fixture-form']],
     ], $overrides);
 }
+
+/** Doc 12 (S12 step 12): CSAT scene — resolved ticket on the fake channel; returns [tenant, ticket, conversationId, customerId]. */
+function csatScene(): array
+{
+    [$tenant, , $ticket] = ticketFixture('resolved');
+    registerFakeChannel();
+    /** @var object{conversation_id: string, customer_id: string} $row */
+    $row = DB::selectOne('SELECT conversation_id, customer_id FROM tickets WHERE id = ?', [$ticket->identifier()]);
+
+    return [$tenant, $ticket, $row->conversation_id, $row->customer_id];
+}
+
+/** Doc 12 (S12 step 12): a catalog-exact ticket.resolved publish — the CSAT arming signal. */
+function publishTicketResolved(object $tenant, object $ticket): string
+{
+    /** @var string $conversationId */
+    $conversationId = DB::table('tickets')->where('id', $ticket->identifier())->value('conversation_id');
+
+    return DB::transaction(fn (): string => app(App\Support\Events\EventPublisher::class)->publish('ticket.resolved', [
+        'tenant_id' => $tenant->identifier(), 'ticket_id' => $ticket->identifier(),
+        'conversation_id' => $conversationId, 'actor_type' => 'staff', 'actor_id' => null,
+    ]));
+}
+
+/** Doc 12 (S12 step 12): the raw survey token, read from the ONE place it exists — the delivered prompt's channel meta. */
+function csatTokenFromDelivery(string $conversationId): string
+{
+    /** @var object{channel_meta: string}|null $message */
+    $message = DB::selectOne("SELECT channel_meta::text AS channel_meta FROM messages WHERE conversation_id = ? AND author_type = 'system' AND channel_meta::text LIKE '%csat%' ORDER BY created_at DESC LIMIT 1", [$conversationId]);
+    expect($message)->not->toBeNull('no CSAT prompt was delivered');
+    $meta = json_decode($message->channel_meta, true);
+
+    return $meta['csat']['token'];
+}
+
+/** Doc 12 grant-physics helpers (S12 step 12: promoted — the per-file-helper law; shared by Automation+Sla grant suites). */
+function doc12Columns(string $table): array
+{
+    /** @var list<object{column_name: string}> $rows */
+    $rows = DB::select('SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY column_name', ['public', $table]);
+
+    return array_map(static fn (object $row): string => $row->column_name, $rows);
+}
+
+function doc12DeniedSet(string $table, string $privilege): array
+{
+    $denied = [];
+    foreach (doc12Columns($table) as $column) {
+        /** @var object{ok: bool} $row */
+        $row = DB::selectOne("SELECT has_column_privilege('app', ?, ?, ?) AS ok", [$table, $column, $privilege]);
+        if (! $row->ok) {
+            $denied[] = $column;
+        }
+    }
+
+    return $denied;
+}

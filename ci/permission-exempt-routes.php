@@ -124,4 +124,6 @@ return [
     'kb.widget.article' => 'Visitor surface (FR-18): HelpContent serves public+published current versions only; internal/draft/unknown all 404 (C-10).',
     'kb.widget.feedback' => 'Visitor surface (FR-11/SEC-05): the visitor principal IS the dedupe hash; rate-limited + length-capped + inert-stored by the step-10 writer.',
     'kb.widget.media' => 'Visitor surface (FR-05): serves only files of public articles with a published variant; signing rotates behind the stable path.',
+    // Doc 12 FR-25/SEC-05 (S12 step 12): the CSAT door — the exemptions' shape inherited exactly.
+    'csat.widget.submit' => 'Visitor surface (SEC-05): the unguessable survey token IS the credential (hash-compared in the domain door); no staff principal exists; throttled at the route and per-token in the door; single-response enforced by row physics.',
 ];

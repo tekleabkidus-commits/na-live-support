@@ -1,0 +1,77 @@
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan octane:reload
+
+   INFO  Reloading workers...  
+
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml restart worker scheduler reverb
+ Container na-live-support-reverb-1 Restarting 
+ Container na-live-support-worker-1 Restarting 
+ Container na-live-support-scheduler-1 Restarting 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-worker-1 Started 
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml up -d --wait app worker scheduler reverb
+ Container na-live-support-redis-durable-1 Running 
+ Container na-live-support-redis-volatile-1 Running 
+ Container na-live-support-worker-1 Running 
+ Container na-live-support-scheduler-1 Running 
+ Container na-live-support-postgres-1 Running 
+ Container na-live-support-app-1 Running 
+ Container na-live-support-reverb-1 Running 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-app-1 Waiting 
+ Container na-live-support-reverb-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-worker-1 Waiting 
+ Container na-live-support-scheduler-1 Waiting 
+ Container na-live-support-app-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-reverb-1 Healthy 
+ Container na-live-support-worker-1 Healthy 
+ Container na-live-support-scheduler-1 Healthy 
+Octane reloaded; worker/scheduler/reverb restarted and healthy.
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec app ./vendor/bin/pest --exclude-group=soak
+
+  [41;1m Pest\Exceptions\FatalException [49;22m
+
+[39;1m  Cannot redeclare function flowScene() (previously declared in /app/tests/Feature/Customers/MergeFlowTest.php:22)[39;22m
+
+  at [32mtests/Feature/Forms/TelegramFlowTest.php[39m:[32m22[39m
+     18▕ |--------------------------------------------------------------------------
+     19▕ */
+     20▕ 
+     21▕ /** @return array{0: mixed, 1: string, 2: mixed, 3: TelegramFlowEngine} tenant, conversationId, agent, engine */
+  ➜  22▕ function flowScene(): array
+     23▕ {
+     24▕     $tenant = createTenant();
+     25▕     [, $conversation] = conversationFixture();
+     26▕     $agent = grantAllPermissions(ticketActor([]));
+
+make: *** [Makefile:63: test] Error 1
+BATTERY_EXIT=2

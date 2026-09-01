@@ -2565,14 +2565,23 @@ entries:
       tests/Isolation/AutomationGrantPhysicsTest.php.
   - ac_ref: "Doc12 AC-08"
     suite_path: tests/Feature/Csat/TriggerMatrixTest.php
-    type: manual
+    type: automated
     tier: integration
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
-    justification: >-
-      PLANNED-MANUAL: the human/AI trigger matrix, cooldown + RG suppression, single-response with the edit window (the unique ALREADY physics at step 2b, tests/Isolation/SlaGrantPhysicsTest.php), expiry (EC-11), event completeness for Doc 15. Flips at step 12.
+    status: covered
+    gap: >-
+      EXECUTED (S12 step 12): both resolution paths incl. RIDER 4's
+      conversation-anchored ai.resolved arming, idempotent on the resolution
+      event, cooldown + RG suppression (TriggerMatrixTest); 1-tap capture,
+      comment prompt, 1 h edit REPLACES, EC-11 hour-73 polite refusal en+am,
+      low-score qa_prescore review item, csat_scored decision enrichment
+      (tests/Feature/Csat/CaptureTest.php); token binding, per-token rate
+      limit, edit-window hard close
+      (tests/Security/CsatSingleResponseTest.php); single-response row physics
+      at step 2b (tests/Isolation/SlaGrantPhysicsTest.php). csat.sent|
+      received|expired events catalogued for Doc 15.
   - ac_ref: "Doc12 AC-09"
     suite_path: tests/Security/ActivatorFloorTest.php
     type: manual

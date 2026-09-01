@@ -59,6 +59,10 @@ Schedule::command('automation:schedule-sweep')->everyMinute()->withoutOverlappin
 // re-verified against row truth + the clock library (the T-03 posture).
 Schedule::command('sla:timers-sweep')->everyMinute()->withoutOverlapping();
 
+// Doc 12 EC-11: unanswered surveys past their materialized window expire and
+// emit csat.expired (five-minute resolution is generous against a 72 h window).
+Schedule::command('csat:expiry-sweep')->everyFiveMinutes()->withoutOverlapping();
+
 // Doc 12 FR-06: execution-log retention (90 d) — platform role, app holds no DELETE.
 Schedule::command('automation:executions-prune')->dailyAt('03:20')->timezone('UTC');
 

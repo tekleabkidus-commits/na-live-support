@@ -134,4 +134,6 @@ return [
     'kb.workflow.publish' => 'Doc 10 FR-07 (S10 step 4): ONE door, TWO audit names — Transitions::publish writes kb.variant.published (approve) OR kb.variant.self_published (the collapsed review) itself, plus kb.sanitizer.overridden when BR-06 applies; a single declared key cannot name both (the ConfigVersions::publish precedent).',
     'inbox.status.heartbeat' => 'Doc 07 FR-28: a TTL presence touch in redis-volatile — no durable state mutates; loss materializes as an EVENTED away transition.',
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',
+    // Doc 12 (S12 step 12): the CSAT capture door — a CUSTOMER act, evented not audited.
+    'csat.widget.submit' => 'Doc 12 FR-25 (the kb.insert_link precedent): a customer\'s 1-tap score is EVENTED (csat.received through the outbox — Doc 15\'s source of truth); no staff principal acts, so an audit row would duplicate the analytics stream for a non-privileged act. Refusals (unknown/expired/locked/rate_limited) mutate nothing.',
 ];

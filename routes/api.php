@@ -494,6 +494,14 @@ Route::group([], function (): void {
             ->post('session', [App\Http\Controllers\Widget\WidgetSessionController::class, 'store'])
             ->name('auth.widget.session');
 
+        // Doc 12 FR-25/SEC-05 (S12 step 12): the CSAT submission door. The
+        // SURVEY TOKEN is the credential (hash compare in the domain door), so
+        // no visitor guard sits here — same trust shape as /session issuance;
+        // throttled at the route on top of the in-door per-token counter.
+        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, 'tenant.state:inbound', 'throttle:30,1'])
+            ->post('csat', [App\Http\Controllers\Widget\CsatController::class, 'store'])
+            ->name('csat.widget.submit');
+
         Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, App\Http\Middleware\AuthenticateWidgetVisitor::class, 'tenant.state:inbound'])
             ->group(function (): void {
                 Route::get('context', [IngressProbeController::class, 'show'])

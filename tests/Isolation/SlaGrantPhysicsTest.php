@@ -48,7 +48,8 @@ const DOC12_SLA_DENIED = [
     ],
     'surveys' => [
         'INSERT' => ['created_at', 'expired_at', 'sent_at'],
-        'UPDATE' => ['channel', 'created_at', 'customer_id', 'expires_at', 'id', 'resolution_event_id', 'resolver_type', 'sent_at', 'tenant_id', 'ticket_id', 'token_hash'],
+        // RIDER 4: conversation_id joins the immutable identity (UPDATE-denied).
+        'UPDATE' => ['channel', 'conversation_id', 'created_at', 'customer_id', 'expires_at', 'id', 'resolution_event_id', 'resolver_type', 'sent_at', 'tenant_id', 'ticket_id', 'token_hash'],
     ],
     'survey_responses' => [
         'INSERT' => ['created_at', 'edited_at', 'responded_at'],

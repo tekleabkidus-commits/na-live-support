@@ -1227,6 +1227,27 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting'],
             'description' => 'Doc 12 FR-16: a macro was inserted (usage drives palette ranking here and the Doc 15 macro report there).',
         ],
+        'csat.sent' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'survey_id', 'ticket_id', 'customer_id', 'resolver_type'],
+            'producers' => ['Doc12/Csat'],
+            'consumers' => ['Doc15/Reporting'],
+            'description' => 'Doc 12 FR-24: a survey armed and its 1-tap prompt sent (one per resolution event; cooldown- and RG-suppressed arming never emits). ticket_id is null for a conversation-anchored AI resolution (RIDER 4).',
+        ],
+        'csat.received' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'survey_id', 'ticket_id', 'customer_id', 'score', 'comment', 'resolver_type'],
+            'producers' => ['Doc12/Csat'],
+            'consumers' => ['Doc15/Reporting', 'Doc12/Automation', 'Doc09/OutcomeEnrichment'],
+            'description' => 'Doc 12 FR-25: a response landed (or an in-window edit replaced one — same shape, C-09 idempotent consumers). Doc 15\'s CSAT source of truth; the FR-01 trigger; score ≤2 raised the FR-20 review item.',
+        ],
+        'csat.expired' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'survey_id', 'ticket_id'],
+            'producers' => ['Doc12/Csat'],
+            'consumers' => ['Doc15/Reporting'],
+            'description' => 'Doc 12 EC-11: the 72 h window closed with no response — non-response is data, recorded honestly.',
+        ],
         'form.changed' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'form_id', 'version_id', 'kind'],

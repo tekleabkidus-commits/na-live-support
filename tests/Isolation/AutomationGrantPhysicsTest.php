@@ -71,28 +71,6 @@ const DOC12_AUTOMATION_DENIED = [
     ],
 ];
 
-function doc12Columns(string $table): array
-{
-    /** @var list<object{column_name: string}> $rows */
-    $rows = DB::select('SELECT column_name FROM information_schema.columns WHERE table_schema = ? AND table_name = ? ORDER BY column_name', ['public', $table]);
-
-    return array_map(static fn (object $row): string => $row->column_name, $rows);
-}
-
-function doc12DeniedSet(string $table, string $privilege): array
-{
-    $denied = [];
-    foreach (doc12Columns($table) as $column) {
-        /** @var object{ok: bool} $row */
-        $row = DB::selectOne("SELECT has_column_privilege('app', ?, ?, ?) AS ok", [$table, $column, $privilege]);
-        if (! $row->ok) {
-            $denied[] = $column;
-        }
-    }
-
-    return $denied;
-}
-
 it('R-19b/ADR-0003: the app denied set per automation table and privilege is EXACTLY the amendment-6 filing', function (): void {
     foreach (DOC12_AUTOMATION_TABLES as $table) {
         $columns = doc12Columns($table);

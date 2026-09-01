@@ -431,6 +431,9 @@ Step 10: `tests/Contract/Forms/FormPreChatContractTest.php` (NEW dir — add
 Step 11: `tests/Feature/Forms/TelegramFlowTest.php` (listed dir),
 `tests/Contract/Forms/DualRenderConformanceTest.php` (added dir); RIDER 3's
 grant legs ride the already-listed AutomationGrantPhysicsTest.
+Step 12: `tests/Feature/Csat/{TriggerMatrixTest,CaptureTest}.php` (listed dir)
++ the already-listed CsatSingleResponseTest; doc12Columns/doc12DeniedSet
+promoted to tests/Pest.php (the per-file-helper law, 6th promotion).
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 

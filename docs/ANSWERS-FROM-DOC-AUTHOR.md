@@ -3070,3 +3070,29 @@ RIDER: **`form_flow_checkpoints`** (T-07, EC-06, SS-03, FS-04) —
   truth (C-07); the DB row is what FS-04's drill resumes from.
 
 END OF RIDER 3 — nothing follows this line.
+
+### SCHEMA AMENDMENT 6 — RIDER 4 (filed at S12 step 12, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+
+FR-24 names TWO trigger points: "ticket resolved (Doc 06 FR-06) and AI-resolved
+(Doc 09 FR-09)". Doc 09's `ai.resolved` is, in the catalog's own words, "the
+chatbot marked a conversation AI-resolved (**no ticket**)" — but item 15 filed
+`surveys.ticket_id` NOT NULL, which makes the second trigger point physically
+un-armable. The doc is law; the item was the oversight. RIDER:
+
+- `surveys.ticket_id` → **DROP NOT NULL** (an AI-resolved conversation's survey
+  has no ticket to name).
+- `surveys.conversation_id` uuid NULL FK conversations — the delivery anchor
+  for the no-ticket case (the CSAT prompt rides ComposeOutbound on the
+  conversation), INSERT-granted, UPDATE-denied like the rest of the identity.
+- CHECK `(ticket_id IS NOT NULL OR conversation_id IS NOT NULL)` — every survey
+  anchors somewhere.
+- The `csat.*` event payloads keep their filed keys; `ticket_id` may carry null
+  for conversation-anchored surveys (closed-key rule unaffected).
+- The decision-row join needs NO new column: `resolution_event_id` IS the
+  `ai.resolved` event id — the response path reads that event row's
+  `decision_id` and lands the FR-20 `csat_scored` enrichment through Doc 09's
+  own OutcomeEnrichment door (closing rows 2/4's mechanism).
+- The SlaGrantPhysicsTest surveys denied sets move in the same commit
+  (UPDATE-denied gains conversation_id).
+
+END OF RIDER 4 — nothing follows this line.

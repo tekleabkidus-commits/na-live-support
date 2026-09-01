@@ -575,7 +575,7 @@ The command names files later steps create (the record-note precedent): figures 
 | FR-06 | DONE | ClassifyPipelineTest (taxonomy, batch-tail, persist-first) |
 | FR-07 | DONE | TurnDecision — ClassifyPipelineTest incl. the step-14 filed interpretation (any open ticket → no second handoff) |
 | FR-08 | DONE | ChatbotTurnTest + ActionSchemaTest (closed enum, context layers, FR-27 render) |
-| FR-09 | PARTIAL **[D12]** | resolve + 24 h post_resolution (ChatbotTurnTest); the 1-tap CSAT prompt is Doc 12's survey (seam recorded on the decision row) |
+| FR-09 | DONE | resolve + 24 h post_resolution (ChatbotTurnTest); the 1-tap CSAT survey LANDED S12 step 12 — armed on ai.resolved, conversation-anchored (RIDER 4), token-bound capture, csat_scored on the resolving decision (tests/Feature/Csat/TriggerMatrixTest.php + CaptureTest; closing row 2 FLIPPED) |
 | FR-10 | DONE ([D10] CLOSED at S10 step 6) | RetrievalTest + AC-02 over fixture-seeded chunks (published-only, AI-usable, language chain, internal = Copilot-only); LIVE Doc 10 articles feed retrieval through the publish-event consumer — PublishPipelineTest (publish → chunks → swap → the chatbot serves the new version with its version pin; unpublish retires) |
 | FR-11 | DONE | SimulationParityTest (AC-03) + ThresholdPublisher (BR-07) + the Backoffice sliders/simulation (BackofficeConfigTest, ai-backoffice.spec) |
 | FR-12 | DONE — **[D11] FLIPPED at S11 step 8 (P-C4 countersigned):** the handoff template interpolates Doc 11's live band phrase (`QueueWaitVariable`, bands only — SEC-05; ONE line in `HandoffDecision`, the six ChatbotTurnTest pins moved with the interpolation named) | every trigger (ChatbotTurnTest) + the FR-11 packet via createFromHandoff + FR-28 template + decision_id |
@@ -583,7 +583,7 @@ The command names files later steps create (the record-note precedent): figures 
 | FR-14 | PARTIAL **[B8]** | CopilotPanelTest + CopilotTab.vue + ai-copilot.spec (chips, debounced summary, card, KB top-3, similar tickets scope-checked, notices, low-confidence banner); pixel fidelity at the Batch 8 freeze; client token-streaming waits on Doc 07's Reverb client seam (server streaming proven, StreamingTest) |
 | FR-15 | DONE | ComposerActionsTest + TranslateTest + TranslateSendTest (original in message metadata through the countersigned 10b packet) + the composer actions UI (ai-copilot.spec) |
 | FR-16 | DONE | ArtifactOutcomeTest (all three outcomes, diff_ref identifiers + numeric metrics) |
-| FR-17 | PARTIAL **[D15]/[D12]/[D16]** | SupervisorTest (anomaly arithmetic, sentiment watch, advisory qa_prescore on the fixture rubric, localized 6-bullet digest); notifications delivered via the three bell arms (AiBellDeliveryTest); dashboards render in Doc 15; rubric content Doc 12/16 |
+| FR-17 | PARTIAL **[D15]/[D12]/[D16]** | SupervisorTest (anomaly arithmetic, sentiment watch, advisory qa_prescore on the fixture rubric, localized 6-bullet digest); notifications delivered via the three bell arms (AiBellDeliveryTest); dashboards render in Doc 15; rubric content Doc 12/16 — S12 step 12 landed the low-CSAT review item AS a qa_prescore supervisor row (kind=low_csat_review, CaptureTest); the rubric CONTENT half completes at S12 step 14's sweep or stays [D16] |
 | FR-18 | PARTIAL **[B8]/[OA]** | BackofficeConfigTest + ai-backoffice.spec (persona w/ 5-conversation preview, guardrails, thresholds+scope, kill-switch grid + confirmation, decisions); provider switch DOOR landed at S10 step 0.4 (`ai.providers.manage`, R-D10-1); the B8-S08 screen + pixel fidelity [B8] |
 | FR-19 | DONE | HonestyTest (a: gate + first greeting; b: trap fixtures; c: author_type=ai + the AI marker DOM in ai-honesty.spec; d: Doc 04 FR-23 re-asserted) |
 | FR-20 | PARTIAL **[D15]** — [D10] half CLOSED at S10 step 9 (was BS:67 at plan time; this row re-located by text) | DecisionLogTest + OutcomeEnrichment + WeeklyOutputsTest (top-10 unanswerable ids-only seam, calibration curve, RG queue); the one-click KB draft is BUILT: `POST admin/kb/drafts/from-conversations` consumes `WeeklyOutputs::topUnanswerable()` ids-only (AiAuthoringTest cluster e2e); rendering Doc 15's |
@@ -610,7 +610,7 @@ The command names files later steps create (the record-note precedent): figures 
 | T-05 | DONE ([D10] CLOSED at S10 step 6) | RetrievalTest + SimilarTicketsTest (HNSW cosine, hybrid, language filter, scope at query, nightly embedder); index maintenance on Doc 10 publish events = KbIndexMaintenanceConsumer (durable, ADR 0011) → PublishPipeline (deterministic chunking, changed-chunks-only embedding, ONE-statement generation swap, kb.retrieval.updated) — PublishPipelineTest |
 | T-06 | DONE | RgEvalHarnessTest + ThresholdPublisher precision readout |
 | T-07 | DONE | QuotaEnforcementTest metering (FS-05 pattern) + CostCard |
-| T-08 | PARTIAL **[D12]** | DecisionLogTest + AiOutcomeEnrichmentConsumer + ArtifactOutcomeTest; the CSAT join waits on Doc 12 |
+| T-08 | DONE | DecisionLogTest + AiOutcomeEnrichmentConsumer + ArtifactOutcomeTest; the csat_scored join LANDED S12 step 12 (ResponseIngest → OutcomeEnrichment through Doc 09's own door; CaptureTest closing-rows-2/4 leg; closing row 4 FLIPPED) |
 | T-09 | DONE | Golden + red-team suites in CI; nightly live leg configured (first run pasted at step 5; live variance is the standing observation) |
 | SEC-01 | PARTIAL **[D18]** | vault ref at call time (OrchestratorTest); ADR 0019 is the interim vendor record |
 | SEC-02 | DONE | PiiRedactionTest + the staff-text variant (TranslateTest; sabotage #13) |
@@ -639,7 +639,7 @@ The command names files later steps create (the record-note precedent): figures 
 | SS-02 | DONE — [D10] CLOSED at S10 step 9 (was BS:117 at plan time; re-located by text) | top-10 unanswerable → the one-click draft, end-to-end against a cluster fixture (AiAuthoringTest: three no_grounding handoffs → intent cluster → 202 → accented draft with the questions as headings) |
 | SS-03 | DONE | RgDistressAuditTest — 50 dialogs |
 | SS-04 | PARTIAL **[D15]** | FailoverDrillTest (zero stranded; evented); the events-only post-incident REPORT is Doc 15's |
-| AC-01 | PARTIAL **[D12]/[D19]** | Golden suite en+am at pinned configs; run_form execution + the CSAT join are Doc 12's |
+| AC-01 | PARTIAL **[D19]** | Golden suite en+am at pinned configs; the [D12] half FLIPPED S12 steps 11-12 (run_form execution = the flow engine + ActiveFlowProvider seam, TelegramFlowTest; the CSAT join = CaptureTest); [D19] load half stays |
 | AC-02 … AC-09 | COVERED | traceability rows (all automated, every one flipped in its step) |
 | AC-10 | PARTIAL **[OA]** | metering + quota proven (QuotaEnforcementTest); the monthly invoice reconciliation is the owner's calendar |
 | R-01 … R-06 | DONE (mitigations) | trap fixtures, calibration loop, red-team + runbook, ladder + AI-off operability, quotas + caps, the triad's data products ([D15] renders) |
