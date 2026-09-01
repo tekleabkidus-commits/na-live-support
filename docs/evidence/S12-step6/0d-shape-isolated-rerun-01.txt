@@ -1,0 +1,18 @@
+  [dev-hardware-indicative] NFR-01 transition            p50  15.766 ms   p99  36.398 ms   max  47.322 ms   budget(p99) 25.0 ms   OVER
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] NFR-02 merge+unmerge round   p50  77.748 ms   p99  94.611 ms   max  94.611 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-04 bulk 200              p50 2893.795 ms   p99 2893.795 ms   max 2893.795 ms   budget(p99) 30000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 sweep (10k armed/20 due) p50 514.376 ms   p99 514.376 ms   max 514.376 ms   budget(p99) 5000.0 ms   WITHIN
+  [dev-hardware-indicative] §12 tag autocomplete @5k    p50  16.359 ms   p99  23.591 ms   max  31.079 ms   budget(p99) 80.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\TicketsBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-01: a single transition commits within budget (p99 ≤ 25 ms)[39m[90m    [39m [90m17.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-02: a merge + unmerge ROUND completes within the single-operati[39m[90m…[39m [90m2.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-04: a 200-item bulk batch completes within budget (≤ 30 s), lin[39m[90m…[39m [90m5.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: the timer sweep is O(due), not O(armed) — 10k armed candidates[39m[90m…[39m [90m2.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12: tag autocomplete answers within budget at 5k distinct tags (p9[39m[90m…[39m [90m4.30s[39m  
+
+  [90mTests:[39m    [32;1m5 passed[39;22m[90m (14 assertions)[39m
+  [90mDuration:[39m [39m32.69s[39m
+
+EXIT=0
