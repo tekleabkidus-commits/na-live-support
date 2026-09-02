@@ -51,12 +51,15 @@ it('the guard grammar: pills detected anywhere, resolved text passes; P-SEND\'s 
     expect(fn () => MacroGuard::assertNoBlank('ETA {{custom.payout_eta}}'))->toThrow(DomainException::class, 'blank_variable');
     MacroGuard::assertNoBlank('all resolved');
 
-    // P-SEND pre-state: the STAFF send API does not yet refuse pills — pinned so
-    // the countersigned landing flips THIS assertion (its fail-first, on record).
+    // P-SEND LANDED (batch-C countersign): the pinned pre-state FLIPPED — the
+    // STAFF send API now refuses a pill-carrying body with the stable code
+    // (T-06's "blocks at the send API, not only UI"); a clean body still sends.
     [$tenant, $ticket] = macroScene();
     registerFakeChannel();
     $conversation = App\Models\Conversation::query()->findOrFail($ticket->getAttribute('conversation_id'));
-    $message = app(App\Domain\Conversations\Outbound\ComposeOutbound::class)
-        ->compose($conversation, 'system', null, 'text', 'pill survives: {{custom.payout_eta}}', 'psend-prestate');
-    expect($message->body)->toContain('{{custom.payout_eta}}');
+    $compose = app(App\Domain\Conversations\Outbound\ComposeOutbound::class);
+    expect(fn () => $compose->compose($conversation, 'system', null, 'text', 'pill survives: {{custom.payout_eta}}', 'psend-poststate'))
+        ->toThrow(DomainException::class, 'blank_variable');
+    $message = $compose->compose($conversation, 'system', null, 'text', 'all resolved, sends fine', 'psend-clean');
+    expect($message->body)->toBe('all resolved, sends fine');
 });

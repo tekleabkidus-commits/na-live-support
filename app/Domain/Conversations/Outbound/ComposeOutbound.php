@@ -73,6 +73,16 @@ final class ComposeOutbound
             throw new DomainException('customer_blocked: this customer is blocked on every channel — nothing can be sent (Doc 08 FR-18/T-06).');
         }
 
+        // COUNTERSIGNED CORE EDIT (S12 PACKET P-SEND, batch-C checkpoint):
+        // Doc 12 T-06's staff half — "unresolved detection blocks at the send
+        // API, not only UI". A deliverable body carrying an unresolved
+        // {{variable}} pill refuses with the stable code (C-04); notes never
+        // reach here (the guard above), so a DRAFT may hold pills — a SEND
+        // may not. The automation half is SendMacroReplyAction's.
+        if ($body !== null && \App\Domain\Macros\MacroGuard::unresolvedIn($body) !== []) {
+            throw new DomainException('blank_variable: the body carries unresolved variable pills — resolve or remove them before sending (Doc 12 T-06/BR-04).');
+        }
+
         if ($idempotencyKey !== null) {
             $original = $this->messages->findByIdempotencyKey($conversation, $idempotencyKey);
 

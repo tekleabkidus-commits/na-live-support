@@ -1,0 +1,158 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\ConversationSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-01: the same channel identity always resolves to the same conver[39m[90m…[39m [90m6.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01: the identity unique index refuses a duplicate at the databas[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: an unregistered channel is refused by the repository boundar[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: the open-ticket slot claims atomically and refuses a second[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-04: release is holder-only — a stale ticket cannot clobber the s[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a body over 16 KB is refused by CHECK constraint, not by val[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-05/SEC-07 row shadow: kind=note must be is_internal and nothing[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13 shape: outbound rows must carry a delivery state; inbound row[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: the app role cannot DELETE conversations, messages, or revis[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-07: a same-second burst orders stably by (created_at, id) across[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\DeadLetterTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-05: tries is exactly 3 — the crash-loop budget is a frozen contr[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05: a poison message parks with its FULL payload, error, and aud[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05: the conversation continues around a parked item — later inbo[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03f: a job with no tenant does not park — the framework failed-j[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05: re-drive flips the row (audited, DB time) and dispatches ont[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05/EC-03: a re-driven message SURVIVES a pre-claimed dedupe slot[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-05: a second re-drive refuses — dead_letter_not_parked, row hist[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-6: the page is gated conversations.view; the re-drive is gated ti[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\DeliveryStateMachineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-02 legal half: every FR-13 edge moves the row, with its event wh[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 illegal half: every pair OUTSIDE the diagram is rejected — en[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-05: a post-send channel invalidation is an ANNOTATION on the sen[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: inbound rows have no delivery lifecycle — the machine refuse[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\EditDeleteTranscriptTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-06: customer edit + delete round-trip preserves originals; the f[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a channel redelivery carrying a KNOWN external id becomes a[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: staff edit rides the capability interface, revises, audits,[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: staff delete requires the telegram.message.delete permission[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-22: a channel whose capability is off has NO staff edit path[39m[90m     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-23: AI messages are never edited or deleted post-send — correcti[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24/US-04: the transcript excludes notes by default, carries the[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: including notes takes BOTH flags — the double-confirm is str[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 PDF (ADR 0009): renders with the embedded Ethiopic font — Amh[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\FailureScenariosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: outage accumulates in queued with the lane intact, health go[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-01: the health signal is transition-only — a second outage failu[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02: storage outage → text unaffected, media held "attachment pen[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02: a storage outage outlasting x3 goes terminal failed with the[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-03: a media backlog cannot slow text — jobs land on the isolated[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-03: the isolation is supervisor physics — every queue family has[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\InboundPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-10 step 1: the webhook ACKs 202 and enqueues to the channel inbo[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10 step 1: an unregistered channel 404s indistinguishably (C-10)[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-05 (Doc 01): the quota gate runs before the enqueue[39m[90m             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-10 end-to-end: one inbound becomes shell customer + conversation[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-01: the same sender again lands in the SAME conversation and cus[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-03: a duplicate webhook delivery is dropped silently — one row,[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-03: the dedupe slot admits its own claimant again (job retry) and[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-11: inbound on a blocked conversation is stored quarantined with[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-05: a suspended tenant past the accrual window gets ACK-but-summ[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-05: a suspended tenant INSIDE the window still stores in full (U[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-01: a 10-message burst confirms exactly ONE batch tail — the las[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\LaneFifoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-15: a lane sends in compose order, one attempt per cycle[39m[90m         [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: a failed(retryable) head BLOCKS the lane — the message behin[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-15: past the 10-minute cap the lane SKIPS — head demoted, conver[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§12 fairness: a hot lane cannot starve idle lanes — one attempt per[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\LocalizationAccessibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90m§14: the detector separates the two launch scripts and refuses to g[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§14: language is stored per message on BOTH directions of the threa[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90m§13: every stored image carries an alt slot, and staff can write it[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\MediaPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-05 EICAR: infected — event with signature, bytes never stored, a[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: clamd down → held in scanning; the third unavailable attempt[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: the 15-minute hold cap quarantines even before three attempt[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-05: a clean voice note emits media.needs_transcript with its stor[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\MessagePartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit finds every existing messages partition enabled, forced, and pol[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit protects messages partitions the MAINTENANCE COMMAND creates, no[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when a future messages partition is missing, an[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit monitor goes RED when any row sits in messages_default — FS-04's[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit maintain NEVER drops an old messages partition — retention is th[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\NodeKillReplayDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-04 / Doc01 AC-03: an inbound worker killed after the dedupe clai[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: an inbound worker killed after the persist commits produces[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21 still holds after the idempotency fix: a GENUINE customer edi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: a lane worker killed mid-send reconciles from recorded truth[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04: a mid-send kill with NO recorded acceptance re-queues for re[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-04 / Doc01 AC-03: a 1k-message replay with each worker class ki[39m[90m…[39m [90m15.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\NotesTypingDraftsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-17: a note persists internal-only with note.added + audit, and a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-04 runtime half: the compose path REFUSES kind=note before any r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: staff composing signals the adapter at most once per 4 s win[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-18: the typing signal is capability-gated — a channel that canno[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-12: customer typing auto-expires by TTL physics — a dead Reverb[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-07: one draft per (user, conversation) — saves upsert, the unique[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-06: last-writer-wins — the device holding a STALE updated_at los[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-20: cleared on send — a tombstone (the table cannot DELETE), and[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-26: draft.saved is LOCAL ONLY — absent from the catalog, so the[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\OutboundPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12: compose writes the queued row + message.queued event and dis[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13 happy path: queued → sending → sent, external id recorded, la[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-03: recomposing with the same idempotency key finds the ORIGINAL[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mBR-02: composing INTO a blocked conversation refuses with conversat[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-04: blocked BETWEEN compose and send → canceled with reason, pre[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13/FR-14 retryable path: backoff schedule stamps 1s then 5s; suc[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: the fifth failed attempt goes failed_final with message.fail[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: a non-retryable class goes failed_final IMMEDIATELY with its[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-16: over-limit sends WAIT in queued and drain once the bucket re[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: manual retry re-enters queued from failed_final and sends on[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\RealtimeBlockingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-03: block and unblock emit their events and audit entries; a dou[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: every push carries v:1 on the tenant-namespaced channel[39m[90m      [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-25: a payload over 32 KB is REFUSED — media rides as signed URLs[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-06: outside production, a payload naming a FOREIGN tenant id re[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-06: subscribe requires conversations.view AND scope — refusals ar[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-26: every named event exists in the catalog; draft.saved does no[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\RetentionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the run drops exactly the eligible partition, copies held ro[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoteIsolationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mDeliverableKind is exactly the seven customer-content kinds — no no[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe single kind-conversion point refuses note and system, and maps[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90ma channel cannot originate a note: NormalizedInbound refuses kind=n[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDeliverablePayload is constructible only through kind-safe named co[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno adapter-namespace method accepts message kinds or message rows —[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\BundledActionHonestyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-09: a tags-only agent applies add_tags, set_priority is skipp[39m[90m…[39m [90m0.08s[39m  
+
+  [dev-hardware-indicative] NFR-05 palette search @1k macros  p50    4.3 ms  p95    5.1 ms  budget(p95) 50 ms  WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\PaletteBudgetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit meets NFR-05 indicatively: palette search over 1k macros prints[39m[90m… [39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\ResolverParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-06 parity + the vocabulary: preview == direct resolution, live[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 walls: an unknown bundled type refuses; saved replies shar[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\MacroNoBlankSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-06 automation half: an unresolved variable refuses blank_varia[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the guard grammar: pills detected anywhere, resolved text passes[39m[90m…[39m [90m0.06s[39m  
+
+  [90mTests:[39m    [32;1m110 passed[39;22m[90m (675 assertions)[39m
+  [90mDuration:[39m [39m30.26s[39m
+
+EXIT=0
