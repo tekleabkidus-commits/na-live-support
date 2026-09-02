@@ -1,0 +1,56 @@
+# SABOTAGE (h) RED — a field type change permitted by grant → FR-18 physics must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Isolation\AutomationGrantPhysicsTest
+  ⨯ it R-19b/ADR-0003: the app denied set per automation table and pri… 10.31s  
+  ✓ it N-01: every automation table is FORCED RLS with tenant_isolation… 0.09s  
+  ⨯ it FR-18 physics (countersign obligation 1): a field key/type/entit… 0.07s  
+  ✓ it R-20 control (countersign obligation 4): the activation stamp fi… 0.06s  
+  ✓ it RIDER 5 physics (step 13): a destination url, a delivery payload… 0.11s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\AutomationGrantPhysicsTest > it R-19b/ADR-0003: t…   
+  field_definitions UPDATE denied set drifted
+Failed asserting that two arrays are identical.
+       2 => 'id',
+       3 => 'key',
+       4 => 'tenant_id',
+  -    5 => 'type',
+   ]
+  
+
+  at tests/Isolation/AutomationGrantPhysicsTest.php:104
+    100▕             $denied = doc12DeniedSet($table, $privilege);
+    101▕             if ($expected === '*') {
+    102▕                 expect($denied)->toBe($columns, "{$table} {$privilege}: app should hold NO column grant");
+    103▕             } else {
+  ➜ 104▕                 expect($denied)->toBe($expected, "{$table} {$privilege} denied set drifted");
+    105▕             }
+    106▕         }
+    107▕     }
+    108▕ });
+
+  1   tests/Isolation/AutomationGrantPhysicsTest.php:104
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\AutomationGrantPhysicsTest…   AssertionFailedError   
+  app executed: UPDATE field_definitions SET type = 'text'
+
+  at tests/Isolation/AutomationGrantPhysicsTest.php:153
+    149▕         "UPDATE form_flow_checkpoints SET version_id = '00000000-0000-0000-0000-000000000000'",
+    150▕     ] as $sql) {
+    151▕         try {
+    152▕             DB::transaction(static fn () => DB::statement($sql));
+  ➜ 153▕             $this->fail("app executed: {$sql}");
+    154▕         } catch (QueryException $e) {
+    155▕             expect($e->getMessage())->toContain('permission denied', $sql);
+    156▕         }
+    157▕     }
+
+  1   tests/Isolation/AutomationGrantPhysicsTest.php:153
+
+
+  Tests:    2 failed, 3 passed (76 assertions)
+  Duration: 10.71s
+
+
+EXIT=1

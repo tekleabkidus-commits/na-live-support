@@ -1,0 +1,32 @@
+# SABOTAGE (c) RED — a blank variable allowed past the automation arm → T-06 must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\MacroNoBlankSendTest
+  ⨯ it T-06 automation half: an unresolved variable refuses blank_vari… 10.71s  
+  ✓ it the guard grammar: pills detected anywhere, resolved text passes… 0.11s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\MacroNoBlankSendTest > it T-06 automation half: an…   
+  Failed asserting that two strings are identical.
+  -'blank_variable'
+  +'send_refused'
+  
+
+  at tests/Security/MacroNoBlankSendTest.php:37
+     33▕     $before = (int) DB::table('messages')->where('conversation_id', $ticket->getAttribute('conversation_id'))->count();
+     34▕ 
+     35▕     $outcomes = runChain($executionId, $actions);
+     36▕ 
+  ➜  37▕     expect($outcomes[0]['reason'])->toBe(MacroGuard::CODE)
+     38▕         ->and($outcomes[0]['unresolved'])->toBe(['custom.payout_eta'])
+     39▕         ->and($outcomes[1]['outcome'])->toBe('ok', json_encode($outcomes[1]));
+     40▕     /** @var list<object{author_type: string, body: string}> $sent */
+     41▕     $sent = DB::select('SELECT author_type, body FROM messages WHERE conversation_id = ? AND direction = ? ORDER BY created_at DESC', [$ticket->getAttribute('conversation_id'), 'out']);
+
+  1   tests/Security/MacroNoBlankSendTest.php:37
+
+
+  Tests:    1 failed, 1 passed (8 assertions)
+  Duration: 11.00s
+
+
+EXIT=1

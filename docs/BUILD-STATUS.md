@@ -17,7 +17,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 09 | AI System (Chatbot, Copilot, Supervisor) | **CLOSED/ACCEPTED — advisor closure ruling filed at `docs/S09-ACCEPTANCE.md` (8e82a7a; register 71/23/0 recounted from rows; CI 32951395795 green on 4ab1135; post-close fix folded). Was: BUILT — S09 close-out below (steps 1–14, commits `b5feecf`…`78349a1`). Final 94-id self-audit: 71 DONE / 23 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed bucket cited BY NAME ([D10]/[D11]/[D12]/[D13]/[D15]/[D18]/[D19]/[B8]/[OA]); sabotage ledger 16/16 item-by-item; [D09] Doc 08 FR-14 + EC-06 CLOSED, SEC-03 + EC-03 carries DISCHARGED; FR-21 family 7→9 by filed amendment; five countersigned core-edit packets landed (SEC-03 scrubber, SCHEMA AMENDMENT 3, QuotaMeter::headroom, FR-15 metadata, Doc 07 slot fills + Doc 08 chip + Doc 07 bell arms). `ai.providers.manage` NOT seeded — awaits the owner's sign-off row (this section).** | S09 | **AC-01 PARTIAL [D12/D19]; AC-02/03/04/05/06/07/08/09 COVERED; AC-10 PARTIAL [OA]** (traceability rows, all automated) | canonical DOC 09 SUITES command below; governance incident #16 (key stays in service by owner ruling; ROTATE before production — standing row) |
 | 10 | Knowledge Base | **CLOSED/ACCEPTED — advisor closure ruling filed at `docs/S10-ACCEPTANCE.md` (this row's commit; recount 89/89 family-exact, 78/8/0 to the digit, no false DONE; ledger 13/13; [D10] 7/7; core edits all countersigned-before-landing; the two owed CI verdicts read once and DISCHARGED under the Option-A ruling — green on Doc 10's own terms, the Doc 07 retry-green 0i pair handed to Doc 07's window as a named finding). Was: BUILT — the S10 STEP 14 close-out section below (steps 0–13b, batches A–D, close-out `03cdfea`)** | S10 | AC-01/02/04/05/06/07/09/10 COVERED; AC-03 PARTIAL [D19]; AC-08 PARTIAL [D15] (traceability rows, all automated) | canonical DOC 10 SUITES command below; standing owner rows 0c (key rotation) + 0d (Addis AI DPA) restated in the acceptance |
 | 11 | Departments, Teams, Queues & Routing | **CLOSED AND ACCEPTED — advisor acceptance at docs/S11-ACCEPTANCE.md (1dc3620); verdict of record CI run 33440243050 on 6492dc9, all stages green. Final register 87 DONE / 3 PARTIAL [D19] / 0 NOT DONE, recounted from rows** | S11 | 10 PLANNED traceability rows (Doc11 AC-01…AC-10, status partial, each naming its flipping step) | canonical DOC 11 SUITES command in the plan §8 |
-| 12 | Automation, SLA, Forms & Custom Fields | **IN PROGRESS — S12 (plan approved + committed `b4cf850`, 97 ids family-exact; step sections below). BATCH C landed steps 9–12 at `d432d03`+fix `a0e80a4` — CI verdict of record run 33569778287 GREEN on a0e80a4 (first look's Stage-4 red = the trio-heal scene-canon defect, fixed a0e80a4 with the CI red as pre-state control; the fix run's Stage-3 red = the RbacBudgets p99 tail with p50 UNDER the spec budget, re-run per the 0i law, green — 4th 0d-family datapoint). BATCH C ACCEPTED at b0365de (RIDER 3/4 confirmed; the three packets countersigned). **BATCH D IN FLIGHT — step 13 landed P-SEND (9dd9f49), P-CHIP (2e448f5), P-FIELDS (d53a76e), RIDER 5 + EVENT-FAMILY AMENDMENT 2 (9bab400, flagged for confirmation) and the five external arms (919aa95); AC-09 FLIPPED; packet P-CLS filed (classify_refresh = unbuilt_ai_task until countersigned); 0d ledger: 4 datapoints, re-shape refused this session; **step 14 landed Doc 12's OWN surfaces — Backoffice → Workflow, 8 pages on the closed catalog keys, [B12-batch]; packet P-NAV filed (shell-side links)** | S12 | 9 PLANNED traceability rows (AC-01…AC-09, flipping per step) | canonical DOC 12 SUITES command in the plan §8 |
+| 12 | Automation, SLA, Forms & Custom Fields | **BUILT — S12 close-out below (steps 1–15; plan `b4cf850`, 97 ids family-exact). Final 97-id self-audit: 88 DONE / 9 PARTIAL / 0 NOT DONE — every PARTIAL a pre-agreed bucket cited BY NAME ([D13] ×1, [D14] ×1, [D17] ×1, [D19] ×4, [B12-batch] ×2); 0 NOT DONE. Sabotage ledger 10/10 EXECUTED as physical removals with red+restored captures. [D12] closing set 12/12 dispositioned (rows 1/2/4/5/6/7 FLIPPED; 8–11 annotated; 3 stays [D16]; 12 parked). Core edits 7-for-7 countersigned-before-landing; P-CLS + P-NAV PROPOSED (not landed); RIDER 5 + EVENT-FAMILY AMENDMENT 2 filed before their code, awaiting confirmation. Batches A/B/C ACCEPTED (b0365de); batch D = steps 13–15 (919aa95 → this row's commit). Close-out SHA to be GROUNDED BY THE OWNER before the advisor recount; acceptance conditional on the batch-D CI verdict of record.** | S12 | 9 PLANNED traceability rows (AC-01…AC-09, flipping per step) | canonical DOC 12 SUITES command in the plan §8 |
 | 13 | Web Chat Widget | NOT STARTED | — | — | Wave 2; needs support subdomain |
 | 14 | SMS Notification Module | NOT STARTED | — | — | needs Ethiopian gateway sandbox |
 | 15 | Reporting, Analytics & Dashboards | NOT STARTED | — | — | |
@@ -32,6 +32,155 @@ SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
 mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
+
+## SESSION-12 (Doc 12) — STEP 15: CLOSE-OUT (protocol step 6; batch D complete; commit = this section's SHA, GROUNDED BY THE OWNER before the advisor recount)
+
+**Register (97 ids, family-exact against the plan's §1: FR 25 / NFR 6 / US 7 / BR 7 / T 9 / SEC 6 / EC 14 / FS 5 / SS 4 / AC 9 / R 5): **88 DONE / 9 PARTIAL / 0 NOT DONE**.** Every DONE row names at least one test FILE in the tree that names the id in its own `it()` text and ran in this step's battery; every PARTIAL cites a pre-agreed bucket BY NAME (plan §6); no NOT DONE row. Ten ids that no test names literally are dispositioned by STATED COMPOSITION over named executed legs (US-01/03/07, T-01, R-01) or as PARTIAL in a bucket (NFR-01, SEC-04, SS-01, SS-04, R-02) — each note says which.
+
+| Id | Status | Proving test file(s) — executed in the step-15 battery | Note |
+|---|---|---|---|
+| FR-01 | DONE | Feature/Automation/ScheduleSweepTest.php, Feature/Automation/AutomationConsumerDrillTest.php, Feature/Automation/RuleDefinitionTest.php |  |
+| FR-02 | DONE | Feature/Automation/RuleDefinitionTest.php, Feature/Automation/ConditionTreeTest.php, Feature/Fields/ValueStorageTest.php, Feature/Fields/DefinitionMatrixTest.php |  |
+| FR-03 | DONE | Feature/Automation/DoorArmsTest.php, Feature/Automation/RuleDefinitionTest.php, Feature/Automation/ActionsTest.php, Feature/Automation/ExternalArmsTest.php, Contract/Automation/ExternalContractsTest.php | all 15 action types bound (ExternalArmsTest pins boundTypes() === TYPES) — classify_refresh inside run_ai_task answers unbuilt_ai_task pending packet P-CLS (a sub-arm, named) |
+| FR-04 | DONE | Property/AutomationGuardCapsTest.php, Feature/Automation/EngineOrderTest.php, Feature/Automation/ActionsTest.php |  |
+| FR-05 | DONE | Feature/Automation/DryRunParityTest.php, Feature/Automation/ConditionTreeTest.php |  |
+| FR-06 | DONE | Feature/Automation/LogElisionTest.php |  |
+| FR-07 | DONE | Feature/Automation/RuleDefinitionTest.php | RuleDefinitionTest (draft-on-edit, atomic swap, the active revision untouched; both keys distinct in the routes); the history DIFF render is annotated under SS-04 [B12-batch] |
+| FR-08 | DONE | Feature/Sla/InstanceLifecycleTest.php, Feature/Automation/DoorArmsTest.php, Feature/Automation/ActionsTest.php |  |
+| FR-09 | DONE | Feature/Sla/InstanceLifecycleTest.php |  |
+| FR-10 | DONE | Property/SlaClockTest.php, Feature/Sla/TimerTest.php |  |
+| FR-11 | DONE | Contract/Sla/SlaChipContractTest.php, Feature/Inbox/SlaProjectionTest.php | SlaChipContractTest + P-CHIP's SlaProjectionTest (the Doc 07 row fed from truth) |
+| FR-12 | DONE | Feature/Hours/CalendarTest.php |  |
+| FR-13 | DONE | Feature/Hours/CalendarTest.php | CalendarTest P-A53 legs + Doc 11 HoursTest byte-untouched (the PRE control) |
+| FR-14 | DONE | Feature/Macros/ResolverParityTest.php |  |
+| FR-15 | DONE | Feature/Automation/ExternalArmsTest.php, Feature/Macros/ResolverParityTest.php, Feature/Csat/TriggerMatrixTest.php, Security/MacroNoBlankSendTest.php |  |
+| FR-16 | DONE | Contract/Automation/MacroPaletteContractTest.php, Isolation/SlaGrantPhysicsTest.php | MacroPaletteContractTest — the B12-S03 seam contract; Doc 07's palette consumption is its own render |
+| FR-17 | DONE | Feature/Automation/ActionsTest.php, Feature/Fields/DefinitionMatrixTest.php |  |
+| FR-18 | DONE | Feature/Fields/LifecycleTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| FR-19 | DONE | Feature/Fields/ValueStorageTest.php, Feature/Fields/DefinitionMatrixTest.php, Feature/Forms/TelegramFlowTest.php | ValueStorageTest (A-59 doors) + CustomerDefinitionsSourceTest (P-FIELDS: Doc 08 reads the real definitions) |
+| FR-20 | DONE | Feature/Forms/FormPublishTest.php, Feature/Csat/CaptureTest.php, Contract/Forms/FormPreChatContractTest.php |  |
+| FR-21 | DONE | Feature/Forms/TelegramFlowTest.php, Contract/Forms/DualRenderConformanceTest.php |  |
+| FR-22 | DONE | Feature/Forms/FormPublishTest.php, Feature/Forms/SubmissionSnapshotTest.php |  |
+| FR-23 | DONE | Feature/Automation/DoorArmsTest.php, Feature/Forms/FormPublishTest.php | FormPublishTest's FR-23 seeder leg (three forms published + three example rules born inactive; presence wins on re-seed) |
+| FR-24 | DONE | Feature/Csat/TriggerMatrixTest.php |  |
+| FR-25 | DONE | Feature/Csat/CaptureTest.php, Security/CsatSingleResponseTest.php |  |
+| NFR-01 | PARTIAL [D19] | — | no timing leg taken — the compiled-tree + async-chain STRUCTURE is proven (EngineOrderTest, ActionsTest); the ≤20 ms p99 @200 rules and ≤2 s p95 figures are Doc 19's L2 obligation, stated plainly |
+| NFR-02 | PARTIAL [D19] | Feature/Sla/TimerTest.php | TimerTest proves next-fire-at re-verification + the FS-02 late-not-early shape; the ±30 s accuracy MEASUREMENT under load is [D19] |
+| NFR-03 | PARTIAL [D19] | Feature/Automation/DryRunParityTest.php | DryRunParityTest replays the recorded corpus at dev scale; the 7-day/50k/≤10 s figure is [D19] |
+| NFR-04 | DONE | Contract/Forms/FormPreChatContractTest.php | FormPreChatContractTest: version cache immutable + the ≤30 KB payload budget asserted |
+| NFR-05 | PARTIAL [D19] | Feature/Macros/PaletteBudgetTest.php | PaletteBudgetTest: 1k macros searched dev-indicatively (the figure printed, not enforced); the 50 ms p95 under L2 is [D19] |
+| NFR-06 | DONE | Feature/Automation/RuleDefinitionTest.php, Feature/Hours/CalendarTest.php, Feature/Fields/DefinitionMatrixTest.php | every writer events + audits (RuleDefinitionTest, CalendarTest, DefinitionMatrixTest legs) + the audit-coverage and event-catalog gates |
+| US-01 | DONE | — | by stated composition: ScreensTest's rules journey (create → edit → dry-run truth badges → activate → reorder → deactivate) + Playwright J1+J2 |
+| US-02 | DONE | Property/SlaClockTest.php |  |
+| US-03 | DONE | — | by stated composition: MacroPaletteContractTest (fill, live variable states) + MacroNoBlankSendTest (the blank warning at BOTH send APIs) + the macros page preview (ScreensTest) |
+| US-04 | DONE | Feature/Forms/TelegramFlowTest.php |  |
+| US-05 | DONE | Feature/Fields/ValueStorageTest.php |  |
+| US-06 | DONE | Feature/Automation/LogElisionTest.php |  |
+| US-07 | DONE | — | TriggerMatrixTest: one-tap prompt + the cooldown re-survey suppression (its FR-24 legs) |
+| BR-01 | DONE | Feature/Automation/EngineOrderTest.php |  |
+| BR-02 | DONE | Feature/Automation/DoorArmsTest.php, Feature/Automation/ActionsTest.php, Security/AutomationNoBypassTest.php |  |
+| BR-03 | DONE | Feature/Sla/SnapshotImmutabilityTest.php, Feature/Automation/ActionsTest.php, Feature/Hours/CalendarTest.php, Isolation/SlaGrantPhysicsTest.php |  |
+| BR-04 | DONE | Feature/Automation/ExternalArmsTest.php, Contract/Automation/ExternalContractsTest.php, Security/MacroNoBlankSendTest.php |  |
+| BR-05 | DONE | Property/AutomationGuardCapsTest.php |  |
+| BR-06 | DONE | Feature/Forms/TelegramFlowTest.php, Feature/Forms/FormPublishTest.php, Feature/Forms/SubmissionSnapshotTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| BR-07 | DONE | Feature/Csat/TriggerMatrixTest.php |  |
+| T-01 | DONE | — | AMENDMENT 6 + RIDERs 1–5 landed; AutomationGrantPhysicsTest (5) + SlaGrantPhysicsTest (5) assert the filed denied sets EXACTLY; the migration-safety gate |
+| T-02 | DONE | Feature/Automation/EngineOrderTest.php |  |
+| T-03 | DONE | Property/AutomationGuardCapsTest.php, Feature/Sla/TimerTest.php, Feature/Foundation/EnvelopeMetadataTest.php |  |
+| T-04 | DONE | Property/SlaClockTest.php, Feature/Sla/TimerTest.php |  |
+| T-05 | DONE | Feature/Sla/SnapshotImmutabilityTest.php |  |
+| T-06 | DONE | Feature/Macros/ResolverParityTest.php, Feature/Workflow/ScreensTest.php, Security/MacroNoBlankSendTest.php |  |
+| T-07 | DONE | Feature/Forms/TelegramFlowTest.php, Feature/Forms/SubmissionSnapshotTest.php, Contract/Forms/DualRenderConformanceTest.php |  |
+| T-08 | DONE | Feature/Csat/CaptureTest.php |  |
+| T-09 | DONE | Contract/Forms/DualRenderConformanceTest.php |  |
+| SEC-01 | DONE | Feature/Automation/RuleDefinitionTest.php, Security/ActivatorFloorTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| SEC-02 | DONE | Isolation/AutomationGrantPhysicsTest.php, Security/WebhookEgressTest.php |  |
+| SEC-03 | DONE | Feature/Automation/LogElisionTest.php, Feature/Automation/RuleDefinitionTest.php, Security/WebhookEgressTest.php |  |
+| SEC-04 | PARTIAL [D13] | — | the type-CLOSED schema half REAL (SchemaValidator's INLINE_TYPES; FormPublishTest's file-field channel block); the file field riding Doc 04's media pipeline end-to-end is the widget's upload seam — [D13] |
+| SEC-05 | DONE | Feature/Fields/CustomerDefinitionsSourceTest.php, Isolation/SlaGrantPhysicsTest.php, Security/CsatSingleResponseTest.php |  |
+| SEC-06 | PARTIAL [D17] | Feature/Automation/DoorArmsTest.php, Feature/Automation/RuleDefinitionTest.php, Feature/Fields/LifecycleTest.php | the four high-risk audit events registered and emitted (rule activate/deactivate, sla.policy.changed, field.deactivated, form.published — RuleDefinitionTest/FormPublishTest legs); their Doc 17 visibility CLASSES are [D17] |
+| EC-01 | DONE | Feature/Automation/ActionsTest.php, Feature/Workflow/ScreensTest.php |  |
+| EC-02 | DONE | Feature/Sla/InstanceLifecycleTest.php |  |
+| EC-03 | DONE | Property/SlaClockTest.php, Feature/Sla/InstanceLifecycleTest.php |  |
+| EC-04 | DONE | Property/SlaClockTest.php, Feature/Sla/InstanceLifecycleTest.php |  |
+| EC-05 | DONE | Feature/Sla/SnapshotImmutabilityTest.php, Feature/Hours/CalendarTest.php |  |
+| EC-06 | DONE | Feature/Forms/TelegramFlowTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| EC-07 | DONE | Feature/Forms/FormPublishTest.php |  |
+| EC-08 | DONE | Feature/Fields/LifecycleTest.php, Feature/Fields/DefinitionMatrixTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| EC-09 | DONE | Feature/Macros/BundledActionHonestyTest.php, Feature/Fields/CustomerDefinitionsSourceTest.php, Feature/Fields/LifecycleTest.php |  |
+| EC-10 | DONE | Feature/Automation/ScheduleSweepTest.php, Feature/Hours/CalendarTest.php |  |
+| EC-11 | DONE | Feature/Csat/CaptureTest.php |  |
+| EC-12 | DONE | Feature/Automation/EngineOrderTest.php |  |
+| EC-13 | DONE | Feature/Automation/ExternalArmsTest.php, Isolation/AutomationGrantPhysicsTest.php |  |
+| EC-14 | DONE | Feature/Automation/ConditionTreeTest.php, Feature/Fields/LifecycleTest.php, Feature/Forms/FormPublishTest.php |  |
+| FS-01 | DONE | Feature/Sla/TimerTest.php |  |
+| FS-02 | DONE | Feature/Sla/TimerTest.php |  |
+| FS-03 | DONE | Feature/Automation/EngineOrderTest.php |  |
+| FS-04 | DONE | Feature/Forms/TelegramFlowTest.php |  |
+| FS-05 | DONE | Property/AutomationGuardCapsTest.php | articulated at step 7 from executed proofs: caps bound the blast (AutomationGuardCapsTest), the pause switch (EngineOrderTest/ScheduleSweepTest R-04 legs), the log scopes the radius (LogElisionTest), dry-run prevents (DryRunParityTest) |
+| SS-01 | PARTIAL [D14] | — | the J5 composition's Doc 12 legs are landed suites (form v2 publish, routing rule, seeded content); the SMS-template leg is Doc 14's ([D14]) — the journey is stated, not walked |
+| SS-02 | DONE | Feature/Sla/SnapshotImmutabilityTest.php, Isolation/SlaGrantPhysicsTest.php |  |
+| SS-03 | DONE | Feature/Forms/TelegramFlowTest.php, Feature/Forms/SubmissionSnapshotTest.php |  |
+| SS-04 | PARTIAL [B12-batch] | — | the rules list is position-ordered, named, with matched counts and the edited-active indicator (ScreensTest, Playwright J2); the revision-history DIFF render is the surface's [B12-batch] fidelity item |
+| AC-01 | DONE | Feature/Automation/EngineOrderTest.php, Feature/Automation/ActionsTest.php, Feature/Automation/ExternalArmsTest.php |  |
+| AC-02 | DONE | Feature/Automation/DryRunParityTest.php |  |
+| AC-03 | DONE | Property/SlaClockTest.php, Feature/Sla/SnapshotImmutabilityTest.php, Feature/Automation/DryRunParityTest.php |  |
+| AC-04 | DONE | Feature/Sla/ExampleSentenceTest.php, Feature/Hours/CalendarTest.php |  |
+| AC-05 | DONE | Feature/Macros/PaletteBudgetTest.php, Feature/Macros/BundledActionHonestyTest.php, Feature/Macros/ResolverParityTest.php |  |
+| AC-06 | DONE | Feature/Fields/LifecycleTest.php, Feature/Fields/DefinitionMatrixTest.php |  |
+| AC-07 | DONE | Contract/Forms/DualRenderConformanceTest.php |  |
+| AC-08 | DONE | Feature/Csat/TriggerMatrixTest.php, Feature/Csat/CaptureTest.php, Security/CsatSingleResponseTest.php |  |
+| AC-09 | DONE | Security/ActivatorFloorTest.php, Security/WebhookEgressTest.php | ActivatorFloorTest + WebhookEgressTest (SEC-02: SSRF rules, url immutable, no direct egress, signed) + ExternalArmsTest EC-13 drill + LogElisionTest; traceability automated/covered |
+| R-01 | DONE | — | matched-count + last-run + revision indicator on the rules list (ScreensTest props; Playwright J2); revision history kept (RuleDefinitionTest) |
+| R-02 | PARTIAL [B12-batch] | — | the property library + snapshot physics REAL (SlaClockTest, SnapshotImmutabilityTest, SlaGrantPhysicsTest); the human-readable dispute record is the instance rows — its render is [B12-batch] |
+| R-03 | DONE | Feature/Forms/FormPublishTest.php |  |
+| R-04 | DONE | Feature/Automation/ScheduleSweepTest.php, Feature/Automation/EngineOrderTest.php |  |
+| R-05 | DONE | Property/AutomationGuardCapsTest.php |  |
+
+
+**Sabotage ledger (plan §7, the floor of TEN — every item a PHYSICAL removal in a committed file, the proving suite captured RED, the file restored from git, the suite captured GREEN; captures `docs/evidence/S12-step15/sabotage-<x>-{red,restored}-01.txt`; (f) at step 13 in `S12-step13/`):**
+- (a) guard cap removed (MAX_RULES_PER_EVENT 10 → 1000) → AutomationGuardCapsTest: removed → **2 failed, 3 passed (11 assertions) exit 1**; restored → **5 passed (101 assertions) exit 0** — RED→GREEN as expected.
+- (b) set_status written AROUND TicketTransitionService → AutomationNoBypassTest (the BR-02 static sweep): removed → **1 failed (15 assertions) exit 1**; restored → **1 passed (43 assertions) exit 0** — RED→GREEN as expected.
+- (c) the blank-variable check removed at the automation arm → MacroNoBlankSendTest (T-06): removed → **1 failed, 1 passed (8 assertions) exit 1**; restored → **2 passed (14 assertions) exit 0** — RED→GREEN as expected.
+- (d) an UPDATE grant ADDED on the armed instance snapshot (migration) → SlaGrantPhysicsTest + SnapshotImmutabilityTest (BR-03): removed → **3 failed, 4 passed (58 assertions) exit 1**; restored → **7 passed (75 assertions) exit 0** — RED→GREEN as expected.
+- (e) the activator-capability floor dropped (allowsExecution → true) → ActivatorFloorTest (SEC-01): removed → **1 failed, 2 passed (8 assertions) exit 1**; restored → **3 passed (10 assertions) exit 0** — RED→GREEN as expected.
+- (g) the single-response UNIQUE removed (migration) → SlaGrantPhysicsTest (SEC-05 physics): removed → **1 failed, 4 passed (69 assertions) exit 1**; restored → **5 passed (70 assertions) exit 0** — RED→GREEN as expected.
+- (h) a field type change permitted by grant (migration) → AutomationGrantPhysicsTest (FR-18 physics): removed → **2 failed, 3 passed (76 assertions) exit 1**; restored → **5 passed (108 assertions) exit 0** — RED→GREEN as expected.
+- (i) required-when-hidden publish permitted (the block removed) → FormPublishTest (EC-07): removed → **1 failed, 3 passed (25 assertions) exit 1**; restored → **4 passed (45 assertions) exit 0** — RED→GREEN as expected.
+- (j) pause-interval double-subtraction (the union edge dropped) → SlaClockTest (EC-04 property): removed → **2 failed, 5 passed (4635 assertions) exit 1**; restored → **7 passed (4840 assertions) exit 0** — RED→GREEN as expected.
+- (f) the SSRF birth check removed → WebhookEgressTest SEC-02 leg (1) RED, 3 legs green (the positive control); restored → 4/59 exit 0 (step 13, `S12-step13/sabotage-f-{red,restored}-01.txt`).
+- **(j) honest trail:** the first two removals (the subtract cursor; the cursor + the constructor merge) did NOT go red — the subtract cursor is itself union-shaped and P1 feeds pauses through the constructor — captures kept as `sabotage-j-{red,restored}-00*` INVALID; the third removal (each pause subtracted SEPARATELY in SlaClock with the constructor merge removed) is the ledger's (j): the guard against double-subtraction is the canonical union at construction AND the union-shaped subtraction — both had to fall for EC-04 to break, which is the finding, not a failure of the sabotage.
+
+**[D12] closing set (plan §5) — 12/12 dispositioned:** rows 1 (Doc 10 FR-19, step 11), 2/4/5 (Doc 09 FR-09/T-08/AC-01-half, step 12), 7 (Doc 08 EC-09, step 8: FR-18 IS the rule; the P-FIELDS landing at step 13 made Doc 08 read the REAL definitions — row FLIPPED this commit) — FLIPPED; **row 6 (Doc 08 FR-15 [D12] half) FLIPPED this commit:** the marketing-suppression flag exists (RIDER 5 C), the `suppress` action sets it (system audit + `customer.suppression.set`), `MarketingSuppression::isSuppressed` is the reader contract, and Doc 12's one promotional-capable automation (send-SMS-template) refuses RG-flagged and suppressed customers — "Doc 12 suppresses promotional automations" made concrete; the [D14] SMS half stays worded; row 3 (Doc 09 FR-17 rubric content) stays annotated ([D16]); rows 8–11 ANNOTATED on their DONE rows this commit (Doc 11 FR-14 HoursContract → P-A53 REAL at step 3, the seam fixture kept as the calendar-less control; `doc12-rules.json` → QueueWriter/RoutingPipeline read real `automation_rules` since steps 4–5; ReferenceInventory's `sla_policies` slice → real rows since step 6; `sla_at_risk` → BoostMatcher reads live warned/breached stages since step 6 AND the Doc 07 render half fed from truth since P-CHIP); row 12 (Doc 05 connection-tag) stays PARKED per STOP-B's NEIGHBOR verdict.
+
+**Deviations (mandate v11 §3 classes, all filed):** class 2 — Doc 12's seven surfaces from DS idioms riding **[B12-batch]** (R-D12-2.2, the record IS the bucket; the fidelity session folds them into R-D12-1's window); class 3 — the shell-side navigation links (Organization's three drawn siblings, the palette row) are Doc 07/11 files → **packet P-NAV filed, PROPOSED**; the operator-authored customer-field label riding the card's t() fallback (Doc 08's card learning the label map — a named [B12-batch]-adjacent follow-up).
+
+**Inherited rows (plan §4):** 0c/0d/0b/[OA] parked and untouched; the 0d ledger holds **4 datapoints** (re-shape REFUSED this session per the acceptance ruling); the 0i CI-tail law applied at batch C; 0l bound every browser scene (the workflow spec creates and asserts its OWN rows — no census pins); R-14 queue grew by the `workflow.ui` bundle (destructive tier flagged).
+
+**Core-edit enumeration (escalate → countersign → land, 7-for-7 on the S11 standard):** #1 P-A53 (Doc 11 HoursContract; countersigned at plan approval; landed step 3) · #2 P-ESC → folded into P-DOORS clause 4 (Doc 06; countersigned at the batch-B acceptance; landed 82137a6) · #3 the T-03 envelope metadata (Doc 01; inside AMENDMENT 6's countersign; landed 0da0805) · #4 P-DOORS clauses 1–3 (Docs 06/11; landed 82137a6) · #5 P-CHIP (Doc 07 TicketListItems/ConsumerRegistry/fixture; countersigned at the batch-C acceptance; landed 2e448f5) · #6 P-SEND (Doc 04 ComposeOutbound; countersigned there; landed 9dd9f49) · #7 P-FIELDS (Doc 08 CustomerFieldValues; countersigned there; landed d53a76e) · **PROPOSED, not landed: P-CLS (Doc 09 InboundClassification classify-only door) and P-NAV (Doc 07/11 nav links)** — both filed with fail-first pins in place (`unbuilt_ai_task`; the pages' own nav). Schema: AMENDMENT 6 (countersigned) + RIDERs 1–4 (confirmed) + **RIDER 5 (filed 9bab400 BEFORE its migration — awaiting confirmation)** + EVENT-FAMILY AMENDMENT 2 (filed before the catalog entries).
+
+**§12 budget rows (dev-scale, misses flagged):** NFR-01 rule eval — not measured ([D19]); NFR-02 timer accuracy — shape proven, ±30 s not measured ([D19]); NFR-03 dry-run — corpus at dev scale ([D19]); NFR-04 payload ≤30 KB — asserted; NFR-05 palette search — dev-indicative figure printed (`S12-step9/step9-budget-01.txt`), the p95 under L2 [D19].
+
+**Verdicts (the close-out tree):** DOC 12 SUITES on this tree **146 passed / 6609 assertions exit 0** (`docs/evidence/S12-step15/step15-suites-01.txt`) · `make gates` **14/14 exit 0** (`step15-gates-01.txt`) · the battery of record is step 14's run 02 on 4ffee7b (**1832 passed / 13 skipped / 1 red = the 0d family, isolated re-run green**, `S12-step14/step14-make-test-02.txt` + `0d-isolated-rerun-01.txt`) — this close-out tree's CODE is byte-identical to that tree (the sabotage runner restores every target from git; `git status` after it: docs + captures only), so no second battery was run and none is claimed · CI: pushed as batch D's one look — the verdict of record is recorded on the top-table row when read (billing annotation first) · Host on AC power throughout.
+
+**Honest trail (session-level, the named findings):** (1) the P-FIELDS commit message's false "lint exit 0" (read from the wrong capture) — amended before push, the red on record; (2) the ghost-event fixture entry only the full battery could see (owning suites were green) — the per-step battery earning its keep; (3) a REAL route-order defect in step 14 (`rules/dry-run` captured as a rule id) found by the screens suite; (4) BUILD-STATUS carries NO step sections for steps 8–12 — batch C's record lives in the commit messages, packets and `docs/evidence/S12-step{8..12}/`; NOT reconstructed from memory here, named for the recount; (5) a lint+gates+battery chain launched under a 10-minute tool cap would have killed the battery — stopped before the battery started, swept, relaunched detached; (6) the sabotage ledger's letters (a)–(e),(g)–(j) had lived as in-suite falsification legs through batch C — at this close they were EXECUTED as physical removals with captures (the ledger above), the honest reading of "captures first".
+
+## SESSION-12 (Doc 12) — "DOC 12 SUITES" IS THIS EXACT COMMAND (standing rule 14, defined at plan approval — plan §8 — and grown only by the filed amendments as files landed)
+
+**Every S12 checkpoint figure and the close-out recount use this and only this** (in-container, the S10 environment law; never beside gates):
+```
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest \
+  tests/Property/SlaClockTest.php tests/Property/AutomationGuardCapsTest.php \
+  tests/Feature/Sla tests/Feature/Automation tests/Feature/Hours tests/Feature/Macros \
+  tests/Feature/Fields tests/Feature/Forms tests/Feature/Csat tests/Feature/Workflow \
+  tests/Contract/Automation tests/Contract/Sla tests/Contract/Forms \
+  tests/Security/AutomationNoBypassTest.php tests/Security/ActivatorFloorTest.php \
+  tests/Isolation/AutomationGrantPhysicsTest.php tests/Isolation/SlaGrantPhysicsTest.php \
+  tests/Security/MacroNoBlankSendTest.php tests/Security/CsatSingleResponseTest.php \
+  tests/Security/WebhookEgressTest.php tests/Feature/Foundation/EnvelopeMetadataTest.php \
+  tests/Feature/Inbox/SlaProjectionTest.php
+```
+Browser proofs run under `make browser` (`tests/Browser/workflow-screens.spec.ts`); performance figures are dev-indicative legs inside the suites ([D19] carries the L2 obligation).
 
 ## SESSION-12 (Doc 12) — STEP 14: DOC 12'S OWN SURFACES — BACKOFFICE → WORKFLOW ([B12-batch]; R-D12-2.2; §8/§9/§13/§14; P-NAV FILED; commit = this section's SHA)
 
@@ -160,13 +309,13 @@ All four clauses under the countersign, each with its control (`tests/Feature/Au
 | FR-05 | DONE | EligibilityTest (Online ∧ free slot ∧ effective member; away/offline/heartbeat-lost NEVER; structural — no clock, no calendar) |
 | FR-06 | DONE | EligibilityTest + AssignmentStatsConsumerTest (capacity = queue rule ?? default; count_pending toggle; per-user override outranks) |
 | FR-07 | DONE | TriggersTest (created/transferred/unassigned/assignee_deactivated/reopened-with-inactive-assignee, all DURABLE with registry pins) |
-| FR-08 | DONE | DecisionOrderTest on fixtures/routing/fr08-order.json (explicit > AI-accepted > connection tag > tenant default; rule tag > department default; RG final; boosts; starvation exempt; wait = step 5's honest outcome) |
+| FR-08 | DONE | DecisionOrderTest on fixtures/routing/fr08-order.json (explicit > AI-accepted > connection tag > tenant default; rule tag > department default; RG final; boosts; starvation exempt; wait = step 5's honest outcome) — **[D12] ANNOTATION (S12 close): the rule-matched tag step reads REAL `automation_rules` since S12 steps 4–5 (QueueWriter::rulesTargeting + the RoutingPipeline hint; DoorArmsTest); `doc12-rules.json` is no longer the source** |
 | FR-09 | DONE | RoundRobinSpliceTest (pointer + DB checkpoint; splice never resets fairness; Away skip keeps the turn; sabotage #10 red) |
 | FR-10 | DONE | LoadBasedTest (least open → least-recent by the FLAG-F stamp → user id) |
 | FR-11 | DONE | SkillBasedTest (ordered declarative matchers; language from Doc 04 detection, proficiency from user_skills; both fallbacks; EC-04 starved drop; routing.no_skill_match at threshold) |
 | FR-12 | DONE | DecisionRecordTest (INSERT-only; every automatic routing writes one; ticket.routed {record_id}; sabotage #6 red) |
 | FR-13 | DONE | EstimatorTest (bands + hysteresis per A-52; depth-only degraded; the cached two-key endpoint; the {{queue_wait}} provider — P-C4) |
-| FR-14 | DONE | HoursTest ([D12] fixture-shaped contract; off-hours band + opens_at; EC-09 no-cliff — hours never touch eligibility) |
+| FR-14 | DONE | HoursTest ([D12] fixture-shaped contract; off-hours band + opens_at; EC-09 no-cliff — hours never touch eligibility) — **[D12] ANNOTATION (S12 close): P-A53 landed at S12 step 3 — a painted business calendar is the FIRST source (split shifts + holidays exact via CalendarSnapshot; CalendarTest P-A53 legs), the fixture stays the calendar-less control, HoursTest byte-untouched; the DepartmentWriter hours-override REF is now READ (CalendarReader: dept override > tenant default)** |
 | FR-15 | DONE | TemporaryMembershipTest + SupervisorOpsTest (pull-in through OverrideAdministration — the router holds NO grant authority; dual-path expiry EACH proven with the other DISABLED; manual reassign SEC-01 both scopes; shift-end default expiry) |
 | FR-16a | DONE | RescueTest (heartbeat-lost timer → rescue.flagged → Rescue view; routing.rescue.auto → the REAL return through Doc 06's unassignBySystem, P-C6; system note N-03) |
 | FR-16b | DONE | RescueTest (channel_unreachable immediate via Doc 05's column; NEVER auto-acted — Doc 06 BR-07) |
@@ -1233,7 +1382,7 @@ dev-hardware-indicative caveat's exact content — the formal profile is
 | FR-12 | DONE | MergeFlowTest + MergeCollisionTest (re-point; linked_work via Doc 06's sanctioned path) |
 | FR-13 | DONE | MergeUndoTest (AC-03 byte-identical restore; 30 d window) |
 | FR-14 | DONE — **[D09] CLOSED at S09 step 7 (`98a6c27`)** | storage + excerpt-ref + visibility (RgVisibilityTest/RgStorageTest); the `source=ai` PRODUCER = Doc 09's RgOverride through RgFlagService::set (actor NULL by the CHECK, excerpt mandatory) — RgOverrideTest + RgDistressAuditTest (50 dialogs) |
-| FR-15 | **PARTIAL [D12]/[D14] — the [D11] HALF FLIPPED at the S11 close: RG-queue routing REAL since S11 step 5 (RgIntake/RgFinalityTest; BR-02 final)** | contracts via event payloads; automation suppression stays Doc 12's, SMS suppression Doc 14's seam; clear=perm+reason + forever-history built (RgStorageTest) |
+| FR-15 | **PARTIAL [D14] — the [D11] HALF FLIPPED at the S11 close: RG-queue routing REAL since S11 step 5 (RgIntake/RgFinalityTest; BR-02 final); the [D12] HALF FLIPPED at the S12 close: the marketing-suppression flag (RIDER 5 C, `MarketingSuppression` reader contract), the rule-driven `suppress` action (system audit + `customer.suppression.set`), and Doc 12's send-SMS-template arm refusing RG-flagged/suppressed customers (ExternalArmsTest) — "Doc 12 suppresses promotional automations" REAL; the [D14] SMS half stays worded** | contracts via event payloads; automation suppression stays Doc 12's, SMS suppression Doc 14's seam; clear=perm+reason + forever-history built (RgStorageTest) |
 | FR-16 | DONE | BettingFieldsTest + DuplicateHintScopeTest (staff-collected label; hint = counts) |
 | FR-17 | DONE | CustomerNotesTest (one pinned; N-04 structural undeliverability) |
 | FR-18 | DONE | BlockingCascadeTest AC-06 (cascade + guard both; A-39 unblock) |
@@ -1283,7 +1432,7 @@ dev-hardware-indicative caveat's exact content — the formal profile is
 | EC-06 | DONE — **[D09] CLOSED at S09 step 7 (`98a6c27`)** | clear-reasons stored consumable (RgStorageTest); Doc 09's RgCalibration READS them (the FR-20 RG precision review queue: AI fires LATERAL-joined to the next human clear WITH its reason) — RgOverrideTest's calibration case; WeeklyOutputs::rgPrecisionQueue delegates to it |
 | EC-07 | DONE | BlockingCascadeTest (evasion shell NOT blocked — the documented limitation, built as documented) |
 | EC-08 | DONE | DirectoryTest + customers-directory.spec (collision pair told apart in place; step 12) |
-| EC-09 | **PARTIAL [D12]** | retired read-only render + refusal built (BettingFieldsTest; H04 browser); the rule's ownership is Doc 12's |
+| EC-09 | DONE — **[D12] FLIPPED at the S12 close** | retired read-only render + refusal built (BettingFieldsTest; H04 browser); the rule IS Doc 12 FR-18 (LifecycleTest: deactivate → writes refuse, values stand, key never re-mints), and since P-FIELDS (S12 step 13) Doc 08 reads the REAL definitions — a deactivated real row refuses FieldRetired at Doc 08's door (CustomerDefinitionsSourceTest control 2) |
 | EC-10 | DONE | ProfileFieldsTest + H03's browser scene (staff-set sticky; apply-once chip) |
 | EC-11 | DONE | ProfileFieldsTest (LWW + conflict toast naming the earlier writer + both audited) |
 | EC-12 | DONE | MergeCollisionTest (409 lists the EXACT tickets; D13's refusal drawn) |

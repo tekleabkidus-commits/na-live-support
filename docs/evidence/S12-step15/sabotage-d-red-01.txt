@@ -1,0 +1,87 @@
+# SABOTAGE (d) RED — an UPDATE grant on the armed instance snapshot ADDED → BR-03 physics must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Isolation\SlaGrantPhysicsTest
+  ⨯ it R-19b/ADR-0003: the app denied set per SLA/hours/CSAT table and…  9.64s  
+  ✓ it N-01 + the delete split: FORCED RLS with tenant_isolation everyw… 0.07s  
+  ⨯ it BR-03 physics (countersign obligation 1): an UPDATE against a RE… 0.07s  
+  ✓ it R-20 control (countersign obligation 4, RIDER 1): warned/breache… 0.08s  
+  ✓ it SEC-05 physics (countersign obligation 1): a second response for… 0.08s  
+
+   FAIL  Tests\Feature\Sla\SnapshotImmutabilityTest
+  ⨯ it BR-03 physics: the direct armed-instance falsification dies 4250… 0.15s  
+  ✓ it BR-03/EC-05: policy edits, calendar edits and holiday adds are A… 0.23s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\SlaGrantPhysicsTest > it R-19b/ADR-0003: the app…    
+  sla_instances UPDATE: app should hold NO column grant
+Failed asserting that two arrays are identical.
+   Array &0 [
+       0 => 'armed_at',
+  -    1 => 'calendar_snapshot',
+  -    2 => 'created_at',
+  -    3 => 'id',
+  -    4 => 'policy_id',
+  -    5 => 'policy_snapshot',
+  -    6 => 'tenant_id',
+  -    7 => 'ticket_id',
+  +    1 => 'created_at',
+  +    2 => 'id',
+  +    3 => 'policy_id',
+  +    4 => 'tenant_id',
+  +    5 => 'ticket_id',
+   ]
+  
+
+  at tests/Isolation/SlaGrantPhysicsTest.php:73
+     69▕         foreach (['INSERT', 'UPDATE'] as $privilege) {
+     70▕             $expected = DOC12_SLA_DENIED[$table][$privilege];
+     71▕             $denied = doc12DeniedSet($table, $privilege);
+     72▕             if ($expected === '*') {
+  ➜  73▕                 expect($denied)->toBe($columns, "{$table} {$privilege}: app should hold NO column grant");
+     74▕             } else {
+     75▕                 expect($denied)->toBe($expected, "{$table} {$privilege} denied set drifted");
+     76▕             }
+     77▕         }
+
+  1   tests/Isolation/SlaGrantPhysicsTest.php:73
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\SlaGrantPhysicsTest > it BR…  AssertionFailedError   
+  app executed: UPDATE sla_instances SET policy_snapshot = '{}'::jsonb
+
+  at tests/Isolation/SlaGrantPhysicsTest.php:139
+    135▕         'UPDATE sla_instance_stages SET warned_at = clock_timestamp()',
+    136▕     ] as $sql) {
+    137▕         try {
+    138▕             DB::transaction(static fn () => DB::statement($sql));
+  ➜ 139▕             $this->fail("app executed: {$sql}");
+    140▕         } catch (QueryException $e) {
+    141▕             expect($e->getMessage())->toContain('permission denied', $sql);
+    142▕         }
+    143▕     }
+
+  1   tests/Isolation/SlaGrantPhysicsTest.php:139
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Sla\SnapshotImmutabilityTest…   AssertionFailedError   
+  an armed instance mutated — BR-03 physics gone
+
+  at tests/Feature/Sla/SnapshotImmutabilityTest.php:54
+     50▕ it('BR-03 physics: the direct armed-instance falsification dies 42501', function (): void {
+     51▕     armedScene();
+     52▕     try {
+     53▕         DB::transaction(static fn () => DB::statement("UPDATE sla_instances SET policy_snapshot = '{}'::jsonb"));
+  ➜  54▕         $this->fail('an armed instance mutated — BR-03 physics gone');
+     55▕     } catch (Illuminate\Database\QueryException $e) {
+     56▕         expect($e->getMessage())->toContain('permission denied');
+     57▕     }
+     58▕ });
+
+  1   tests/Feature/Sla/SnapshotImmutabilityTest.php:54
+
+
+  Tests:    3 failed, 4 passed (58 assertions)
+  Duration: 10.42s
+
+
+EXIT=1

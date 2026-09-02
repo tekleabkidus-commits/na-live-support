@@ -1,0 +1,31 @@
+(a) red: 2 failed, 3 passed (11 assertions) EXIT=1
+(a) restored: 5 passed (101 assertions) EXIT=0
+(a) verdict: red_exit=1 restored_exit=0 OK
+(b) red: 1 failed (15 assertions) EXIT=1
+(b) restored: 1 passed (43 assertions) EXIT=0
+(b) verdict: red_exit=1 restored_exit=0 OK
+(c) red: 1 failed, 1 passed (8 assertions) EXIT=1
+(c) restored: 2 passed (14 assertions) EXIT=0
+(c) verdict: red_exit=1 restored_exit=0 OK
+(d) red: 3 failed, 4 passed (58 assertions) EXIT=1
+(d) restored: 7 passed (75 assertions) EXIT=0
+(d) verdict: red_exit=1 restored_exit=0 OK
+(e) red: 1 failed, 2 passed (8 assertions) EXIT=1
+(e) restored: 3 passed (10 assertions) EXIT=0
+(e) verdict: red_exit=1 restored_exit=0 OK
+(g) red: 1 failed, 4 passed (69 assertions) EXIT=1
+(g) restored: 5 passed (70 assertions) EXIT=0
+(g) verdict: red_exit=1 restored_exit=0 OK
+(h) red: 2 failed, 3 passed (76 assertions) EXIT=1
+(h) restored: 5 passed (108 assertions) EXIT=0
+(h) verdict: red_exit=1 restored_exit=0 OK
+(i) red: 1 failed, 3 passed (25 assertions) EXIT=1
+(i) restored: 4 passed (45 assertions) EXIT=0
+(i) verdict: red_exit=1 restored_exit=0 OK
+(j) red: 7 passed (4840 assertions) EXIT=0
+(j) restored: 7 passed (4840 assertions) EXIT=0
+(j) verdict: red_exit=0 restored_exit=0 *** NOT THE EXPECTED SHAPE ***
+# (j) re-runs (the first two mutations did not reach the guard — captures kept as -00 / -00b INVALID):
+(j) attempt 1 (cursor only): red_exit=0 — NOT red (the subtract cursor is itself union-shaped)
+(j) attempt 2 (merge removed + cursor): red_exit=0 — NOT red (P1 feeds pauses through the constructor; the cursor's continue still protects)
+(j) attempt 3 (per-pause subtraction in SlaClock + the constructor merge removed): red 2 failed / 5 passed EXIT=1; restored 7 passed EXIT=0 — OK

@@ -1,0 +1,32 @@
+# SABOTAGE (g) RED — a second CSAT response accepted (unique removed) → SEC-05 physics must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Isolation\SlaGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app denied set per SLA/hours/CSAT table and…  9.84s  
+  ✓ it N-01 + the delete split: FORCED RLS with tenant_isolation everyw… 0.09s  
+  ✓ it BR-03 physics (countersign obligation 1): an UPDATE against a RE… 0.11s  
+  ✓ it R-20 control (countersign obligation 4, RIDER 1): warned/breache… 0.09s  
+  ⨯ it SEC-05 physics (countersign obligation 1): a second response for… 0.09s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Isolation\SlaGrantPhysicsTest > it SE…  AssertionFailedError   
+  a second response row landed — SEC-05 single-response physics is gone
+
+  at tests/Isolation/SlaGrantPhysicsTest.php:191
+    187▕         DB::transaction(static fn () => DB::table('survey_responses')->insert([
+    188▕             'id' => (string) Str::uuid7(), 'tenant_id' => $tenant->identifier(),
+    189▕             'survey_id' => $surveyId, 'score' => 1,
+    190▕         ]));
+  ➜ 191▕         $this->fail('a second response row landed — SEC-05 single-response physics is gone');
+    192▕     } catch (QueryException $e) {
+    193▕         expect($e->getMessage())->toContain('survey_responses_single');
+    194▕     }
+    195▕
+
+  1   tests/Isolation/SlaGrantPhysicsTest.php:191
+
+
+  Tests:    1 failed, 4 passed (69 assertions)
+  Duration: 10.36s
+
+
+EXIT=1

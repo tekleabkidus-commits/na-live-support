@@ -1,0 +1,31 @@
+# SABOTAGE (i) RED — required-when-hidden publish permitted → EC-07 must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Forms\FormPublishTest
+  ✓ it FR-22: publish mints sequential immutable versions, moves the p… 10.36s  
+  ⨯ it FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required… 0.14s  
+  ✓ it FR-22: a REQUIRED file field blocks publish when a registered ch… 0.14s  
+  ✓ it FR-23/§21: the seeder mints the three forms PUBLISHED + three ex… 0.33s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Forms\FormPublishTest > it FR-22 blocks: retired re…   
+  Expecting null not to be null .
+
+  at tests/Feature/Forms/FormPublishTest.php:60
+     56▕         'label' => ['en' => 'Maybe', 'am' => 'ምናልባት'],
+     57▕         'visible_when' => ['field' => 'summary', 'op' => 'not_empty']]);
+     58▕     $blocks = $publisher->preview($formId, $hidden)['blocks'];
+     59▕     $ec07 = collect($blocks)->firstWhere('code', 'required_hidden');
+  ➜  60▕     expect($ec07)->not->toBeNull()
+     61▕         ->and($ec07['suggest'])->toBe(['set' => ['required_when_visible' => true]]);
+     62▕     // ...and applying the suggested fix publishes.
+     63▕     $hidden['steps'][0]['fields'][1]['required_when_visible'] = true;
+     64▕     expect($publisher->preview($formId, $hidden)['blocks'])->toBe([]);
+
+  1   tests/Feature/Forms/FormPublishTest.php:60
+
+
+  Tests:    1 failed, 3 passed (25 assertions)
+  Duration: 11.08s
+
+
+EXIT=1

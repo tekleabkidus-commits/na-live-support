@@ -1,0 +1,17 @@
+# SABOTAGE (j) RED — pause-interval double-subtraction → EC-04 property must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Property\SlaClockTest
+  ✓ it P1: overlapping pauses subtract as a union, never twice (EC-04)   9.84s  
+  ✓ it P2: extending the active interval never decreases elapsed         0.11s  
+  ✓ it P3: elapsed is bounded by raw active time, and a 24/7 calendar e… 0.06s  
+  ✓ it P4: the EC-03 retarget formula preserves the remaining proportio… 0.07s  
+  ✓ it P5: next-fire-at and the elapsed clock can never disagree (inver… 0.06s  
+  ✓ it P5b: an unreachable target answers null, an already-met target a… 0.05s  
+  ✓ it G: the golden timelines reproduce to the second (the shared Doc…  0.05s  
+
+  Tests:    7 passed (4840 assertions)
+  Duration: 10.34s
+
+
+EXIT=0

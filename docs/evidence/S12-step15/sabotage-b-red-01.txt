@@ -1,0 +1,34 @@
+# SABOTAGE (b) RED — a rule writing status around TicketTransitionService → the BR-02 sweep must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\AutomationNoBypassTest
+  ⨯ it BR-02: the automation namespace holds NO ticket write and NO tra… 9.91s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\AutomationNoBypassTest > it BR-02: the automation…    
+  BR-02 violation(s) in /app/app/Domain/Automation/Actions/SetStatusAction.php: column assignment 'status' =>
+Failed asserting that two arrays are identical.
+  -Array &0 []
+  +Array &0 [
+  +    0 => 'column assignment 'status' =>',
+  +]
+  
+
+  at tests/Security/AutomationNoBypassTest.php:76
+     72▕     expect($files)->not->toBeEmpty('the automation namespace vanished — the sweep is scanning nothing');
+     73▕ 
+     74▕     foreach ($files as $file) {
+     75▕         $violations = ticketWriteViolations((string) file_get_contents($file));
+  ➜  76▕         expect($violations)->toBe([], sprintf('BR-02 violation(s) in %s: %s', $file, implode(', ', $violations)));
+     77▕     }
+     78▕ 
+     79▕     // POSITIVE CONTROL: the grammar catches the ONE lawful status writer, so a
+     80▕     // green sweep above is a working scan.
+
+  1   tests/Security/AutomationNoBypassTest.php:76
+
+
+  Tests:    1 failed (15 assertions)
+  Duration: 10.05s
+
+
+EXIT=1

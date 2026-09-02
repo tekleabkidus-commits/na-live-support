@@ -1,0 +1,33 @@
+# SABOTAGE (e) RED — the activator-capability floor dropped → SEC-01 must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\ActivatorFloorTest
+  ✓ it SEC-01 (1): activation captures the activator's floor on the rev… 9.56s  
+  ⨯ it SEC-01 (2+3): the demoted-author falsification — set_priority is… 0.17s  
+  ✓ it SEC-01 (4): revoking the activator's key after activation surfac… 0.23s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\ActivatorFloorTest > it SEC-01 (2+3): the demoted-…   
+  Failed asserting that two strings are identical.
+  -'failed'
+  +'ok'
+  
+
+  at tests/Security/ActivatorFloorTest.php:74
+     70▕     [, $executionId] = floorScene(['tickets.note']);
+     71▕     $registry = app(ActionRegistry::class);
+     72▕ 
+     73▕     $refused = $registry->execute('set_priority', ['type' => 'set_priority', 'priority' => 'high'], $executionId, 1);
+  ➜  74▕     expect($refused['outcome'])->toBe('failed')
+     75▕         ->and($refused['reason'])->toBe('floor_refused', 'the floor did not refuse — a demoted author\'s rule can out-privilege the org (SEC-01 broken)');
+     76▕ 
+     77▕     // Since step 5 the add_note arm is BOUND, so the ordering proof is stronger:
+     78▕     // the floored-and-allowed type passes the gate and the REAL arm runs.
+
+  1   tests/Security/ActivatorFloorTest.php:74
+
+
+  Tests:    1 failed, 2 passed (8 assertions)
+  Duration: 10.04s
+
+
+EXIT=1

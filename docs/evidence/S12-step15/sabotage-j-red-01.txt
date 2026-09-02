@@ -1,0 +1,52 @@
+# SABOTAGE (j) RED — pause-interval double-subtraction → EC-04 property must go red
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Property\SlaClockTest
+  ⨯ it P1: overlapping pauses subtract as a union, never twice (EC-04)   9.83s  
+  ✓ it P2: extending the active interval never decreases elapsed         0.05s  
+  ✓ it P3: elapsed is bounded by raw active time, and a 24/7 calendar e… 0.03s  
+  ✓ it P4: the EC-03 retarget formula preserves the remaining proportio… 0.05s  
+  ✓ it P5: next-fire-at and the elapsed clock can never disagree (inver… 0.08s  
+  ✓ it P5b: an unreachable target answers null, an already-met target a… 0.05s  
+  ⨯ it G: the golden timelines reproduce to the second (the shared Doc…  0.05s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Property\SlaClockTest > it P1: overlapping pauses subtract…    
+  Failed asserting that 108000000000 is identical to 117000000000.
+
+  at tests/Property/SlaClockTest.php:88
+     84▕             $pauses[] = [(int) $s, (int) $s + mt_rand(1, 12) * HOUR_US / 2];
+     85▕         }
+     86▕         $elapsed = $clock->elapsedMicroseconds($active, null, new IntervalSet($pauses));
+     87▕         $expected = ($until - $from) - sweepUnionWithin($pauses, $from, $until);
+  ➜  88▕         expect($elapsed)->toBe($expected);
+     89▕     }
+     90▕ });
+     91▕ 
+     92▕ it('P2: extending the active interval never decreases elapsed', function () {
+
+  1   tests/Property/SlaClockTest.php:88
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Property\SlaClockTest > it G: the golden timelines reproduc…   
+  pause-union-ec04 probe 2026-09-01T10:00:00Z
+Failed asserting that 14400000000 is identical to 21600000000.
+
+  at tests/Property/SlaClockTest.php:189
+    185▕             $t['pauses'],
+    186▕         ));
+    187▕         foreach ($t['probes'] as $probe) {
+    188▕             $elapsed = $clock->elapsedMicroseconds(new IntervalSet([[$start, isoUs($probe['at'])]]), $calendar, $pauses);
+  ➜ 189▕             expect($elapsed)->toBe($probe['expected_elapsed_s'] * 1_000_000, "{$t['name']} probe {$probe['at']}");
+    190▕         }
+    191▕         $targetUs = $t['target_s'] * 1_000_000;
+    192▕         if ($t['expected_warning_at'] !== null) {
+    193▕             $warnAt = $clock->instantWhenElapsedReaches($clock->warningThresholdUs($targetUs, $t['warning_pct']), $start, $calendar, $pauses);
+
+  1   tests/Property/SlaClockTest.php:189
+
+
+  Tests:    2 failed, 5 passed (4635 assertions)
+  Duration: 10.21s
+
+
+EXIT=1
