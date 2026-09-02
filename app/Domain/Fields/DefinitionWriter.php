@@ -26,9 +26,9 @@ use InvalidArgumentException;
  */
 final class DefinitionWriter
 {
-    private const TYPES = ['text', 'number', 'email', 'phone', 'date', 'time', 'checkbox', 'radio', 'dropdown', 'multi_select', 'url', 'file', 'rich_text'];
+    public const TYPES = ['text', 'number', 'email', 'phone', 'date', 'time', 'checkbox', 'radio', 'dropdown', 'multi_select', 'url', 'file', 'rich_text'];
 
-    private const CHOICE_TYPES = ['radio', 'dropdown', 'multi_select'];
+    public const CHOICE_TYPES = ['radio', 'dropdown', 'multi_select'];
 
     public function __construct(
         private readonly TenantContext $context,

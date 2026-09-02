@@ -1,0 +1,21 @@
+  [dev-hardware-indicative] resolver hit p99 (NFR-01)    p50   1.265 ms   p99   3.098 ms   max  16.336 ms   budget(p99) 25.0 ms   WITHIN
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+  [dev-hardware-indicative] rollup HANDLER p99 (§12 line) p50   5.465 ms   p99   9.404 ms   max  25.477 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] recompute (repair unit, no §12 budget) p50   2.665 ms   p99   6.137 ms   max  13.845 ms   budget(p99) 25.0 ms   WITHIN
+  [dev-hardware-indicative] cascade 50 conversations: 526 ms (spec ≤3000 ms)
+  [dev-hardware-indicative] customers_index search p99 (NFR-04 dev-scale) p50   5.445 ms   p99  10.795 ms   max  26.296 ms   budget(p99) 750.0 ms   WITHIN
+  [dev-hardware-indicative] panel header build p99 (NFR-03/§12) p50   3.787 ms   p99   9.609 ms   max  21.726 ms   budget(p99) 600.0 ms   WITHIN
+  [dev-hardware-indicative] customer tab badge read p99 (vs Doc 07 NFR-01 1500 ms) p50   1.737 ms   p99   5.206 ms   max  11.620 ms   budget(p99) 7500.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\CustomerBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01 indicatively: the resolver HIT path (every inbound messa[39m[90m…[39m [90m13.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the per-event HANDLER inside 5 ms×tier, and t[39m[90m…[39m [90m17.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 indicatively: the blocking cascade over 50 conversations ins[39m[90m…[39m [90m0.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04 indicatively: customers_index search round-trip at dev s[39m[90m…[39m [90m70.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-03/§12 indicatively: the T-07 header build (payload + identi[39m[90m…[39m [90m8.65s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE RULED MEASUREMENT (escalation #3 part 2): the per-viewer no-[39m[90m…[39m [90m4.04s[39m  
+
+  [90mTests:[39m    [32;1m6 passed[39;22m[90m (12 assertions)[39m
+  [90mDuration:[39m [39m115.14s[39m
+
+EXIT=0

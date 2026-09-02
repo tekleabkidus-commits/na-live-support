@@ -1,0 +1,30 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Workflow\ScreensTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders all seven surfaces + the hub for a full-map admin, each[39m[90m…[39m [90m10.99s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every page is gated by its catalog key — a viewer without it is[39m[90m… [39m [90m0.32s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit rules: create → edit (draft revision) → dry-run against a recent[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook destinations + keyword sets from the rules surface: an i[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SLA + hours: a policy is created through PolicyWriter, the live[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit macros + fields + forms + CSAT: each surface's doors land throug[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: every workflow.ui string resolves in en AND am (the bundle[39m[90m… [39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it rules: cr… [41;1m ErrorException [49;22m  
+[39;1m  Attempt to read property "id" on null[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m89[39m
+     85▕ 
+     86▕     $db();
+     87▕     $eventId = publishTicketCreated($tenant, $ticket);
+     88▕     $row = DB::table('outbox')->where('id', $eventId)->first();
+  ➜  89▕     DB::table('events')->insertOrIgnore(['id' => $row->id, 'tenant_id' => $row->tenant_id, 'name' => $row->name, 'schema_version' => $row->schema_version ?? 1, 'payload' => $row->payload]);
+     90▕     $dry = $as()->postJson('https://localhost/admin/workflow/rules/dry-run', ['event_id' => $eventId, 'definition' => ['conditions' => ['all' => [['fact' => 'ticket.status', 'op' => 'equals', 'value' => 'open']]], 'actions' => [['type' => 'add_note', 'body' => 'x']]]]);
+     91▕     $dry->assertOk();
+     92▕     expect($dry->json('matched'))->toBeTrue()->and($dry->json('trace.0.matched'))->toBeTrue()->and($dry->json('trace.0.actual'))->toBe('open')->and($dry->json('actions.0.would_run'))->toBeTrue();
+     93▕
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (624 assertions)[39m
+  [90mDuration:[39m [39m12.65s[39m
+
+EXIT=2

@@ -136,4 +136,12 @@ return [
     'customers.merge.preview' => 'Doc 08 FR-11 (S08 step 11): a POST-shaped READ — the confirm checklist computed from the SAME live MergePlan the saga executes (inherited row 6: one brain, never a second engine); nothing mutates, the body carries the pick. The EXECUTION door (customers.merge.execute) audits customer.merged.',
     // Doc 12 (S12 step 12): the CSAT capture door — a CUSTOMER act, evented not audited.
     'csat.widget.submit' => 'Doc 12 FR-25 (the kb.insert_link precedent): a customer\'s 1-tap score is EVENTED (csat.received through the outbox — Doc 15\'s source of truth); no staff principal acts, so an audit row would duplicate the analytics stream for a non-privileged act. Refusals (unknown/expired/locked/rate_limited) mutate nothing.',
+
+    // Doc 12 §8 (S12 step 14): four POST-shaped READS on the Workflow surfaces — each computes an
+    // answer from the SAME engine the live path uses and mutates nothing (the customers.merge.preview
+    // precedent). The execution doors beside them (create/update/activate/publish) audit themselves.
+    'workflow.rules.dry_run' => 'Doc 12 FR-05: the dry-run is ZERO side effects BY CONSTRUCTION (DryRunner holds no writer; AC-02 parity is shared code) — a POST because the definition under test rides the body.',
+    'workflow.sla.example' => 'Doc 12 §8: the live example sentence is the clock library\'s arithmetic over a calendar snapshot — a read; the POST carries the draft policy\'s target and calendar.',
+    'workflow.macros.preview' => 'Doc 12 FR-16/T-06: PaletteReader::preview resolves variables against a sample ticket — a read (T-06 parity: preview == send resolution); nothing is inserted or sent.',
+    'workflow.forms.preview' => 'Doc 12 FR-22: FormPublisher::preview runs the publish validations over a draft schema and returns the blocks + usage — a read; publish is the audited door.',
 ];

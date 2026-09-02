@@ -1,0 +1,95 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Workflow\ScreensTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit renders all seven surfaces + the hub for a full-map admin, each[39m[90m…[39m [90m10.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every page is gated by its catalog key — a viewer without it is[39m[90m… [39m [90m0.24s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit rules: create → edit (draft revision) → dry-run against a recent[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit webhook destinations + keyword sets from the rules surface: an i[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SLA + hours: a policy is created through PolicyWriter, the live[39m[90m… [39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit macros + fields + forms + CSAT: each surface's doors land throug[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: every workflow.ui string resolves in en AND am (the bundle[39m[90m… [39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it renders all seven surface…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m33[39m
+     29▕         '/admin/workflow/hours' => 'Workflow/Hours', '/admin/workflow/macros' => 'Workflow/Macros', '/admin/workflow/fields' => 'Workflow/Fields',
+     30▕         '/admin/workflow/forms' => 'Workflow/Forms', '/admin/workflow/csat' => 'Workflow/Csat',
+     31▕     ] as $url => $component) {
+     32▕         $response = $this->actingAs($admin, 'staff')->get('https://localhost'.$url);
+  ➜  33▕         $response->assertOk();
+     34▕         $page = $response->viewData('page');
+     35▕         expect($page['component'])->toBe($component, $url)
+     36▕             ->and($page['props']['copy']['nav']['workflow'])->toBe('Workflow')
+     37▕             ->and($page['props']['can'])->toBeArray();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it rules: create → edit (dra…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m53[39m
+     49▕ it('rules: create → edit (draft revision) → dry-run against a recent event (truth badges) → activate → reorder → deactivate, all through RuleWriter/DryRunner; a bad card refuses 422 with the writer\'s own words', function (): void {
+     50▕     $admin = workflowAdmin();
+     51▕     $as = fn () => $this->actingAs($admin, 'staff');
+     52▕     $created = $as()->postJson('https://localhost/admin/workflow/rules', ['name' => 'Screen rule', 'trigger' => 'ticket.created', 'conditions' => ['all' => []], 'actions' => [['type' => 'add_tags', 'tags' => ['screen']]]]);
+  ➜  53▕     $created->assertOk();
+     54▕     $ruleId = $created->json('rule_id');
+     55▕     $editor = $as()->get('https://localhost/admin/workflow/rules/'.$ruleId);
+     56▕     $editor->assertOk();
+     57▕     expect($editor->viewData('page')['props']['rule']['name'])->toBe('Screen rule');
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it webhook destinations + ke…   
+[39;1m  Expected response status code [422] but received 403.
+Failed asserting that 403 is identical to 422.[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m89[39m
+     85▕ it('webhook destinations + keyword sets from the rules surface: an internal target refuses with the ssrf_refused code in errors; a set is created and retired', function (): void {
+     86▕     $admin = workflowAdmin();
+     87▕     $as = fn () => $this->actingAs($admin, 'staff');
+     88▕     $bad = $as()->postJson('https://localhost/admin/workflow/webhook-destinations', ['name' => 'x', 'url' => 'https://10.0.0.1/hook']);
+  ➜  89▕     $bad->assertStatus(422);
+     90▕     expect($bad->json('errors.url.0'))->toBe('ssrf_refused');
+     91▕     $good = $as()->postJson('https://localhost/admin/workflow/webhook-destinations', ['name' => 'CRM', 'url' => 'https://hooks.example.test/x']);
+     92▕     $good->assertOk();
+     93▕     $as()->postJson('https://localhost/admin/workflow/webhook-destinations/'.$good->json('id'), ['active' => false])->assertOk();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it SLA + hours: a policy is…    
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m104[39m
+    100▕ it('SLA + hours: a policy is created through PolicyWriter, the live example sentence answers from the clock library in the tenant zone, a calendar with holidays lands through CalendarWriter', function (): void {
+    101▕     $admin = workflowAdmin();
+    102▕     $as = fn () => $this->actingAs($admin, 'staff');
+    103▕     $calendar = $as()->postJson('https://localhost/admin/workflow/hours/calendars', ['name' => 'Addis office', 'timezone' => 'Africa/Addis_Ababa', 'weekdays' => ['1' => [['open' => '08:00', 'close' => '17:00']], '2' => [['open' => '08:00', 'close' => '17:00']], '3' => [['open' => '08:00', 'close' => '17:00']]], 'is_tenant_default' => true]);
+  ➜ 104▕     $calendar->assertOk();
+    105▕     $calendarId = $calendar->json('id');
+    106▕     $as()->postJson('https://localhost/admin/workflow/hours/calendars/'.$calendarId.'/holidays', ['date' => '2026-09-11', 'name' => 'Enkutatash', 'recurring_yearly' => true])->assertOk();
+    107▕     expect((int) DB::table('business_calendar_holidays')->where('calendar_id', $calendarId)->count())->toBe(1);
+    108▕
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Workflow\ScreensTest[22m [90m>[39m it macros + fields + forms +…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Workflow/ScreensTest.php[39m:[32m123[39m
+    119▕ it('macros + fields + forms + CSAT: each surface\'s doors land through their writers; preview answers T-06 parity; a form publishes v1; the CSAT settings write through the registry', function (): void {
+    120▕     $admin = workflowAdmin();
+    121▕     $as = fn () => $this->actingAs($admin, 'staff');
+    122▕     $macro = $as()->postJson('https://localhost/admin/workflow/macros', ['name' => 'Payout ETA', 'scope' => 'personal', 'body' => 'Hi {{customer.name}}, ticket {{ticket.number}}']);
+  ➜ 123▕     $macro->assertOk();
+    124▕     $ticketId = (string) DB::table('tickets')->orderByDesc('created_at')->value('id');
+    125▕     $preview = $as()->postJson('https://localhost/admin/workflow/macros/'.$macro->json('id').'/preview', ['ticket_id' => $ticketId]);
+    126▕     $preview->assertOk();
+    127▕     expect($preview->json('text'))->toContain('#');
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m2 passed[39;22m[90m (561 assertions)[39m
+  [90mDuration:[39m [39m11.44s[39m
+
+EXIT=1

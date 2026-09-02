@@ -1,0 +1,34 @@
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               FAIL
+      string-lint: resources/js/Pages/Workflow/Fields.vue:169: hardcoded text node "x.name).join(', ') }}"
+      string-lint: resources/js/Pages/Workflow/Fields.vue:173: hardcoded text node "x.name).join(', ') }}"
+      string-lint: resources/js/Pages/Workflow/Fields.vue:177: hardcoded text node "x.name ?? x.id).join(', ') }}"
+      string-lint: resources/js/Pages/Workflow/Fields.vue:333: hardcoded text node "x.name).join(', ') }}"
+      string-lint: resources/js/Pages/Workflow/Fields.vue:337: hardcoded text node "x.name).join(', ') }}"
+      string-lint: resources/js/Pages/Workflow/Hours.vue:46: hardcoded text node "d.id === k.department_id)?.name ??
+                                                '',
+                                        })
+                              }}"
+      string-lint: FAIL (6 violation(s)). User-visible strings must be i18n keys (Doc 01 FR-09). Genuine exceptions go in ci/string-lint-allowlist.php with a reason.
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 1 failed, 0 skipped.
+FAILED: string-lint
+make: *** [Makefile:97: gates] Error 1
+EXIT=2

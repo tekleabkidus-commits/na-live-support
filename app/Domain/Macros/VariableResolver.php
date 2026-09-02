@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\DB;
  */
 final class VariableResolver
 {
+    /** The named variables the resolver answers (custom.<key> fields ride the field_definitions rows) — the editor's palette (S12 step 14). */
+    public const VOCABULARY = ['customer.name', 'ticket.number', 'agent.first_name', 'queue.wait_band'];
+
     public function __construct(private readonly QueueWaitVariable $queueWait) {}
 
     /**

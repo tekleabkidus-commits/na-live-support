@@ -196,6 +196,36 @@ final class RuleWriter
         ]);
     }
 
+    /**
+     * §8's drag-reorder: position is EXECUTION ORDER (BR-01), so a move is a
+     * head edit that bites immediately — the trigger's compiled cache
+     * invalidates. Positions of the rules between the old and new slots shift
+     * by one; nothing else changes. Audited as automation.rule.updated.
+     */
+    public function reposition(string $ruleId, int $position, User $actor): void
+    {
+        /** @var object{id: string, position: int, trigger: string, active_revision_id: ?string}|null $rule */
+        $rule = DB::table('automation_rules')->where('id', $ruleId)->first(['id', 'position', 'trigger', 'active_revision_id']);
+        if ($rule === null) {
+            throw new InvalidArgumentException('unknown rule');
+        }
+        $from = (int) $rule->position;
+        if ($position === $from) {
+            return;
+        }
+        DB::transaction(function () use ($ruleId, $from, $position, $actor, $rule): void {
+            if ($position < $from) {
+                DB::table('automation_rules')->where('position', '>=', $position)->where('position', '<', $from)->update(['position' => DB::raw('position + 1'), 'updated_at' => DB::raw('clock_timestamp()')]);
+            } else {
+                DB::table('automation_rules')->where('position', '>', $from)->where('position', '<=', $position)->update(['position' => DB::raw('position - 1'), 'updated_at' => DB::raw('clock_timestamp()')]);
+            }
+            DB::table('automation_rules')->where('id', $ruleId)->update(['position' => $position, 'updated_at' => DB::raw('clock_timestamp()')]);
+            $latest = DB::table('automation_rule_revisions')->where('rule_id', $ruleId)->orderByDesc('created_at')->orderByDesc('id')->value('id');
+            $this->announce($ruleId, $rule->active_revision_id ?? (is_string($latest) ? $latest : null), 'updated', $actor);
+        });
+        $this->compiler->invalidate($rule->trigger);
+    }
+
     private function announce(string $ruleId, ?string $revisionId, string $kind, User $actor): void
     {
         $this->events->publish('automation.rule.changed', [

@@ -457,6 +457,7 @@ dir); the external arms: `tests/Security/WebhookEgressTest.php` (add the file �
 AC-09's automated suite), `tests/Feature/Automation/ExternalArmsTest.php` and
 `tests/Contract/Automation/ExternalContractsTest.php` (listed dirs); RIDER 5's
 physics legs ride the already-listed AutomationGrantPhysicsTest.
+Step 14: `tests/Feature/Workflow/ScreensTest.php` (NEW dir — add `tests/Feature/Workflow` to the run list).
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 

@@ -581,3 +581,72 @@ Route::middleware([
     Route::patch('prefs', [App\Http\Controllers\Inbox\PrefsController::class, 'update'])
         ->middleware('permission:views.manage')->name('inbox.prefs.update');
 });
+
+// ── Doc 12 §8/§9 (S12 step 14): Backoffice → Workflow — Doc 12's OWN surfaces, functional/themed/
+// i18n-keyed from design-system components, riding [B12-batch] (R-D12-2.2). Reads under the view
+// keys, mutations under the edit/activate/publish/manage keys — the catalog's own Doc 12 entries
+// (CLOSED at 114; no key invented). Every mutation door is a step-4…13 writer that audits itself;
+// the route declares the same key (the D8/A-37 lesson at design time).
+Route::middleware([
+    'auth:staff',
+    'tenant:staff_session',
+    'tenant.state:staff',
+    App\Http\Middleware\ApplyUserLocale::class,
+])->prefix('admin/workflow')->group(function (): void {
+    $w = App\Http\Controllers\Workflow\WorkflowScreensController::class;
+    Route::get('/', [$w, 'hub'])->middleware('permission:automation.rules.view')->name('workflow.hub');
+
+    // Rules (FR-01…FR-07, §8 rules list + editor + dry-run drawer)
+    Route::get('rules', [$w, 'rules'])->middleware('permission:automation.rules.view')->name('workflow.rules');
+    // The dry-run door is registered BEFORE the {ruleId} routes (a literal segment must never be captured as an id).
+    Route::post('rules/dry-run', [$w, 'dryRun'])->middleware('permission:automation.rules.edit')->name('workflow.rules.dry_run');
+    Route::get('rules/{ruleId}', [$w, 'ruleEditor'])->middleware('permission:automation.rules.view')->name('workflow.rules.editor');
+    Route::post('rules', [$w, 'createRule'])->middleware(['permission:automation.rules.edit', 'audit:automation.rule.created'])->name('workflow.rules.create');
+    Route::post('rules/{ruleId}', [$w, 'updateRule'])->middleware(['permission:automation.rules.edit', 'audit:automation.rule.updated'])->name('workflow.rules.update');
+    Route::post('rules/{ruleId}/activate', [$w, 'activateRule'])->middleware(['permission:automation.rules.activate', 'audit:automation.rule.activated'])->name('workflow.rules.activate');
+    Route::post('rules/{ruleId}/deactivate', [$w, 'deactivateRule'])->middleware(['permission:automation.rules.activate', 'audit:automation.rule.deactivated'])->name('workflow.rules.deactivate');
+    Route::post('rules/{ruleId}/reorder', [$w, 'reorderRule'])->middleware(['permission:automation.rules.edit', 'audit:automation.rule.updated'])->name('workflow.rules.reorder');
+    Route::post('keyword-sets', [$w, 'createKeywordSet'])->middleware(['permission:automation.rules.edit', 'audit:automation.keyword_set.changed'])->name('workflow.keyword_sets.create');
+    Route::post('keyword-sets/{setId}', [$w, 'updateKeywordSet'])->middleware(['permission:automation.rules.edit', 'audit:automation.keyword_set.changed'])->name('workflow.keyword_sets.update');
+    Route::post('webhook-destinations', [$w, 'createDestination'])->middleware(['permission:automation.rules.edit', 'audit:automation.webhook_destination.changed'])->name('workflow.destinations.create');
+    Route::post('webhook-destinations/{destinationId}', [$w, 'updateDestination'])->middleware(['permission:automation.rules.edit', 'audit:automation.webhook_destination.changed'])->name('workflow.destinations.update');
+
+    // SLA policies (FR-08…FR-11, §8 live example)
+    Route::get('sla', [$w, 'sla'])->middleware('permission:sla.policies.view')->name('workflow.sla');
+    Route::post('sla/policies', [$w, 'createPolicy'])->middleware(['permission:sla.policies.edit', 'audit:sla.policy.changed'])->name('workflow.sla.create');
+    Route::post('sla/policies/{policyId}', [$w, 'updatePolicy'])->middleware(['permission:sla.policies.edit', 'audit:sla.policy.changed'])->name('workflow.sla.update');
+    Route::post('sla/example', [$w, 'slaExample'])->middleware('permission:sla.policies.edit')->name('workflow.sla.example');
+
+    // Business hours (FR-12/FR-13, §8 painter + interval-list editor)
+    Route::get('hours', [$w, 'hours'])->middleware('permission:sla.policies.view')->name('workflow.hours');
+    Route::post('hours/calendars', [$w, 'createCalendar'])->middleware(['permission:sla.policies.edit', 'audit:hours.calendar.updated'])->name('workflow.hours.create');
+    Route::post('hours/calendars/{calendarId}', [$w, 'updateCalendar'])->middleware(['permission:sla.policies.edit', 'audit:hours.calendar.updated'])->name('workflow.hours.update');
+    Route::post('hours/calendars/{calendarId}/holidays', [$w, 'addHoliday'])->middleware(['permission:sla.policies.edit', 'audit:hours.calendar.updated'])->name('workflow.hours.holiday.add');
+    Route::post('hours/holidays/{holidayId}/remove', [$w, 'removeHoliday'])->middleware(['permission:sla.policies.edit', 'audit:hours.calendar.updated'])->name('workflow.hours.holiday.remove');
+
+    // Macros (FR-14…FR-16, §8 manager + editor with live preview)
+    Route::get('macros', [$w, 'macros'])->middleware('permission:macros.personal.manage')->name('workflow.macros');
+    Route::post('macros', [$w, 'createMacro'])->middleware(['permission:macros.personal.manage', 'audit:macro.changed'])->name('workflow.macros.create');
+    Route::post('macros/{macroId}', [$w, 'updateMacro'])->middleware(['permission:macros.personal.manage', 'audit:macro.changed'])->name('workflow.macros.update');
+    Route::post('macros/{macroId}/preview', [$w, 'previewMacro'])->middleware('permission:macros.personal.manage')->name('workflow.macros.preview');
+
+    // Fields (FR-17…FR-19, §8 manager + where-used)
+    Route::get('fields', [$w, 'fields'])->middleware('permission:fields.manage')->name('workflow.fields');
+    Route::post('fields', [$w, 'createField'])->middleware(['permission:fields.manage', 'audit:field.changed'])->name('workflow.fields.create');
+    Route::post('fields/{fieldId}', [$w, 'updateField'])->middleware(['permission:fields.manage', 'audit:field.changed'])->name('workflow.fields.update');
+    Route::post('fields/{fieldId}/deactivate', [$w, 'deactivateField'])->middleware(['permission:fields.manage', 'audit:field.deactivated'])->name('workflow.fields.deactivate');
+    Route::post('fields/{fieldId}/reactivate', [$w, 'reactivateField'])->middleware(['permission:fields.manage', 'audit:field.changed'])->name('workflow.fields.reactivate');
+    Route::get('fields/{entity}/{key}/where-used', [$w, 'whereUsed'])->middleware('permission:fields.manage')->name('workflow.fields.where_used');
+
+    // Forms (FR-20…FR-23, §8 builder with dual live preview)
+    Route::get('forms', [$w, 'forms'])->middleware('permission:forms.view')->name('workflow.forms');
+    Route::get('forms/{formId}', [$w, 'formBuilder'])->middleware('permission:forms.view')->name('workflow.forms.builder');
+    Route::post('forms', [$w, 'createForm'])->middleware(['permission:forms.edit', 'audit:form.changed'])->name('workflow.forms.create');
+    Route::post('forms/{formId}', [$w, 'updateForm'])->middleware(['permission:forms.edit', 'audit:form.changed'])->name('workflow.forms.update');
+    Route::post('forms/{formId}/preview', [$w, 'previewForm'])->middleware('permission:forms.edit')->name('workflow.forms.preview');
+    Route::post('forms/{formId}/publish', [$w, 'publishForm'])->middleware(['permission:forms.publish', 'audit:form.published'])->name('workflow.forms.publish');
+
+    // CSAT settings (FR-24/FR-25, §8 settings page)
+    Route::get('csat', [$w, 'csat'])->middleware('permission:settings.view')->name('workflow.csat');
+    Route::post('csat', [$w, 'updateCsat'])->middleware(['permission:settings.edit', 'audit:tenant.setting_changed'])->name('workflow.csat.update');
+});

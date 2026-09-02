@@ -38,6 +38,17 @@ final class PageCapabilities
         'Admin/Org/RestructureWizard' => [
             'org.departments.manage', 'org.queues.manage',
         ],
+        // Doc 12 §8 (S12 step 14): Backoffice → Workflow — each page's controls render against these keys.
+        'Workflow/Hub' => ['automation.rules.view', 'sla.policies.view', 'forms.view', 'fields.manage', 'macros.personal.manage', 'settings.view'],
+        'Workflow/Rules' => ['automation.rules.view', 'automation.rules.edit', 'automation.rules.activate'],
+        'Workflow/RuleEditor' => ['automation.rules.view', 'automation.rules.edit', 'automation.rules.activate'],
+        'Workflow/Sla' => ['sla.policies.view', 'sla.policies.edit'],
+        'Workflow/Hours' => ['sla.policies.view', 'sla.policies.edit'],
+        'Workflow/Macros' => ['macros.personal.manage', 'macros.shared.manage'],
+        'Workflow/Fields' => ['fields.manage'],
+        'Workflow/Forms' => ['forms.view', 'forms.edit', 'forms.publish'],
+        'Workflow/FormBuilder' => ['forms.view', 'forms.edit', 'forms.publish'],
+        'Workflow/Csat' => ['settings.view', 'settings.edit'],
         'Conversations/DeadLetters' => [
             'tickets.reply',
         ],
