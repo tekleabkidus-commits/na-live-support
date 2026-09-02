@@ -1,0 +1,14 @@
+=== S12 FINAL CLOSE — CI VERDICT OF RECORD (2026-09-02) ===
+Run 33641590086 on a86d022 (the final close commit: P-CLS + P-NAV landed; the EventContext ai-facts read fixed; timing waived by the owner): completed / success — read ONCE, after the run finished.
+Annotations read FIRST: NO billing annotation; the Node.js 20 deprecation notice + prettier WARNINGS in pre-existing files (OperationDialog.vue, CustomerPanel.vue, copilotApi.ts, CopilotTab.vue) — none in Doc 12's files, none blocking.
+Stages:
+  Stage 1: lint + static: success
+  Stage 2: unit: success
+  Stage 3b: AC-03 ordering evidence — 10k soak + backstep controls (alone): success
+  Stage 3: integration (ephemeral stack): success
+  Stage 4: browser (Playwright + axe): success
+  Stage 5: performance budgets (placeholder until Doc 19 L1 profile): success
+  Stage 6: deploy to staging (STUB): success
+  Stage 7: deploy to production (STUB, manual approval): skipped
+Stage 7 = the manual production-approval STUB, skipped by design.
+Green on Doc 12's own terms; no re-run, no verdict-shopping. Timing: not taken — waived by the owner.
