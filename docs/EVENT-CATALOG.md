@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-149 event(s).
+153 event(s).
 
 ## `agent.status_changed`
 
@@ -239,6 +239,15 @@ Doc 12 FR-04/T-03: a guard cap stopped evaluation (guard: max_rules|max_actions|
 - **Producers:** Doc12/Automation
 - **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
 
+## `automation.notify.requested`
+
+Doc 12 FR-03 notify: resolved recipient user ids + a REGISTERED category — identifiers only; Doc 16 delivers ([D16]). ticket_id nullable.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `rule_id`, `execution_id`, `ticket_id`, `category`, `user_ids`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc16/Notifications, Doc17/Audit
+
 ## `automation.rule.changed`
 
 Doc 12 FR-07: a rule changed (kind: created|updated|activated|deactivated). Activation swaps the revision pointer atomically; activated/deactivated are the SEC-06 high-risk pair.
@@ -256,6 +265,24 @@ Doc 12 FR-06: a rule MATCHED an event and its action chain dispatched. The full 
 - **Payload:** `tenant_id`, `rule_id`, `revision_id`, `event_id`, `ticket_id`, `matched`
 - **Producers:** Doc12/Automation
 - **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `automation.sms.requested`
+
+Doc 12 FR-03 send SMS template (BR-04): a TEMPLATE REFERENCE and identifiers — NO text key exists on this payload; Doc 14 renders and applies its guards ([D14]).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `rule_id`, `execution_id`, `ticket_id`, `customer_id`, `template_ref`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc14/Sms, Doc17/Audit
+
+## `automation.webhook.disabled`
+
+Doc 12 EC-13: a webhook destination exhausted retry ×8 and AUTO-DISABLED — the alert arm (rule_id nullable; delivery_id = the exhausting delivery).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `destination_id`, `rule_id`, `delivery_id`, `attempts`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
 
 ## `channel.health.changed`
 
@@ -409,6 +436,15 @@ FR-22/FR-14: the RG flag was set (source=staff|ai). FR-15's contracts consume it
 - **Payload:** `tenant_id`, `customer_id`, `history_id`, `source`
 - **Producers:** Doc08/RgFlagService
 - **Consumers:** Doc11/Routing, Doc12/Automation, Doc14/SmsSuppression, Doc17/Audit
+
+## `customer.suppression.set`
+
+Doc 12 FR-03 suppress: the marketing-suppression flag set on a customer (Doc 08 FR-15 consumers read it via MarketingSuppression::isSuppressed); rule_id nullable for a staff set.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `customer_id`, `rule_id`, `reason`
+- **Producers:** Doc12/Automation
+- **Consumers:** Doc08/Customers, Doc14/Sms, Doc15/Reporting, Doc17/Audit
 
 ## `customer.unblocked`
 

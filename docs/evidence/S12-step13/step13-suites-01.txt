@@ -1,0 +1,232 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\SlaClockTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P1: overlapping pauses subtract as a union, never twice (EC-04)[39m[90m [39m [90m10.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: extending the active interval never decreases elapsed[39m[90m        [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: elapsed is bounded by raw active time, and a 24/7 calendar e[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4: the EC-03 retarget formula preserves the remaining proportio[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P5: next-fire-at and the elapsed clock can never disagree (inver[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P5b: an unreachable target answers null, an already-met target a[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit G: the golden timelines reproduce to the second (the shared Doc[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Property\AutomationGuardCapsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P1: the caps are code constants — no settings key names them, an[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: the cooldown column CHECK is the tuning boundary — 86401 and[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P3: twelve matching rules, one event — exactly ten fire and the[39m[90m… [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P4: one rule with twenty-five actions — its chain carries exactl[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P5: an event carrying automation_depth 3 evaluates NOTHING and t[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sla\ExampleSentenceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the §8 example reproduces golden timeline #1 through the[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: ICU-rendered in both languages with the display timezone ex[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sla\InstanceLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-08/FR-09: the FIRST matching policy arms one instance with sn[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-08 walls: a queue key is refused (the vocabulary is closed);[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: five rapid customer messages hold ONE live next_response[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pauses per the snapshot toggles: pending_customer opens/closes a[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: retarget_remaining stores the documented formula record;[39m[90m… [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sla\SnapshotImmutabilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-03 physics: the direct armed-instance falsification dies 4250[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/EC-05: policy edits, calendar edits and holiday adds are A[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sla\TimerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-04: arming computes next-fire candidates; a paused stage carri[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-10/NFR-02 structural + FS-02 honesty: a due warn AND breach f[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 DRILL: the ZSET is wiped — nothing fires early; rebuild re[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closing row 11: BoostMatcher's sla_at_risk reads the REAL warned[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's o[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\AutomationConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer evaluates once, and a re-driven delivery[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the doc12.json read-slice conformance: every payload key the con[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ConditionTreeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: the operator matrix over every fact type[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: nested all/any groups with the full trace — no short-circ[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets resolve the managed list at evaluation; a re[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\DoorArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit clause 1: transfer_department moves the ticket with actor system[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 2: tags add/remove through the system arms with rule_ref;[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 4: escalate lands through the ONE system door (actor syst[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 3 (option a): the DIRECTED agent is tried FIRST — with th[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit clause 3 CONTROL (the countersign's addition): RG finality BEATS[39m[90m…[39m [90m0.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\DryRunParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-02: replayed corpus verdicts are EQUAL, and the dry-run write[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05/§9: the drawer's data — per-condition badges with evaluate[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\EngineOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-01: rules evaluate and dispatch in position order — the admin[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the trigger index: a rule wakes only for its own trigger[39m[90m         [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event inserts nothing and dispatches nothing[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: cooldown keys on (rule, ticket) — the same ticket suppres[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a corrupt compiled cache falls back to interpretive evalu[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: the rules-pause switch stops evaluation instantly and dest[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ExternalArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every FR-03 action type is BOUND — the step-4 unbuilt_action pos[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook_out: names a destination BY ID from the allowlist, queue[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-13 drill: a failing target retries with backoff up to EXACTLY[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: resolves users + role members from row truth, requires a[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit send_sms_template: a TEMPLATE REFERENCE only — the request event[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit suppress: sets the marketing-suppression flag on the ticket's cu[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit run_ai_task: catalog-bound to the three names — chatbot_turn is[39m[90m… [39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\LogElisionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03 role fixtures: message-fact prose elides to markers for t[39m[90m…[39m [90m0.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\RuleDefinitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: create drafts, activate swaps atomically, an edit to an a[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/FR-03 walls: unknown trigger, unknown action type and a su[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets are managed lists — created, updated, retire[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ScheduleSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit arms without firing, then fires ONCE when due and re-arms in the[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-04: a paused tenant's due schedule rule re-arms silently — not[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Hours\CalendarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: creates, validates through the clock parser, and refuses[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12 physics: one tenant default, split shifts stored intact, h[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05/BR-03: a calendar edit is prospective — an armed instance[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: a timezone change clears schedule_next_run_at on schedule[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-A53 PRE control: a calendar-less tenant answers the seam shape[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-A53 REAL source: a painted calendar drives windowFor/isOpen/ne[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\BundledActionHonestyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-09: a tags-only agent applies add_tags, set_priority is skipp[39m[90m…[39m [90m0.25s[39m  
+
+  [dev-hardware-indicative] NFR-05 palette search @1k macros  p50    9.7 ms  p95   13.9 ms  budget(p95) 50 ms  WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\PaletteBudgetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit meets NFR-05 indicatively: palette search over 1k macros prints[39m[90m… [39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Macros\ResolverParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-06 parity + the vocabulary: preview == direct resolution, live[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 walls: an unknown bundled type refuses; saved replies shar[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\CustomerDefinitionsSourceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit control 1 (PRE): with NO customer field_definitions rows Doc 08[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the provisioning consumer seeds the trio as REAL rows (system ac[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 3: the duplicate-player_id hint (SEC-05) is unchanged on[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 2 (POST): a NEW operator definition accepts a value end-[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\DefinitionMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/FR-19: the 13-type matrix — definition, canonical storage,[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: number min/max and text regex validation rules bind; the[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\LifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: deactivate → writes refuse + values stand; reactivate res[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08: option removal snapshots the label; the stored value stan[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-14: the where-used answer is COMPLETE — the referencing rule[39m[90m… [39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Fields\ValueStorageTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-59 customer half: the seeded trio stores through Doc 08's door[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02 live: a stored ticket custom value drives a rule condition[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the po[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\SubmissionSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: a submission names its exact version forever — a later pu[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 server truth: a COMPLETE submission missing a required-and-[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\TelegramFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit US-04 end-to-end (direct mode): one field per message, buttons f[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 retries: three friendly failures then the human offer; /hu[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06: a version published MID-FLOW never moves the running flow[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04 DRILL: Redis state killed mid-flow → the next message resu[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: one live flow per conversation — a second start supersedes[39m[90m…[39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Csat\CaptureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-25: the 1-tap score lands, prompts for a comment, and an in-w[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: an hour-73 tap records NOTHING, answers the polite window[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closing rows 2/4: an AI-resolver score lands csat_scored on the[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Csat\TriggerMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: a human resolution arms ONE survey (idempotent on the res[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-24 cooldown: the SAME customer resolved again within csat.coo[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-24 RG suppression (Doc 08 FR-15's contract): an RG-flagged pl[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER 4: an ai.resolved conversation with NO ticket arms a CONVE[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\ExternalContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fixtures/automation/doc16-notify-contract.json + doc14-sms-reque[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\MacroPaletteContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B12-S03: personal lists FIRST, fuzzy matches letters anywhere, o[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B12-S03: INSERT NEVER SENDS — the palette classes hold NO send c[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Sla\SlaChipContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11: shape, step states, pause reason and most-urgent selectio[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\DualRenderConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit one schema, three renders, ONE submission shape: widget-path, di[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 language resolution is ONE chain for both renderers: custome[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AutomationNoBypassTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02: the automation namespace holds NO ticket write and NO tra[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\ActivatorFloorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (1): activation captures the activator's floor on the rev[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (2+3): the demoted-author falsification — set_priority is[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 (4): revoking the activator's key after activation surfac[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\AutomationGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per automation table and priv[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every automation table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18 physics (countersign obligation 1): a field key/type/entit[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4): the activation stamp fi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER 5 physics (step 13): a destination url, a delivery payload[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\SlaGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per SLA/hours/CSAT table and[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01 + the delete split: FORCED RLS with tenant_isolation everyw[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03 physics (countersign obligation 1): an UPDATE against a RE[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4, RIDER 1): warned/breache[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 physics (countersign obligation 1): a second response for[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\MacroNoBlankSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-06 automation half: an unresolved variable refuses blank_varia[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the guard grammar: pills detected anywhere, resolved text passes[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CsatSingleResponseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: the RAW token exists only in the delivery — the row hold[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: the door rate-limits per token before touching any row[39m[90m   [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-25: beyond the 1 h edit window the response is LOCKED — the s[39m[90m…[39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\EnvelopeMetadataTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (1): a publish WITHOUT metadata is byte-compatible —[39m[90m… [39m [90m13.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (2): envelope metadata lands on the outbox row and the[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit packet #3 (3), the smuggled-key control: automation_depth INSIDE[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Inbox\SlaProjectionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-CHIP: warned/breached project from TRUTH — the row carries Chi[39m[90m…[39m [90m2.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-CHIP: the CLEAR — a staff reply clears first_response in truth[39m[90m…[39m [90m2.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-CHIP: a ticket WITHOUT an SLA instance keeps its row's sla col[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WebhookEgressTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (1): the SSRF rules refuse every internal-network shape a[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (2): the landed url is IMMUTABLE by grant — an UPDATE ont[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (3): an EMPTY egress-proxy value refuses to send at all —[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (4): every send is SIGNED with the tenant secret — the th[39m[90m…[39m [90m0.18s[39m  
+
+  [90mTests:[39m    [32;1m138 passed[39;22m[90m (5961 assertions)[39m
+  [90mDuration:[39m [39m51.83s[39m
+
+EXIT=0

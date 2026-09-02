@@ -1,0 +1,215 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WebhookEgressTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (1): the SSRF rules refuse every internal-network shape[39m[90m… [39m [90m10.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (2): the landed url is IMMUTABLE by grant — an UPDATE ont[39m[90m…[39m [90m0.13s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 (3): an EMPTY egress-proxy value refuses to send at all —[39m[90m…[39m [90m0.25s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 (4): every send is SIGNED with the tenant secret — the th[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Automation\ExternalArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every FR-03 action type is BOUND — the step-4 unbuilt_action pos[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit webhook_out: names a destination BY ID from the allowlist, queue[39m[90m…[39m [90m0.23s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-13 drill: a failing target retries with backoff up to EXACTLY[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: resolves users + role members from row truth, requires a[39m[90m…[39m [90m0.17s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit send_sms_template: a TEMPLATE REFERENCE only — the request event[39m[90m…[39m [90m0.22s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit suppress: sets the marketing-suppression flag on the ticket's cu[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit run_ai_task: catalog-bound to the three names — chatbot_turn is[39m[90m… [39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\ExternalContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fixtures/automation/doc16-notify-contract.json + doc14-sms-reque[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\AutomationGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per automation table and priv[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every automation table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18 physics (countersign obligation 1): a field key/type/entit[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4): the activation stamp fi[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit RIDER 5 physics (step 13): a destination url, a delivery payload[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: an illegal transition fails THAT action with the door's o[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_status through the service: a LEGAL edge lands with actor sy[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit set_priority through ChangePriority(null): the door publishes ac[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit assign via Doc 11: the pipeline routes with trigger=automation a[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: the second rule's arm reports superseded_state when the f[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\RuleDefinitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: create drafts, activate swaps atomically, an edit to an a[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/FR-03 walls: unknown trigger, unknown action type and a su[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets are managed lists — created, updated, retire[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AutomationNoBypassTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02: the automation namespace holds NO ticket write and NO tra[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WebhookEgressTest[22m [90m>[39m it SEC-02 (3): an EMPTY egress…   
+[39;1m  Exception "RuntimeException" not thrown.[39;22m
+
+  at [32mtests/Security/WebhookEgressTest.php[39m:[32m89[39m
+     85▕     $deliveryId = app(WebhookDeliveries::class)->enqueue($id, null, null, 'automation.rule.fired', ['event' => 'automation.rule.fired']);
+     86▕ 
+     87▕     expect(config('automation.webhook.egress_proxy'))->toBe('http://egress-proxy:8888', 'the default must be the proxy, never direct');
+     88▕     config(['automation.webhook.egress_proxy' => '']);
+  ➜  89▕     expect(fn () => app(WebhookDeliveries::class)->attempt($deliveryId))->toThrow(RuntimeException::class, 'direct egress is refused');
+     90▕     Http::assertNothingSent();
+     91▕     expect(DB::table('automation_webhook_deliveries')->where('id', $deliveryId)->value('state'))->toBe('queued');
+     92▕ });
+     93▕
+
+  [33m1   [39m[39;1mtests/Security/WebhookEgressTest.php[39;22m:[39;1m89[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WebhookEgressTest[22m [90m>[39m it SEC-02 (4): every send is S…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'abandoned'[39m[39;1m
+  [39;22m[32m+'skipped'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/WebhookEgressTest.php[39m:[32m102[39m
+     98▕     $id = $destinations->create('CRM', 'https://hooks.example.test/signed', $admin->identifier());
+     99▕ 
+    100▕     // Empty secret (the registered default): abandoned, nothing sent.
+    101▕     $unsigned = $deliveries->enqueue($id, null, null, 'automation.rule.fired', ['event' => 'automation.rule.fired']);
+  ➜ 102▕     expect($deliveries->attempt($unsigned))->toBe('abandoned');
+    103▕     expect(DB::table('automation_webhook_deliveries')->where('id', $unsigned)->value('last_error'))->toBe('unsigned_refused');
+    104▕     Http::assertNothingSent();
+    105▕ 
+    106▕     app(SettingsRepository::class)->set('tenant.outbound_webhook_secret', 'fixture-secret-0001');
+
+  [33m1   [39m[39;1mtests/Security/WebhookEgressTest.php[39;22m:[39;1m102[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ExternalArmsTest[22m [90m>[39m it webhook_out: names…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'queued'[39m[39;1m
+  [39;22m[32m+'abandoned'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/ExternalArmsTest.php[39m:[32m64[39m
+     60▕         ->and($outcomes[3]['outcome'])->toBe('ok', 'the chain died around a webhook — AC-01 isolation broken');
+     61▕     $delivery = DB::table('automation_webhook_deliveries')->where('id', $outcomes[2]['delivery_id'])->first();
+     62▕     /** @var array<string, mixed> $payload */
+     63▕     $payload = json_decode((string) $delivery->payload, true, 8);
+  ➜  64▕     expect($delivery->state)->toBe('queued')
+     65▕         ->and($delivery->execution_id)->toBe($executionId)
+     66▕         ->and($payload['ticket']['id'])->toBe($ticket->identifier())
+     67▕         ->and($payload['ticket']['ticket_status'])->toBe('open')
+     68▕         ->and(json_encode($payload))->not->toContain('body', 'a webhook payload carries identifiers and state, never message text');
+
+  [33m1   [39m[39;1mtests/Feature/Automation/ExternalArmsTest.php[39;22m:[39;1m64[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ExternalArmsTest[22m [90m>[39m it EC-13 drill: a fai…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'retry',[39m[39;1m
+  [39;22m[31m-    1 => 'retry',[39m[39;1m
+  [39;22m[31m-    2 => 'retry',[39m[39;1m
+  [39;22m[31m-    3 => 'retry',[39m[39;1m
+  [39;22m[31m-    4 => 'retry',[39m[39;1m
+  [39;22m[31m-    5 => 'retry',[39m[39;1m
+  [39;22m[31m-    6 => 'retry',[39m[39;1m
+  [39;22m[31m-    7 => 'abandoned',[39m[39;1m
+  [39;22m[32m+    0 => 'skipped',[39m[39;1m
+  [39;22m[32m+    1 => 'skipped',[39m[39;1m
+  [39;22m[32m+    2 => 'skipped',[39m[39;1m
+  [39;22m[32m+    3 => 'skipped',[39m[39;1m
+  [39;22m[32m+    4 => 'skipped',[39m[39;1m
+  [39;22m[32m+    5 => 'skipped',[39m[39;1m
+  [39;22m[32m+    6 => 'skipped',[39m[39;1m
+  [39;22m[32m+    7 => 'skipped',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Automation/ExternalArmsTest.php[39m:[32m98[39m
+     94▕     $results = [];
+     95▕     for ($i = 1; $i <= 8; $i++) {
+     96▕         $results[] = $deliveries->attempt($deliveryId);
+     97▕     }
+  ➜  98▕     expect($results)->toBe(array_merge(array_fill(0, 7, 'retry'), ['abandoned']));
+     99▕     expect($deliveries->attempt($deliveryId))->toBe('skipped', 'a terminal delivery must never be re-sent');
+    100▕     Http::assertSentCount(8);
+    101▕ 
+    102▕     $delivery = DB::table('automation_webhook_deliveries')->where('id', $deliveryId)->first();
+
+  [33m1   [39m[39;1mtests/Feature/Automation/ExternalArmsTest.php[39;22m:[39;1m98[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ExternalArmsTest[22m [90m>[39m it send_sms_template:…   
+[39;1m  Expected: [39;22m[31mEvent "automation.sms.requested" payload does not match its catalog entry. Not declared: [body]. Declared: [customer_id, execution_id, rule_id, template_ref, tenant_id, ticket_id]. Extra keys are refused as firmly as missing ones — SEC-07 keeps PII out of the event stream by declaring what each event may carry.[39m[39;1m
+
+  To contain: [39;22m[32mThrowable[39m
+
+  at [32mtests/Feature/Automation/ExternalArmsTest.php[39m:[32m187[39m
+    183▕     // Structure, both walls: the card refuses a body at SAVE; the catalog refuses a smuggled body at PUBLISH.
+    184▕     $writer = app(RuleWriter::class);
+    185▕     expect(fn () => $writer->create(['name' => 'Free text', 'trigger' => 'ticket.created', 'conditions' => ['all' => []], 'actions' => [['type' => 'send_sms_template', 'template_ref' => 't', 'body' => 'Hello {{name}}']]], $admin))
+    186▕         ->toThrow(InvalidArgumentException::class, 'no free-text SMS');
+  ➜ 187▕     expect(fn () => EventCatalog::assertPayloadMatches('automation.sms.requested', $payload + ['body' => 'smuggled']))->toThrow(Throwable::class);
+    188▕ 
+    189▕     // Doc 08 FR-15: the suppressions, RG first.
+    190▕     app(MarketingSuppression::class)->suppress($customerId, 'opted out of promotions', 'staff', null, null, $admin->identifier());
+    191▕     $suppressed = automationActionScene($tenant, $ticket, $actions);
+
+  [33m1   [39m[39;1mtests/Feature/Automation/ExternalArmsTest.php[39;22m:[39;1m187[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ExternalArmsTe[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  suppress card needs a non-empty reason (FR-03)[39;22m
+
+  at [32mapp/Domain/Automation/Actions/ActionCards.php[39m:[32m50[39m
+     46▕         }
+     47▕         foreach ($grammar['required'] as $key) {
+     48▕             $value = $action[$key] ?? null;
+     49▕             if (! is_string($value) || trim($value) === '') {
+  ➜  50▕                 throw new InvalidArgumentException(sprintf('%s card needs a non-empty %s (FR-03)', $type, $key));
+     51▕             }
+     52▕         }
+     53▕         if ($type === 'notify' && self::count($action['user_ids'] ?? null) + self::count($action['role_ids'] ?? null) === 0) {
+     54▕             throw new InvalidArgumentException('notify card needs at least one user or role (FR-03)');
+
+  [33m1   [39m[39;1mapp/Domain/Automation/Actions/ActionCards.php[39;22m:[39;1m50[39;22m
+  [33m2   [39m[39;1mapp/Domain/Automation/Rules/RuleWriter.php[39;22m:[39;1m163[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Automation\ExternalArmsTe[22m… [41;1m InvalidArgumentException [49;22m  
+[39;1m  run_ai_task card: "chatbot_turn" is not one of the three catalog-bound tasks (FR-03)[39;22m
+
+  at [32mapp/Domain/Automation/Actions/ActionCards.php[39m:[32m57[39m
+     53▕         if ($type === 'notify' && self::count($action['user_ids'] ?? null) + self::count($action['role_ids'] ?? null) === 0) {
+     54▕             throw new InvalidArgumentException('notify card needs at least one user or role (FR-03)');
+     55▕         }
+     56▕         if ($type === 'run_ai_task' && ! in_array($action['task'], RunAiTaskAction::TASKS, true)) {
+  ➜  57▕             throw new InvalidArgumentException(sprintf('run_ai_task card: "%s" is not one of the three catalog-bound tasks (FR-03)', (string) $action['task']));
+     58▕         }
+     59▕     }
+     60▕ 
+     61▕     private static function count(mixed $value): int
+
+  [33m1   [39m[39;1mapp/Domain/Automation/Actions/ActionCards.php[39;22m:[39;1m57[39;22m
+  [33m2   [39m[39;1mapp/Domain/Automation/Rules/RuleWriter.php[39;22m:[39;1m163[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\AutomationGrantPhysicsTest[22m [90m>[39m it RIDER 5 physics (…   
+[39;1m  automation_webhook_deliveries — expected the grant refusal
+Failed asserting that two strings are identical.
+  [39;22m[31m-'42501'[39m[39;1m
+  [39;22m[32m+'25P02'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/AutomationGrantPhysicsTest.php[39m:[32m213[39m
+    209▕         try {
+    210▕             DB::table($table)->where('id', $id)->update($update);
+    211▕             $this->fail("{$table}: the immutable column moved");
+    212▕         } catch (QueryException $e) {
+  ➜ 213▕             expect($e->getCode())->toBe('42501', "{$table} — expected the grant refusal");
+    214▕         }
+    215▕     }
+    216▕     // The lawful writes still land (the grant is a split, not a wall).
+    217▕     DB::table('automation_webhook_destinations')->where('id', $destinationId)->update(['active' => false]);
+
+  [33m1   [39m[39;1mtests/Isolation/AutomationGrantPhysicsTest.php[39;22m:[39;1m213[39;22m
+
+
+  [90mTests:[39m    [31;1m8 failed[39;22m[90m,[39m[39m [39m[32;1m18 passed[39;22m[90m (287 assertions)[39m
+  [90mDuration:[39m [39m14.80s[39m
+
+EXIT=2

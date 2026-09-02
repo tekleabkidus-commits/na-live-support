@@ -2583,12 +2583,12 @@ entries:
       at step 2b (tests/Isolation/SlaGrantPhysicsTest.php). csat.sent|
       received|expired events catalogued for Doc 15.
   - ac_ref: "Doc12 AC-09"
-    suite_path: tests/Security/ActivatorFloorTest.php
-    type: manual
+    suite_path: tests/Security/WebhookEgressTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      GROWN AT S12 STEPS 4-7 (type stays manual until the webhook half): SEC-01 floor REAL (ActivatorFloorTest — capture, demoted-author floor_refused, drift) and SEC-03 elision REAL (LogElisionTest role fixtures — keyword markers for the unprivileged). REMAINING: the SEC-02 webhook allowlist + SSRF legs land at step 13 with the webhook arm; the row flips to automated there.
+      FLIPPED AT S12 STEP 13: SEC-01 floor REAL (ActivatorFloorTest — capture, demoted-author floor_refused, drift); SEC-02 REAL (WebhookEgressTest — the SSRF rules at destination birth with the stable code, url immutable by grant 42501, no direct egress when the proxy is empty, signed headers verifying against the inbound contract's arithmetic, unsigned never sends; ExternalArmsTest's EC-13 drill: retry ×8 → abandon + auto-disable + alert); SEC-03 elision REAL (LogElisionTest role fixtures).

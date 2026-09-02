@@ -1730,4 +1730,20 @@ return [
         'required_fields' => ['keyword_set_id'],
         'owning_doc' => 'Doc12',
     ],
+    [
+        // S12 step 13 (RIDER 5): the SEC-02 destination allowlist — created|updated|activated|deactivated by staff, auto_disabled by the system (EC-13).
+        'action_key' => 'automation.webhook_destination.changed',
+        'entity' => 'automation_webhook_destination',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['destination_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
+    [
+        // S12 step 13: FR-03 suppress — the marketing-suppression flag set (by a rule = system) or cleared (staff); kind set|cleared.
+        'action_key' => 'customer.marketing_suppression.changed',
+        'entity' => 'customer',
+        'actor_types' => ['staff', 'system'],
+        'required_fields' => ['customer_id', 'kind'],
+        'owning_doc' => 'Doc12',
+    ],
 ];

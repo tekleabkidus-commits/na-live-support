@@ -159,6 +159,8 @@ final class RuleWriter
             if (! in_array($type, ActionRegistry::TYPES, true)) {
                 throw new InvalidArgumentException(sprintf('unknown action type "%s" — the registry is closed (FR-03)', $type));
             }
+            // Step 13: the external arms' CLOSED card grammar (BR-04 as data: no text key can be saved on an SMS card).
+            \App\Domain\Automation\Actions\ActionCards::assertValid($action);
         }
     }
 

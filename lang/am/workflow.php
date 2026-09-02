@@ -56,4 +56,13 @@ return [
             'resolution' => 'መፍትሄ',
         ],
     ],
+    // FR-03 notify — machine-authored am (R-14 queue; non-destructive tier).
+    'notify' => [
+        'rule' => 'የደንብ ማሳወቂያ',
+    ],
+    // FR-03 run AI task — machine-authored am (R-14 queue; non-destructive tier).
+    'ai_task' => [
+        'summary_note' => 'የAI ማጠቃለያ (በደንብ የተፈጠረ)፦ :summary',
+        'translation_note' => 'የመጨረሻው የደንበኛ መልእክት ወደ :language የተተረጎመ (በደንብ የተፈጠረ)፦ :text',
+    ],
 ];

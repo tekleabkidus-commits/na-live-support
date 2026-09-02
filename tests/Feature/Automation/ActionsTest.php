@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\DB;
 | AC-01 RUNTIME: an illegal transition FAILS THAT ACTION with the service's own
 | reason and the chain CONTINUES to the next action. EC-01: an arm acting on
 | state that moved since the match reports superseded_state honestly.
-| transfer/tags/directed-assign/escalate stay `unbuilt_action`/`unbuilt_directed_assign`
-| until packet P-DOORS' countersign — asserted, not assumed.
+| transfer/tags/directed-assign/escalate landed at P-DOORS; the external arms at step 13
+| (ExternalArmsTest) — no `unbuilt_action` answer remains.
 */
 
 it('AC-01: an illegal transition fails THAT action with the door\'s own reason and the chain continues', function (): void {
@@ -104,20 +104,4 @@ it('EC-01: the second rule\'s arm reports superseded_state when the fact moved a
         ->and($outcomes[0]['superseded_state'])->toBeTrue('the arm acted on moved state silently — EC-01 honesty gone');
 });
 
-it('the STILL-unbuilt arms answer honestly until step 13: the external arms = unbuilt_action', function (): void {
-    [$tenant, , $ticket] = ticketFixture('open');
-    $actions = [
-        ['type' => 'notify', 'user_ids' => []],
-        ['type' => 'webhook_out', 'url' => 'https://example.test'],
-        ['type' => 'send_sms_template', 'template_ref' => 't1'],
-        ['type' => 'run_ai_task', 'task' => 'summarize_thread'],
-        ['type' => 'suppress', 'reason' => 'rule'],
-    ];
-    $executionId = automationActionScene($tenant, $ticket, $actions);
-
-    $outcomes = runChain($executionId, $actions);
-
-    foreach ($outcomes as $outcome) {
-        expect($outcome['reason'])->toBe('unbuilt_action', json_encode($outcome));
-    }
-});
+// The step-5 "still-unbuilt arms" pin RETIRED at step 13: every FR-03 type is bound — ExternalArmsTest pins boundTypes() === TYPES.

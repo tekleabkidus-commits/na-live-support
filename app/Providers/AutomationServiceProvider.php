@@ -38,6 +38,12 @@ final class AutomationServiceProvider extends ServiceProvider
             $registry->bind('set_custom_field', $app->make(\App\Domain\Automation\Actions\SetCustomFieldAction::class));
             // Step 9: the resolver-guarded system reply (T-06's automation half).
             $registry->bind('send_macro_reply', $app->make(\App\Domain\Automation\Actions\SendMacroReplyAction::class));
+            // Step 13: the external arms (FR-03's remainder) — every FR-03 type is now bound.
+            $registry->bind('webhook_out', $app->make(\App\Domain\Automation\Actions\WebhookOutAction::class));
+            $registry->bind('notify', $app->make(\App\Domain\Automation\Actions\NotifyAction::class));
+            $registry->bind('send_sms_template', $app->make(\App\Domain\Automation\Actions\SendSmsTemplateAction::class));
+            $registry->bind('suppress', $app->make(\App\Domain\Automation\Actions\SuppressAction::class));
+            $registry->bind('run_ai_task', $app->make(\App\Domain\Automation\Actions\RunAiTaskAction::class));
 
             return $registry;
         });

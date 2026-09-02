@@ -20,6 +20,8 @@ const DOC12_AUTOMATION_TABLES = [
     'automation_rules', 'automation_rule_revisions', 'automation_rule_executions',
     'automation_keyword_sets', 'field_definitions', 'field_definition_options',
     'forms', 'form_versions', 'form_flow_checkpoints',
+    // RIDER 5 (step 13): the external arms' three tables.
+    'automation_webhook_destinations', 'automation_webhook_deliveries', 'customer_marketing_suppressions',
 ];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). '*' = every column. */
@@ -68,6 +70,24 @@ const DOC12_AUTOMATION_DENIED = [
         'INSERT' => ['created_at', 'finished_at', 'outcome', 'updated_at'],
         // EC-06's pin as physics: the flow's version (and identity) never moves.
         'UPDATE' => ['conversation_id', 'created_at', 'form_id', 'id', 'language', 'mode', 'tenant_id', 'version_id'],
+    ],
+    'automation_webhook_destinations' => [
+        // RIDER 5 A: born active with a clean streak; the EC-13 stamps arrive by outcome.
+        'INSERT' => ['active', 'auto_disabled_at', 'created_at', 'failure_streak', 'last_delivered_at', 'last_error', 'last_failed_at', 'updated_at'],
+        // SEC-02 as physics: url/host (and provenance) never move — a corrected target is a new row.
+        'UPDATE' => ['created_at', 'created_by', 'host', 'id', 'tenant_id', 'url'],
+    ],
+    'automation_webhook_deliveries' => [
+        // RIDER 5 B: born queued with zero attempts.
+        'INSERT' => ['attempts', 'created_at', 'delivered_at', 'last_error', 'last_status_code', 'next_attempt_at', 'state', 'updated_at'],
+        // What was sent is what was recorded: payload, destination and provenance immutable.
+        'UPDATE' => ['created_at', 'destination_id', 'event_name', 'execution_id', 'id', 'payload', 'rule_id', 'tenant_id'],
+    ],
+    'customer_marketing_suppressions' => [
+        // RIDER 5 C: born live; the clear arrives by outcome.
+        'INSERT' => ['cleared_at', 'cleared_by', 'created_at', 'updated_at'],
+        // Identity and reason immutable; NO DELETE — history stays.
+        'UPDATE' => ['created_at', 'customer_id', 'id', 'reason', 'rule_ref', 'source', 'tenant_id'],
     ],
 ];
 
@@ -169,4 +189,33 @@ it('R-20 control (countersign obligation 4): the activation stamp fills once fro
     $after = DB::table('automation_rule_revisions')->where('id', $revisionId)->first();
     expect($after->activated_at)->toBe($activated->activated_at, 'activated_at MOVED — the fill-only law is broken')
         ->and($after->activated_by)->toBe($activator, 'activated_by moved after activation');
+});
+
+it('RIDER 5 physics (step 13): a destination url, a delivery payload and a suppression reason each die 42501 on UPDATE — SEC-02 / the dispute record / the history posture as column grants', function (): void {
+    [$tenant, , $ticket] = ticketFixture('open');
+    $customerId = (string) DB::table('tickets')->where('id', $ticket->identifier())->value('customer_id');
+    $destinationId = (string) Str::uuid7();
+    DB::table('automation_webhook_destinations')->insert(['id' => $destinationId, 'tenant_id' => $tenant->identifier(), 'name' => 'd', 'url' => 'https://hooks.example.test/a', 'host' => 'hooks.example.test', 'created_by' => (string) Str::uuid7()]);
+    $deliveryId = (string) Str::uuid7();
+    DB::table('automation_webhook_deliveries')->insert(['id' => $deliveryId, 'tenant_id' => $tenant->identifier(), 'destination_id' => $destinationId, 'event_name' => 'automation.rule.fired', 'payload' => '{}']);
+    $suppressionId = (string) Str::uuid7();
+    DB::table('customer_marketing_suppressions')->insert(['id' => $suppressionId, 'tenant_id' => $tenant->identifier(), 'customer_id' => $customerId, 'reason' => 'r', 'source' => 'rule']);
+
+    foreach ([
+        ['automation_webhook_destinations', $destinationId, ['url' => 'https://10.0.0.1/x']],
+        ['automation_webhook_deliveries', $deliveryId, ['payload' => '{"forged":true}']],
+        ['customer_marketing_suppressions', $suppressionId, ['reason' => 'rewritten']],
+    ] as [$table, $id, $update]) {
+        try {
+            DB::transaction(static fn () => DB::table($table)->where('id', $id)->update($update)); // a savepoint per refusal
+            $this->fail("{$table}: the immutable column moved");
+        } catch (QueryException $e) {
+            expect($e->getCode())->toBe('42501', "{$table} — expected the grant refusal");
+        }
+    }
+    // The lawful writes still land (the grant is a split, not a wall).
+    DB::table('automation_webhook_destinations')->where('id', $destinationId)->update(['active' => false]);
+    DB::table('automation_webhook_deliveries')->where('id', $deliveryId)->update(['attempts' => 1, 'state' => 'abandoned']);
+    DB::table('customer_marketing_suppressions')->where('id', $suppressionId)->update(['cleared_at' => DB::raw('clock_timestamp()')]);
+    expect(DB::table('customer_marketing_suppressions')->where('id', $suppressionId)->value('cleared_at'))->not->toBeNull();
 });

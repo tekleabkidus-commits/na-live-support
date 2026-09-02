@@ -3030,7 +3030,7 @@ to all-but-action_outcomes in the same commit.
 END OF RIDER 2 — nothing follows this line.
 
 
-### SCHEMA AMENDMENT 6 — RIDER 3 (filed at S12 step 11, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+### SCHEMA AMENDMENT 6 — RIDER 3 (filed at S12 step 11, BEFORE its migration — the rider law; rides the granted countersign; **CONFIRMED at the batch-C acceptance, grounded at b0365de: T-07's DB half; EC-06's version pin by grant; supersede-by-outcome, never delete**)
 
 T-07 states the flow store in full ("per-conversation flow state in Redis with
 24 h TTL + DB checkpoint at step boundaries — a crashed flow resumes at the last
@@ -3071,7 +3071,7 @@ RIDER: **`form_flow_checkpoints`** (T-07, EC-06, SS-03, FS-04) —
 
 END OF RIDER 3 — nothing follows this line.
 
-### SCHEMA AMENDMENT 6 — RIDER 4 (filed at S12 step 12, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+### SCHEMA AMENDMENT 6 — RIDER 4 (filed at S12 step 12, BEFORE its migration — the rider law; rides the granted countersign; **CONFIRMED at the batch-C acceptance, grounded at b0365de: the doc is law — item 15's NOT NULL was the oversight; the one-anchor CHECK; closed payloads as filed**)
 
 FR-24 names TWO trigger points: "ticket resolved (Doc 06 FR-06) and AI-resolved
 (Doc 09 FR-09)". Doc 09's `ai.resolved` is, in the catalog's own words, "the

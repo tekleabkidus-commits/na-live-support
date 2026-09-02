@@ -260,4 +260,12 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc11',
     ],
+    [
+        // Doc 12 FR-03 notify (S12 step 13; EVENT-FAMILY AMENDMENT 2): the category a rule's notify action names by default — delivery is Doc 16's ([D16]).
+        'category_key' => 'notify.automation.rule',
+        'label_i18n_key' => 'workflow.notify.rule',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc12',
+    ],
 ];

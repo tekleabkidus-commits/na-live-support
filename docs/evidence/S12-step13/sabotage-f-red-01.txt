@@ -1,0 +1,30 @@
+# SABOTAGE (f) — plan §7: the webhook allowlist/SSRF birth check removed from WebhookDestinations::create (the SsrfRules::assertAllowed call deleted); expectation: WebhookEgressTest SEC-02 (1) RED
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WebhookEgressTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-02 (1): the SSRF rules refuse every internal-network shape[39m[90m… [39m [90m10.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (2): the landed url is IMMUTABLE by grant — an UPDATE ont[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (3): an EMPTY egress-proxy value refuses to send at all —[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (4): every send is SIGNED with the tenant secret — the th[39m[90m…[39m [90m0.19s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WebhookEgressTest[22m [90m>[39m it SEC-02 (1): the SSRF rules…    
+[39;1m  Exception "App\Domain\Automation\Webhooks\WebhookDestinationRefused" not thrown.[39;22m
+
+  at [32mtests/Security/WebhookEgressTest.php[39m:[32m58[39m
+     54▕         'http://hooks.example.test/hook', 'https://user:pw@hooks.example.test/hook', 'not a url',
+     55▕     ];
+     56▕     foreach ($refused as $url) {
+     57▕         expect(fn () => $destinations->create('bad', $url, $admin->identifier()))
+  ➜  58▕             ->toThrow(WebhookDestinationRefused::class, '', "{$url} was admitted — SEC-02's SSRF rules are open");
+     59▕     }
+     60▕     expect(SsrfRules::CODE)->toBe('ssrf_refused');
+     61▕ 
+     62▕     $id = $destinations->create('Operator CRM', 'https://hooks.example.test/na-live', $admin->identifier());
+
+  [33m1   [39m[39;1mtests/Security/WebhookEgressTest.php[39;22m:[39;1m58[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (17 assertions)[39m
+  [90mDuration:[39m [39m11.03s[39m
+
+EXIT=1

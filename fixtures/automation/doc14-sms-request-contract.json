@@ -1,0 +1,8 @@
+{
+  "doc": "Doc12",
+  "spec": "Doc 12 FR-03 send-SMS-template → Doc 14 delivery ([D14]): the read-slice Doc 14 consumes. A TEMPLATE REFERENCE and identifiers — no text key exists on this event (BR-04; Doc 14 BR-01). Doc 14 resolves the published template in the customer's language, applies ITS per-customer guards (opt-out, quiet hours, phone present) and records the send.",
+  "event": "automation.sms.requested",
+  "consumer": "Doc14/Sms",
+  "schema_version": 1,
+  "reads": ["tenant_id", "rule_id", "execution_id", "ticket_id", "customer_id", "template_ref"]
+}

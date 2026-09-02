@@ -1178,6 +1178,35 @@ final class EventCatalog
             'consumers' => ['Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
             'description' => 'Doc 12 FR-04/T-03: a guard cap stopped evaluation (guard: max_rules|max_actions|chain_depth) — the alert arm; rule_id null on a depth skip.',
         ],
+        // S12 step 13 — EVENT-FAMILY AMENDMENT 2 (filed before these entries): the external arms' products.
+        'automation.webhook.disabled' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'destination_id', 'rule_id', 'delivery_id', 'attempts'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 12 EC-13: a webhook destination exhausted retry ×8 and AUTO-DISABLED — the alert arm (rule_id nullable; delivery_id = the exhausting delivery).',
+        ],
+        'automation.notify.requested' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'rule_id', 'execution_id', 'ticket_id', 'category', 'user_ids'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc16/Notifications', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-03 notify: resolved recipient user ids + a REGISTERED category — identifiers only; Doc 16 delivers ([D16]). ticket_id nullable.',
+        ],
+        'automation.sms.requested' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'rule_id', 'execution_id', 'ticket_id', 'customer_id', 'template_ref'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc14/Sms', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-03 send SMS template (BR-04): a TEMPLATE REFERENCE and identifiers — NO text key exists on this payload; Doc 14 renders and applies its guards ([D14]).',
+        ],
+        'customer.suppression.set' => [
+            'schema_version' => 1,
+            'payload' => ['tenant_id', 'customer_id', 'rule_id', 'reason'],
+            'producers' => ['Doc12/Automation'],
+            'consumers' => ['Doc08/Customers', 'Doc14/Sms', 'Doc15/Reporting', 'Doc17/Audit'],
+            'description' => 'Doc 12 FR-03 suppress: the marketing-suppression flag set on a customer (Doc 08 FR-15 consumers read it via MarketingSuppression::isSuppressed); rule_id nullable for a staff set.',
+        ],
         'sla.policy.changed' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'policy_id', 'kind'],

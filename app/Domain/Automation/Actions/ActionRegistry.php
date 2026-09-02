@@ -18,10 +18,10 @@ use App\Domain\Automation\Rules\SystemActorFloor;
  *     AutomationNoBypassTest sweep is the physics over this directory;
  *   - returns its honest outcome {action, outcome, reason?, superseded_state?}.
  *
- * S12 step 4 ships the REGISTRY + floor gate with ZERO arms bound: every type
- * resolves to `unbuilt` and logs `failed/unbuilt_action` honestly (no fake
- * success exists to ship). The arms land at steps 5 and 13; binding one is a
- * container registration, not an edit here.
+ * S12 step 4 shipped the REGISTRY + floor gate with ZERO arms bound (every
+ * type answered `failed/unbuilt_action` honestly); steps 5, P-DOORS and 13
+ * bound them all — boundTypes() === TYPES is pinned. Binding is a container
+ * registration, not an edit here.
  */
 final class ActionRegistry
 {
@@ -36,6 +36,15 @@ final class ActionRegistry
     private array $arms = [];
 
     public function __construct(private readonly SystemActorFloor $floor) {}
+
+    /** @return list<string> the types an arm is bound to, sorted — the step-13 "every type bound" pin */
+    public function boundTypes(): array
+    {
+        $types = array_keys($this->arms);
+        sort($types);
+
+        return $types;
+    }
 
     public function bind(string $type, AutomationAction $arm): void
     {

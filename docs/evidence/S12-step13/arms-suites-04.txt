@@ -1,0 +1,39 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WebhookEgressTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (1): the SSRF rules refuse every internal-network shape[39m[90m… [39m [90m10.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (2): the landed url is IMMUTABLE by grant — an UPDATE ont[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (3): an EMPTY egress-proxy value refuses to send at all —[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 (4): every send is SIGNED with the tenant secret — the th[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ExternalArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every FR-03 action type is BOUND — the step-4 unbuilt_action pos[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook_out: names a destination BY ID from the allowlist, queue[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-13 drill: a failing target retries with backoff up to EXACTLY[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: resolves users + role members from row truth, requires a[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit send_sms_template: a TEMPLATE REFERENCE only — the request event[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit suppress: sets the marketing-suppression flag on the ticket's cu[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit run_ai_task: catalog-bound to the three names — chatbot_turn is[39m[90m… [39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\ExternalContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fixtures/automation/doc16-notify-contract.json + doc14-sms-reque[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\AutomationGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per automation table and priv[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every automation table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18 physics (countersign obligation 1): a field key/type/entit[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-20 control (countersign obligation 4): the activation stamp fi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER 5 physics (step 13): a destination url, a delivery payload[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\RuleDefinitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-07: create drafts, activate swaps atomically, an edit to an a[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01/FR-03 walls: unknown trigger, unknown action type and a su[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: keyword sets are managed lists — created, updated, retire[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AutomationNoBypassTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-02: the automation namespace holds NO ticket write and NO tra[39m[90m…[39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m21 passed[39;22m[90m (344 assertions)[39m
+  [90mDuration:[39m [39m14.80s[39m
+
+EXIT=0

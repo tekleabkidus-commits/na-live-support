@@ -16,6 +16,22 @@ v1/v2, B6-S14 v1/v2); highest version binds; the v1s stay; the session's
 "one-version-per-screen" claim was a defective-regex finding (the pattern missed
 `.dc.html`), corrected as honest trail on the [B8] BUILD-STATUS row.
 
+## §0b — BATCH-C ACCEPTANCE RULINGS FOLDED (owner-relayed, grounded at b0365de; folded 2026-09-02 at the batch-D resume)
+BATCH C ACCEPTED at b0365de; both CI dispositions accepted (the Stage-4 trio-heal
+fix's run as the verdict; the Stage-3 0d tail re-run per 0i). RIDER 3 CONFIRMED
+(T-07's DB half; EC-06 version pin by grant; supersede-by-outcome never delete).
+RIDER 4 CONFIRMED (the doc is law — item 15's NOT NULL was the oversight; one-
+anchor CHECK; closed payloads as filed). P-CHIP COUNTERSIGN GRANTED as filed
+(fail-first null pin; poisoned-payload values-from-truth control; Doc 07 suites
+green same commit; seeder hand-paint stays until the fidelity session). P-FIELDS
+COUNTERSIGN GRANTED as filed (A-53 swap shape; all three controls incl. EC-09
+from the real source; seeded trio as real rows at provisioning same commit; Doc
+08 suites green same commit). P-SEND COUNTERSIGN GRANTED as filed (one guard,
+notes exempt, pinned pre-state flips, Doc 04 suites green same commit).
+RbacBudgets re-shape REFUSED for this session — the 4-datapoint count is filed
+on 0d's ledger; it is Doc 03's file and a future window's escalate-first call.
+Batch D opened at step 13. (END OF RULING — nothing followed that line.)
+
 ## §0 — PLAN-TIME STOPS (rulings needed before step 1)
 
 ### STOP-A (prompt §5.3 — RESOLVED AT STEP 0, stated not asked) — catalog verification
@@ -435,7 +451,12 @@ Step 12: `tests/Feature/Csat/{TriggerMatrixTest,CaptureTest}.php` (listed dir)
 + the already-listed CsatSingleResponseTest; doc12Columns/doc12DeniedSet
 promoted to tests/Pest.php (the per-file-helper law, 6th promotion).
 Step 13 (batch D): P-CHIP's proof `tests/Feature/Inbox/SlaProjectionTest.php`
-(a Doc 07 dir — add the file to the run list; Doc 07's own suite runs it too).
+(a Doc 07 dir — add the file to the run list; Doc 07's own suite runs it too);
+P-FIELDS' proof `tests/Feature/Fields/CustomerDefinitionsSourceTest.php` (listed
+dir); the external arms: `tests/Security/WebhookEgressTest.php` (add the file —
+AC-09's automated suite), `tests/Feature/Automation/ExternalArmsTest.php` and
+`tests/Contract/Automation/ExternalContractsTest.php` (listed dirs); RIDER 5's
+physics legs ride the already-listed AutomationGrantPhysicsTest.
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 
@@ -558,6 +579,15 @@ consumption slots (SLA chips, macro palette source) — CONTRACT FIXTURES ONLY t
 session; any Doc 07 file edit is its own packet · #6 anticipated NONE for Docs
 02/03/04/08/09/10 (conditions/actions consume doors; Doc 08's customer_field_values
 written through its existing service; any surprise = stop first).
+_Batch-D addenda (filed as reached):_ #5 became TWO packets — P-CHIP (Doc 07's
+TicketListItems/ConsumerRegistry/fixture; countersigned at the batch-C acceptance,
+landed 2e448f5) and P-SEND (Doc 04's ComposeOutbound; countersigned there, landed
+9dd9f49); #6's "any surprise" fired twice — P-FIELDS (Doc 08's CustomerFieldValues
+source swap; countersigned, landed d53a76e) and **P-CLS (Doc 09's
+InboundClassification: a classify-ONLY door, because classify() also executes the
+route — filed docs/evidence/S12-step13/packet-P-CLS.md, PROPOSED; the
+classify_refresh sub-arm answers unbuilt_ai_task until countersigned).** #7 =
+P-CLS.
 
 ## §12 — Step 0 record
 Solo guard: rival PID 84745 killed, verified gone twice; no daemon/bridge; no orphaned

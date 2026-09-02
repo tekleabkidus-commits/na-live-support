@@ -61,4 +61,13 @@ return [
             'resolution' => 'Resolution',
         ],
     ],
+    // FR-03 notify: the registered category's label (Doc 16 renders the opt model).
+    'notify' => [
+        'rule' => 'Rule notification',
+    ],
+    // FR-03 run AI task: the INTERNAL note bodies (N-04), resolved at write time (NotesWriter's law).
+    'ai_task' => [
+        'summary_note' => 'AI summary (rule-generated): :summary',
+        'translation_note' => 'AI translation of the last customer message into :language (rule-generated): :text',
+    ],
 ];

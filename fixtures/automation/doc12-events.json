@@ -1,0 +1,15 @@
+{
+  "doc": "Doc12",
+  "spec": "Doc 12 / Doc 06 NFR-06 — consumer contracts for Doc 12's durable consumption of NON-ticket events (S12 step 13; ADR 0011). The ticket.* slices live in fixtures/tickets/consumers/doc12.json (Doc 06's roster, ticket events only — a non-ticket event there is a ghost, the step-13 battery's own finding).",
+  "note": "CustomerFieldSeederConsumer (P-FIELDS) reads tenant_id only and seeds the Doc 08 betting trio as real customer field definitions; idempotent by key. The other non-ticket triggers Doc 12 rides (message.received, form.submitted, sla.*, csat.received, telegram.window.*) are read by EventContext under the doc12.json ticket-key conformance leg and the TriggerMap; their slices join this file when the close-out enumerates them — stated, not implied.",
+  "entries": [
+    {
+      "event": "tenant.provisioned",
+      "consumer": "Doc12/CustomerFieldSeeder",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id"
+      ]
+    }
+  ]
+}
