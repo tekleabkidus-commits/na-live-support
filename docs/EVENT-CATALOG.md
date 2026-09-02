@@ -1083,7 +1083,7 @@ A tenant completed every provisioning step and became active.
 - **Schema version:** 1
 - **Payload:** `tenant_id`
 - **Producers:** Doc01/ProvisionTenant
-- **Consumers:** Doc03/RoleSeeder, Doc10/KnowledgeBaseSeeder, Doc17/Audit
+- **Consumers:** Doc03/RoleSeeder, Doc10/KnowledgeBaseSeeder, Doc12/CustomerFieldSeeder, Doc17/Audit
 
 ## `tenant.quota_exceeded`
 

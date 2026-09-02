@@ -14,13 +14,13 @@ use Illuminate\Support\Str;
 |
 | customer → Doc 08's customer_field_values door (its audit-history reading
 | stands; the seeded trio accepts through BOTH validation layers; a NEW
-| customer definition validates HERE and then hits Doc 08's fixture wall —
+| customer definition validates HERE and then stores through Doc 08's door (P-FIELDS landed; the old fixture-wall pin flipped) —
 | packet P-FIELDS' documented pre-state, ASSERTED so the swap has its
 | fail-first). ticket → the Doc 06 jsonb (proven across the matrix). The FR-02
 | condition facts read both stores (EventContext — proven live here).
 */
 
-it('A-59 customer half: the seeded trio stores through Doc 08\'s door; a NEW definition validates here and hits the fixture wall (P-FIELDS\' pre-state, asserted)', function (): void {
+it('A-59 customer half: the seeded trio stores through Doc 08\'s door; a NEW definition validates here AND stores through Doc 08\'s door (P-FIELDS landed — the pre-state pin flipped)', function (): void {
     [$tenant, , $ticket] = ticketFixture('open');
     $definitions = app(DefinitionWriter::class);
     $values = app(ValueWriter::class);
@@ -33,11 +33,13 @@ it('A-59 customer half: the seeded trio stores through Doc 08\'s door; a NEW def
     expect(DB::table('customer_field_values')->where('customer_id', $customerId)->where('field_key', 'player_id')->value('value'))
         ->toBe('PL-90001');
 
-    // A NEW customer definition: MY validation passes, Doc 08's fixture door
-    // refuses — the P-FIELDS packet's fail-first, pinned until the countersigned swap.
+    // A NEW customer definition: MY validation passes AND Doc 08's door now reads
+    // the REAL rows — P-FIELDS LANDED (S12 batch D, countersigned): the pinned
+    // pre-state ("unknown customer field" from the fixture wall) FLIPPED on record.
     $definitions->create(['entity' => 'customer', 'key' => 'referral_channel', 'label' => ['en' => 'Tier', 'am' => 'ደረጃ'], 'type' => 'text'], $actor);
-    expect(fn () => $values->setCustomerField($customerId, 'referral_channel', 'gold', $actor))
-        ->toThrow(InvalidArgumentException::class, 'unknown customer field');
+    $values->setCustomerField($customerId, 'referral_channel', 'gold', $actor);
+    expect(DB::table('customer_field_values')->where('customer_id', $customerId)->where('field_key', 'referral_channel')->value('value'))
+        ->toBe('gold', 'the swap did not land — Doc 08\'s door still reads the fixture');
 });
 
 it('FR-02 live: a stored ticket custom value drives a rule condition end-to-end (US-05\'s "usable in rule conditions")', function (): void {

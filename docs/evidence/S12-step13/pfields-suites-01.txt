@@ -1,0 +1,21 @@
+
+  [41;1m ERROR [49;22m Test case [Tests\TestCase] can not be used. The folder [/app/tests/Feature/Fields/CustomerDefinitionsSourceTest.php] already uses the test case [Tests\TestCase].
+
+Location: /app/vendor/pestphp/pest/src/Repositories/TestRepository.php:191
+
+#0 /app/vendor/pestphp/pest/src/Repositories/TestRepository.php(173): Pest\Repositories\TestRepository->make(Object(Pest\Factories\TestCaseFactory))
+#1 /app/vendor/pestphp/pest/overrides/Runner/TestSuiteLoader.php(97): Pest\Repositories\TestRepository->makeIfNeeded('/app/tests/Feat...')
+#2 /app/vendor/pestphp/pest/overrides/Runner/TestSuiteLoader.php(98): PHPUnit\Runner\TestSuiteLoader::{closure:PHPUnit\Runner\TestSuiteLoader::load():90}()
+#3 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(237): PHPUnit\Runner\TestSuiteLoader->load('/app/tests/Feat...')
+#4 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(258): PHPUnit\Framework\TestSuite->addTestFile('/app/tests/Feat...')
+#5 /app/vendor/phpunit/phpunit/src/TextUI/Configuration/TestSuiteBuilder.php(113): PHPUnit\Framework\TestSuite->addTestFiles(Array)
+#6 /app/vendor/phpunit/phpunit/src/TextUI/Configuration/TestSuiteBuilder.php(146): PHPUnit\TextUI\Configuration\TestSuiteBuilder->testSuiteFromPath('/app/tests/Feat...', Array, Object(PHPUnit\Framework\TestSuite))
+#7 /app/vendor/phpunit/phpunit/src/TextUI/Configuration/TestSuiteBuilder.php(63): PHPUnit\TextUI\Configuration\TestSuiteBuilder->testSuiteFromPathList(Array, Array)
+#8 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(389): PHPUnit\TextUI\Configuration\TestSuiteBuilder->build(Object(PHPUnit\TextUI\Configuration\Configuration))
+#9 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(196): PHPUnit\TextUI\Application->buildTestSuite(Object(PHPUnit\TextUI\Configuration\Configuration))
+#10 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#11 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#12 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#13 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#14 {main}.
+EXIT=255

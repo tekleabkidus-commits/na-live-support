@@ -72,7 +72,7 @@ it('rides ProvisioningStep::Organization — ordered after DefaultRoles, before 
     expect(__('foundation.provisioning.step.organization', [], 'en'))->not->toBe('foundation.provisioning.step.organization')
         ->and(__('foundation.provisioning.step.organization', [], 'am'))->not->toBe('foundation.provisioning.step.organization');
     // STOP-C.1 is a STEP, not a consumer: the drill pin's list is untouched.
-    expect(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class]);
+    expect(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, App\Jobs\Fields\CustomerFieldSeederConsumer::class]); // S12 batch D (P-FIELDS): the trio seeder joined, pin moved same commit
 });
 
 it('runs inside a real provisioning: a tenant provisioned through TenantProvisioner has its nine departments and is Active only after the organization step completed', function () {

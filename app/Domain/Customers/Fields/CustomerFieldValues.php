@@ -11,14 +11,16 @@ use App\Support\Audit\AuditLogger;
 use App\Support\Events\EventPublisher;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use InvalidArgumentException;
 use Symfony\Component\Uid\UuidV7;
 
 /**
  * FR-16's value writer and reader — the ONE door for entity=customer
  * custom-field values (SCHEMA AMENDMENT 2 addition 9, countersigned).
- * Definitions are Doc 12's; until it ships they come from the [D12] seam
- * fixture (`fixtures/customers/field-definitions.json`).
+ * Definitions are Doc 12's: `field_definitions` (entity=customer) is the
+ * source; the [D12] seam fixture (`fixtures/customers/field-definitions.json`)
+ * is read only by a tenant holding no rows (P-FIELDS, S12 batch D).
  *
  * EC-09: a RETIRED definition's value renders read-only ("the definition
  * went, the fact stayed" — B4-S02's own caption) and a write to it REFUSES.
@@ -40,9 +42,48 @@ final class CustomerFieldValues
         private readonly CustomerScope $scope,
     ) {}
 
-    /** @return list<array{key: string, label_i18n: string, type: string, retired: bool}> */
+    /**
+     * P-FIELDS (S12 batch D, countersigned at the batch-C acceptance — the
+     * A-53/HoursContract swap shape): the definitions come from Doc 12's
+     * `field_definitions` (entity=customer) whenever the bound tenant holds
+     * any — {key, label_i18n, type, retired: !active} in position order — and
+     * from the [D12] seam fixture ONLY when it holds none (the PRE state, kept
+     * as the control; a provisioned tenant receives the betting trio as REAL
+     * rows from the tenant.provisioned consumer, so production never reads the
+     * fixture). label_i18n keeps its i18n-KEY contract wherever a platform key
+     * exists (the trio; the fixture's retired loyalty_tier); an OPERATOR-
+     * authored definition carries its own label text (operator content — the
+     * N-03 exemption), which the card's t() renders as-is until Doc 08's card
+     * learns the label map (a named [B12-batch]-adjacent follow-up, outside
+     * this packet's one file).
+     *
+     * @return list<array{key: string, label_i18n: string, type: string, retired: bool}>
+     */
     public static function definitions(): array
     {
+        // No bound tenant (a platform context) = no rows to read: the fixture, as before.
+        /** @var list<object{key: string, label: string, type: string, active: bool}> $rows */
+        $rows = app(TenantContext::class)->isBound()
+            ? DB::table('field_definitions')->where('entity', 'customer')->orderBy('position')->orderBy('id')->get(['key', 'label', 'type', 'active'])->all()
+            : [];
+        if ($rows !== []) {
+            $locale = app()->getLocale();
+            $definitions = [];
+            foreach ($rows as $row) {
+                $key = 'customers.fields.'.$row->key;
+                /** @var array<string, string> $label */
+                $label = json_decode($row->label, true, 4) ?: [];
+                $definitions[] = [
+                    'key' => $row->key,
+                    'label_i18n' => Lang::has($key, 'en') ? $key : ($label[$locale] ?? $label['en'] ?? $row->key),
+                    'type' => $row->type,
+                    'retired' => ! $row->active,
+                ];
+            }
+
+            return $definitions;
+        }
+
         /** @var array{fields: list<array{key: string, label_i18n: string, type: string, retired: bool}>} $data */
         $data = json_decode(
             (string) file_get_contents(base_path('fixtures/customers/field-definitions.json')),

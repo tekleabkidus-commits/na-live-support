@@ -77,7 +77,7 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // S11 step 5: TicketCreatedRouter joined ticket.created DELIBERATELY (Doc 11 FR-07's created trigger,
         // durable per ADR 0011; contract fixture doc11.json) — the pin moves WITH the registry change, again.
         ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class, App\Jobs\Routing\TicketCreatedRouter::class, App\Jobs\Automation\AutomationEventConsumer::class, App\Jobs\Sla\SlaLifecycleConsumer::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator + the Doc 11 created router + the Doc 12 automation and SLA consumers (S07 step 2 / S08 steps 3 and 8 / S09 step 11 / S11 step 5 / S12 steps 4+6)')
-        ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class], 'S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
+        ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, App\Jobs\Fields\CustomerFieldSeederConsumer::class], 'S12 batch D (P-FIELDS): the customer-field trio seeder joined DELIBERATELY; S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
 });
 
 test('ADR 0011: relaying a mapped event queues the consumer once — event id, tenant and correlation stamped — and a relay re-run re-dispatches nothing', function () {

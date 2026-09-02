@@ -111,7 +111,10 @@ final class ConsumerRegistry
         // Doc 10 FR-04 (S10 step 8; A-45 AS RULED): the catalog's DECLARED tenant.provisioned
         // consumer, implemented — the starter set seeds right after activation (the disclosed
         // millisecond asynchrony). The ReopenConsumerDrillTest empty pin moves in THIS commit.
-        'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class],
+        // P-FIELDS (S12 batch D, countersigned): the Doc 08 betting trio lands as REAL customer
+        //    field definitions at provisioning — the KB seeder shape (fixture doc12.json; the
+        //    ReopenConsumerDrillTest + OrganizationSeederTest pins move in THIS commit).
+        'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, \App\Jobs\Fields\CustomerFieldSeederConsumer::class],
         'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],

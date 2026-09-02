@@ -49,7 +49,7 @@ final class EventCatalog
             'schema_version' => 1,
             'payload' => ['tenant_id'],
             'producers' => ['Doc01/ProvisionTenant'],
-            'consumers' => ['Doc03/RoleSeeder', 'Doc10/KnowledgeBaseSeeder', 'Doc17/Audit'],
+            'consumers' => ['Doc03/RoleSeeder', 'Doc10/KnowledgeBaseSeeder', 'Doc12/CustomerFieldSeeder', 'Doc17/Audit'],
             'description' => 'A tenant completed every provisioning step and became active.',
         ],
         'tenant.state_changed' => [
