@@ -3096,3 +3096,110 @@ un-armable. The doc is law; the item was the oversight. RIDER:
   (UPDATE-denied gains conversation_id).
 
 END OF RIDER 4 — nothing follows this line.
+
+### SCHEMA AMENDMENT 6 — RIDER 5 (filed at S12 step 13, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+
+Step 13 builds FR-03's external arms. Three of them need rows the amendment-6
+filing never carried, and no existing table can hold them: SEC-02's per-tenant
+admin-managed webhook DESTINATION ALLOWLIST, EC-13's per-destination retry
+×8 → auto-disable record (a delivery's attempt history), and the FR-03
+`suppress` action's marketing-suppression flag (Doc 08 FR-15's [D12] consumer
+contract — the customers table is Doc 08's and gains no column; the flag is
+Doc 12-owned state with a reader contract, the RG-flag-history posture:
+never hard-deleted, cleared by outcome). RIDER — three tables:
+
+**A. `automation_webhook_destinations`** (SEC-02, EC-13)
+- `id` uuid PK; `tenant_id` uuid NOT NULL FK tenants; `name` text NOT NULL;
+  `url` text NOT NULL CHECK (url ~ '^https://') — TLS only; `host` text NOT
+  NULL (the parsed hostname, the allowlist's match key); unique
+  (tenant_id, url).
+- `active` boolean NOT NULL DEFAULT true (the admin's switch);
+  `auto_disabled_at` timestamptz(6) NULL (EC-13's own stamp — distinct from
+  the admin's switch so the alert can say WHICH); `failure_streak` integer
+  NOT NULL DEFAULT 0; `last_error` text NULL; `last_failed_at`,
+  `last_delivered_at` timestamptz(6) NULL; `created_by` uuid NOT NULL.
+- GRANTS: INSERT (id, tenant_id, name, url, host, created_by); UPDATE (name,
+  active, auto_disabled_at, failure_streak, last_error, last_failed_at,
+  last_delivered_at, updated_at) — **url/host IMMUTABLE by grant: the SSRF
+  rules (no internal-network target, https only) are checked at BIRTH and
+  physics keeps them true; a corrected target is a NEW row**; NO DELETE
+  (deactivate by flag — the allowlist is an audited record). created_at
+  app-DENIED (R-19b).
+
+**B. `automation_webhook_deliveries`** (EC-13, FR-06's outcome detail)
+- `id` uuid PK; `tenant_id`; `destination_id` uuid NOT NULL FK
+  automation_webhook_destinations; `execution_id` uuid NULL (the rule
+  execution that produced it; nullable so a future non-rule producer can
+  ride the same table); `rule_id` uuid NULL; `event_name` text NOT NULL;
+  `payload` jsonb NOT NULL (what was signed and sent — the dispute record).
+- `attempts` integer NOT NULL DEFAULT 0; `state` text NOT NULL DEFAULT
+  'queued' CHECK (queued|delivered|abandoned) — named `state`, not `status`:
+  the BR-02 no-bypass grammar over the automation namespace refuses any
+  `'status' =>` assignment, deliberately; `last_status_code` integer
+  NULL; `last_error` text NULL; `next_attempt_at` timestamptz(6) NULL;
+  `delivered_at` timestamptz(6) NULL.
+- GRANTS: INSERT (id, tenant_id, destination_id, execution_id, rule_id,
+  event_name, payload); UPDATE (attempts, state, last_status_code,
+  last_error, next_attempt_at, delivered_at, updated_at) — **payload,
+  destination and provenance IMMUTABLE by grant (what was sent is what was
+  recorded)**; NO DELETE (retention is the platform role's, the executions
+  90 d precedent). Index (tenant_id, destination_id, created_at); partial
+  index on state = 'queued'. No FK from execution_id/rule_id: the 90 d
+  executions prune must never be blocked by a delivery row.
+- The retry schedule (×8, backoff) is a CODE CONSTANT like the guard caps
+  (BR-05's posture: a platform limit, not a setting).
+
+**C. `customer_marketing_suppressions`** (FR-03 suppress; Doc 08 FR-15 [D12])
+- `id` uuid PK; `tenant_id`; `customer_id` uuid NOT NULL FK customers;
+  `reason` text NOT NULL (rule-authored); `source` text NOT NULL CHECK
+  (rule|staff); `rule_ref` text NULL; `cleared_at` timestamptz(6) NULL;
+  `cleared_by` uuid NULL.
+- Partial unique (tenant_id, customer_id) WHERE cleared_at IS NULL — ONE live
+  suppression per customer; a re-suppress while live is an idempotent no-op
+  (the outcome says `already_suppressed`).
+- GRANTS: INSERT (id, tenant_id, customer_id, reason, source, rule_ref);
+  UPDATE (cleared_at, cleared_by, updated_at) — identity/reason immutable;
+  **NO DELETE — history retained (the Doc 08 rg_flag "never hard-deleted"
+  posture)**. created_at app-DENIED.
+- The READER CONTRACT (`MarketingSuppression::isSuppressed(customerId)`) is
+  what Doc 08 FR-15's consumers call: Doc 14's SMS guard ([D14]); Doc 12's own
+  send-SMS-template arm refuses for a suppressed OR RG-flagged customer
+  (`marketing_suppressed` / `rg_suppressed`) — "Doc 12 suppresses promotional
+  automations" (Doc 08 FR-15's words) made concrete on the one promotional-
+  capable automation Doc 12 emits.
+
+All three: FORCED RLS + tenant_isolation; the grant-physics denied sets land
+in tests/Isolation/AutomationGrantPhysicsTest in the same commit, with the
+url-UPDATE-dies-42501 leg as SEC-02's physics control.
+
+END OF RIDER 5 — nothing follows this line.
+
+### S12 EVENT-FAMILY AMENDMENT 2 (filed at step 13, BEFORE the events exist in the catalog — the enumeration law; growth of the sixteen+one by filing, never a silent catalog edit)
+
+FR-03's external arms produce three events the first amendment did not name
+(it named `customer.suppression.set`, which lands here as filed). Added:
+
+18. `automation.webhook.disabled` {tenant_id, destination_id, rule_id,
+    delivery_id, attempts} — EC-13's ALERT arm: a destination exhausted
+    retry ×8 and was auto-disabled (rule_id/delivery_id of the exhausting
+    delivery; rule_id nullable). → Doc 16 (alert delivery), Doc 15, Doc 17.
+19. `automation.notify.requested` {tenant_id, rule_id, execution_id,
+    ticket_id, category, user_ids} — the FR-03 notify action's PRODUCT:
+    identifiers only (resolved recipients; the registered category key);
+    Doc 16 delivers ([D16]). ticket_id nullable.
+20. `automation.sms.requested` {tenant_id, rule_id, execution_id, ticket_id,
+    customer_id, template_ref} — the FR-03 send-SMS-template action's
+    PRODUCT: a TEMPLATE REFERENCE and identifiers — no text key EXISTS in the
+    closed payload (BR-04 as catalog physics: a smuggled `body` is refused
+    by the closed-payload law); Doc 14 renders and applies its own guards
+    ([D14]).
+17. (as first filed) `customer.suppression.set` {tenant_id, customer_id,
+    rule_id, reason} — lands at step 13 with RIDER 5's table; rule_id
+    nullable (a staff clear is audited, not evented — the flag's consumers
+    re-read the reader contract).
+
+Notification category registered in the same commit, before its producer:
+`notify.automation.rule` (label `workflow.notify.rule`, in_app, user layer,
+owning Doc12) — the category a rule's notify action names by default.
+
+END OF EVENT-FAMILY AMENDMENT 2 — nothing follows this line.
