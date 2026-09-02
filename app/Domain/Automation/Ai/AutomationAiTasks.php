@@ -8,6 +8,7 @@ use App\Domain\Ai\Chatbot\ContextBuilder;
 use App\Domain\Ai\Chatbot\OutputGuard;
 use App\Domain\Ai\Copilot\ComposerActions;
 use App\Domain\Ai\Orchestrator\AiOrchestrator;
+use App\Domain\Ai\Pipeline\InboundClassification;
 use App\Domain\Ai\Prompt\LayeredAssembly;
 use App\Domain\Ai\Providers\RefusalDetector;
 use App\Domain\Conversations\Notes\NotesWriter;
@@ -40,6 +41,7 @@ final class AutomationAiTasks
         private readonly RefusalDetector $refusals,
         private readonly NotesWriter $notes,
         private readonly SettingsRepository $settings,
+        private readonly InboundClassification $classification,
     ) {}
 
     /** @return array{note_id: string} */
@@ -86,6 +88,30 @@ final class AutomationAiTasks
         $note = $this->notes->addSystemNote($conversation, (string) __('workflow.ai_task.translation_note', ['language' => self::LANGUAGE_NAMES[$target], 'text' => $text]));
 
         return ['note_id' => $note->identifier(), 'target_language' => $target];
+    }
+
+    /**
+     * P-CLS: classify-refresh — the latest customer text message re-classified
+     * through Doc 09's classify-ONLY door (no route executes); the FR-02 ai.*
+     * facts then read the new decision row.
+     *
+     * @return array{decision_id: string, message_id: string}
+     */
+    public function classifyRefresh(Conversation $conversation): array
+    {
+        /** @var object{id: string}|null $last */
+        $last = DB::table('messages')->where('conversation_id', $conversation->identifier())
+            ->where('direction', 'in')->where('author_type', 'customer')->where('kind', 'text')->where('quarantined', false)
+            ->orderByDesc('created_at')->orderByDesc('id')->first(['id']);
+        if ($last === null) {
+            throw new DomainException('nothing to classify: no customer text message');
+        }
+        $decisionId = $this->classification->classifyOnly($last->id);
+        if ($decisionId === null) {
+            throw new DomainException('classify_refresh_refused: the provider or quota refused, or the message is not the batch tail — nothing refreshed');
+        }
+
+        return ['decision_id' => $decisionId, 'message_id' => $last->id];
     }
 
     private function guarded(\App\Domain\Ai\Providers\ProviderResponse $response, string $text): string

@@ -117,6 +117,15 @@ test('Doc 05 US-04 (the closing row): the Rescue system view lists the channel_u
     await expect(page.locator('[data-ticket]', { hasText: 'Rescue Fixture Player' })).toBeVisible();
 });
 
+test("P-NAV (S12, countersigned): the palette carries the shell's one Workflow nav row, beside the KB row (the P8 shape)", async ({
+    page,
+}) => {
+    await openInbox(page);
+    await page.keyboard.press('ControlOrMeta+k');
+    await page.getByTestId('palette-input').fill('workflow');
+    await expect(page.getByTestId('palette-actions')).toContainText('Open Workflow');
+});
+
 test('FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath)', async ({
     page,
 }) => {

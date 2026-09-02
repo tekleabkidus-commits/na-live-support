@@ -53,6 +53,30 @@ final class InboundClassification
      */
     public function classify(string $messageId): ?string
     {
+        return $this->run($messageId, executeRoute: true);
+    }
+
+    /**
+     * PACKET P-CLS (S12 batch D, countersigned at the close-out recount): the
+     * classify-ONLY door for Doc 12's run-AI-task classify_refresh. The SAME
+     * burst assembly, template, normalize + two-stage RG confirmation and the
+     * SAME DecisionRecord write — so the FR-02 `ai.*` condition facts (which
+     * read the latest classify_message decision row for the message) refresh
+     * from a REAL row — and NO RouteExecutor call: a rule asking for a refresh
+     * never re-runs a chatbot turn, an RG override or a handoff. The row records
+     * action `copilot_context` (the catalog's own "no act" verb) under surface
+     * `chatbot` (ruled: the row is what the facts read; an automation surface
+     * would fork the source for a counting convenience — Doc 15's separate-
+     * counting reopener is filed in ANSWERS). A quota/provider refusal answers
+     * null — nothing to refresh, no fallback handoff recorded or executed.
+     */
+    public function classifyOnly(string $messageId): ?string
+    {
+        return $this->run($messageId, executeRoute: false);
+    }
+
+    private function run(string $messageId, bool $executeRoute): ?string
+    {
         /** @var object{conversation_id: string, direction: string, quarantined: bool, language: ?string, body: ?string, author_id: ?string}|null $message */
         $message = DB::table('messages')->where('id', $messageId)->first();
         if ($message === null || $message->direction !== 'in' || $message->quarantined) {
@@ -88,6 +112,9 @@ final class InboundClassification
             // refused before any model call — the customer still goes
             // STRAIGHT TO A HUMAN within this turn, never stranded on a
             // failed job (the first ChatbotTurnTest draft proved this gap).
+            if (! $executeRoute) {
+                return null; // P-CLS: a refresh has nothing to hand off — no fallback row, no route
+            }
             $reason = $refused instanceof AiQuotaExhausted ? 'quota_exhausted' : 'degraded';
             $fallbackId = (string) new UuidV7;
             $this->decisions->record(new DecisionRecord(
@@ -132,12 +159,12 @@ final class InboundClassification
             language: $language,
             intent: $classification['intent'],
             confidence: $classification['confidence'],
-            action: $route,
+            action: $executeRoute ? $route : 'copilot_context',
             rgRisk: $classification['rg_risk'],
             tokensIn: $result['response']->tokensIn + $rg['tokens_in'],
             tokensOut: $result['response']->tokensOut + $rg['tokens_out'],
             latencyMs: (int) round((microtime(true) - $started) * 1000),
-            requestPayload: ['burst' => $burst],
+            requestPayload: ['burst' => $burst] + ($executeRoute ? [] : ['refresh' => 'automation']),
             // The RoutePolicy outcome under the thresholds IN FORCE — AC-03's
             // replay anchor: the simulation recomputes exactly this.
             responsePayload: ['classification' => $classification, 'policy' => RoutePolicy::outcomeFor(
@@ -157,7 +184,9 @@ final class InboundClassification
         // The route EXECUTES through the seam its owning step implements
         // (step 7: rg_override; step 9: chatbot_turn + handoff_path;
         // copilot_context needs no act — the decision row IS the delivery).
-        $this->executor->execute($route, $decisionId, $message->conversation_id, $messageId, $language, $classification);
+        if ($executeRoute) {
+            $this->executor->execute($route, $decisionId, $message->conversation_id, $messageId, $language, $classification);
+        }
 
         return $decisionId;
     }

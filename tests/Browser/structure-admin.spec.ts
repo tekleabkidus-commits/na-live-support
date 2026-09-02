@@ -80,6 +80,21 @@ test('J01/J02/J03: three tabs; departments reorderable by move buttons with defa
     await expect(page.getByTestId('dept-danger-delete')).toBeVisible();
 });
 
+test("P-NAV (S12, countersigned): the drawn Backoffice nav links SLA policies, Automation and Business hours to Doc 12's own screens; People and Channels stay drawn", async ({
+    page,
+}) => {
+    await openOrganization(page);
+    await expect(page.getByTestId('org-nav-sla')).toHaveAttribute('href', '/admin/workflow/sla');
+    await expect(page.getByTestId('org-nav-automation')).toHaveAttribute(
+        'href',
+        '/admin/workflow/rules',
+    );
+    await expect(page.getByTestId('org-nav-hours')).toHaveAttribute(
+        'href',
+        '/admin/workflow/hours',
+    );
+});
+
 test('J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant', async ({
     page,
 }) => {

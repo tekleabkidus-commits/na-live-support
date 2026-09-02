@@ -45,6 +45,7 @@ final class RunAiTaskJob implements ShouldQueue
             $result = match ($this->task) {
                 'summarize_thread' => $tasks->summarizeToNote($conversation),
                 'translate_last_message' => $tasks->translateLastMessageToNote($conversation),
+                'classify_refresh' => $tasks->classifyRefresh($conversation),
                 default => throw new \InvalidArgumentException('unbuilt automation AI task '.$this->task),
             };
             Log::info('automation.ai_task.done', ['execution_id' => $this->executionId, 'task' => $this->task] + $result);

@@ -335,6 +335,7 @@ return [
         'action_toggle_density' => 'Toggle density',
         'action_set_away' => 'Set myself Away',
         'action_open_kb' => 'Open the Knowledge Base', // P8 (S10 countersigned): the shell's one KB nav entry
+        'action_open_workflow' => 'Open Workflow (rules, SLA, hours, macros, fields, forms, CSAT)', // P-NAV (S12 countersigned): the shell's one Workflow nav entry
         'hint_move' => 'move',
         'hint_open' => 'open',
         'recent_label' => 'Recent:',

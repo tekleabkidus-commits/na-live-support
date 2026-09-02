@@ -1,0 +1,48 @@
+
+Running 14 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/inbox-palette.spec.ts:69:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (1.8s)
+  ✓   2 [chromium] › tests/Browser/inbox-palette.spec.ts:90:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.5s)
+  ✘   3 [chromium] › tests/Browser/inbox-palette.spec.ts:111:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (6.1s)
+  ✓   4 [chromium] › tests/Browser/inbox-palette.spec.ts:120:1 › P-NAV (S12, countersigned): the palette carries the shell's one Workflow nav row, beside the KB row (the P8 shape) (1.2s)
+  ✓   5 [chromium] › tests/Browser/inbox-palette.spec.ts:129:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) (1.6s)
+  ✓   6 [chromium] › tests/Browser/inbox-palette.spec.ts:147:1 › FR-23: ↑↓ move the roving selection and ↵ opens it — keyboard-only from ⌘K to a switched view (US-01 posture) (1.1s)
+  ✓   7 [chromium] › tests/Browser/inbox-palette.spec.ts:161:1 › FR-23: recent searches persist per user — the footer offers the last query on the next open (1.5s)
+  ✓   8 [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS (1.9s)
+  ✓   9 [chromium] › tests/Browser/structure-admin.spec.ts:83:1 › P-NAV (S12, countersigned): the drawn Backoffice nav links SLA policies, Automation and Business hours to Doc 12's own screens; People and Channels stay drawn (1.1s)
+  ✓  10 [chromium] › tests/Browser/structure-admin.spec.ts:98:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant (1.9s)
+  ✓  11 [chromium] › tests/Browser/structure-admin.spec.ts:117:1 › J07–J15 on the Queues tab: strategy badges icon+text, the REAL rotation preview, the dashed temporary chip with countdown, the locked starvation row (no controls, caption associated), vip source warning, tags, the skill panel with the live hold, the J15 bands; light AND dark axe-clean; §C/§D: identical controls at 375 (3.6s)
+  ✓  12 [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated (1.8s)
+  ✓  13 [chromium] › tests/Browser/workflow-screens.spec.ts:96:1 › J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday (2.2s)
+  ✓  14 [chromium] › tests/Browser/workflow-screens.spec.ts:118:1 › J5 + J6 + J7 + J8: a field with where-used, a form published v1 from the builder with the dual preview, a macro previewed, the CSAT settings row saved (3.8s)
+
+
+  1) [chromium] › tests/Browser/inbox-palette.spec.ts:111:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-ticket]').filter({ hasText: 'Rescue Fixture Player' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Rescue Fixture Player' })
+
+
+      115 |
+      116 |     await page.locator('[data-view="rescue"]').first().click();
+    > 117 |     await expect(page.locator('[data-ticket]', { hasText: 'Rescue Fixture Player' })).toBeVisible();
+          |                                                                                       ^
+      118 | });
+      119 |
+      120 | test("P-NAV (S12, countersigned): the palette carries the shell's one Workflow nav row, beside the KB row (the P8 shape)", async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-palette.spec.ts:117:87
+
+    Error Context: test-results/inbox-palette-Doc-05-US-04-828f0--channel-unreachable-ticket-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/inbox-palette.spec.ts:111:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket 
+  13 passed (40.5s)
+EXIT=1

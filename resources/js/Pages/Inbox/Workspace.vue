@@ -495,6 +495,10 @@ async function onPaletteAction(id: string): Promise<void> {
         window.location.href = '/admin/kb'; // P8 (S10 countersigned): the KB manager
         return;
     }
+    if (id === 'open-workflow') {
+        window.location.href = '/admin/workflow'; // P-NAV (S12 countersigned): the Workflow hub
+        return;
+    }
     if (id === 'toggle-density') {
         setDensity(density.value === 'comfortable' ? 'compact' : 'comfortable');
         return;

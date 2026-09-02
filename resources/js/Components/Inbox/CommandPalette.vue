@@ -67,6 +67,8 @@ const actions = computed(() => {
     // P8 (S10 countersigned): the shell's one KB nav entry. tickets.view gates the target route
     // (and this whole workspace), so no extra render gate exists to fail closed on.
     rows.push({ id: 'open-kb', label: props.t.action_open_kb ?? '' });
+    // P-NAV (S12 countersigned): the shell's one Workflow nav entry — the P8 shape verbatim.
+    rows.push({ id: 'open-workflow', label: props.t.action_open_workflow ?? '' });
     return rows;
 });
 

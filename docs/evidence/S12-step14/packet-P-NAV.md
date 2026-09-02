@@ -28,3 +28,14 @@ countersign (the P8 precedent's own order).
 CONTROLS: the Organization browser spec byte-untouched except the three hrefs
 asserted; inbox-palette.spec gains the one row; Doc 07 + Doc 11 owning suites
 green in the same commit.
+
+---
+COUNTERSIGN GRANTED AS FILED (close-out recount rulings, grounded at 51d0292).
+LANDED at the S12 close (the commit carrying this note): Organization.vue's
+three drawn siblings (SLA policies, Automation, Business hours) are real
+links to /admin/workflow/{sla,rules,hours} (People and Channels stay drawn);
+the command palette carries ONE `open-workflow` row beside the KB row (the P8
+shape; label `inbox.palette.action_open_workflow` en + am, machine am → R-14);
+Workspace.vue routes it to /admin/workflow. Controls: structure-admin.spec
+asserts the three hrefs (its other journeys byte-untouched); inbox-palette.spec
+asserts the row; Doc 07 and Doc 11 owning suites green in the same commit.

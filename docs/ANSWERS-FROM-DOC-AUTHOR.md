@@ -3097,7 +3097,7 @@ un-armable. The doc is law; the item was the oversight. RIDER:
 
 END OF RIDER 4 — nothing follows this line.
 
-### SCHEMA AMENDMENT 6 — RIDER 5 (filed at S12 step 13, BEFORE its migration — the rider law; rides the granted countersign, flagged for next-checkpoint confirmation)
+### SCHEMA AMENDMENT 6 — RIDER 5 (filed at S12 step 13, BEFORE its migration — the rider law; rides the granted countersign; **CONFIRMED at the close-out recount rulings, grounded at 51d0292: three tables; url/host immutable by grant; SSRF at birth; a corrected target = a new row**)
 
 Step 13 builds FR-03's external arms. Three of them need rows the amendment-6
 filing never carried, and no existing table can hold them: SEC-02's per-tenant
@@ -3174,7 +3174,7 @@ url-UPDATE-dies-42501 leg as SEC-02's physics control.
 
 END OF RIDER 5 — nothing follows this line.
 
-### S12 EVENT-FAMILY AMENDMENT 2 (filed at step 13, BEFORE the events exist in the catalog — the enumeration law; growth of the sixteen+one by filing, never a silent catalog edit)
+### S12 EVENT-FAMILY AMENDMENT 2 (filed at step 13, BEFORE the events exist in the catalog — the enumeration law; growth of the sixteen+one by filing, never a silent catalog edit; **CONFIRMED at the close-out recount rulings, grounded at 51d0292: events 18–21 as filed**)
 
 FR-03's external arms produce three events the first amendment did not name
 (it named `customer.suppression.set`, which lands here as filed). Added:
@@ -3203,3 +3203,17 @@ Notification category registered in the same commit, before its producer:
 owning Doc12) — the category a rule's notify action names by default.
 
 END OF EVENT-FAMILY AMENDMENT 2 — nothing follows this line.
+
+### P-CLS LANDING NOTE — the Doc 15 separate-counting reopener (filed with the landing, S12 close, per the countersign)
+
+`InboundClassification::classifyOnly` (the run-AI-task classify_refresh door)
+records its decision row under surface `chatbot`, task `classify_message`,
+action `copilot_context`, with `requestPayload.refresh = "automation"` — the
+row IS the source the FR-02 `ai.*` facts read, so it stays on the chatbot
+surface (ruled: an automation surface would fork the source for a counting
+convenience). REOPENER for Doc 15: if the reporting layer wants rule-driven
+refreshes counted APART from customer-turn classifications, the discriminator
+already exists in the row (`requestPayload.refresh`) — a Doc 15 metric-
+dictionary entry, not a schema change; no CHECK amendment is proposed.
+
+END OF P-CLS LANDING NOTE — nothing follows this line.

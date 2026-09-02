@@ -39,3 +39,18 @@ and NO chatbot turn / handoff / route side effect occurs (the RouteExecutor
 spy control: zero calls; the outbound message count unchanged). Doc 09's
 own suites (the golden + red-team floor, the drill pins) green in the same
 commit; classify() byte-identical in behavior (ChatbotTurnTest untouched).
+
+---
+COUNTERSIGN GRANTED (close-out recount rulings, grounded at 51d0292) with
+surface = 'chatbot' as proposed; all controls as filed. LANDED at the S12
+close (the commit carrying this note): `classify()` = `run(executeRoute:
+true)` and `classifyOnly()` = `run(executeRoute: false)` — byte-identical
+behavior for classify() (the same code path; the route executes only under
+the flag; a quota/provider refusal on a refresh returns null — no fallback row,
+no bypass handoff). RunAiTaskAction::BUILT gained classify_refresh; the
+`unbuilt_ai_task` pin FLIPPED (ExternalArmsTest); ClassifyRefreshTest carries
+the controls (the RouteExecutor zero-call spy; the new decision row with
+action copilot_context + refresh marker; the ai.intent fact reading the new
+value through EventContext; outbound count unchanged; the Doc 09 suites green
+in the same commit). The Doc 15 separate-counting reopener sentence is filed
+in ANSWERS ("P-CLS LANDING NOTE").

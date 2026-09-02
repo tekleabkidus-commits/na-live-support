@@ -14,11 +14,10 @@ use App\Models\Ticket;
  * refuses `unknown_ai_task` (a rule cannot reach the customer-visible
  * tasks). The model call is NEVER inline (CLAUDE.md §3): the arm QUEUES
  * RunAiTaskJob on the ai-background family and answers `queued`; the note
- * on the ticket timeline is the product. classify_refresh needs a
- * classify-ONLY door on Doc 09's InboundClassification (its existing door
- * also EXECUTES the route — a chatbot turn from a rule is not a refresh):
- * packet P-CLS is filed; until its countersign the sub-arm answers
- * `unbuilt_ai_task`, asserted (the P-DOORS precedent).
+ * on the ticket timeline is the product. classify_refresh rides P-CLS's
+ * classify-ONLY door (InboundClassification::classifyOnly, countersigned at
+ * the close-out recount): no route executes; the FR-02 ai.* facts refresh
+ * from a REAL decision row.
  */
 final class RunAiTaskAction implements AutomationAction
 {
@@ -26,17 +25,11 @@ final class RunAiTaskAction implements AutomationAction
 
     public const TASKS = ['summarize_thread', 'translate_last_message', 'classify_refresh'];
 
-    /** The sub-arms bound today; classify_refresh joins at P-CLS. */
-    public const BUILT = ['summarize_thread', 'translate_last_message'];
-
     public function run(array $action, string $executionId, int $automationDepth, array $basis = []): array
     {
         $task = is_string($action['task'] ?? null) ? $action['task'] : '';
         if (! in_array($task, self::TASKS, true)) {
             return ['action' => 'run_ai_task', 'outcome' => 'failed', 'reason' => 'unknown_ai_task'];
-        }
-        if (! in_array($task, self::BUILT, true)) {
-            return ['action' => 'run_ai_task', 'outcome' => 'failed', 'reason' => 'unbuilt_ai_task', 'task' => $task];
         }
         $ticket = $this->ticketOf($executionId);
         if (! $ticket instanceof Ticket) {

@@ -234,7 +234,7 @@ it('suppress: sets the marketing-suppression flag on the ticket\'s customer (eve
         ->and($suppression->clear($customerId, $admin->identifier()))->toBeFalse();
 });
 
-it('run_ai_task: catalog-bound to the three names — chatbot_turn is unknown_ai_task; classify_refresh answers unbuilt_ai_task until P-CLS (asserted); summarize/translate QUEUE the ai-background job and the job lands an INTERNAL note through NotesWriter', function (): void {
+it('run_ai_task: catalog-bound to the three names — chatbot_turn is unknown_ai_task; all three sub-arms QUEUE (classify_refresh since P-CLS); summarize/translate the ai-background job and the job lands an INTERNAL note through NotesWriter', function (): void {
     [$tenant, $ticket, $admin] = externalScene();
     expect(RunAiTaskAction::TASKS)->toBe(['summarize_thread', 'translate_last_message', 'classify_refresh']);
     // A real Doc 09 catalog task outside the three cannot even be SAVED on a card (the customer-visible tasks are out of a rule's reach).
@@ -250,10 +250,11 @@ it('run_ai_task: catalog-bound to the three names — chatbot_turn is unknown_ai
     ];
     $executionId = automationActionScene($tenant, $ticket, $actions);
     $outcomes = runChain($executionId, $actions);
-    expect($outcomes[0]['reason'])->toBe('unbuilt_ai_task')
+    // P-CLS LANDED (countersigned at the close-out recount): the classify_refresh pin FLIPPED from unbuilt_ai_task to queued.
+    expect($outcomes[0]['outcome'])->toBe('queued')
         ->and($outcomes[1]['outcome'])->toBe('queued')
         ->and($outcomes[2]['outcome'])->toBe('queued');
-    Queue::assertPushed(RunAiTaskJob::class, 2);
+    Queue::assertPushed(RunAiTaskJob::class, 3);
     Queue::assertPushedOn('ai-background', RunAiTaskJob::class);
 
     // The job, driven directly with the fake provider: the note lands, internal, system-authored (N-04).

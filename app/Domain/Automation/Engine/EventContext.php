@@ -90,16 +90,22 @@ final class EventContext
                 $facts['message.body'] = $message->body;
                 $facts['message.language'] = $message->language ?? null;
             }
-            /** @var object{output: string}|null $classify */
+            // The latest classify_message decision row for the message (P-CLS's refresh writes a
+            // NEW row, so "latest" is the refreshed truth). S12 close finding: this read named an
+            // `output` column the decisions table never had — the ai.* facts had never been
+            // assembled from a real row until P-CLS's control exercised the path; fixed at cause.
+            /** @var object{intent: ?string, response_payload: ?string}|null $classify */
             $classify = DB::selectOne(
-                "SELECT output FROM ai_decisions WHERE task = 'classify_message' AND message_id = ? ORDER BY created_at DESC LIMIT 1",
+                "SELECT intent, response_payload FROM ai_decisions WHERE task = 'classify_message' AND message_id = ? ORDER BY created_at DESC LIMIT 1",
                 [$messageId],
             );
             if ($classify !== null) {
+                /** @var array<string, mixed> $payload */
+                $payload = is_string($classify->response_payload) ? (json_decode($classify->response_payload, true, 8) ?: []) : [];
                 /** @var array<string, mixed> $out */
-                $out = json_decode($classify->output, true, 8) ?: [];
+                $out = is_array($payload['classification'] ?? null) ? $payload['classification'] : [];
                 $facts += [
-                    'ai.intent' => $out['intent'] ?? null,
+                    'ai.intent' => $out['intent'] ?? $classify->intent,
                     'ai.sentiment' => $out['sentiment'] ?? null,
                     'ai.confidence' => $out['confidence'] ?? null,
                     'ai.urgency' => $out['urgency'] ?? null,

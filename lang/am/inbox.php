@@ -310,6 +310,7 @@ return [
         'action_toggle_density' => 'ጥግግት ቀያይር',
         'action_set_away' => 'እራሴን ራቅ አድርግ',
         'action_open_kb' => 'የእውቀት ማዕከልን ክፈት', // P8 (S10 countersigned)
+        'action_open_workflow' => 'የስራ ፍሰትን ክፈት (ደንቦች፣ SLA፣ ሰዓታት፣ ማክሮዎች፣ መስኮች፣ ቅጾች፣ CSAT)', // P-NAV (S12 countersigned); machine am → R-14
         'hint_move' => 'አንቀሳቅስ',
         'hint_open' => 'ክፈት',
         'recent_label' => 'የቅርብ ጊዜ፦',

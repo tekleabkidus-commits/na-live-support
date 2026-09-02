@@ -32,6 +32,19 @@ RbacBudgets re-shape REFUSED for this session — the 4-datapoint count is filed
 on 0d's ledger; it is Doc 03's file and a future window's escalate-first call.
 Batch D opened at step 13. (END OF RULING — nothing followed that line.)
 
+## §0c — CLOSE-OUT RECOUNT RULINGS FOLDED (owner-relayed, grounded at 51d0292; folded 2026-09-02)
+RIDER 5 CONFIRMED (three tables; url/host immutable by grant; SSRF at birth; a
+corrected target = a new row). EVENT-FAMILY AMENDMENT 2 CONFIRMED (events 18–21 as
+filed). P-CLS COUNTERSIGN GRANTED with surface = 'chatbot' as proposed (the row is
+what the facts read; an automation surface would fork the source for a counting
+convenience — the Doc 15 separate-counting reopener sentence filed with the landing);
+all controls as filed incl. the RouteExecutor zero-call spy and classify()
+byte-identical. P-NAV COUNTERSIGN GRANTED as filed. Order: land both packets, flip
+their pins, run the closing battery + ONE CI look on the final tree, update the
+close-out with the final figures, report the FINAL close-out SHA for the owner's
+grounding — the advisor recount follows that grounding. (END OF RULING — nothing
+followed that line.)
+
 ## §0 — PLAN-TIME STOPS (rulings needed before step 1)
 
 ### STOP-A (prompt §5.3 — RESOLVED AT STEP 0, stated not asked) — catalog verification

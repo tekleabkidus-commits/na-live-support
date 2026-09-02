@@ -287,11 +287,25 @@ function strategyLabel(strategy: string): string {
                         >{{ t.nav.organization }}</span
                     >
                     <span
-                        v-for="key in ['people', 'channels', 'sla', 'automation', 'hours']"
+                        v-for="key in ['people', 'channels']"
                         :key="key"
                         class="rounded-md px-2 py-1.5"
                         :style="{ color: 'var(--ds-text-primary)' }"
                         >{{ t.nav[key] }}</span
+                    >
+                    <!-- P-NAV (S12, countersigned): the three siblings Doc 12 now owns are REAL links; the drawn set is unchanged. -->
+                    <a
+                        v-for="[key, href] in [
+                            ['sla', '/admin/workflow/sla'],
+                            ['automation', '/admin/workflow/rules'],
+                            ['hours', '/admin/workflow/hours'],
+                        ]"
+                        :key="key"
+                        :href="href"
+                        :data-testid="`org-nav-${key}`"
+                        class="rounded-md px-2 py-1.5"
+                        :style="{ color: 'var(--ds-text-primary)' }"
+                        >{{ t.nav[key] }}</a
                     >
                 </div>
             </nav>
