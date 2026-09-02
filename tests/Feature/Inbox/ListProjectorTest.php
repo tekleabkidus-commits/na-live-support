@@ -329,7 +329,7 @@ it('FS-02/ADR 0011 drill: kill the consumer mid-upsert — no trace; re-drive co
     expect(listItemState($ticket->identifier()))->toBe($state);
 });
 
-it('registers the projector for its 31 events in the ConsumerRegistry (ADR 0011 — an entry, never a relay edit)', function (): void {
+it('registers the projector for its 33 events in the ConsumerRegistry (ADR 0011 — an entry, never a relay edit)', function (): void {
     $expected = [
         'message.received', 'message.sent', 'note.mentioned',
         'ticket.created', 'ticket.status_changed', 'ticket.assigned', 'ticket.assignee_deactivated',
@@ -341,9 +341,11 @@ it('registers the projector for its 31 events in the ConsumerRegistry (ADR 0011 
         'telegram.window.reopened', 'telegram.connection.revoked', 'telegram.connection.active',
         // S11 step 9 (P-C2): the two rescue arms — Doc 11's flags populate the Rescue view.
         'rescue.flagged', 'rescue.auto_returned',
+        // S12 batch D (P-CHIP): the two SLA flip events — the row re-reads Chips' truth.
+        'sla.warned', 'sla.breached',
     ];
 
-    expect(count($expected))->toBe(31);
+    expect(count($expected))->toBe(33);
     foreach ($expected as $event) {
         // in_array, NOT toContain($class, $message) — the S22 variadic-needle
         // trap, dodged by name (again).

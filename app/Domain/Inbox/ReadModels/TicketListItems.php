@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Inbox\ReadModels;
 
+use App\Domain\Sla\Chips;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -78,7 +79,26 @@ final class TicketListItems
         'window_expires_at', 'updated_at', 'tags',
     ];
 
-    public function __construct(private readonly CanonicalTicketReader $reader) {}
+    /**
+     * P-CHIP (S12 batch D, countersigned at the batch-C acceptance): the SLA
+     * chip columns are fed from Doc 12's TRUTH on every recompute of a ticket
+     * that HOLDS an instance — Chips::forTicket's state (amber → warned, red →
+     * breached, green/none → null) and its target as sla_due_at. Values from
+     * truth, never from an event payload (the RollupConsumer posture: a
+     * poisoned sla.warned due_at cannot land). A ticket with NO instance keeps
+     * whatever its row holds — the browser seeders' hand-paint stays until the
+     * fidelity session (stated in the packet). The CLEAR needs no arm of its
+     * own: staff reply / status change already recompute the row, and the
+     * rebuild re-reads a cleared stage as null. (Ordering note, stated: the
+     * SLA lifecycle consumer and this projector ride the same event on the
+     * same family; if the projector runs first the row heals on the ticket's
+     * next event — the view membership is unaffected either way, since
+     * sla_at_risk also requires the open family.)
+     */
+    public function __construct(
+        private readonly CanonicalTicketReader $reader,
+        private readonly Chips $chips,
+    ) {}
 
     /**
      * The T-02 delta's row patch — assembled HERE (the context-free file) so
@@ -161,10 +181,24 @@ final class TicketListItems
             'updated_at' => DB::raw('clock_timestamp()'),
         ];
 
+        // P-CHIP: the chip columns, from Doc 12's truth, ONLY for a ticket that holds an instance.
+        $updatable = self::UPDATABLE;
+        if ($this->chips->hasInstance($ticketId)) {
+            $chip = $this->chips->forTicket($ticketId);
+            $values['sla_state'] = match ($chip['state'] ?? null) {
+                'amber' => 'warned',
+                'red' => 'breached',
+                default => null,
+            };
+            $values['sla_due_at'] = $chip['target_at'] ?? null;
+            $updatable[] = 'sla_state';
+            $updatable[] = 'sla_due_at';
+        }
+
         DB::table('ticket_list_items')->upsert(
             [array_merge(['ticket_id' => $ticketId], $values)],
             ['ticket_id'],
-            self::UPDATABLE,
+            $updatable,
         );
 
         /** @var ListItemRow|null $fresh */

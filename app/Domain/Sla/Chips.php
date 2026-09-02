@@ -19,6 +19,17 @@ final class Chips
     public function __construct(private readonly SlaTimers $timers) {}
 
     /**
+     * P-CHIP (S12 batch D): does this ticket hold an SLA instance at all? The
+     * Doc 07 row builder asks this to tell "no SLA on this ticket — leave the
+     * row's seam columns alone" from "an instance with nothing live — the
+     * chip cleared, so the row clears".
+     */
+    public function hasInstance(string $ticketId): bool
+    {
+        return DB::table('sla_instances')->where('ticket_id', $ticketId)->exists();
+    }
+
+    /**
      * @return array{stage: string, label_key: string, state: string, target_at: ?string, paused: ?array{reason: string}}|null
      */
     public function forTicket(string $ticketId): ?array

@@ -149,8 +149,11 @@ final class ConsumerRegistry
         //    state events DELIBERATELY (arming, EC-02 re-arm, clears, pauses,
         //    EC-03 retarget, the window-unreachable pause); sla.warned/breached
         //    now EXIST, so the automation trigger consumer joins them too.
-        'sla.warned' => [\App\Jobs\Automation\AutomationEventConsumer::class],
-        'sla.breached' => [\App\Jobs\Automation\AutomationEventConsumer::class],
+        // P-CHIP (S12 batch D, countersigned): the Doc 07 projector joins the two flip events
+        //    DELIBERATELY — the row re-reads Chips' truth (fixture doc07-events.json; the
+        //    ListProjectorTest event-count pin moves in THIS commit, the routine line).
+        'sla.warned' => [\App\Jobs\Automation\AutomationEventConsumer::class, ListProjectorConsumer::class],
+        'sla.breached' => [\App\Jobs\Automation\AutomationEventConsumer::class, ListProjectorConsumer::class],
         'telegram.window.reopened' => [ListProjectorConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'telegram.connection.revoked' => [ListProjectorConsumer::class],
         'telegram.connection.active' => [ListProjectorConsumer::class],

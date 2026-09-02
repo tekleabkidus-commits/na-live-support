@@ -434,6 +434,8 @@ grant legs ride the already-listed AutomationGrantPhysicsTest.
 Step 12: `tests/Feature/Csat/{TriggerMatrixTest,CaptureTest}.php` (listed dir)
 + the already-listed CsatSingleResponseTest; doc12Columns/doc12DeniedSet
 promoted to tests/Pest.php (the per-file-helper law, 6th promotion).
+Step 13 (batch D): P-CHIP's proof `tests/Feature/Inbox/SlaProjectionTest.php`
+(a Doc 07 dir — add the file to the run list; Doc 07's own suite runs it too).
 
 ## §9 — Plan table of record (ONE row per id: id → file(s) → proving test; paths under `app/Domain/{Automation,Sla,Hours,Macros,Fields,Forms,Csat}/` unless noted; tests under `tests/`)
 

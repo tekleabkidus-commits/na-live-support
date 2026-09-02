@@ -1,0 +1,48 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\SlaProjectionTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit P-CHIP: warned/breached project from TRUTH — the row carries Chi[39m[90m…[39m [90m6.83s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit P-CHIP: the CLEAR — a staff reply clears first_response in truth[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-CHIP: a ticket WITHOUT an SLA instance keeps its row's sla col[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\SlaProjectionTest[22m [90m>[39m it P-CHIP: warned/breache…   
+[39;1m  Failed asserting that two DateTime objects are equal.
+  [39;22m[31m-2026-09-02T04:01:55.000000+0000[39m[39;1m
+  [39;22m[32m+2026-09-02T03:51:55.290512+0000[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Inbox/SlaProjectionTest.php[39m:[32m41[39m
+     37▕     $projector->recomputeTicket($ticketId);
+     38▕     $target = (string) DB::table('sla_instance_stages')->where('instance_id', $instance->id)->where('stage', 'first_response')->value('target_at');
+     39▕     $row = listItemState($ticketId);
+     40▕     expect($row['sla_state'])->toBeNull()
+  ➜  41▕         ->and(new DateTimeImmutable((string) $row['sla_due_at']))->toEqual(new DateTimeImmutable($target));
+     42▕ 
+     43▕     // The stage flips warned (RIDER 1's app-writable stamp); the event arrives with a POISONED due_at.
+     44▕     DB::table('sla_instance_stages')->where('instance_id', $instance->id)->where('stage', 'first_response')->update(['warned' => true]);
+     45▕     $poisoned = '2099-01-01T00:00:00+00:00';
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/SlaProjectionTest.php[39;22m:[39;1m41[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\SlaProjectionTest[22m [90m>[39m it P-CHIP: the CLEAR — a…    
+[39;1m  Failed asserting that null is identical to 'warned'.[39;22m
+
+  at [32mtests/Feature/Inbox/SlaProjectionTest.php[39m:[32m71[39m
+     67▕     [$tenant, $ticket, $instance] = timerScene(600);
+     68▕     $ticketId = $ticket->identifier();
+     69▕     DB::table('sla_instance_stages')->where('instance_id', $instance->id)->where('stage', 'first_response')->update(['warned' => true]);
+     70▕     app(ListProjector::class)->recomputeTicket($ticketId);
+  ➜  71▕     expect(listItemState($ticketId)['sla_state'])->toBe('warned');
+     72▕ 
+     73▕     // The reply, through Doc 04's door (a real message row), then the SLA truth clears the stage.
+     74▕     registerFakeChannel();
+     75▕     $conversation = App\Models\Conversation::query()->findOrFail($ticket->getAttribute('conversation_id'));
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/SlaProjectionTest.php[39;22m:[39;1m71[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m7.01s[39m
+
+EXIT=1

@@ -23,3 +23,29 @@ poisoned payload due_at never lands — the projector re-reads). Doc 07's
 owning + contract suites green in the same commit. Browser seeders KEEP their
 hand-paint until the fidelity session (stated: repointing scenes is [B12-batch]
 adjacent, not this packet).
+
+---
+COUNTERSIGN GRANTED AS FILED (batch-C acceptance, grounded at b0365de: fail-first
+null pin; poisoned-payload values-from-truth control; Doc 07 suites green same
+commit; seeder hand-paint stays until the fidelity session). LANDED at S12
+step 13 (this commit). WHERE THE MECHANISM LIVES, stated exactly: the row
+builder `TicketListItems::recompute` (the Doc 07 read-model file the
+projector calls on EVERY pass) feeds sla_state/sla_due_at from
+`Chips::forTicket` for a ticket that HOLDS an sla_instance (amber → warned,
+red → breached, green/none → null; due_at = the live chip's target) and
+leaves the seam columns untouched otherwise; `Chips::hasInstance` (Doc 12's
+file) is the one added door. `ListProjector` itself needed no new branch —
+sla.warned/sla.breached carry ticket_id and ride its default recompute path;
+the CLEAR rides the staff-reply / status-change paths it already owns because
+the builder re-reads truth. ConsumerRegistry: the projector joined both flip
+events; doc07-events.json gained the two read-slices; the ListProjectorTest
+31-event pin → 33 (same commit). PROOF: tests/Feature/Inbox/SlaProjectionTest —
+fail-first captured RED on the pre-landing tree (pchip-prestate-01.txt: the
+row stayed null under a warned stage); after: Doc 07 suites + SLA suites +
+the drill pins 144 passed / 975 assertions exit 0 (pchip-suites-01.txt);
+lint exit 0; gates 14/14 exit 0. RESIDUAL, named: the SLA lifecycle consumer
+and the projector ride the same event on the same family — if the projector
+runs first the row heals on the ticket's next event (view membership is
+unaffected: sla_at_risk also requires the open family). The FR-26
+notify.inbox.sla_warning bell row now HAS a producer — its projector arm is
+outside this packet's filed scope and is named for the checkpoint.
