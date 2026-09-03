@@ -84,6 +84,8 @@ final class CopilotPanel
             'notices' => $cached['notices'] ?? [],
             'macros' => ['seam' => 'Doc12', 'items' => []],
             'as_of_message_id' => $cached['as_of_message_id'] ?? null,
+            // F1 (B8-S01 A02): the summary's own stamp — the panel says how fresh its text is (DB clock, C-11).
+            'summary_updated_at' => $cached['summary_updated_at'] ?? null,
         ];
     }
 
@@ -139,6 +141,12 @@ final class CopilotPanel
             'similar_tickets' => $similar,
             'notices' => array_values(array_unique($notices)),
             'as_of_message_id' => $latest,
+            'summary_updated_at' => (static function (): ?string {
+                /** @var object{at: string}|null $row */
+                $row = DB::selectOne('SELECT clock_timestamp()::text AS at');
+
+                return $row?->at;
+            })(),
         ];
         $this->cache->put($this->cacheKey($conversationId, $user->identifier()), $payload, self::CACHE_TTL_SECONDS, 'TTL + as_of_message_id staleness check on read');
 

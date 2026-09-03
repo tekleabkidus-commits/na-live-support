@@ -8,3 +8,17 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* SESSION-F1 — the frozen batches' motion law (B8-S12 L05, B9-S13 M06): under a
+   reduced-motion preference nothing animates or transitions — streaming renders
+   in chunks with a static caret, skeletons are static blocks, chips do not
+   pulse. Tokens and layout are untouched; only motion is removed. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

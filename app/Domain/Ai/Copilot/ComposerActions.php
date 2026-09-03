@@ -131,11 +131,15 @@ final class ComposerActions
         if ($prior->isNotEmpty() && $cooldown > 0) {
             $lastCreatedAt = $prior->first()->created_at;
             $inCooldown = DB::selectOne(
-                'SELECT (?::timestamptz > clock_timestamp() - make_interval(secs => ?)) AS hot',
-                [self::str($lastCreatedAt), $cooldown],
+                'SELECT (?::timestamptz > clock_timestamp() - make_interval(secs => ?)) AS hot,
+                        GREATEST(0, ceil(? - extract(epoch FROM (clock_timestamp() - ?::timestamptz))))::int AS left_s',
+                [self::str($lastCreatedAt), $cooldown, $cooldown, self::str($lastCreatedAt)],
             );
             if (is_object($inCooldown) && (bool) ($inCooldown->hot ?? false)) {
-                return ['state' => 'cooldown', 'kind' => 'draft_reply', 'notices' => ['ai.copilot.notice.cooldown'], 'regenerations' => ['used' => $prior->count(), 'limit' => self::REGENERATE_LIMIT]];
+                // F1 (B8-S01 A06): the countdown the panel draws ("Regenerate in 0:12") — DB clock, read-only.
+                $left = $inCooldown->left_s ?? null;
+
+                return ['state' => 'cooldown', 'kind' => 'draft_reply', 'notices' => ['ai.copilot.notice.cooldown'], 'regenerations' => ['used' => $prior->count(), 'limit' => self::REGENERATE_LIMIT], 'retry_after_seconds' => is_numeric($left) ? (int) $left : $cooldown];
             }
         }
 
@@ -355,7 +359,8 @@ final class ComposerActions
             // §14: REJECTED — the agent gets the refusal, never the altered text.
             $id = $this->artifacts->mint($task, $kind, $agentId, $conversationId, null, $language, null, $result['provider'], $result['model'], $assembled['layer_hashes'], $tokensIn, $tokensOut, self::ms($started), 'guard_refused', $meta + ['digit_mismatch' => ['missing' => count($verdict['missing']), 'extra' => count($verdict['extra'])]], $request);
 
-            return ['state' => 'refused', 'kind' => $kind, 'artifact_id' => $id, 'notices' => ['ai.copilot.notice.digit_mismatch']];
+            // F1 (B8-S02 B05): the block NAMES the digits it caught — the altered text itself is still withheld.
+            return ['state' => 'refused', 'kind' => $kind, 'artifact_id' => $id, 'notices' => ['ai.copilot.notice.digit_mismatch'], 'digits' => ['missing' => $verdict['missing'], 'extra' => $verdict['extra']]];
         }
 
         if ($output === '' || $this->refusals->isPolicyRefusal($result['response']) || $this->outputGuard->leaksSystemText($output)) {

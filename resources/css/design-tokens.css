@@ -97,6 +97,11 @@
     /* ── FIXED: note + AI accent (Doc 07 FR-17 / §9) ── */
     --ds-note-bg: #fbf3d6;  --ds-note-fg: #7e650f;
     --ds-ai-bg: #f1edfe;    --ds-ai-fg: #5b3fd6;
+    /* F1 (SESSION-F1, B8 fidelity): the drawn AI-bubble anatomy's two remaining
+       members — the card/chip border and the 3 px inline-start edge. Both hexes
+       are the B1-DS v2 AI family verbatim (light #DACFFB / #7C5CFC; dark
+       #3D3266 / #A18BFF), extraction-verified. */
+    --ds-ai-border: #dacffb; --ds-ai-edge: #7c5cfc;
 }
 
 [data-theme='dark'] {
@@ -168,4 +173,5 @@
 
     --ds-note-bg: #332b12;  --ds-note-fg: #e8c25a;
     --ds-ai-bg: #292144;    --ds-ai-fg: #bca9ff;
+    --ds-ai-border: #3d3266; --ds-ai-edge: #a18bff;
 }

@@ -1,0 +1,13 @@
+
+Running 7 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (3.2s)
+  ✓  2 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (6.7s)
+  ✓  3 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (1.6s)
+  ✓  4 [chromium] › tests/Browser/f1-b8.spec.ts:134:5 › B8-S02 — composer AI actions › §A/§B/§D: four labelled verbs; Improve → the "meaning kept" card with digits verified and "Insert — replaces your text"; Summarize → the note card whose Insert lands in NOTE mode; axe light + dark (8.9s)
+  ✓  5 [chromium] › tests/Browser/f1-b8.spec.ts:176:5 › B8-S02 — composer AI actions › §C (the door shapes pinned by ComposerActionsTest, rendered): the translate PAIR with digits verified and "Insert the Amharic"; the validator rejection NAMES the digits and offers no insert; no card sends (3.3s)
+  ✓  6 [chromium] › tests/Browser/f1-b8.spec.ts:228:5 › B8-S02 — composer AI actions › §A AI-off (LIVE kill switch): copilot OFF → the cluster is GONE and one line says what still works; back ON → the verbs return (3.0s)
+  ✓  7 [chromium] › tests/Browser/f1-b8.spec.ts:254:5 › B8-S02 — composer AI actions › §F at 375: all four verbs stay visible and wrap; every target clears 44 px; axe-clean both themes (3.2s)
+
+  7 passed (39.4s)
+EXIT=0

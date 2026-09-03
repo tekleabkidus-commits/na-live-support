@@ -1,0 +1,31 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/f1-b8.spec.ts:61:5 › B8-S01 — the Copilot panel › §A/§C/§D: six labelled regions in reading order with stamps; the draft card carries the meter as TEXT; Discard rests the region; axe-clean light + dark (6.4s)
+  ✘  2 [chromium] › tests/Browser/f1-b8.spec.ts:105:5 › B8-S01 — the Copilot panel › §G at 375: the sheet carries the same panel; every control row clears 44 px; axe-clean in both themes (5.0s)
+
+
+  1) [chromium] › tests/Browser/f1-b8.spec.ts:105:5 › B8-S01 — the Copilot panel › §G at 375: the sheet carries the same panel; every control row clears 44 px; axe-clean in both themes 
+
+    Error: copilot-insert height
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 44
+    Received:    42.5
+
+      116 |         for (const id of ['copilot-insert', 'copilot-regenerate', 'copilot-discard']) {
+      117 |             const box = await page.getByTestId(id).boundingBox();
+    > 118 |             expect(box?.height ?? 0, `${id} height`).toBeGreaterThanOrEqual(44);
+          |                                                      ^
+      119 |         }
+      120 |         for (const btn of await tab.locator('.cp-ins').all()) {
+      121 |             expect((await btn.boundingBox())?.height ?? 0, 'insert-link height').toBeGreaterThanOrEqual(40);
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:118:54
+
+    Error Context: test-results/f1-b8-B8-S01-—-the-Copilot-8f8f9-px-axe-clean-in-both-themes-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/f1-b8.spec.ts:105:5 › B8-S01 — the Copilot panel › §G at 375: the sheet carries the same panel; every control row clears 44 px; axe-clean in both themes 
+  1 passed (18.1s)
+EXIT=1

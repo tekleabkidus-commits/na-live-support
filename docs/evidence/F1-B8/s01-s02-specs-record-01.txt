@@ -1,0 +1,19 @@
+
+Running 12 tests using 1 worker
+
+  ✓   1 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (6.0s)
+  ✓   2 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (6.2s)
+  ✓   3 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (2.1s)
+  ✓   4 [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not (2.1s)
+  ✓   5 [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) (1.9s)
+  ✓   6 [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there (2.4s)
+
+  ✓   7 [chromium] › tests/Browser/f1-b8.spec.ts:78:5 › B8-S01 — the Copilot panel › §A/§C/§D: six labelled regions in reading order with stamps; the draft card carries the meter as TEXT; Discard rests the region; axe-clean light + dark (5.7s)
+  ✓   8 [chromium] › tests/Browser/f1-b8.spec.ts:151:5 › B8-S01 — the Copilot panel › §G at 375: the sheet carries the same panel; every control row clears 44 px; axe-clean in both themes (5.6s)
+  ✓   9 [chromium] › tests/Browser/f1-b8.spec.ts:193:5 › B8-S02 — composer AI actions › §A/§B/§D: four labelled verbs; Improve → the "meaning kept" card with digits verified and "Insert — replaces your text"; Summarize → the note card whose Insert lands in NOTE mode; axe light + dark (8.5s)
+  ✓  10 [chromium] › tests/Browser/f1-b8.spec.ts:264:5 › B8-S02 — composer AI actions › §C (the door shapes pinned by ComposerActionsTest, rendered): the translate PAIR with digits verified and "Insert the Amharic"; the validator rejection NAMES the digits and offers no insert; no card sends (2.7s)
+  ✓  11 [chromium] › tests/Browser/f1-b8.spec.ts:356:5 › B8-S02 — composer AI actions › §A AI-off (LIVE kill switch): copilot OFF → the cluster is GONE and one line says what still works; back ON → the verbs return (2.4s)
+  ✓  12 [chromium] › tests/Browser/f1-b8.spec.ts:394:5 › B8-S02 — composer AI actions › §F at 375: all four verbs stay visible and wrap; every target clears 44 px; axe-clean both themes (2.8s)
+
+  12 passed (1.0m)
+EXIT=0
