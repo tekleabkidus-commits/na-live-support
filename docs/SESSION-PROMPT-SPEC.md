@@ -1,81 +1,91 @@
-# SESSION-PROMPT-SPEC.md — how the advisor writes SESSION-12 (and every later session prompt)
-_v11, updated at S11 close. The exemplars are `prompts/SESSION-10-doc10-kb.md`
-and `prompts/SESSION-11-doc11-routing.md` (in-repo) — mirror their structure;
-SESSION-11 ran 15 steps / 4 batches to a 90/90 recount with zero
-landed-then-escalated core edits, so its shape is the current best._
+# SESSION-PROMPT-SPEC.md — how the advisor writes SESSION-13 (and every later session prompt)
+_v12, updated at the F1 acceptance. The exemplars are
+`prompts/SESSION-11-doc11-routing.md` and `prompts/SESSION-12-doc12-automation.md`
+(in-repo) — mirror their structure; SESSION-12 ran 15 steps / 4 batches to a
+97-id recount with zero landed-then-escalated core edits and every schema
+change filed-before-code, so its shape is the current best. `prompts/
+SESSION-F1-fidelity.md` is the exemplar for a fidelity-only session._
 
 ## Non-negotiable mechanics
-- The session reads the prompt FROM DISK (`prompts/SESSION-12-doc12-*.md`),
-  launched with: `Read prompts/SESSION-12-doc12-<slug>.md from disk and follow
+- The session reads the prompt FROM DISK (`prompts/SESSION-13-doc13-<slug>.md`),
+  launched with: `Read prompts/SESSION-13-doc13-<slug>.md from disk and follow
   it completely.`
 - Integrity check inside the prompt: exactly **6 PROTOCOL steps**; last line
   exactly `Then STOP.`; the session states both in its first report.
 - The prompt commits BEFORE launch (with the advisor rulings file); the owner
-  grounds the commit; the advisor verifies the tail-1 line.
+  grounds the commit.
 - The plan is delivered UNCOMMITTED (rule 12), audited family-exact against
-  the advisor's PRIVATE enumeration, and commits as the plan of record at
-  approval. One row per id; counts stated by family; a mismatch is
-  investigated, never averaged.
+  the advisor's PRIVATE enumeration, commits as the plan of record at
+  approval. One row per id; counts by family; a mismatch is investigated,
+  never averaged.
+- **Cadence is the owner's to set.** Default = batches with one report + one
+  grounding per checkpoint. The owner may direct autonomous end-to-end
+  running with review at the close (F1 precedent) — the prompt states that
+  two stops survive any cadence: core-edit packets stop for countersign; the
+  close-out stops for owner review + grounding.
 
-## The prompt's required blocks (SESSION-11's §1–§14 shape)
-1. Role + verification contract (owner is a non-programmer; pasted output or
-   it didn't happen; false DONE = Sev-1).
-2. Solo-process guard — carry the FULL rival recipes (detached bg-pty-host;
-   `claude daemon run` respawns; the Windows Desktop bridge needs
-   taskkill.exe; two spaced looks; /proc sweep for orphaned pest/gates;
-   NEVER Pest beside gates).
+## The prompt's required blocks (SESSION-12's §1–§14 shape)
+1. Role + verification contract.
+2. Solo-process guard — carry the FULL rival recipes (bg-pty-host; `claude
+   daemon run`; the Windows Desktop bridge + `taskkill.exe`; transports with
+   no child CLI are NOT sessions; two spaced looks; /proc sweep; NEVER Pest
+   beside gates).
 3. Prompt integrity check.
-4. Standing rules from minute one (18; restate 11/15/17/18 — and the S11
-   addition: every advisor ruling block ends with an explicit END line; a
-   truncated ruling is not a ruling).
-5. STEP 0: rulings-filed proof + the [D12] closing set enumerated from the
-   register's OWN rows + any sanctioned side-rows your rulings order +
-   catalog count EXECUTED (114) + every permission key the document routes to
-   verified EXISTING or STOP (no invented keys; the catalog is closed).
-   Doc 12 likely needs an external-credential check ONLY if its SLA/notify
-   arms touch one — do not invent a gate that isn't in the document.
+4. Standing rules from minute one (18; restate 11/13/15/17/18 — 13: the
+   correctness battery runs regardless of power, only timing waits; a
+   timing waiver is the OWNER's on the record).
+5. STEP 0: the prerequisite ruling of record (row 0a — the public origin; if
+   absent, the [OA] bucket named plainly) + rulings-filed proof + the [D13]
+   closing set enumerated from the register's OWN rows + catalog count
+   EXECUTED (114) + every permission key the document routes to (widget.*,
+   webchat.*) verified EXISTING or STOP.
 6. Reading list with WHY per file — the document end-to-end; BUILD-STATUS's
-   relevant close sections + risks 0a–0m; ANSWERS (A-50/A-53/A-57/A-58 and
-   the amendments matter to Doc 12); the ADRs; the substrate AS CODE
-   (Doc 11's routing doors + HoursContract seam; Doc 03's doors; Doc 06's
-   ticket machinery; Doc 10's MenuDesigner contract; the settings registry);
-   both prior approved plans.
-7. Escalate-first, stated BEFORE scope, with the document-specific pressure
-   points named (for Doc 12: Doc 11's PlaceInQueue/RoutingPipeline as the
-   ONLY placement doors; Doc 06's schema for custom fields; Doc 03's doors
-   for every condition the engine evaluates).
-8. Scope: the fidelity sentence verbatim; out-of-scope handoffs per document;
-   pre-agreed buckets AS A TABLE each with its unblocker; dev-scale figures
-   for every §12 row with misses flagged plainly (the NFR-05/TTI precedent).
-9. Inherited rows table with dispositions.
-10. THE SUBTLE PARTS — each verified against the document text with ids;
-    property-test physics for anything the document calls absolute (the
-    starvation-cap model: value configurable, existence absolute).
+   relevant close sections + risks 0a–0m + the F1 registers; ANSWERS
+   (A-40/A-42 identity, A-59/A-60, the widget-adjacent rulings from S14/S23);
+   the ADRs; the substrate AS CODE (Doc 04's ChannelAdapter contract + the
+   conformance suite + the webchat queue families + the media chain; Doc 02's
+   visitor-token stack + the widget route group + CORS; Doc 08's
+   ChannelIdentityMap; Doc 10's mounted Help API; Doc 12's CSAT endpoint,
+   form_versions contract, HoursContract; Reverb channel-auth); both prior
+   approved plans; the frozen B3 files.
+7. Escalate-first, stated BEFORE scope, with Doc 13's pressure points named
+   (the ChannelAdapter contract above all — zero core edits is the proof;
+   Doc 02's widget auth stack; Doc 08's identity map entry; the mounted
+   Doc 10/12 endpoints — render, never rebuild).
+8. Scope: the fidelity sentence verbatim; out-of-scope handoffs; pre-agreed
+   buckets AS A TABLE each with its unblocker ([OA] for live-origin legs if
+   row 0a is unmet; [D14]; [D15]; [D18]; [D19]); dev-scale figures for every
+   §12 row with misses flagged.
+9. Inherited rows table with dispositions (handoff v12 §4 rows 0a–7).
+10. THE SUBTLE PARTS — each verified against the document text with ids
+    (customer-facing no-failure-vocabulary law; R-24 fallback; conformance
+    with zero core edits; A-42's anchor; cookie-less media origin; per-tenant
+    CORS origins; visitor-principal Reverb; the B3-A01 rows as tests).
 11. PROTOCOL (exactly 6): plan-first with plan-time STOPs; build (one commit
     per step, registries as you go, schema = filed amendment countersigned
-    BEFORE migration); sabotage floor grown only by filed amendment, with
-    the document's mandated falsifications named, positive control per
-    assertion, invalid greens filed and re-executed hardened; i18n en+am
-    through the R-14 queue with the destructive tier flagged; full battery
-    every step-commit (wall power for timing legs; the 0l fixture law INCL.
-    scene budgets — S11's close red was a fixture-shape defect; verdicts
-    from capture summary + exit code, never the Tests: line alone; a
-    recorded-class red gets its class's ruled disposition, not a chased
-    re-run); close-out per the house shape, ending with its SHA, grounded by
-    the owner BEFORE the advisor recount.
-12. Cadence: batches, one report + one grounding per checkpoint, the SEVEN
-    mandatory stops only.
-13. Design fidelity per the mandate + the sitting advisor's design ruling.
-14. Hard prohibitions.
+    BEFORE migration, riders filed-before-code when a build surfaces a
+    missed necessity); sabotage floor of TEN with the document's mandated
+    falsifications (include one conformance-lie and one visitor-token-
+    widening falsification); i18n en+am through R-14; full battery every
+    step-commit regardless of power (the 0l fixture law incl. scene budgets
+    and the reseed+views-rebuild heal); close-out ending with its SHA,
+    grounded BEFORE the advisor recount, recount FROM ROWS.
+12. Cadence: per the owner's directive (see mechanics); the seven mandatory
+    stops.
+13. Design fidelity: Batch 3 binds at FULL fidelity — frame-mapping rows for
+    every B3 frame; B3-A01's rows dispositioned as executed tests; deviations
+    in exactly three classes, all filed; tokens only with the hex-extraction
+    re-run; the three seam files (B3-S03/S04/S05) already consumed by earlier
+    documents are conformance targets, never redrawn.
+14. Hard prohibitions (+ no failure vocabulary on the customer surface; no
+    real customer data in any non-production origin).
 
-## Session-side disciplines proven at S11 — bake them in
-- Draft in a SCRATCHPAD while a battery runs; never write the tree under a
-  live chain (two invalid batteries at S10/S11 taught this; S11's monitor
-  pattern is the model).
-- Killed/exit-2 batteries prove nothing either way — relaunch, never
-  salvage.
-- KEEP-AND-VERIFY for any inherited dirty tree (five applications on
-  record).
-- The session may correct the advisor's kit/plan with repo evidence — the
-  prompt should SAY so (S11's §8 command-definition catch and the pin
+## Session-side disciplines proven at S12/F1 — bake them in
+- Scratchpad while a battery runs; never write the tree under a live chain.
+- Killed/exit-2 batteries prove nothing — relaunch, never salvage.
+- KEEP-AND-VERIFY for any inherited dirty tree (six applications on record).
+- The session may correct the advisor's kit with repo evidence — the prompt
+  SAYS so (S12's defective-regex self-correction and the built-pages-path
   correction were both session-side wins).
+- The full battery drifts shared browser fixtures — reseed + `inbox:views-
+  rebuild` is the sanctioned heal, filed once per session, not re-diagnosed.
