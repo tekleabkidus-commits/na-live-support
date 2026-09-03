@@ -1299,7 +1299,21 @@ test.describe('P-F1 packets — BUBBLE · BANNER · TOPBAR (countersigned, lande
             const overflow = await page.evaluate(
                 () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
             );
-            expect(overflow, 'document overflow at 375 (am)').toBeLessThanOrEqual(0);
+            // on a red, name the offenders (right edge past the viewport) — the runner's fonts differ
+            const offenders = await page.evaluate(() =>
+                Array.from(document.querySelectorAll('body *'))
+                    .map((el) => ({ el, r: el.getBoundingClientRect() }))
+                    .filter(({ r }) => r.right > window.innerWidth + 0.5 && r.width > 0)
+                    .slice(0, 8)
+                    .map(
+                        ({ el, r }) =>
+                            `${el.tagName.toLowerCase()}${el.getAttribute('data-testid') ? '[' + el.getAttribute('data-testid') + ']' : ''}${el.className && typeof el.className === 'string' ? '.' + el.className.split(' ').slice(0, 2).join('.') : ''} right=${Math.round(r.right)}`,
+                    ),
+            );
+            expect(
+                overflow,
+                `document overflow at 375 (am); offenders: ${offenders.join(' | ')}`,
+            ).toBeLessThanOrEqual(0);
             const status = page.getByTestId('agent-status');
             await expect(status).toBeVisible();
             await expect(status.locator('.status-word')).not.toBeInViewport();

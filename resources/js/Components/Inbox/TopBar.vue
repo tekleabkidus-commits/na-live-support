@@ -47,11 +47,11 @@ function toggleDensity(value: 'comfortable' | 'compact'): void {
 <template>
     <header
         data-testid="inbox-topbar"
-        class="flex h-14 shrink-0 items-center gap-3 border-b px-4"
+        class="flex h-14 min-w-0 shrink-0 items-center gap-3 border-b px-4 max-[639px]:gap-2 max-[639px]:px-3"
         :style="{ background: 'var(--ds-panel-bg)', borderColor: 'var(--ds-border)' }"
     >
         <span
-            class="truncate text-sm font-semibold"
+            class="min-w-0 truncate text-sm font-semibold"
             :style="{ color: 'var(--ds-text-primary)' }"
             data-testid="tenant-name"
         >
