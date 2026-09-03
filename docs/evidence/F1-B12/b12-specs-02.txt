@@ -1,0 +1,188 @@
+
+Running 18 tests using 1 worker
+
+
+  ✓   1 [chromium] › tests/Browser/f1-b12.spec.ts:110:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (3.9s)
+  ✓   2 [chromium] › tests/Browser/f1-b12.spec.ts:128:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark (4.3s)
+  ✓   3 [chromium] › tests/Browser/f1-b12.spec.ts:163:5 › B9-S05 — the rules list › §E E02: the activate dialog names the position, the trigger, the capability floor, the dry-run habit and the audit; Cancel changes nothing; the deactivate dialog is the red primary with stops · keeps · untouched · audited (2.0s)
+  ✓   4 [chromium] › tests/Browser/f1-b12.spec.ts:182:5 › B9-S05 — the rules list › §E E07 (absence of the door): the pause banner renders only from the R-04 flag; with the flag off no banner, no paused chip, no per-row "Paused" (1.9s)
+  ✓   5 [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes (3.0s)
+  ✘   6 [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark (6.8s)
+
+  ✓   7 [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head (1.7s)
+  ✘   8 [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline (3.6s)
+
+  ✘   9 [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing (6.8s)
+
+  ✓  10 [chromium] › tests/Browser/f1-b12.spec.ts:340:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) (1.7s)
+  ✓  11 [chromium] › tests/Browser/f1-b12.spec.ts:356:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow (4.1s)
+  ✘  12 [chromium] › tests/Browser/f1-b12.spec.ts:409:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark (7.2s)
+
+  ✓  13 [chromium] › tests/Browser/f1-b12.spec.ts:451:5 › B9-S07 — SLA policies › §G G03: the live example in en + am from the clock library — reachable on the calendar, wall-clock on 24 × 7; G05: the EC-03 diagram draws keep vs rescale from the targets and follows the chosen mode; G07: the FR-11 chip strip in the fixed tokens (2.0s)
+  ✘  14 [chromium] › tests/Browser/f1-b12.spec.ts:499:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date (2.3s)
+
+  ✓  15 [chromium] › tests/Browser/f1-b12.spec.ts:532:5 › B9-S07 — SLA policies › §G G01 empty (absence): the empty state is drawn only when no policy exists — with policies on the list it is absent; G08 375: the read notice, the list cards, policy 1 live example in en + am, no editor, no overflow; axe-clean both themes (2.8s)
+  ✘  16 [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated (6.9s)
+  ✓  17 [chromium] › tests/Browser/workflow-screens.spec.ts:96:1 › J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday (2.7s)
+  ✓  18 [chromium] › tests/Browser/workflow-screens.spec.ts:118:1 › J5 + J6 + J7 + J8: a field with where-used, a form published v1 from the builder with the dual preview, a macro previewed, the CSAT settings row saved (4.3s)
+
+
+  1) [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('wf-panel-trigger')
+    Expected substring: "Per ticket, keyed on rule + ticket"
+    Received string:    "1Triggername · when · cooldown · run window · positionNameDescriptionWhenticket.createdticket.status_changedticket.priority_changedticket.transferredmessage.receivedform.submittedsla.warnedsla.breachedcsat.receivedtelegram.window.closingtelegram.window.expiredcustomer.rg_flag.setscheduleticket.createdticket.status_changedticket.priority_changedticket.transferredmessage.receivedform.submittedsla.warnedsla.breachedcsat.receivedtelegram.window.closingtelegram.window.expiredcustomer.rg_flag.setscheduleSchedule (cron, tenant timezone, at least every 5 minutes)Five-minute floor — a faster cron is refused inline, never rounded.Next run (Africa/Addis_Ababa)computed after saveShown in the tenant timezone; the rule row carries its UTC twin.Run windowAlwaysOptional — outside the window the rule does not fire; nothing is queued for later.Positionposition 6 of 7Position order is execution order. Move the rule from the list."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-trigger')
+        14 × locator resolved to <section class="wf-pnl" data-testid="wf-panel-trigger">…</section>
+           - unexpected value "1Triggername · when · cooldown · run window · positionNameDescriptionWhenticket.createdticket.status_changedticket.priority_changedticket.transferredmessage.receivedform.submittedsla.warnedsla.breachedcsat.receivedtelegram.window.closingtelegram.window.expiredcustomer.rg_flag.setscheduleticket.createdticket.status_changedticket.priority_changedticket.transferredmessage.receivedform.submittedsla.warnedsla.breachedcsat.receivedtelegram.window.closingtelegram.window.expiredcustomer.rg_flag.setscheduleSchedule (cron, tenant timezone, at least every 5 minutes)Five-minute floor — a faster cron is refused inline, never rounded.Next run (Africa/Addis_Ababa)computed after saveShown in the tenant timezone; the rule row carries its UTC twin.Run windowAlwaysOptional — outside the window the rule does not fire; nothing is queued for later.Positionposition 6 of 7Position order is execution order. Move the rule from the list."
+
+
+      230 |         await expect(page.getByTestId('wf-panel-trigger')).toContainText('Five-minute floor');
+      231 |         await expect(page.getByTestId('wf-next-run')).toBeVisible();
+    > 232 |         await expect(page.getByTestId('wf-panel-trigger')).toContainText(
+          |                                                            ^
+      233 |             'Per ticket, keyed on rule + ticket',
+      234 |         );
+      235 |         await expect(page.getByTestId('wf-panel-trigger')).toContainText('Run window');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:232:60
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-ec650--hints-axe-clean-light-dark-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+
+    Error: axe violations — rule editor · 15 cards (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   "aria-allowed-attr: .p-2",
+    +   "aria-required-children: .lh",
+    +   "aria-required-parent: .lh",
+    +   "listitem: li[data-testid=\"wf-inline-validation\"]",
+    + ]
+
+      70 |         ),
+      71 |         `axe violations — ${label}`,
+    > 72 |     ).toEqual([]);
+         |       ^
+      73 | }
+      74 | async function shot(
+      75 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:72:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:295:9
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-6c9a7-template-blocks-save-inline-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-dry-run')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-dry-run')
+
+
+      312 |             .fill('[F1] from the proof');
+      313 |         await page.getByTestId('wf-dry-run-toggle').click();
+    > 314 |         await expect(page.getByTestId('wf-dry-run')).toBeVisible();
+          |                                                      ^
+      315 |         await expect(page.getByTestId('wf-dry-event')).toBeVisible();
+      316 |         await expect(page.getByTestId('wf-dry-run')).toContainText('Reads only');
+      317 |         await page.getByTestId('wf-dry-run-go').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:314:54
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-2657d-udge-Cancel-changes-nothing-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/f1-b12.spec.ts:409:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.sla-foot')
+    Expected substring: "first match wins"
+    Received string:    "On ticket creation the FIRST policy whose match conditions hold arms the instance with a snapshot of the policy and its calendar (FR-09). Order is the ↑↓ buttons; the catch-all belongs last."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('.sla-foot')
+        14 × locator resolved to <p data-v-21343895="" class="bo-hint sla-foot">On ticket creation the FIRST policy whose match c…</p>
+           - unexpected value "On ticket creation the FIRST policy whose match conditions hold arms the instance with a snapshot of the policy and its calendar (FR-09). Order is the ↑↓ buttons; the catch-all belongs last."
+
+
+      419 |         await expect(row).toContainText(/min/);
+      420 |         await expect(row.locator('.st')).toContainText(/Active|Inactive/);
+    > 421 |         await expect(page.locator('.sla-foot')).toContainText('first match wins');
+          |                                                 ^
+      422 |         await page.getByTestId(`wf-sla-row-${id}`).click();
+      423 |         await expect(page.getByTestId(`wf-sla-up-${id}`)).toBeVisible();
+      424 |         const ed = page.getByTestId('wf-sla-editor');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:421:49
+
+    Error Context: test-results/f1-b12-B9-S07-—-SLA-polici-2c0e6-h-hook-axe-clean-light-dark-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/f1-b12.spec.ts:499:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date 
+
+    Error: locator.selectOption: options[0].label: expected string, got object
+
+      513 |         await page.getByTestId(`wf-sla-row-${id}`).click();
+      514 |         await page.getByTestId('wf-sla-clock').selectOption('calendar');
+    > 515 |         await page.getByTestId('wf-sla-calendar').selectOption({
+          |                                                   ^
+      516 |             label: new RegExp(name.replace(/[[\]]/g, '\\$&')) as unknown as string,
+      517 |         });
+      518 |         await expect(page.getByTestId('wf-sla-example')).toContainText('never opens');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:515:51
+
+    Error Context: test-results/f1-b12-B9-S07-—-SLA-polici-24cd9-s-—-never-a-fabricated-date-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-rule-row]').filter({ hasText: 'Browser rule 1788433950752' }).locator('[data-testid^="wf-rule-state-"]')
+    Expected: "Active"
+    Received: "○ Draft"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-rule-row]').filter({ hasText: 'Browser rule 1788433950752' }).locator('[data-testid^="wf-rule-state-"]')
+        14 × locator resolved to <span class="st" data-testid="wf-rule-state-01a066f8-692a-71bd-b9fb-d5f46dfc5a46">○ Draft</span>
+           - unexpected value "○ Draft"
+
+
+      91 |     const row = page.locator('[data-rule-row]', { hasText: name });
+      92 |     await expect(row).toBeVisible();
+    > 93 |     await expect(row.locator('[data-testid^="wf-rule-state-"]')).toHaveText('Active');
+         |                                                                  ^
+      94 | });
+      95 |
+      96 | test('J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/workflow-screens.spec.ts:93:66
+
+    Error Context: test-results/workflow-screens-J1-J2-the-9f063--truth-badges-and-activated-chromium/error-context.md
+
+  6 failed
+    [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+    [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+    [chromium] › tests/Browser/f1-b12.spec.ts:409:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:499:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date 
+    [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated 
+  12 passed (1.5m)
+EXIT=1

@@ -18,7 +18,11 @@ const props = defineProps<{
     keywordSets: { id: string; name: string; active: boolean }[];
     removedOptions?: Record<string, string[]>; // fact → values no longer offered (EC-08 warning)
 }>();
-const emit = defineEmits<{ (e: 'update:modelValue', v: Group): void; (e: 'remove'): void; (e: 'outdent', node: Node): void }>();
+const emit = defineEmits<{
+    (e: 'update:modelValue', v: Group): void;
+    (e: 'remove'): void;
+    (e: 'outdent', node: Node): void;
+}>();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const c = props.copy as any;
 
@@ -112,7 +116,7 @@ function removedWarning(leaf: Leaf): boolean {
 <template>
     <div
         role="group"
-        :aria-level="level"
+        :data-level="level"
         class="rounded-md border p-2"
         :style="{
             borderColor: 'var(--ds-border)',

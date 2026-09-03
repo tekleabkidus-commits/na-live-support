@@ -608,6 +608,8 @@ Route::middleware([
     // The dry-run door is registered BEFORE the {ruleId} routes (a literal segment must never be captured as an id).
     Route::post('rules/dry-run', [$w, 'dryRun'])->middleware('permission:automation.rules.edit')->name('workflow.rules.dry_run');
     Route::get('rules/{ruleId}', [$w, 'ruleEditor'])->middleware('permission:automation.rules.view')->name('workflow.rules.editor');
+    // SESSION-F1 [B12] B9-S13 M02 — the execution detail READ page (FR-06 / SEC-03) on the existing key
+    Route::get('rules/{ruleId}/executions/{executionId}', [$w, 'execution'])->middleware('permission:automation.rules.view')->name('workflow.rules.execution');
     Route::post('rules', [$w, 'createRule'])->middleware(['permission:automation.rules.edit', 'audit:automation.rule.created'])->name('workflow.rules.create');
     Route::post('rules/{ruleId}', [$w, 'updateRule'])->middleware(['permission:automation.rules.edit', 'audit:automation.rule.updated'])->name('workflow.rules.update');
     Route::post('rules/{ruleId}/activate', [$w, 'activateRule'])->middleware(['permission:automation.rules.activate', 'audit:automation.rule.activated'])->name('workflow.rules.activate');

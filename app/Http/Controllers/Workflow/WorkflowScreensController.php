@@ -35,6 +35,7 @@ use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use Inertia\Inertia;
 use Inertia\Response;
 use InvalidArgumentException;
@@ -71,6 +72,21 @@ final class WorkflowScreensController extends Controller
                 'policies' => DB::table('sla_policies')->where('active', true)->count(),
                 'forms' => DB::table('forms')->where('active', true)->count(),
                 'macros' => DB::table('macros')->where('active', true)->count(),
+                // SESSION-F1 [B12] B9-S13 M01 — the card sub-lines, read-only
+                'rules_active' => DB::table('automation_rules')->where('active', true)->count(),
+                'policies_default_calendar' => DB::table('sla_policies')->where('active', true)->whereIn('calendar_id', DB::table('business_calendars')->where('is_tenant_default', true)->select('id'))->count(),
+                'calendars' => DB::table('business_calendars')->where('active', true)->count(),
+                'timezone' => $this->tenantTimezone(),
+                'macros_personal' => DB::table('macros')->where('active', true)->where('scope', 'personal')->count(),
+                'macros_team' => DB::table('macros')->where('active', true)->where('scope', 'team')->count(),
+                'macros_shared' => DB::table('macros')->where('active', true)->where('scope', 'tenant')->count(),
+                'fields_ticket' => DB::table('field_definitions')->where('active', true)->where('entity', 'ticket')->count(),
+                'fields_customer' => DB::table('field_definitions')->where('active', true)->where('entity', 'customer')->count(),
+                'fields_retired' => DB::table('field_definitions')->where('active', false)->count(),
+                'forms_seeded' => DB::table('forms')->where('active', true)->whereIn('name', array_keys(\App\Domain\Forms\Seeding\FormSeeder::forms()))->count(),
+                'forms_draft' => DB::table('forms')->where('active', true)->whereNull('current_version_id')->count(),
+                'csat_cooldown' => self::i($this->settings->get('csat.cooldown.hours')),
+                'csat_window' => self::i($this->settings->get('csat.window.hours')),
             ],
         ]);
     }
@@ -80,15 +96,39 @@ final class WorkflowScreensController extends Controller
     public function rules(Request $request, LogReader $log, SystemActorFloor $floor): Response
     {
         $user = $this->user($request);
+        // SESSION-F1 [B12-batch] (B9-S05 E03/E04): matches per day over 14 days for the sparkline and
+        // the guard NAMES from the recent executions — reads over the execution log, grouped once.
+        $perDay = [];
+        /** @var list<object{rule_id: string, d: string, n: int|string}> $dayRows */
+        $dayRows = DB::select("SELECT rule_id, (executed_at AT TIME ZONE 'UTC')::date::text AS d, count(*) AS n FROM automation_rule_executions WHERE matched AND executed_at >= clock_timestamp() - interval '14 days' GROUP BY 1, 2");
+        foreach ($dayRows as $row) {
+            $perDay[$row->rule_id][$row->d] = (int) $row->n;
+        }
+        $days = [];
+        for ($i = 13; $i >= 0; $i--) {
+            $days[] = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->modify("-{$i} days")->format('Y-m-d');
+        }
         $rows = [];
         foreach (DB::table('automation_rules')->orderBy('position')->orderBy('id')->get() as $rule) {
-            $summary = $log->forRule(self::s($rule->id), $user, 1);
+            $summary = $log->forRule(self::s($rule->id), $user, 50);
+            $guardNames = [];
+            foreach ($summary['executions'] as $x) {
+                $trips = $x['guard_trips'] ?? [];
+                foreach (is_array($trips) ? $trips : [] as $g) {
+                    if (is_string($g)) {
+                        $guardNames[$g] = ($guardNames[$g] ?? 0) + 1;
+                    }
+                }
+            }
             $rows[] = [
                 'id' => $rule->id, 'name' => $rule->name, 'description' => $rule->description, 'trigger' => $rule->trigger,
                 'position' => self::i($rule->position), 'active' => (bool) $rule->active,
                 'has_draft' => $this->hasDraft(self::s($rule->id), $rule->active_revision_id),
                 'matched_count' => $summary['matched_count'], 'last_run_at' => $summary['last_run_at'],
                 'guard_trips' => count(array_filter($summary['executions'], static fn (array $x): bool => ($x['guard_trips'] ?? []) !== [])),
+                'guard_names' => $guardNames,
+                'per_day' => array_map(static fn (string $d): int => $perDay[self::s($rule->id)][$d] ?? 0, $days),
+                'schedule_cron' => $rule->schedule_cron ?? null, 'schedule_next_run_at' => $rule->schedule_next_run_at ?? null,
                 'drift' => (bool) $rule->active ? $floor->driftFor(self::s($rule->id)) : [],
                 'updated_at' => $rule->updated_at,
             ];
@@ -99,6 +139,9 @@ final class WorkflowScreensController extends Controller
             'can' => $this->capabilities->for($user, 'Workflow/Rules'),
             'rules' => $rows,
             'triggers' => array_keys(\App\Domain\Automation\Engine\TriggerMap::EVENTS),
+            'paused' => (bool) \Laravel\Pennant\Feature::active('automation.rules_pause'),
+            'guards' => ['rules' => \App\Domain\Automation\Engine\Guards::MAX_RULES_PER_EVENT, 'actions' => \App\Domain\Automation\Engine\Guards::MAX_ACTIONS_PER_EVENT, 'depth' => \App\Domain\Automation\Engine\Guards::MAX_CHAIN_DEPTH],
+            'timezone' => $this->tenantTimezone(),
         ]);
     }
 
@@ -135,6 +178,9 @@ final class WorkflowScreensController extends Controller
             'fields' => DB::table('field_definitions')->where('active', true)->orderBy('entity')->orderBy('position')->get(['id', 'entity', 'key', 'label', 'type'])->all(),
             'log' => $log->forRule($ruleId, $user, 25),
             'recent_events' => $dryRun->recentEvents(50),
+            'rule_count' => (int) DB::table('automation_rules')->count(),
+            'timezone' => $this->tenantTimezone(),
+            'guards' => ['rules' => \App\Domain\Automation\Engine\Guards::MAX_RULES_PER_EVENT, 'actions' => \App\Domain\Automation\Engine\Guards::MAX_ACTIONS_PER_EVENT, 'depth' => \App\Domain\Automation\Engine\Guards::MAX_CHAIN_DEPTH],
         ]);
     }
 
@@ -285,7 +331,9 @@ final class WorkflowScreensController extends Controller
             'copy' => __('workflow.ui'),
             'can' => $this->capabilities->for($this->user($request), 'Workflow/Sla'),
             'policies' => $policies,
-            'calendars' => DB::table('business_calendars')->where('active', true)->orderBy('name')->get(['id', 'name', 'timezone', 'is_tenant_default', 'department_id'])->all(),
+            'calendars' => DB::table('business_calendars')->where('active', true)->orderBy('name')->get(['id', 'name', 'timezone', 'is_tenant_default', 'department_id', 'weekdays'])
+                ->map(fn (object $k): array => ['id' => $k->id, 'name' => $k->name, 'timezone' => $k->timezone, 'is_tenant_default' => (bool) $k->is_tenant_default, 'department_id' => $k->department_id, 'weekdays' => json_decode(self::s($k->weekdays), true, 8) ?: []])
+                ->all(),
             'departments' => DB::table('departments')->where('is_active', true)->orderBy('position')->get(['id', 'name'])->all(),
             'timezone' => $this->tenantTimezone(),
         ]);
@@ -320,8 +368,12 @@ final class WorkflowScreensController extends Controller
             $target = max(60, self::i($request->input('target_seconds', 2400)));
             $createdAt = new DateTimeImmutable(self::s($request->input('created_at', '2026-09-01T17:00:00+03:00')));
             $tz = new DateTimeZone($this->tenantTimezone());
+            // SESSION-F1 [B12] G03: the editor asks for both launch languages; the locale is
+            // an optional, closed input — anything else falls back to the request locale.
+            $locale = in_array($request->input('locale'), ['en', 'am'], true) ? self::s($request->input('locale')) : app()->getLocale();
+            $sentence = $example->render($calendar, $target, $createdAt, $tz, $locale);
 
-            return ['ok' => true, 'sentence' => $example->render($calendar, $target, $createdAt, $tz, app()->getLocale())];
+            return ['ok' => true, 'sentence' => $sentence, 'reachable' => $sentence !== Lang::get('workflow.sla.example_unreachable', [], $locale)];
         });
     }
 
@@ -337,6 +389,7 @@ final class WorkflowScreensController extends Controller
                 'weekdays' => json_decode(self::s($c->weekdays), true, 8) ?: [],
                 'holidays' => DB::table('business_calendar_holidays')->where('calendar_id', $c->id)->orderBy('date')->get(['id', 'date', 'name', 'recurring_yearly'])->all(),
                 'updated_at' => $c->updated_at,
+                'referenced_by' => DB::table('sla_policies')->where('calendar_id', $c->id)->count(),
             ];
         }
 
@@ -422,6 +475,8 @@ final class WorkflowScreensController extends Controller
             'palette' => $rows,
             'sample_tickets' => DB::table('tickets')->orderByDesc('created_at')->limit(10)->get(['id', 'number', 'subject'])->all(),
             'variables' => \App\Domain\Macros\VariableResolver::VOCABULARY,
+            'teams' => DB::table('teams')->orderBy('name')->get(['id', 'name'])->all(),
+            'user_id' => $user->identifier(),
         ]);
     }
 
@@ -478,9 +533,15 @@ final class WorkflowScreensController extends Controller
                 'type' => $f->type, 'validation' => json_decode(self::s($f->validation), true, 8) ?: [],
                 'agent_editable' => (bool) $f->agent_editable, 'customer_visible' => (bool) $f->customer_visible,
                 'position' => self::i($f->position), 'active' => (bool) $f->active, 'deactivated_at' => $f->deactivated_at,
-                'options' => DB::table('field_definition_options')->where('field_id', $f->id)->orderBy('position')->get(['id', 'value', 'label', 'position'])
-                    ->map(static fn (object $o): array => ['id' => $o->id, 'value' => $o->value, 'label' => json_decode(self::s($o->label), true, 4) ?: [], 'position' => self::i($o->position)])->values()->all(),
+                'options' => DB::table('field_definition_options')->where('field_id', $f->id)->orderBy('position')->get(['id', 'value', 'label', 'position', 'active', 'label_snapshot', 'updated_at'])
+                    ->map(static fn (object $o): array => [
+                        'id' => $o->id, 'value' => $o->value, 'label' => json_decode(self::s($o->label), true, 4) ?: [], 'position' => self::i($o->position),
+                        'active' => (bool) $o->active, 'label_snapshot' => $o->label_snapshot !== null ? (json_decode(self::s($o->label_snapshot), true, 4) ?: null) : null, 'updated_at' => $o->updated_at,
+                    ])->values()->all(),
                 'updated_at' => $f->updated_at,
+                'created_at' => $f->created_at,
+                // stored values are countable for customer fields only (ticket values have no store of their own)
+                'stored_values' => $f->entity === 'customer' ? DB::table('customer_field_values')->where('field_key', $f->key)->count() : null,
             ];
         }
 
@@ -558,10 +619,19 @@ final class WorkflowScreensController extends Controller
         $forms = [];
         foreach (DB::table('forms')->orderBy('name')->get() as $f) {
             $current = $f->current_version_id !== null ? DB::table('form_versions')->where('id', $f->current_version_id)->first(['version', 'published_at']) : null;
+            $schema = $f->current_version_id !== null ? json_decode(self::s(DB::table('form_versions')->where('id', $f->current_version_id)->value('schema')), true, 32) : [];
+            $steps = is_array($schema) && is_array($schema['steps'] ?? null) ? $schema['steps'] : [];
+            $bindings = json_decode(self::s($f->entity_bindings), true, 8) ?: [];
+            $departmentId = is_array($bindings) && is_string($bindings['department_id'] ?? null) ? $bindings['department_id'] : null;
             $forms[] = [
                 'id' => $f->id, 'name' => $f->name, 'active' => (bool) $f->active,
                 'current_version' => $current->version ?? null, 'published_at' => $current->published_at ?? null,
                 'usage' => $usage->forForm(self::s($f->id)), 'updated_at' => $f->updated_at,
+                // FR-23: the seeded three are content — flagged by name against the seeder's own list
+                'seeded' => array_key_exists(self::s($f->name), \App\Domain\Forms\Seeding\FormSeeder::forms()),
+                'department_name' => $departmentId !== null ? DB::table('departments')->where('id', $departmentId)->value('name') : null,
+                'steps' => count($steps),
+                'fields' => array_sum(array_map(static fn (mixed $st): int => is_array($st) && is_array($st['fields'] ?? null) ? count($st['fields']) : 0, $steps)),
             ];
         }
 
@@ -580,18 +650,33 @@ final class WorkflowScreensController extends Controller
             abort(404);
         }
         $versions = DB::table('form_versions')->where('form_id', $formId)->orderByDesc('version')->get(['id', 'version', 'schema', 'published_at', 'published_by'])
-            ->map(static fn (object $v): array => ['id' => $v->id, 'version' => self::i($v->version), 'schema' => json_decode(self::s($v->schema), true, 32) ?: [], 'published_at' => $v->published_at])->values()->all();
+            ->map(static fn (object $v): array => [
+                'id' => $v->id, 'version' => self::i($v->version), 'schema' => json_decode(self::s($v->schema), true, 32) ?: [], 'published_at' => $v->published_at,
+                'published_by_name' => is_string($v->published_by) ? DB::table('users')->where('id', $v->published_by)->value('name') : null,
+            ])->values()->all();
 
         return Inertia::render('Workflow/FormBuilder', [
             'copy' => __('workflow.ui'),
             'blocks' => __('workflow.forms.block'),
             'usage_labels' => __('workflow.forms.usage'),
             'can' => $this->capabilities->for($this->user($request), 'Workflow/FormBuilder'),
-            'form' => ['id' => $form->id, 'name' => $form->name, 'active' => (bool) $form->active, 'current_version_id' => $form->current_version_id, 'updated_at' => $form->updated_at],
+            'form' => [
+                'id' => $form->id, 'name' => $form->name, 'active' => (bool) $form->active, 'current_version_id' => $form->current_version_id, 'updated_at' => $form->updated_at,
+                'entity_bindings' => json_decode(self::s($form->entity_bindings), true, 8) ?: [],
+                'seeded' => array_key_exists(self::s($form->name), \App\Domain\Forms\Seeding\FormSeeder::forms()),
+            ],
+            'departments' => DB::table('departments')->where('is_active', true)->orderBy('position')->get(['id', 'name'])->all(),
+            // the preview chrome in both launch languages — the renders follow the preview language (K08)
+            'render_strings' => ['en' => self::renderStrings('en'), 'am' => self::renderStrings('am')],
             'versions' => $versions,
             'schema' => $versions[0]['schema'] ?? ['languages' => ['en', 'am'], 'steps' => [], 'completion' => []],
             'field_types' => DefinitionWriter::TYPES,
-            'custom_fields' => DB::table('field_definitions')->where('active', true)->orderBy('entity')->orderBy('position')->get(['id', 'entity', 'key', 'label', 'type'])->all(),
+            'custom_fields' => DB::table('field_definitions')->where('active', true)->orderBy('entity')->orderBy('position')->get(['id', 'entity', 'key', 'label', 'type'])
+                ->map(static fn (object $f): array => [
+                    'id' => $f->id, 'entity' => $f->entity, 'key' => $f->key, 'label' => json_decode(self::s($f->label), true, 4) ?: [], 'type' => $f->type,
+                    'options' => DB::table('field_definition_options')->where('field_id', $f->id)->where('active', true)->orderBy('position')->get(['value', 'label'])
+                        ->map(static fn (object $o): array => ['value' => $o->value, 'label' => json_decode(self::s($o->label), true, 4) ?: []])->values()->all(),
+                ])->values()->all(),
             'usage' => $usage->forForm($formId),
         ]);
     }
@@ -656,6 +741,101 @@ final class WorkflowScreensController extends Controller
                 'en' => __('workflow.csat', [], 'en'),
                 'am' => __('workflow.csat', [], 'am'),
             ],
+            // SESSION-F1 [B12] B9-S12 L01 — the settings-row contract: defaults from the registry, provenance from the row
+            'defaults' => [
+                'cooldown_hours' => self::i(self::registryDefault('csat.cooldown.hours', 24)),
+                'window_hours' => self::i(self::registryDefault('csat.window.hours', 72)),
+                'comment_prompt_enabled' => (bool) self::registryDefault('csat.comment_prompt.enabled', true),
+            ],
+            'provenance' => $this->settingProvenance(['csat.cooldown.hours', 'csat.window.hours', 'csat.comment_prompt.enabled']),
+        ]);
+    }
+
+    /**
+     * @param  list<string>  $keys
+     * @return array<string, array{updated_by_name: ?string, updated_at: ?string, version: ?int}|null>
+     */
+    private function settingProvenance(array $keys): array
+    {
+        $out = [];
+        foreach ($keys as $key) {
+            $row = DB::table('tenant_settings')->where('key', $key)->first(['updated_by', 'updated_at', 'version']);
+            $name = $row !== null && is_string($row->updated_by) ? DB::table('users')->where('id', $row->updated_by)->value('name') : null;
+            $out[$key] = $row === null ? null : [
+                'updated_by_name' => is_string($name) ? $name : null,
+                'updated_at' => is_string($row->updated_at) ? $row->updated_at : null,
+                'version' => is_numeric($row->version) ? (int) $row->version : null,
+            ];
+        }
+
+        return $out;
+    }
+
+    /** @return array<string, string> */
+    private static function renderStrings(string $locale): array
+    {
+        $out = [];
+        foreach (['step_of', 'widget_continue', 'tg_bot', 'tg_optional', 'tg_reply_number', 'tg_retry', 'tg_attempt', 'tg_direct', 'tg_business'] as $key) {
+            $value = Lang::get('workflow.ui.forms.'.$key, [], $locale);
+            $out[$key] = is_string($value) ? $value : $key;
+        }
+
+        return $out;
+    }
+
+    private static function registryDefault(string $key, mixed $fallback): mixed
+    {
+        /** @var list<array{key: string, default: mixed}> $rows */
+        $rows = require base_path('registries/settings.php');
+        foreach ($rows as $row) {
+            if ($row['key'] === $key) {
+                return $row['default'] ?? $fallback;
+            }
+        }
+
+        return $fallback;
+    }
+
+    // SESSION-F1 [B12] B9-S13 M02 — one execution of one rule, through LogReader's own elision (SEC-03)
+    public function execution(Request $request, string $ruleId, string $executionId, LogReader $log): Response
+    {
+        $user = $this->user($request);
+        $rule = DB::table('automation_rules')->where('id', $ruleId)->first(['id', 'name', 'position', 'active', 'active_revision_id']);
+        if ($rule === null) {
+            abort(404);
+        }
+        $execution = null;
+        foreach ($log->forRule($ruleId, $user, 500)['executions'] as $row) {
+            if (($row['id'] ?? null) === $executionId) {
+                $execution = $row;
+                break;
+            }
+        }
+        if ($execution === null) {
+            abort(404);
+        }
+        $ticket = null;
+        $ticketId = $execution['ticket_id'] ?? null;
+        if (is_string($ticketId)) {
+            $t = DB::table('tickets')->where('id', $ticketId)->first(['id', 'number', 'source', 'department_id']);
+            if ($t !== null) {
+                $ticket = [
+                    'id' => $t->id, 'number' => self::i($t->number), 'channel' => is_string($t->source) ? $t->source : null,
+                    'department' => is_string($t->department_id) ? DB::table('departments')->where('id', $t->department_id)->value('name') : null,
+                ];
+            }
+        }
+
+        $can = $this->capabilities->for($user, 'Workflow/RuleEditor');
+
+        return Inertia::render('Workflow/Execution', [
+            'copy' => __('workflow.ui'),
+            'can' => $can,
+            'rule' => ['id' => $rule->id, 'name' => $rule->name, 'position' => self::i($rule->position), 'active' => (bool) $rule->active, 'revision' => is_string($rule->active_revision_id) ? $rule->active_revision_id : null],
+            'execution' => $execution,
+            'privileged' => ($can['automation.rules.view'] ?? false) === true,
+            'ticket' => $ticket,
+            'guards' => ['rules' => \App\Domain\Automation\Engine\Guards::MAX_RULES_PER_EVENT, 'actions' => \App\Domain\Automation\Engine\Guards::MAX_ACTIONS_PER_EVENT, 'depth' => \App\Domain\Automation\Engine\Guards::MAX_CHAIN_DEPTH],
         ]);
     }
 

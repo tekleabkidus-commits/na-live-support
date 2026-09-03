@@ -1,0 +1,291 @@
+
+Running 14 tests using 1 worker
+
+
+  ✘   1 [chromium] › tests/Browser/f1-b12.spec.ts:110:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (2.3s)
+
+  ✘   2 [chromium] › tests/Browser/f1-b12.spec.ts:128:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark (2.5s)
+
+  ✓   3 [chromium] › tests/Browser/f1-b12.spec.ts:163:5 › B9-S05 — the rules list › §E E02: the activate dialog names the position, the trigger, the capability floor, the dry-run habit and the audit; Cancel changes nothing; the deactivate dialog is the red primary with stops · keeps · untouched · audited (1.9s)
+  ✓   4 [chromium] › tests/Browser/f1-b12.spec.ts:182:5 › B9-S05 — the rules list › §E E07 (absence of the door): the pause banner renders only from the R-04 flag; with the flag off no banner, no paused chip, no per-row "Paused" (1.3s)
+  ✘   5 [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes (2.0s)
+
+  ✘   6 [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark (6.7s)
+
+  ✘   7 [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head (6.6s)
+
+  ✘   8 [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline (1.9s)
+
+  ✘   9 [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing (6.7s)
+
+  ✘  10 [chromium] › tests/Browser/f1-b12.spec.ts:340:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) (6.5s)
+
+  ✘  11 [chromium] › tests/Browser/f1-b12.spec.ts:356:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow (9.8s)
+  ✘  12 [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated (6.2s)
+  ✓  13 [chromium] › tests/Browser/workflow-screens.spec.ts:96:1 › J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday (2.5s)
+  ✓  14 [chromium] › tests/Browser/workflow-screens.spec.ts:118:1 › J5 + J6 + J7 + J8: a field with where-used, a form published v1 from the builder with the dual preview, a macro previewed, the CSAT settings row saved (4.0s)
+
+
+  1) [chromium] › tests/Browser/f1-b12.spec.ts:110:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark 
+
+    Error: axe violations — workflow chrome (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 4
+
+    - Array []
+    + Array [
+    +   "aria-required-children: .wf-rh | .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5)",
+    +   "aria-required-parent: .wf-rh | .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5)",
+    + ]
+
+      70 |         ),
+      71 |         `axe violations — ${label}`,
+    > 72 |     ).toEqual([]);
+         |       ^
+      73 | }
+      74 | async function shot(
+      75 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:72:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:121:9
+
+    Error Context: test-results/f1-b12-B9-S13-M01-—-the-Wo-8e461--crumb-axe-clean-light-dark-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b12.spec.ts:128:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark 
+
+    Error: axe violations — rules list (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 4
+
+    - Array []
+    + Array [
+    +   "aria-required-children: .wf-rh | .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5) | .wf-rr.on[role=\"row\"]",
+    +   "aria-required-parent: .wf-rh | .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5) | .wf-rr.on[role=\"row\"]",
+    + ]
+
+      70 |         ),
+      71 |         `axe violations — ${label}`,
+    > 72 |     ).toEqual([]);
+         |       ^
+      73 | }
+      74 | async function shot(
+      75 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:72:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:156:9
+
+    Error Context: test-results/f1-b12-B9-S05-—-the-rules--caec4-legend-axe-clean-light-dark-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes 
+
+    Error: axe violations — rules 375 (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 4
+
+    - Array []
+    + Array [
+    +   "aria-required-children: .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5) | .wf-rr[role=\"row\"]:nth-child(6)",
+    +   "aria-required-parent: .wf-rr[role=\"row\"]:nth-child(2) | .wf-rr[role=\"row\"]:nth-child(3) | .wf-rr[role=\"row\"]:nth-child(4) | .wf-rr[role=\"row\"]:nth-child(5) | .wf-rr[role=\"row\"]:nth-child(6)",
+    + ]
+
+      70 |         ),
+      71 |         `axe violations — ${label}`,
+    > 72 |     ).toEqual([]);
+         |       ^
+      73 | }
+      74 | async function shot(
+      75 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:72:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:206:9
+
+    Error Context: test-results/f1-b12-B9-S05-—-the-rules--a67d7-rflow-axe-clean-both-themes-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-panel-trigger')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-trigger')
+
+
+      220 |         const id = await ensureRule(page, '[F1] editor proof');
+      221 |         await page.goto(`/admin/workflow/rules/${id}`);
+    > 222 |         await expect(page.getByTestId('wf-panel-trigger')).toBeVisible();
+          |                                                            ^
+      223 |         await expect(page.getByTestId('wf-panel-conditions')).toBeVisible();
+      224 |         await expect(page.getByTestId('wf-panel-actions')).toBeVisible();
+      225 |         await expect(page.getByTestId('wf-editor-state')).toContainText('Draft');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:222:60
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-ec650--hints-axe-clean-light-dark-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('wf-panel-conditions')
+    Expected substring: "Facts: ticket · customer · message"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-conditions')
+
+
+      249 |         const id = await ensureRule(page, '[F1] editor proof');
+      250 |         await page.goto(`/admin/workflow/rules/${id}`);
+    > 251 |         await expect(page.getByTestId('wf-panel-conditions')).toContainText(
+          |                                                               ^
+      252 |             'Facts: ticket · customer · message',
+      253 |         );
+      254 |         await expect(
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:251:63
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-8bbb6-stands-under-the-panel-head-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 15
+    Received length: 0
+    Received array:  []
+
+      270 |             .locator('option:not([value=""])')
+      271 |             .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
+    > 272 |         expect(types).toHaveLength(15);
+          |                       ^
+      273 |         for (const t of types) await page.getByTestId('wf-action-add').selectOption(t);
+      274 |         await expect(
+      275 |             page.locator('[data-testid^="wf-action-"]:not([data-testid="wf-action-add"])'),
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:272:23
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-6c9a7-template-blocks-save-inline-chromium/error-context.md
+
+  7) [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-dry-nudge')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-dry-nudge')
+
+
+      303 |         const id = await ensureRule(page, '[F1] editor proof');
+      304 |         await page.goto(`/admin/workflow/rules/${id}`);
+    > 305 |         await expect(page.getByTestId('wf-dry-nudge')).toBeVisible();
+          |                                                        ^
+      306 |         await page.getByTestId('wf-cond-add').first().click();
+      307 |         await page.getByTestId('wf-action-add').selectOption('add_note');
+      308 |         await page
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:305:56
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-2657d-udge-Cancel-changes-nothing-chromium/error-context.md
+
+  8) [chromium] › tests/Browser/f1-b12.spec.ts:340:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-log')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-log')
+
+
+      346 |         await page.goto(`/admin/workflow/rules/${id}`);
+      347 |         const log = page.getByTestId('wf-log');
+    > 348 |         await expect(log).toBeVisible();
+          |                           ^
+      349 |         for (const h of ['When', 'Event', 'Result', 'Guards'])
+      350 |             await expect(log.locator('.lh')).toContainText(h);
+      351 |         await expect(log).toContainText(/No executions in the retention window|matched|no match/);
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:348:27
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-45731-10-retry-is-absent-no-door--chromium/error-context.md
+
+  9) [chromium] › tests/Browser/f1-b12.spec.ts:356:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('wf-panel-trigger')
+    Expected substring: "ቀስቃሽ"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-trigger')
+
+
+      374 |             await page.setViewportSize(V1440);
+      375 |             await page.goto(`/admin/workflow/rules/${id}`);
+    > 376 |             await expect(page.getByTestId('wf-panel-trigger')).toContainText('ቀስቃሽ');
+          |                                                                ^
+      377 |             await expect(page.getByTestId('wf-trigger-chips').locator('span')).toHaveCount(13);
+      378 |             await noOverflow(page, 'editor am 1440');
+      379 |             await shot(page, 'B9-S06-editor-build-1440-am');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:376:64
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-879af--and-chips-without-overflow-chromium/error-context.md
+
+  10) [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-panel-trigger')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-trigger')
+
+
+      72 |     await page.getByTestId('wf-rule-create').click();
+      73 |     await page.waitForURL(/\/admin\/workflow\/rules\/[0-9a-f-]+$/);
+    > 74 |     await expect(page.getByTestId('wf-panel-trigger')).toBeVisible();
+         |                                                        ^
+      75 |     await expect(page.getByTestId('wf-panel-conditions')).toBeVisible();
+      76 |     await expect(page.getByTestId('wf-panel-actions')).toBeVisible();
+      77 |
+        at /home/kidus/projects/na-live-support/tests/Browser/workflow-screens.spec.ts:74:56
+
+    Error Context: test-results/workflow-screens-J1-J2-the-9f063--truth-badges-and-activated-chromium/error-context.md
+
+  10 failed
+    [chromium] › tests/Browser/f1-b12.spec.ts:110:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:128:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes 
+    [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head 
+    [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+    [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+    [chromium] › tests/Browser/f1-b12.spec.ts:340:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) 
+    [chromium] › tests/Browser/f1-b12.spec.ts:356:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow 
+    [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated 
+  4 passed (1.5m)
+EXIT=1

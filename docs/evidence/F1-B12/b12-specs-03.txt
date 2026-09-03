@@ -1,0 +1,166 @@
+
+Running 21 tests using 1 worker
+
+
+  ✓   1 [chromium] › tests/Browser/f1-b12.spec.ts:110:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (4.0s)
+  ✓   2 [chromium] › tests/Browser/f1-b12.spec.ts:128:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark (3.8s)
+  ✓   3 [chromium] › tests/Browser/f1-b12.spec.ts:163:5 › B9-S05 — the rules list › §E E02: the activate dialog names the position, the trigger, the capability floor, the dry-run habit and the audit; Cancel changes nothing; the deactivate dialog is the red primary with stops · keeps · untouched · audited (2.5s)
+  ✓   4 [chromium] › tests/Browser/f1-b12.spec.ts:182:5 › B9-S05 — the rules list › §E E07 (absence of the door): the pause banner renders only from the R-04 flag; with the flag off no banner, no paused chip, no per-row "Paused" (1.9s)
+  ✓   5 [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes (3.3s)
+  ✓   6 [chromium] › tests/Browser/f1-b12.spec.ts:215:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark (3.2s)
+  ✘   7 [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head (6.7s)
+
+  ✘   8 [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline (3.5s)
+
+  ✘   9 [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing (2.6s)
+
+  ✓  10 [chromium] › tests/Browser/f1-b12.spec.ts:341:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) (2.1s)
+  ✓  11 [chromium] › tests/Browser/f1-b12.spec.ts:357:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow (6.3s)
+  ✓  12 [chromium] › tests/Browser/f1-b12.spec.ts:410:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark (4.9s)
+  ✓  13 [chromium] › tests/Browser/f1-b12.spec.ts:452:5 › B9-S07 — SLA policies › §G G03: the live example in en + am from the clock library — reachable on the calendar, wall-clock on 24 × 7; G05: the EC-03 diagram draws keep vs rescale from the targets and follows the chosen mode; G07: the FR-11 chip strip in the fixed tokens (2.5s)
+  ✘  14 [chromium] › tests/Browser/f1-b12.spec.ts:500:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date (7.2s)
+
+  ✓  15 [chromium] › tests/Browser/f1-b12.spec.ts:538:5 › B9-S07 — SLA policies › §G G01 empty (absence): the empty state is drawn only when no policy exists — with policies on the list it is absent; G08 375: the read notice, the list cards, policy 1 live example in en + am, no editor, no overflow; axe-clean both themes (3.9s)
+  ✘  16 [chromium] › tests/Browser/f1-b12.spec.ts:580:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark (7.7s)
+
+  ✓  17 [chromium] › tests/Browser/f1-b12.spec.ts:649:5 › B9-S08 — business hours › §H H04: a department override — the card states the diff, the editor draws the side-by-side day table with the changed row worded; departments without an override read "Same as the workspace default"; Remove override → use the default keeps the calendar on record, inactive (3.6s)
+  ✓  18 [chromium] › tests/Browser/f1-b12.spec.ts:689:5 › B9-S08 — business hours › §H H06 (absence) + H07 375: the empty state is absent while calendars exist; the phone reads the hours per day, the holidays and the override diff under the notice — no editor, no overflow; axe-clean both themes (4.5s)
+  ✓  19 [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated (2.8s)
+  ✓  20 [chromium] › tests/Browser/workflow-screens.spec.ts:96:1 › J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday (2.9s)
+  ✓  21 [chromium] › tests/Browser/workflow-screens.spec.ts:118:1 › J5 + J6 + J7 + J8: a field with where-used, a form published v1 from the builder with the dual preview, a macro previewed, the CSAT settings row saved (4.8s)
+
+
+  1) [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('wf-panel-conditions').locator('[aria-level]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByTestId('wf-panel-conditions').locator('[aria-level]').first()
+
+
+      254 |         await expect(
+      255 |             page.getByTestId('wf-panel-conditions').locator('[aria-level]').first(),
+    > 256 |         ).toBeVisible();
+          |           ^
+      257 |         await expect(page.getByTestId('wf-cond-add').first()).toHaveRole('button');
+      258 |         await expect(page.getByTestId('wf-cond-add-group').first()).toHaveRole('button');
+      259 |     });
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:256:11
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-8bbb6-stands-under-the-panel-head-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+
+    Error: axe violations — rule editor · 15 cards (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "listitem: li[data-testid=\"wf-inline-validation\"]",
+    + ]
+
+      70 |         ),
+      71 |         `axe violations — ${label}`,
+    > 72 |     ).toEqual([]);
+         |       ^
+      73 | }
+      74 | async function shot(
+      75 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:72:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:295:9
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-6c9a7-template-blocks-save-inline-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Cancel' }) resolved to 2 elements:
+        1) <button class="x" type="button" aria-label="Cancel"> ✕ </button> aka getByTestId('wf-dry-run').getByRole('button', { name: 'Cancel' })
+        2) <button type="button" class="bo-btn">Cancel</button> aka getByTestId('wf-activate-dialog').getByRole('button', { name: 'Cancel' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Cancel' })
+
+
+      334 |         await expect(dlg).toContainText('swapped in one step');
+      335 |         await expect(dlg).toContainText(/dry run/i);
+    > 336 |         await page.getByRole('button', { name: 'Cancel' }).click();
+          |                                                            ^
+      337 |         await expect(dlg).toHaveCount(0);
+      338 |         await expect(page.getByTestId('wf-editor-state')).toContainText('Draft');
+      339 |     });
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:336:60
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-2657d-udge-Cancel-changes-nothing-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/f1-b12.spec.ts:500:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('wf-hours-intervals')
+    Expected substring: "Closed all day"
+    Received string:    "MondayAdd intervalClosedTuesdayAdd intervalClosedWednesdayAdd intervalClosedThursdayAdd intervalClosedFridayAdd intervalClosedSaturdayAdd intervalClosedSundayAdd intervalClosed"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('wf-hours-intervals')
+        14 × locator resolved to <div class="hr-list" data-v-a7630c72="" data-testid="wf-hours-intervals">…</div>
+           - unexpected value "MondayAdd intervalClosedTuesdayAdd intervalClosedWednesdayAdd intervalClosedThursdayAdd intervalClosedFridayAdd intervalClosedSaturdayAdd intervalClosedSundayAdd intervalClosed"
+
+
+      510 |         for (const d of ['1', '2', '3', '4', '5'])
+      511 |             await page.getByTestId(`wf-hours-remove-${d}-0`).click();
+    > 512 |         await expect(page.getByTestId('wf-hours-intervals')).toContainText('Closed all day');
+          |                                                              ^
+      513 |         await page.getByTestId('wf-hours-save').click();
+      514 |         await page.waitForLoadState('networkidle');
+      515 |         const id = await ensurePolicy(page, '[F1] sla proof');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:512:62
+
+    Error Context: test-results/f1-b12-B9-S07-—-SLA-polici-24cd9-s-—-never-a-fabricated-date-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/f1-b12.spec.ts:580:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('wf-hours-intervals')
+    Expected substring: "20:00"
+    Received string:    "MondayAdd intervalOpenClose ✕ TuesdayAdd intervalOpenClose ✕ WednesdayAdd intervalOpenClose ✕ ThursdayAdd intervalOpenClose ✕ FridayAdd intervalOpenClose ✕ SaturdayAdd intervalOpenClose ✕ SundayAdd intervalClosed"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('wf-hours-intervals')
+        14 × locator resolved to <div class="hr-list" data-v-a7630c72="" data-testid="wf-hours-intervals">…</div>
+           - unexpected value "MondayAdd intervalOpenClose ✕ TuesdayAdd intervalOpenClose ✕ WednesdayAdd intervalOpenClose ✕ ThursdayAdd intervalOpenClose ✕ FridayAdd intervalOpenClose ✕ SaturdayAdd intervalOpenClose ✕ SundayAdd intervalClosed"
+
+
+      607 |         await expect(page.getByTestId('wf-hours-painting')).toHaveText('');
+      608 |         await expect(wed.locator('th small')).toContainText('20:00');
+    > 609 |         await expect(page.getByTestId('wf-hours-intervals')).toContainText('20:00');
+          |                                                              ^
+      610 |         // Esc cancels a band on Sunday
+      611 |         const sun = page.getByTestId('wf-hours-grid').locator('tbody tr').nth(6);
+      612 |         await sun.locator('button[title="10:00"]').hover();
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:609:62
+
+    Error Context: test-results/f1-b12-B9-S08-—-business-h-2b6b6-g-rows-axe-clean-light-dark-chromium/error-context.md
+
+  5 failed
+    [chromium] › tests/Browser/f1-b12.spec.ts:244:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head 
+    [chromium] › tests/Browser/f1-b12.spec.ts:261:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+    [chromium] › tests/Browser/f1-b12.spec.ts:298:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing 
+    [chromium] › tests/Browser/f1-b12.spec.ts:500:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date 
+    [chromium] › tests/Browser/f1-b12.spec.ts:580:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark 
+  16 passed (1.8m)
+EXIT=1

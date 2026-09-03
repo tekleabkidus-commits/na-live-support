@@ -1,20 +1,25 @@
 <script setup lang="ts">
 // Doc 12 §8 (S12 step 14) — the drawn Backoffice chrome the Organization page carries
-// (B5-S09 J01: 52px topbar + 200px nav), with the WORKFLOW group live. Organization
-// links out (Doc 11's page); SLA / Automation / Business hours are Doc 12's own
-// screens; People / Channels stay drawn (Docs 03/05 own them). The reverse links from
-// Organization and the palette are packet P-NAV's. Tokens only; RTL-safe (logical
-// properties via Tailwind's ps/pe/ms/me); reduced-motion honoured (no animation here).
+// (B5-S09 J01: 52px topbar + 200px nav), with the WORKFLOW group live. SESSION-F1 [B12-batch]
+// (frozen B9-S05…S13 §M M01): the same chrome now comes from the shared BackofficeShell —
+// Organization a real link out; People & roles / Channels drawn dim (Docs 03/05 own them);
+// Knowledge base its own row (P8); Workflow with its seven rows as an indented sub-group;
+// the breadcrumb "Backoffice › Workflow › {page}"; sub / actions / banner slots for the
+// pages' headers. Tokens only; RTL-safe; no animation.
+import { computed } from 'vue';
+import BackofficeShell from '../Backoffice/BackofficeShell.vue';
+
 const props = defineProps<{
     copy: Record<string, unknown>;
     active: 'rules' | 'sla' | 'hours' | 'macros' | 'fields' | 'forms' | 'csat' | 'hub';
     title: string;
     summary?: string;
+    crumb?: { label: string; href?: string }[];
+    readNote?: string;
 }>();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const c = props.copy as any;
-const links: { key: string; href: string; navKey: string }[] = [
-    { key: 'hub', href: '/admin/workflow', navKey: 'workflow' },
+const links: { key: typeof props.active; href: string; navKey: string }[] = [
     { key: 'rules', href: '/admin/workflow/rules', navKey: 'automation' },
     { key: 'sla', href: '/admin/workflow/sla', navKey: 'sla' },
     { key: 'hours', href: '/admin/workflow/hours', navKey: 'hours' },
@@ -23,85 +28,64 @@ const links: { key: string; href: string; navKey: string }[] = [
     { key: 'forms', href: '/admin/workflow/forms', navKey: 'forms' },
     { key: 'csat', href: '/admin/workflow/csat', navKey: 'csat' },
 ];
+// The shared shell reads its nav words from a flat t-map; Doc 12's copy keeps them under nav.*
+const t = computed<Record<string, string>>(() => ({
+    nav_backoffice: c.nav?.backoffice ?? '',
+    nav_organization: c.nav?.organization ?? '',
+    nav_people: c.nav?.people ?? '',
+    nav_channels: c.nav?.channels ?? '',
+    nav_kb: c.nav?.kb ?? '',
+    nav_workflow: c.nav?.workflow ?? '',
+}));
+const crumb = computed(() => {
+    if (props.crumb) return props.crumb;
+    const base = [
+        { label: c.nav?.backoffice ?? '' },
+        { label: c.nav?.workflow ?? '', href: '/admin/workflow' },
+    ];
+    if (props.active === 'hub') return base;
+    const link = links.find((l) => l.key === props.active);
+    return [...base, { label: c.nav?.[link?.navKey ?? ''] ?? props.title }];
+});
 </script>
 
 <template>
-    <div
-        class="flex min-h-screen flex-col"
-        :style="{ background: 'var(--ds-page-bg)', color: 'var(--ds-text-primary)' }"
-    >
-        <header
-            class="flex h-[52px] flex-none items-center gap-3.5 border-b px-4"
-            :style="{ background: 'var(--ds-panel-bg)', borderColor: 'var(--ds-border)' }"
-        >
-            <span
-                class="flex-none rounded-md border border-dashed px-2.5 py-1 text-xs font-semibold"
-                :style="{ borderColor: 'var(--ds-border-strong)', color: 'var(--ds-text-muted)' }"
-                >{{ c.nav.backoffice }}</span
+    <BackofficeShell :t="t" active="workflow" :title="title" :crumb="crumb" :read-note="readNote">
+        <template #nav-sub>
+            <a
+                v-for="link in links"
+                :key="link.key"
+                :href="link.href"
+                :data-testid="`wf-nav-${link.key}`"
+                class="bo-nav-a"
+                :class="{ on: active === link.key }"
+                :aria-current="active === link.key ? 'page' : undefined"
+                >{{ c.nav[link.navKey] }}</a
             >
-            <h1 class="text-sm font-semibold">{{ title }}</h1>
-        </header>
-        <div class="flex min-h-0 flex-1">
-            <nav
-                :aria-label="c.nav.backoffice"
-                class="w-[200px] flex-none overflow-y-auto border-e p-2"
-                :style="{ background: 'var(--ds-page-bg)', borderColor: 'var(--ds-border)' }"
+        </template>
+        <template #sub>
+            <slot name="sub"
+                ><span v-if="summary">{{ summary }}</span></slot
             >
-                <p
-                    class="px-2 pb-2 text-[10.5px] font-semibold uppercase tracking-wider"
-                    :style="{ color: 'var(--ds-text-label)' }"
-                >
-                    {{ c.nav.backoffice }}
-                </p>
-                <div class="flex flex-col gap-px text-[12.5px]">
-                    <a
-                        href="/admin/organization"
-                        class="rounded-md px-2 py-1.5"
-                        :style="{ color: 'var(--ds-text-primary)' }"
-                        >{{ c.nav.organization }}</a
-                    >
-                    <span
-                        v-for="key in ['people', 'channels']"
-                        :key="key"
-                        class="rounded-md px-2 py-1.5"
-                        :style="{ color: 'var(--ds-text-muted)' }"
-                        >{{ c.nav[key] }}</span
-                    >
-                    <a
-                        v-for="link in links"
-                        :key="link.key"
-                        :href="link.href"
-                        :data-testid="`wf-nav-${link.key}`"
-                        class="rounded-md px-2 py-1.5"
-                        :class="{ 'font-semibold': active === link.key }"
-                        :style="
-                            active === link.key
-                                ? {
-                                      background: 'var(--ds-accent)',
-                                      color: 'var(--ds-accent-contrast)',
-                                  }
-                                : { color: 'var(--ds-text-primary)' }
-                        "
-                        :aria-current="active === link.key ? 'page' : undefined"
-                        >{{ c.nav[link.navKey] }}</a
-                    >
-                </div>
-            </nav>
-            <main class="flex min-w-0 flex-1 flex-col overflow-auto">
-                <div class="flex-none px-[18px] pt-3.5">
-                    <h2 class="text-xl font-semibold tracking-tight">{{ title }}</h2>
-                    <p
-                        v-if="summary"
-                        class="mt-0.5 text-xs"
-                        :style="{ color: 'var(--ds-text-muted)' }"
-                    >
-                        {{ summary }}
-                    </p>
-                </div>
-                <div class="min-h-0 flex-1 px-[18px] pb-6 pt-3">
-                    <slot />
-                </div>
-            </main>
-        </div>
-    </div>
+        </template>
+        <template #actions><slot name="actions" /></template>
+        <template #banner><slot name="banner" /></template>
+        <div class="wf-body"><slot /></div>
+    </BackofficeShell>
 </template>
+
+<style>
+.wf-body {
+    padding: 12px 18px 24px;
+    flex: 1;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    min-width: 0;
+}
+@media (max-width: 639px) {
+    .wf-body {
+        padding: 10px 12px;
+    }
+}
+</style>
