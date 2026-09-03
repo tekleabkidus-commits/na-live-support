@@ -1,0 +1,1031 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ActionSchemaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an action outside the closed enum is DISCARDED, never exe[39m[90m…[39m [90m7.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: malformed output (non-object, or missing required fields)[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02/AC-02: an answer WITHOUT a citation is refused by the sche[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/Q7: handoff reasons come from the CLOSED category list — f[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the five legal actions all validate with their required fields[39m[90m   [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiBellDeliveryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ai.killswitch.changed → every live ai.killswitch holder EXCEPT t[39m[90m…[39m [90m2.91s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.anomaly.detected → every live reports.supervisor.live holder,[39m[90m…[39m [90m3.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.digest.ready → its ONE recipient and only while they still ho[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ai.provider.health_changed is DELIBERATELY not projected into th[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Ai\AiI18nParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit en and am ai.php carry the same key set; every :param in en appe[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the R-14 queue file lists every machine-authored am ai.* key exa[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\AiQueueTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0017 (amended): ai and ai-background are SEPARATE supervisor[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the per-tenant semaphore admits to the registered cap and[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the semaphore is per-tenant — one tenant at cap starves n[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the ai.concurrency.per_tenant setting is registered with platfor[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ArtifactOutcomeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_unedited: insert (gated ai.copilot.insert_draft)[39m[90m… [39m [90m3.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 inserted_edited{diff_ref}: the agent edits before sending[39m[90m… [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16 discarded: the discard door records it; a discarded artifa[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 gating: insert WITHOUT ai.copilot.insert_draft is refused[39m[90m… [39m [90m0.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: a non-usable row (low_confidence / refused) cannot be ins[39m[90m…[39m [90m0.51s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\BackofficeConfigTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit persona: draft → preview (queued on ai-background, the DRAFT per[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guardrails: draft → publish writes the SEC-05 audit row (ai.conf[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit thresholds/scope (BR-07, US-06): simulate returns before/after/d[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli[39m[90m…[39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit permissions: every Backoffice door is gated by its closed key —[39m[90m… [39m [90m0.59s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ChatbotTurnTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01 (AC-01's pipeline clause): a six-message burst yields ONE[39m[90m… [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ClassifyPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-06/FR-07: the consumer classifies the burst and records the d[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01: only the confirmed batch TAIL classifies — a superseded a[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event changes nothing — one decision, howeve[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 (Doc 04): a quarantined inbound gets NO classification — n[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06: the two-stage RG confirmation runs ONLY past the screening[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 (filed interpretation, S09 step 14): a second customer mes[39m[90m…[39m [90m0.57s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ComposerActionsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Draft reply: a grounded draft cites a retrieved INTERNAL a[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 guardrail notice: a money-intent draft WITHOUT a citation[39m[90m… [39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Improve: tone/grammar kept to meaning; the §14 digit rule[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 Summarize thread: an INTERNAL NOTE draft (kind note_draft)[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 doors: every composer action is QUEUED (202 + request id,[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an out-of-scope conversation answers the 404 pattern on ev[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ConfigVersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: draft -> publish -> the single active version; a second p[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: rollback REPUBLISHES the old payload as a NEW version; hi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: only a draft publishes — a superseded version is republis[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit flag 2 THE HELD-WINDOW RACE: a publish racing into an uncommitte[39m[90m…[39m [90m1.45s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\CopilotPanelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 chips: intent / sentiment / urgency / confidence from the[39m[90m… [39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 debounce: repeated panel reads within 10 s dispatch ONE re[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09: regenerate ×3 exhausted → the card LOCKS to the low-confi[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09 cooldown: a regenerate inside the cooldown window is refus[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 / AC-09 (Copilot half): with the provider chain exhausted[39m[90m… [39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the request-poll door (T-04's socket fallback): pending until th[39m[90m…[39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionAccessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the door serves the curated allowlist — the payload pair[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: without ai.decisions.view the door refuses[39m[90m               [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-05: the cursor walks the log without overlap or gap[39m[90m            [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the split's other half stands: the platform connection CAN read[39m[90m… [39m [90m0.18s[39m  
+  [dev-hardware-indicative] NFR-05 decision record() staging p50   0.003 ms   p99   0.009 ms   max   2.766 ms   budget(p99) 3.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\DecisionLogTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: record + flush lands the row with layer_hashes carrying t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 (flag 1): at 1000 permille every decision emits the SAMPLE[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: the enrichment pen writes outcome + meta from the CLOSED c[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05 (dev-hardware-indicative): record() stages within the 3 m[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\FailoverDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: primary fails → breaker trips → DEGRADED (transition-only[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01/NFR-04: every provider exhausted → DOWN for this tenant, t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: auto-resume — a success after DOWN publishes HEALTHY once[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: a policy refusal on benign content is detected as provide[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\HonestyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 (sabotage #10 target): a persona publishes ONLY if every d[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19a wording vs presence: guardrails may REWORD the disclosure[39m[90m…[39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-08 / BR-05 ABSENCE: no registered setting, no config kind, no[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19d: an AI-authored message is never edited post-send — Doc 0[39m[90m…[39m [90m0.46s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m1.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\LanguageGateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14: the launch pair publishes; a third language with NO templat[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: a language becomes enableable ONLY once a guardrails overri[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 in the turn: a customer writing in a language the endpoint d[39m[90m…[39m [90m0.76s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\NormalizeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the guard extends to MEDIA egress: outside production a real med[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a voice note gains its transcript_ref through the Doc 04[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a receipt image gains ocr_ref with per-field confidence[39m[90m   [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a provider outage leaves the media item UNTOUCHED and the[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\OrchestratorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: the task catalog is CLOSED at fifteen (twelve + Doc 10 FR[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: the fallback chain falls through a failing provider to the[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-01: an OPEN breaker skips its provider without spending a call[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE STEP-3 ASSERTION: no egress path skips the guard — every Pro[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02: a PUBLISHED provider_routing config overrides the seed —[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PayloadReductionJobTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: a 31-day-old payload pair reduces to hash + stamp; a fre[39m[90m…[39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\PromptAssemblyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the system layer STARTS with the immutable honesty layer a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02/STEP-0.2 ruling: the hardened identity and language rules a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05/N-08: no config kind and no registered setting can disable[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: customer content is fenced and role-separated; a crafted m[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03: retrieved chunks arrive fenced with provenance and the ind[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: user-turn PII is masked positionally with the masking ma[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ProviderSwitchDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the switch door: 403 without the key; GET answers the model map;[39m[90m…[39m [90m0.69s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\QuotaEnforcementTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit RULED EDIT obligation: headroom() mirrors allow()'s own counter[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: every orchestrator call accumulates the provider's ACTUAL[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12 (sabotage #12 target): inside the reserve band NEW turns a[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the band itself refuses — at 96% used a new turn is refus[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06: the registered reserve and rate-card settings exist with[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RetrievalTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-03 at index time: the planted imperative is stripped and the p[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 hybrid: the vector-near, language-matched, PUBLIC chunk ran[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06/[D10]: retiring an article FLIPS retrievable — the chunk s[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02 posture: with no query vector available the keyword half s[39m[90m…[39m [90m0.08s[39m  
+  [dev-hardware-indicative] NFR-07 RG precision (scripted mechanism proof) p50   1.000 ms   p99   1.000 ms   max   1.000 ms   budget(p99) 0.9 ms   OVER
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgEvalHarnessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the corpus is the shipped 50: half risk, half healthy, both lang[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-07: at the shipped rg_min the scripted realistic scorer meet[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the harness CAN fail: a miscalibrated threshold drops precision[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\RgOverrideTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-13 + [D09] FR-14 close: the override writes the flag THROUGH[39m[90m… [39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-03/AC-04: the customer receives the operator template BYTE FO[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-10 STRUCTURAL: the RG override cannot reach the generation ser[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/AC-04 PREEMPTION: rg_override outranks an open assigned ti[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-18: a PUBLISHED guardrails rg_template overrides the seeded w[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: a redelivered event fires the override ONCE — one flag, on[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit [D09] EC-06 close: calibration CONSUMES Doc 08's stored clear-re[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimilarTicketsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-05/FR-14: top-3 by cosine over resolved-ticket summaries, the[39m[90m… [39m [90m1.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 scope AT QUERY TIME: an Own-scoped agent sees ONLY tickets[39m[90m… [39m [90m1.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-05 nightly: the embedder summarizes + embeds resolved tickets[39m[90m… [39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimulationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)[39m[90m… [39m [90m0.93s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\StreamingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-04 client: an SSE response is parsed delta-by-delta in order,[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §13 sentence chunker: Latin and Ethiopic terminators both bound[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 relay: token-sized deltas become SENTENCE frames on the age[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04 job: CopilotTaskJob runs the stream end-to-end and ends in[39m[90m… [39m [90m0.58s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SubjectGenerationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a subjectless ticket gets a generated subject through Sub[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: a ticket that ALREADY has a staff subject is never overwr[39m[90m…[39m [90m1.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-03: the 80-character cap and one-line normalization hold; an[39m[90m… [39m [90m1.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SupervisorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17/US-05: withdrawal complaints tripling in the last hour vs[39m[90m… [39m [90m1.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 sentiment watch: a conversation whose latest classificatio[39m[90m…[39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 qa_prescore: samples yesterday's resolved tickets once eac[39m[90m…[39m [90m0.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17 daily_digest: six bullets per manager (reports.supervisor.[39m[90m…[39m [90m0.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 (AC-09's last rung) + FR-18: with every provider of the ch[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the supervisor FEED is the decision-log door filtered by surface[39m[90m…[39m [90m0.88s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit (b)+(d): a translate send carries channel_meta.ai_translation {a[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (d): an EDITED translation still carries the original and the ve[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) default-preserving, TESTED: a reply WITHOUT ai_artifact_id w[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit (c) negative controls: wrong-owner artifact, missing ai.copilot.[39m[90m…[39m [90m1.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\TranslateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14 validator unit: same digits in any order pass; a reordered d[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 (sabotage #14 target): a translation that ALTERS a digit is[39m[90m… [39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: the repair retry SUCCEEDING yields the artifact — digits ve[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 mixed-language input: the dominant script decides the sour[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02 on staff text: a phone number in the agent's draft never[39m[90m… [39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\WeeklyOutputsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit top unanswerable: no_grounding handoffs and locked regenerations[39m[90m…[39m [90m0.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit calibration curve: confidence buckets vs outcomes over chatbot +[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RG precision queue delegates to RgCalibration (the [D09] EC-06 r[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\CopilotNeverAutoSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC (BR-01, sabotage #7 target): no Copilot source names an o[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: the Copilot controller's and jobs' constructor graph con[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME (AC-06): a suggested reply + improve + translate + summa[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: the job that generates a draft has no send either — run[39m[90m…[39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\AiContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04/BR-06: planted RG flag content and staff notes NEVER ente[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the exclusion holds through the FULL assembled prompt, a[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the allowlist is honest in the OTHER direction: language, prior-[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Ai\AiI18nParityTest[22m [90m>[39m it the R-14 queue file lists…    
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => 'ai.backoffice.action',[39m[39;1m
+  [39;22m[32m     1 => 'ai.backoffice.add',[39m[39;1m
+  [39;22m[31m-    2 => 'ai.backoffice.add_fallback',[39m[39;1m
+  [39;22m[31m-    3 => 'ai.backoffice.add_override',[39m[39;1m
+  [39;22m[31m-    4 => 'ai.backoffice.add_topic',[39m[39;1m
+  [39;22m[31m-    5 => 'ai.backoffice.after',[39m[39;1m
+  [39;22m[31m-    6 => 'ai.backoffice.all',[39m[39;1m
+  [39;22m[31m-    7 => 'ai.backoffice.anomaly_intent_body',[39m[39;1m
+  [39;22m[31m-    8 => 'ai.backoffice.anomaly_intent_title',[39m[39;1m
+  [39;22m[31m-    9 => 'ai.backoffice.anomaly_sentiment_body',[39m[39;1m
+  [39;22m[31m-    10 => 'ai.backoffice.anomaly_sentiment_title',[39m[39;1m
+  [39;22m[31m-    11 => 'ai.backoffice.anomaly_volume_body',[39m[39;1m
+  [39;22m[31m-    12 => 'ai.backoffice.anomaly_volume_title',[39m[39;1m
+  [39;22m[31m-    13 => 'ai.backoffice.anonymized',[39m[39;1m
+  [39;22m[31m-    14 => 'ai.backoffice.audit_class',[39m[39;1m
+  [39;22m[31m-    15 => 'ai.backoffice.audit_empty',[39m[39;1m
+  [39;22m[31m-    16 => 'ai.backoffice.audit_note',[39m[39;1m
+  [39;22m[31m-    17 => 'ai.backoffice.audit_title',[39m[39;1m
+  [39;22m[31m-    18 => 'ai.backoffice.avatar',[39m[39;1m
+  [39;22m[31m-    19 => 'ai.backoffice.avatar_am',[39m[39;1m
+  [39;22m[31m-    20 => 'ai.backoffice.avatar_en',[39m[39;1m
+  [39;22m[31m-    21 => 'ai.backoffice.avatar_note',[39m[39;1m
+  [39;22m[31m-    22 => 'ai.backoffice.avatar_spark',[39m[39;1m
+  [39;22m[31m-    23 => 'ai.backoffice.axis_actual',[39m[39;1m
+  [39;22m[31m-    24 => 'ai.backoffice.axis_stated',[39m[39;1m
+  [39;22m[31m-    25 => 'ai.backoffice.before',[39m[39;1m
+  [39;22m[31m-    26 => 'ai.backoffice.blast_chatbot',[39m[39;1m
+  [39;22m[31m-    27 => 'ai.backoffice.blast_copilot',[39m[39;1m
+  [39;22m[31m-    28 => 'ai.backoffice.blast_generic',[39m[39;1m
+  [39;22m[31m-    29 => 'ai.backoffice.blast_label',[39m[39;1m
+  [39;22m[31m-    30 => 'ai.backoffice.blast_supervisor',[39m[39;1m
+  [39;22m[31m-    31 => 'ai.backoffice.blocked_topics',[39m[39;1m
+  [39;22m[31m-    32 => 'ai.backoffice.calibration_empty',[39m[39;1m
+  [39;22m[31m-    33 => 'ai.backoffice.cancel',[39m[39;1m
+  [39;22m[31m-    34 => 'ai.backoffice.cat_stats',[39m[39;1m
+  [39;22m[31m-    35 => 'ai.backoffice.change',[39m[39;1m
+  [39;22m[31m-    36 => 'ai.backoffice.chatbot_enabled',[39m[39;1m
+  [39;22m[31m-    37 => 'ai.backoffice.chatbot_off',[39m[39;1m
+  [39;22m[31m-    38 => 'ai.backoffice.chatbot_on',[39m[39;1m
+  [39;22m[31m-    39 => 'ai.backoffice.chip_all_on',[39m[39;1m
+  [39;22m[31m-    40 => 'ai.backoffice.chip_breakers_tripped',[39m[39;1m
+  [39;22m[31m-    41 => 'ai.backoffice.chip_chains_healthy',[39m[39;1m
+  [39;22m[31m-    42 => 'ai.backoffice.chip_draft',[39m[39;1m
+  [39;22m[31m-    43 => 'ai.backoffice.chip_off',[39m[39;1m
+  [39;22m[31m-    44 => 'ai.backoffice.chip_platform_defaults',[39m[39;1m
+  [39;22m[31m-    45 => 'ai.backoffice.chip_previewed',[39m[39;1m
+  [39;22m[31m-    46 => 'ai.backoffice.chip_published',[39m[39;1m
+  [39;22m[31m-    47 => 'ai.backoffice.chip_unpublished',[39m[39;1m
+  [39;22m[31m-    48 => 'ai.backoffice.close',[39m[39;1m
+  [39;22m[31m-    49 => 'ai.backoffice.code_shipped',[39m[39;1m
+  [39;22m[31m-    50 => 'ai.backoffice.col_action',[39m[39;1m
+  [39;22m[31m-    51 => 'ai.backoffice.col_all',[39m[39;1m
+  [39;22m[31m-    52 => 'ai.backoffice.col_change',[39m[39;1m
+  [39;22m[31m-    53 => 'ai.backoffice.col_confidence',[39m[39;1m
+  [39;22m[31m-    54 => 'ai.backoffice.col_decisions',[39m[39;1m
+  [39;22m[31m-    55 => 'ai.backoffice.col_fallback',[39m[39;1m
+  [39;22m[31m-    56 => 'ai.backoffice.col_gap',[39m[39;1m
+  [39;22m[31m-    57 => 'ai.backoffice.col_intent',[39m[39;1m
+  [39;22m[31m-    58 => 'ai.backoffice.col_latency',[39m[39;1m
+  [39;22m[31m-    59 => 'ai.backoffice.col_metric',[39m[39;1m
+  [39;22m[31m-    60 => 'ai.backoffice.col_model',[39m[39;1m
+  [39;22m[31m-    61 => 'ai.backoffice.col_outcome',[39m[39;1m
+  [39;22m[31m-    62 => 'ai.backoffice.col_payload',[39m[39;1m
+  [39;22m[31m-    63 => 'ai.backoffice.col_pending',[39m[39;1m
+  [39;22m[31m-    64 => 'ai.backoffice.col_primary',[39m[39;1m
+  [39;22m[31m-    65 => 'ai.backoffice.col_published',[39m[39;1m
+  [39;22m[31m-    66 => 'ai.backoffice.col_stated',[39m[39;1m
+  [39;22m[31m-    67 => 'ai.backoffice.col_succeeded',[39m[39;1m
+  [39;22m[31m-    68 => 'ai.backoffice.col_surface',[39m[39;1m
+  [39;22m[31m-    69 => 'ai.backoffice.col_task',[39m[39;1m
+  [39;22m[31m-    70 => 'ai.backoffice.col_telegram',[39m[39;1m
+  [39;22m[31m-    71 => 'ai.backoffice.col_tier',[39m[39;1m
+  [39;22m[31m-    72 => 'ai.backoffice.col_time',[39m[39;1m
+  [39;22m[31m-    73 => 'ai.backoffice.col_tokens',[39m[39;1m
+  [39;22m[31m-    74 => 'ai.backoffice.col_web',[39m[39;1m
+  [39;22m[31m-    75 => 'ai.backoffice.complete',[39m[39;1m
+  [39;22m[31m-    76 => 'ai.backoffice.confidence_word',[39m[39;1m
+  [39;22m[31m-    77 => 'ai.backoffice.confirm',[39m[39;1m
+  [39;22m[31m-    78 => 'ai.backoffice.confirm_off',[39m[39;1m
+  [39;22m[31m-    79 => 'ai.backoffice.confirm_off_body',[39m[39;1m
+  [39;22m[31m-    80 => 'ai.backoffice.confirm_off_title',[39m[39;1m
+  [39;22m[31m-    81 => 'ai.backoffice.confirm_on',[39m[39;1m
+  [39;22m[31m-    82 => 'ai.backoffice.confirm_on_body',[39m[39;1m
+  [39;22m[31m-    83 => 'ai.backoffice.confirm_on_title',[39m[39;1m
+  [39;22m[31m-    84 => 'ai.backoffice.confirm_title',[39m[39;1m
+  [39;22m[31m-    85 => 'ai.backoffice.conversation_n_of',[39m[39;1m
+  [39;22m[31m-    86 => 'ai.backoffice.conversations_word',[39m[39;1m
+  [39;22m[31m-    87 => 'ai.backoffice.credential',[39m[39;1m
+  [39;22m[31m-    88 => 'ai.backoffice.credentials_note',[39m[39;1m
+  [39;22m[31m-    89 => 'ai.backoffice.crumb_ai',[39m[39;1m
+  [39;22m[31m-    90 => 'ai.backoffice.crumb_settings',[39m[39;1m
+  [39;22m[31m-    91 => 'ai.backoffice.current',[39m[39;1m
+  [39;22m[31m-    92 => 'ai.backoffice.curve_aria',[39m[39;1m
+  [39;22m[31m-    93 => 'ai.backoffice.decision',[39m[39;1m
+  [39;22m[31m-    94 => 'ai.backoffice.decisions_page',[39m[39;1m
+  [39;22m[31m-    95 => 'ai.backoffice.decisions_title',[39m[39;1m
+  [39;22m[31m-    96 => 'ai.backoffice.delete',[39m[39;1m
+  [39;22m[31m-    97 => 'ai.backoffice.delete_body',[39m[39;1m
+  [39;22m[31m-    98 => 'ai.backoffice.delete_title',[39m[39;1m
+  [39;22m[31m-    99 => 'ai.backoffice.delete_topic',[39m[39;1m
+  [39;22m[31m-    100 => 'ai.backoffice.delta_fewer',[39m[39;1m
+  [39;22m[31m-    101 => 'ai.backoffice.delta_more',[39m[39;1m
+  [39;22m[31m-    102 => 'ai.backoffice.delta_none',[39m[39;1m
+  [39;22m[31m-    103 => 'ai.backoffice.delta_none_plain',[39m[39;1m
+  [39;22m[31m-    104 => 'ai.backoffice.desc_auto_resolve_min',[39m[39;1m
+  [39;22m[31m-    105 => 'ai.backoffice.desc_handoff_below',[39m[39;1m
+  [39;22m[31m-    106 => 'ai.backoffice.desc_rg_min',[39m[39;1m
+  [39;22m[31m-    107 => 'ai.backoffice.desc_spam_min',[39m[39;1m
+  [39;22m[31m-    108 => 'ai.backoffice.destructive_tier',[39m[39;1m
+  [39;22m[31m-    109 => 'ai.backoffice.dialog',[39m[39;1m
+  [39;22m[31m-    110 => 'ai.backoffice.dialog_deposit-question-am',[39m[39;1m
+  [39;22m[31m-    111 => 'ai.backoffice.dialog_deposit-question-en',[39m[39;1m
+  [39;22m[31m-    112 => 'ai.backoffice.dialog_human-request-en',[39m[39;1m
+  [39;22m[31m-    113 => 'ai.backoffice.dialog_money-no-grounding-en',[39m[39;1m
+  [39;22m[31m-    114 => 'ai.backoffice.dialog_thanks-resolve-en',[39m[39;1m
+  [39;22m[31m-    115 => 'ai.backoffice.digest_empty',[39m[39;1m
+  [39;22m[31m-    116 => 'ai.backoffice.digest_heading',[39m[39;1m
+  [39;22m[31m-    117 => 'ai.backoffice.digest_model',[39m[39;1m
+  [39;22m[31m-    118 => 'ai.backoffice.digest_note',[39m[39;1m
+  [39;22m[31m-    119 => 'ai.backoffice.digest_template',[39m[39;1m
+  [39;22m[31m-    120 => 'ai.backoffice.digest_title',[39m[39;1m
+  [39;22m[31m-    121 => 'ai.backoffice.discard_changes',[39m[39;1m
+  [39;22m[31m-    122 => 'ai.backoffice.disclosure_label',[39m[39;1m
+  [39;22m[31m-    123 => 'ai.backoffice.disclosure_lock_body',[39m[39;1m
+  [39;22m[31m-    124 => 'ai.backoffice.disclosure_lock_title',[39m[39;1m
+  [39;22m[31m-    125 => 'ai.backoffice.disclosure_required',[39m[39;1m
+  [39;22m[31m-    126 => 'ai.backoffice.disclosure_wording',[39m[39;1m
+  [39;22m[31m-    127 => 'ai.backoffice.draft_category',[39m[39;1m
+  [39;22m[31m-    128 => 'ai.backoffice.draft_kb',[39m[39;1m
+  [39;22m[31m-    129 => 'ai.backoffice.draft_open',[39m[39;1m
+  [39;22m[31m-    130 => 'ai.backoffice.draft_saved',[39m[39;1m
+  [39;22m[31m-    131 => 'ai.backoffice.drafting',[39m[39;1m
+  [39;22m[31m-    132 => 'ai.backoffice.ec11_note',[39m[39;1m
+  [39;22m[31m-    133 => 'ai.backoffice.edit',[39m[39;1m
+  [39;22m[31m-    134 => 'ai.backoffice.empty_filtered',[39m[39;1m
+  [39;22m[31m-    135 => 'ai.backoffice.empty_none',[39m[39;1m
+  [39;22m[31m-    136 => 'ai.backoffice.empty_none_sub',[39m[39;1m
+  [39;22m[31m-    137 => 'ai.backoffice.empty_outcome',[39m[39;1m
+  [39;22m[31m-    138 => 'ai.backoffice.empty_task',[39m[39;1m
+  [39;22m[31m-    139 => 'ai.backoffice.endpoint',[39m[39;1m
+  [39;22m[31m-    140 => 'ai.backoffice.endpoint_default',[39m[39;1m
+  [39;22m[31m-    141 => 'ai.backoffice.endpoint_stats',[39m[39;1m
+  [39;22m[31m-    142 => 'ai.backoffice.feed_empty',[39m[39;1m
+  [39;22m[31m-    143 => 'ai.backoffice.finding_ok',[39m[39;1m
+  [39;22m[31m-    144 => 'ai.backoffice.finding_over',[39m[39;1m
+  [39;22m[31m-    145 => 'ai.backoffice.finding_under',[39m[39;1m
+  [39;22m[31m-    146 => 'ai.backoffice.flips_more',[39m[39;1m
+  [39;22m[31m-    147 => 'ai.backoffice.flips_title',[39m[39;1m
+  [39;22m[31m-    148 => 'ai.backoffice.fresh_body',[39m[39;1m
+  [39;22m[31m-    149 => 'ai.backoffice.gate_body',[39m[39;1m
+  [39;22m[31m-    150 => 'ai.backoffice.gate_disclosure',[39m[39;1m
+  [39;22m[31m-    151 => 'ai.backoffice.gate_go_disclosure',[39m[39;1m
+  [39;22m[31m-    152 => 'ai.backoffice.gate_go_rg',[39m[39;1m
+  [39;22m[31m-    153 => 'ai.backoffice.gate_handoff',[39m[39;1m
+  [39;22m[31m-    154 => 'ai.backoffice.gate_rg',[39m[39;1m
+  [39;22m[31m-    155 => 'ai.backoffice.gate_title',[39m[39;1m
+  [39;22m[31m-    156 => 'ai.backoffice.gated',[39m[39;1m
+  [39;22m[31m-    157 => 'ai.backoffice.greeting',[39m[39;1m
+  [39;22m[31m-    158 => 'ai.backoffice.grid_title',[39m[39;1m
+  [39;22m[31m-    159 => 'ai.backoffice.guardrails_page',[39m[39;1m
+  [39;22m[31m-    160 => 'ai.backoffice.guardrails_title',[39m[39;1m
+  [39;22m[31m-    161 => 'ai.backoffice.headline',[39m[39;1m
+  [39;22m[31m-    162 => 'ai.backoffice.history',[39m[39;1m
+  [39;22m[31m-    163 => 'ai.backoffice.holder_named',[39m[39;1m
+  [39;22m[31m-    164 => 'ai.backoffice.holder_none',[39m[39;1m
+  [39;22m[31m-    165 => 'ai.backoffice.honesty_layer',[39m[39;1m
+  [39;22m[31m-    166 => 'ai.backoffice.honesty_who',[39m[39;1m
+  [39;22m[31m-    167 => 'ai.backoffice.internal',[39m[39;1m
+  [39;22m[31m-    168 => 'ai.backoffice.internal_lock_note',[39m[39;1m
+  [39;22m[31m-    169 => 'ai.backoffice.killswitches_help',[39m[39;1m
+  [39;22m[31m-    170 => 'ai.backoffice.killswitches_page',[39m[39;1m
+  [39;22m[31m-    171 => 'ai.backoffice.killswitches_title',[39m[39;1m
+  [39;22m[31m-    172 => 'ai.backoffice.kind_anomaly',[39m[39;1m
+  [39;22m[31m-    173 => 'ai.backoffice.kind_digest',[39m[39;1m
+  [39;22m[31m-    174 => 'ai.backoffice.kind_guardrails',[39m[39;1m
+  [39;22m[31m-    175 => 'ai.backoffice.kind_paused',[39m[39;1m
+  [39;22m[31m-    176 => 'ai.backoffice.kind_persona',[39m[39;1m
+  [39;22m[31m-    177 => 'ai.backoffice.kind_prompt_template',[39m[39;1m
+  [39;22m[31m-    178 => 'ai.backoffice.kind_provider_routing',[39m[39;1m
+  [39;22m[31m-    179 => 'ai.backoffice.kind_resumed',[39m[39;1m
+  [39;22m[31m-    180 => 'ai.backoffice.kind_rg_classifier',[39m[39;1m
+  [39;22m[31m-    181 => 'ai.backoffice.kind_sentiment',[39m[39;1m
+  [39;22m[31m-    182 => 'ai.backoffice.kind_thresholds',[39m[39;1m
+  [39;22m[31m-    183 => 'ai.backoffice.ladder_exhausted',[39m[39;1m
+  [39;22m[31m-    184 => 'ai.backoffice.ladder_exhausted_sub',[39m[39;1m
+  [39;22m[31m-    185 => 'ai.backoffice.ladder_failover',[39m[39;1m
+  [39;22m[31m-    186 => 'ai.backoffice.ladder_failover_sub',[39m[39;1m
+  [39;22m[31m-    187 => 'ai.backoffice.ladder_healthy',[39m[39;1m
+  [39;22m[31m-    188 => 'ai.backoffice.lang_am',[39m[39;1m
+  [39;22m[31m-    189 => 'ai.backoffice.lang_en',[39m[39;1m
+  [39;22m[31m-    190 => 'ai.backoffice.languages',[39m[39;1m
+  [39;22m[31m-    191 => 'ai.backoffice.legend_pending',[39m[39;1m
+  [39;22m[31m-    192 => 'ai.backoffice.legend_published',[39m[39;1m
+  [39;22m[31m-    193 => 'ai.backoffice.limits',[39m[39;1m
+  [39;22m[31m-    194 => 'ai.backoffice.live',[39m[39;1m
+  [39;22m[31m-    195 => 'ai.backoffice.live_scans',[39m[39;1m
+  [39;22m[31m-    196 => 'ai.backoffice.load_failed',[39m[39;1m
+  [39;22m[31m-    197 => 'ai.backoffice.load_more',[39m[39;1m
+  [39;22m[31m-    198 => 'ai.backoffice.loading',[39m[39;1m
+  [39;22m[31m-    199 => 'ai.backoffice.lock_body',[39m[39;1m
+  [39;22m[31m-    200 => 'ai.backoffice.lock_title',[39m[39;1m
+  [39;22m[31m-    201 => 'ai.backoffice.max_ai_consequence',[39m[39;1m
+  [39;22m[31m-    202 => 'ai.backoffice.max_ai_messages',[39m[39;1m
+  [39;22m[31m-    203 => 'ai.backoffice.metric_auto_resolved',[39m[39;1m
+  [39;22m[31m-    204 => 'ai.backoffice.metric_eligible',[39m[39;1m
+  [39;22m[31m-    205 => 'ai.backoffice.metric_handoffs',[39m[39;1m
+  [39;22m[31m-    206 => 'ai.backoffice.metric_rg',[39m[39;1m
+  [39;22m[31m-    207 => 'ai.backoffice.metric_spam',[39m[39;1m
+  [39;22m[31m-    208 => 'ai.backoffice.missing_gates',[39m[39;1m
+  [39;22m[31m-    209 => 'ai.backoffice.model',[39m[39;1m
+  [39;22m[31m-    210 => 'ai.backoffice.model_map',[39m[39;1m
+  [39;22m[31m-    211 => 'ai.backoffice.model_map_note',[39m[39;1m
+  [39;22m[31m-    212 => 'ai.backoffice.name',[39m[39;1m
+  [39;22m[31m-    213 => 'ai.backoffice.nav_feed',[39m[39;1m
+  [39;22m[31m-    214 => 'ai.backoffice.nav_qa',[39m[39;1m
+  [39;22m[31m-    215 => 'ai.backoffice.nav_rg',[39m[39;1m
+  [39;22m[31m-    216 => 'ai.backoffice.no_rollback',[39m[39;1m
+  [39;22m[31m-    217 => 'ai.backoffice.no_versions',[39m[39;1m
+  [39;22m[31m-    218 => 'ai.backoffice.node_health',[39m[39;1m
+  [39;22m[31m-    219 => 'ai.backoffice.node_serving',[39m[39;1m
+  [39;22m[31m-    220 => 'ai.backoffice.node_standby',[39m[39;1m
+  [39;22m[31m-    221 => 'ai.backoffice.node_tripped',[39m[39;1m
+  [39;22m[31m-    222 => 'ai.backoffice.nohist_body',[39m[39;1m
+  [39;22m[31m-    223 => 'ai.backoffice.nohist_title',[39m[39;1m
+  [39;22m[31m-    224 => 'ai.backoffice.not_published',[39m[39;1m
+  [39;22m[31m-    225 => 'ai.backoffice.oc_csat_scored',[39m[39;1m
+  [39;22m[31m-    226 => 'ai.backoffice.oc_discarded',[39m[39;1m
+  [39;22m[31m-    227 => 'ai.backoffice.oc_handoff_agreed_routing',[39m[39;1m
+  [39;22m[31m-    228 => 'ai.backoffice.oc_handoff_rerouted',[39m[39;1m
+  [39;22m[31m-    229 => 'ai.backoffice.oc_inserted_edited',[39m[39;1m
+  [39;22m[31m-    230 => 'ai.backoffice.oc_inserted_unedited',[39m[39;1m
+  [39;22m[31m-    231 => 'ai.backoffice.oc_pending',[39m[39;1m
+  [39;22m[31m-    232 => 'ai.backoffice.oc_resolved',[39m[39;1m
+  [39;22m[31m-    233 => 'ai.backoffice.oc_resolved_then_reopened',[39m[39;1m
+  [39;22m[31m-    234 => 'ai.backoffice.off',[39m[39;1m
+  [39;22m[31m-    235 => 'ai.backoffice.off_banner',[39m[39;1m
+  [39;22m[31m-    236 => 'ai.backoffice.off_consequence_chatbot',[39m[39;1m
+  [39;22m[31m-    237 => 'ai.backoffice.off_consequence_copilot',[39m[39;1m
+  [39;22m[31m-    238 => 'ai.backoffice.off_consequence_supervisor',[39m[39;1m
+  [39;22m[31m-    239 => 'ai.backoffice.off_label',[39m[39;1m
+  [39;22m[31m-    240 => 'ai.backoffice.off_since',[39m[39;1m
+  [39;22m[31m-    241 => 'ai.backoffice.off_word',[39m[39;1m
+  [39;22m[31m-    242 => 'ai.backoffice.on',[39m[39;1m
+  [39;22m[31m-    243 => 'ai.backoffice.on_label',[39m[39;1m
+  [39;22m[31m-    244 => 'ai.backoffice.on_word',[39m[39;1m
+  [39;22m[31m-    245 => 'ai.backoffice.open_conversation',[39m[39;1m
+  [39;22m[31m-    246 => 'ai.backoffice.open_thread',[39m[39;1m
+  [39;22m[31m-    247 => 'ai.backoffice.outcome',[39m[39;1m
+  [39;22m[31m-    248 => 'ai.backoffice.outcome_eligible',[39m[39;1m
+  [39;22m[31m-    249 => 'ai.backoffice.outcome_eligible_auto_resolve',[39m[39;1m
+  [39;22m[31m-    250 => 'ai.backoffice.outcome_handoff_low_confidence',[39m[39;1m
+  [39;22m[31m-    251 => 'ai.backoffice.outcome_rg_override',[39m[39;1m
+  [39;22m[31m-    252 => 'ai.backoffice.outcome_spam',[39m[39;1m
+  [39;22m[31m-    253 => 'ai.backoffice.override_tag',[39m[39;1m
+  [39;22m[31m-    254 => 'ai.backoffice.overrides_note',[39m[39;1m
+  [39;22m[31m-    255 => 'ai.backoffice.overrides_title',[39m[39;1m
+  [39;22m[31m-    256 => 'ai.backoffice.pagination_note',[39m[39;1m
+  [39;22m[31m-    257 => 'ai.backoffice.paused_body',[39m[39;1m
+  [39;22m[31m-    258 => 'ai.backoffice.paused_title',[39m[39;1m
+  [39;22m[31m-    259 => 'ai.backoffice.payload_30d',[39m[39;1m
+  [39;22m[31m-    260 => 'ai.backoffice.payload_hash',[39m[39;1m
+  [39;22m[31m-    261 => 'ai.backoffice.pending_n',[39m[39;1m
+  [39;22m[31m-    262 => 'ai.backoffice.per_day',[39m[39;1m
+  [39;22m[31m-    263 => 'ai.backoffice.per_day_unknown',[39m[39;1m
+  [39;22m[31m-    264 => 'ai.backoffice.perfect_calibration',[39m[39;1m
+  [39;22m[31m-    265 => 'ai.backoffice.persona_fallback_name',[39m[39;1m
+  [39;22m[31m-    266 => 'ai.backoffice.persona_help',[39m[39;1m
+  [39;22m[31m-    267 => 'ai.backoffice.persona_page',[39m[39;1m
+  [39;22m[31m-    268 => 'ai.backoffice.persona_title',[39m[39;1m
+  [39;22m[31m-    269 => 'ai.backoffice.pii_consequence',[39m[39;1m
+  [39;22m[31m-    270 => 'ai.backoffice.pii_redaction',[39m[39;1m
+  [39;22m[31m-    271 => 'ai.backoffice.platform',[39m[39;1m
+  [39;22m[31m-    272 => 'ai.backoffice.preview',[39m[39;1m
+  [39;22m[31m-    273 => 'ai.backoffice.preview_again',[39m[39;1m
+  [39;22m[31m-    274 => 'ai.backoffice.preview_first',[39m[39;1m
+  [39;22m[31m-    275 => 'ai.backoffice.preview_note',[39m[39;1m
+  [39;22m[31m-    276 => 'ai.backoffice.preview_placeholder',[39m[39;1m
+  [39;22m[31m-    277 => 'ai.backoffice.preview_running',[39m[39;1m
+  [39;22m[31m-    278 => 'ai.backoffice.preview_tag',[39m[39;1m
+  [39;22m[31m-    279 => 'ai.backoffice.preview_timeout',[39m[39;1m
+  [39;22m[31m-    280 => 'ai.backoffice.preview_title',[39m[39;1m
+  [39;22m[31m-    281 => 'ai.backoffice.profanity_allow',[39m[39;1m
+  [39;22m[31m-    282 => 'ai.backoffice.profanity_block',[39m[39;1m
+  [39;22m[31m-    283 => 'ai.backoffice.profanity_consequence',[39m[39;1m
+  [39;22m[31m-    284 => 'ai.backoffice.profanity_policy',[39m[39;1m
+  [39;22m[31m-    285 => 'ai.backoffice.profanity_soften',[39m[39;1m
+  [39;22m[31m-    286 => 'ai.backoffice.provider',[39m[39;1m
+  [39;22m[31m-    287 => 'ai.backoffice.providers_page',[39m[39;1m
+  [39;22m[31m-    288 => 'ai.backoffice.pts',[39m[39;1m
+  [39;22m[31m-    289 => 'ai.backoffice.publish',[39m[39;1m
+  [39;22m[31m-    290 => 'ai.backoffice.publish_confirm_body',[39m[39;1m
+  [39;22m[31m-    291 => 'ai.backoffice.publish_confirm_title',[39m[39;1m
+  [39;22m[31m-    292 => 'ai.backoffice.publish_locked',[39m[39;1m
+  [39;22m[31m-    293 => 'ai.backoffice.publish_locked_sim',[39m[39;1m
+  [39;22m[31m-    294 => 'ai.backoffice.publish_needs_sim',[39m[39;1m
+  [39;22m[31m-    295 => 'ai.backoffice.publish_now',[39m[39;1m
+  [39;22m[31m-    296 => 'ai.backoffice.publish_v',[39m[39;1m
+  [39;22m[31m-    297 => 'ai.backoffice.published',[39m[39;1m
+  [39;22m[31m-    298 => 'ai.backoffice.q_stats',[39m[39;1m
+  [39;22m[31m-    299 => 'ai.backoffice.qa_advisory',[39m[39;1m
+  [39;22m[31m-    300 => 'ai.backoffice.qa_empty',[39m[39;1m
+  [39;22m[31m-    301 => 'ai.backoffice.qa_flags',[39m[39;1m
+  [39;22m[31m-    302 => 'ai.backoffice.qa_label',[39m[39;1m
+  [39;22m[31m-    303 => 'ai.backoffice.qa_prioritized',[39m[39;1m
+  [39;22m[31m-    304 => 'ai.backoffice.qa_resolved_by',[39m[39;1m
+  [39;22m[31m-    305 => 'ai.backoffice.qa_score',[39m[39;1m
+  [39;22m[31m-    306 => 'ai.backoffice.qa_start_review',[39m[39;1m
+  [39;22m[31m-    307 => 'ai.backoffice.qa_title',[39m[39;1m
+  [39;22m[31m-    308 => 'ai.backoffice.qa_unscored',[39m[39;1m
+  [39;22m[31m-    309 => 'ai.backoffice.quality_title',[39m[39;1m
+  [39;22m[31m-    310 => 'ai.backoffice.quota_aria',[39m[39;1m
+  [39;22m[31m-    311 => 'ai.backoffice.quota_exhausted',[39m[39;1m
+  [39;22m[31m-    312 => 'ai.backoffice.quota_title',[39m[39;1m
+  [39;22m[31m-    313 => 'ai.backoffice.quota_under',[39m[39;1m
+  [39;22m[31m-    314 => 'ai.backoffice.quota_warn',[39m[39;1m
+  [39;22m[31m-    315 => 'ai.backoffice.reading',[39m[39;1m
+  [39;22m[31m-    316 => 'ai.backoffice.reason',[39m[39;1m
+  [39;22m[31m-    317 => 'ai.backoffice.record_note',[39m[39;1m
+  [39;22m[31m-    318 => 'ai.backoffice.record_title',[39m[39;1m
+  [39;22m[31m-    319 => 'ai.backoffice.remove',[39m[39;1m
+  [39;22m[31m-    320 => 'ai.backoffice.remove_hop',[39m[39;1m
+  [39;22m[31m-    321 => 'ai.backoffice.reply',[39m[39;1m
+  [39;22m[31m-    322 => 'ai.backoffice.rg_cleared_facts',[39m[39;1m
+  [39;22m[31m-    323 => 'ai.backoffice.rg_cleared_label',[39m[39;1m
+  [39;22m[31m-    324 => 'ai.backoffice.rg_cleared_pill',[39m[39;1m
+  [39;22m[31m-    325 => 'ai.backoffice.rg_empty',[39m[39;1m
+  [39;22m[31m-    326 => 'ai.backoffice.rg_facts',[39m[39;1m
+  [39;22m[31m-    327 => 'ai.backoffice.rg_fire_pending',[39m[39;1m
+  [39;22m[31m-    328 => 'ai.backoffice.rg_gate_body',[39m[39;1m
+  [39;22m[31m-    329 => 'ai.backoffice.rg_gate_title',[39m[39;1m
+  [39;22m[31m-    330 => 'ai.backoffice.rg_lock_body',[39m[39;1m
+  [39;22m[31m-    331 => 'ai.backoffice.rg_lock_title',[39m[39;1m
+  [39;22m[31m-    332 => 'ai.backoffice.rg_month',[39m[39;1m
+  [39;22m[31m-    333 => 'ai.backoffice.rg_note',[39m[39;1m
+  [39;22m[31m-    334 => 'ai.backoffice.rg_precision_body',[39m[39;1m
+  [39;22m[31m-    335 => 'ai.backoffice.rg_precision_title',[39m[39;1m
+  [39;22m[31m-    336 => 'ai.backoffice.rg_preview_empty',[39m[39;1m
+  [39;22m[31m-    337 => 'ai.backoffice.rg_preview_label',[39m[39;1m
+  [39;22m[31m-    338 => 'ai.backoffice.rg_preview_tag',[39m[39;1m
+  [39;22m[31m-    339 => 'ai.backoffice.rg_review_card',[39m[39;1m
+  [39;22m[31m-    340 => 'ai.backoffice.rg_tag',[39m[39;1m
+  [39;22m[31m-    341 => 'ai.backoffice.rg_template',[39m[39;1m
+  [39;22m[31m-    342 => 'ai.backoffice.rg_title',[39m[39;1m
+  [39;22m[31m-    343 => 'ai.backoffice.rg_view_card',[39m[39;1m
+  [39;22m[31m-    344 => 'ai.backoffice.rollback',[39m[39;1m
+  [39;22m[31m-    345 => 'ai.backoffice.rollback_to',[39m[39;1m
+  [39;22m[31m-    346 => 'ai.backoffice.rollback_via',[39m[39;1m
+  [39;22m[31m-    347 => 'ai.backoffice.save_draft',[39m[39;1m
+  [39;22m[31m-    348 => 'ai.backoffice.save_routing',[39m[39;1m
+  [39;22m[31m-    349 => 'ai.backoffice.scope_all',[39m[39;1m
+  [39;22m[31m-    350 => 'ai.backoffice.scope_categories',[39m[39;1m
+  [39;22m[31m-    351 => 'ai.backoffice.scope_categories_note',[39m[39;1m
+  [39;22m[31m-    352 => 'ai.backoffice.scope_channel',[39m[39;1m
+  [39;22m[31m-    353 => 'ai.backoffice.scope_endpoints',[39m[39;1m
+  [39;22m[31m-    354 => 'ai.backoffice.scope_endpoints_note',[39m[39;1m
+  [39;22m[31m-    355 => 'ai.backoffice.scope_no_categories',[39m[39;1m
+  [39;22m[31m-    356 => 'ai.backoffice.scope_page',[39m[39;1m
+  [39;22m[31m-    357 => 'ai.backoffice.seeded_no_delete',[39m[39;1m
+  [39;22m[31m-    358 => 'ai.backoffice.sentiment_body',[39m[39;1m
+  [39;22m[31m-    359 => 'ai.backoffice.sentiment_title',[39m[39;1m
+  [39;22m[31m-    360 => 'ai.backoffice.setup_done',[39m[39;1m
+  [39;22m[31m-    361 => 'ai.backoffice.setup_here',[39m[39;1m
+  [39;22m[31m-    362 => 'ai.backoffice.setup_lead',[39m[39;1m
+  [39;22m[31m-    363 => 'ai.backoffice.setup_open_categories',[39m[39;1m
+  [39;22m[31m-    364 => 'ai.backoffice.setup_open_kb',[39m[39;1m
+  [39;22m[31m-    365 => 'ai.backoffice.setup_persona_done',[39m[39;1m
+  [39;22m[31m-    366 => 'ai.backoffice.setup_persona_todo',[39m[39;1m
+  [39;22m[31m-    367 => 'ai.backoffice.setup_publish_desc',[39m[39;1m
+  [39;22m[31m-    368 => 'ai.backoffice.setup_publish_title',[39m[39;1m
+  [39;22m[31m-    369 => 'ai.backoffice.setup_scope_desc',[39m[39;1m
+  [39;22m[31m-    370 => 'ai.backoffice.setup_scope_title',[39m[39;1m
+  [39;22m[31m-    371 => 'ai.backoffice.setup_starter_desc',[39m[39;1m
+  [39;22m[31m-    372 => 'ai.backoffice.setup_starter_title',[39m[39;1m
+  [39;22m[31m-    373 => 'ai.backoffice.setup_title',[39m[39;1m
+  [39;22m[31m-    374 => 'ai.backoffice.setup_todo',[39m[39;1m
+  [39;22m[31m-    375 => 'ai.backoffice.sim_ago_m',[39m[39;1m
+  [39;22m[31m-    376 => 'ai.backoffice.sim_ago_s',[39m[39;1m
+  [39;22m[31m-    377 => 'ai.backoffice.sim_computing',[39m[39;1m
+  [39;22m[31m-    378 => 'ai.backoffice.sim_fresh',[39m[39;1m
+  [39;22m[31m-    379 => 'ai.backoffice.sim_help',[39m[39;1m
+  [39;22m[31m-    380 => 'ai.backoffice.sim_stale_short',[39m[39;1m
+  [39;22m[31m-    381 => 'ai.backoffice.sim_title',[39m[39;1m
+  [39;22m[31m-    382 => 'ai.backoffice.sim_title_n',[39m[39;1m
+  [39;22m[31m-    383 => 'ai.backoffice.simulate',[39m[39;1m
+  [39;22m[31m-    384 => 'ai.backoffice.simulate_first',[39m[39;1m
+  [39;22m[31m-    385 => 'ai.backoffice.simulate_needs_history',[39m[39;1m
+  [39;22m[31m-    386 => 'ai.backoffice.simulated_day',[39m[39;1m
+  [39;22m[31m-    387 => 'ai.backoffice.simulation',[39m[39;1m
+  [39;22m[31m-    388 => 'ai.backoffice.stale_body',[39m[39;1m
+  [39;22m[31m-    389 => 'ai.backoffice.stale_title',[39m[39;1m
+  [39;22m[31m-    390 => 'ai.backoffice.status_draft',[39m[39;1m
+  [39;22m[31m-    391 => 'ai.backoffice.status_superseded',[39m[39;1m
+  [39;22m[31m-    392 => 'ai.backoffice.success_def',[39m[39;1m
+  [39;22m[31m-    393 => 'ai.backoffice.supervisor_feed',[39m[39;1m
+  [39;22m[31m-    394 => 'ai.backoffice.supervisor_page',[39m[39;1m
+  [39;22m[31m-    395 => 'ai.backoffice.surface',[39m[39;1m
+  [39;22m[31m-    396 => 'ai.backoffice.surface_chatbot',[39m[39;1m
+  [39;22m[31m-    397 => 'ai.backoffice.surface_copilot',[39m[39;1m
+  [39;22m[31m-    398 => 'ai.backoffice.surface_desc_chatbot',[39m[39;1m
+  [39;22m[31m-    399 => 'ai.backoffice.surface_desc_copilot',[39m[39;1m
+  [39;22m[31m-    400 => 'ai.backoffice.surface_desc_supervisor',[39m[39;1m
+  [39;22m[31m-    401 => 'ai.backoffice.surface_supervisor',[39m[39;1m
+  [39;22m[31m-    402 => 'ai.backoffice.tab_calibration',[39m[39;1m
+  [39;22m[31m-    403 => 'ai.backoffice.tab_unanswerable',[39m[39;1m
+  [39;22m[31m-    404 => 'ai.backoffice.template_label',[39m[39;1m
+  [39;22m[31m-    405 => 'ai.backoffice.th_auto_resolve_min',[39m[39;1m
+  [39;22m[31m-    406 => 'ai.backoffice.th_handoff_below',[39m[39;1m
+  [39;22m[31m-    407 => 'ai.backoffice.th_publish_confirm_body',[39m[39;1m
+  [39;22m[31m-    408 => 'ai.backoffice.th_publish_confirm_title',[39m[39;1m
+  [39;22m[31m-    409 => 'ai.backoffice.th_rg_min',[39m[39;1m
+  [39;22m[31m-    410 => 'ai.backoffice.th_spam_min',[39m[39;1m
+  [39;22m[31m-    411 => 'ai.backoffice.thresholds_page',[39m[39;1m
+  [39;22m[31m-    412 => 'ai.backoffice.thresholds_title',[39m[39;1m
+  [39;22m[31m-    413 => 'ai.backoffice.tier_embeddings',[39m[39;1m
+  [39;22m[31m-    414 => 'ai.backoffice.tier_embeddings_desc',[39m[39;1m
+  [39;22m[31m-    415 => 'ai.backoffice.tier_fast',[39m[39;1m
+  [39;22m[31m-    416 => 'ai.backoffice.tier_fast_desc',[39m[39;1m
+  [39;22m[31m-    417 => 'ai.backoffice.tier_strong',[39m[39;1m
+  [39;22m[31m-    418 => 'ai.backoffice.tier_strong_desc',[39m[39;1m
+  [39;22m[31m-    419 => 'ai.backoffice.today',[39m[39;1m
+  [39;22m[31m-    420 => 'ai.backoffice.today_count',[39m[39;1m
+  [39;22m[31m-    421 => 'ai.backoffice.tokens_word',[39m[39;1m
+  [39;22m[31m-    422 => 'ai.backoffice.tone',[39m[39;1m
+  [39;22m[31m-    423 => 'ai.backoffice.tone_axis_detail',[39m[39;1m
+  [39;22m[31m-    424 => 'ai.backoffice.tone_axis_formality',[39m[39;1m
+  [39;22m[31m-    425 => 'ai.backoffice.tone_balanced',[39m[39;1m
+  [39;22m[31m-    426 => 'ai.backoffice.tone_brief',[39m[39;1m
+  [39;22m[31m-    427 => 'ai.backoffice.tone_detailed',[39m[39;1m
+  [39;22m[31m-    428 => 'ai.backoffice.tone_formal',[39m[39;1m
+  [39;22m[31m-    429 => 'ai.backoffice.tone_friendly',[39m[39;1m
+  [39;22m[31m-    430 => 'ai.backoffice.topic_balance_claim',[39m[39;1m
+  [39;22m[31m-    431 => 'ai.backoffice.topic_betting_advice',[39m[39;1m
+  [39;22m[31m-    432 => 'ai.backoffice.topic_custom_desc',[39m[39;1m
+  [39;22m[31m-    433 => 'ai.backoffice.topic_desc_balance_claim',[39m[39;1m
+  [39;22m[31m-    434 => 'ai.backoffice.topic_desc_betting_advice',[39m[39;1m
+  [39;22m[31m-    435 => 'ai.backoffice.topic_desc_generic',[39m[39;1m
+  [39;22m[31m-    436 => 'ai.backoffice.topic_desc_legal_advice',[39m[39;1m
+  [39;22m[31m-    437 => 'ai.backoffice.topic_desc_payment_promise',[39m[39;1m
+  [39;22m[31m-    438 => 'ai.backoffice.topic_legal_advice',[39m[39;1m
+  [39;22m[31m-    439 => 'ai.backoffice.topic_payment_promise',[39m[39;1m
+  [39;22m[31m-    440 => 'ai.backoffice.total',[39m[39;1m
+  [39;22m[31m-    441 => 'ai.backoffice.turn_back_on',[39m[39;1m
+  [39;22m[31m-    442 => 'ai.backoffice.turn_off_verb',[39m[39;1m
+  [39;22m[31m-    443 => 'ai.backoffice.turn_on_verb',[39m[39;1m
+  [39;22m[31m-    444 => 'ai.backoffice.unanswerable_empty',[39m[39;1m
+  [39;22m[31m-    445 => 'ai.backoffice.unanswerable_foot',[39m[39;1m
+  [39;22m[31m-    446 => 'ai.backoffice.unanswerable_note',[39m[39;1m
+  [39;22m[31m-    447 => 'ai.backoffice.value_pending',[39m[39;1m
+  [39;22m[31m-    448 => 'ai.backoffice.value_unchanged',[39m[39;1m
+  [39;22m[31m-    449 => 'ai.backoffice.version_who',[39m[39;1m
+  [39;22m[31m-    450 => 'ai.backoffice.versions_note',[39m[39;1m
+  [39;22m[31m-    451 => 'ai.backoffice.versions_title',[39m[39;1m
+  [39;22m[31m-    452 => 'ai.backoffice.view_bars',[39m[39;1m
+  [39;22m[31m-    453 => 'ai.backoffice.view_flips',[39m[39;1m
+  [39;22m[31m-    454 => 'ai.backoffice.view_table',[39m[39;1m
+  [39;22m[31m-    455 => 'ai.backoffice.web_na',[39m[39;1m
+  [39;22m[31m-    456 => 'ai.backoffice.web_scope_note',[39m[39;1m
+  [39;22m[31m-    457 => 'ai.copilot.kind.draft_reply',[39m[39;1m
+  [39;22m[31m-    458 => 'ai.copilot.kind.improve_text',[39m[39;1m
+  [39;22m[31m-    459 => 'ai.copilot.kind.note_draft',[39m[39;1m
+  [39;22m[31m-    460 => 'ai.copilot.kind.translate',[39m[39;1m
+  [39;22m[31m-    461 => 'ai.copilot.notice.busy',[39m[39;1m
+  [39;22m[31m-    462 => 'ai.copilot.notice.cooldown',[39m[39;1m
+  [39;22m[31m-    463 => 'ai.copilot.notice.degraded',[39m[39;1m
+  [39;22m[31m-    464 => 'ai.copilot.notice.digit_mismatch',[39m[39;1m
+  [39;22m[31m-    465 => 'ai.copilot.notice.low_confidence',[39m[39;1m
+  [39;22m[31m-    466 => 'ai.copilot.notice.regenerate_exhausted',[39m[39;1m
+  [39;22m[31m-    467 => 'ai.copilot.notice.retrieval_degraded',[39m[39;1m
+  [39;22m[31m-    468 => 'ai.copilot.notice.unavailable',[39m[39;1m
+  [39;22m[31m-    469 => 'ai.copilot.notice.verify_reference',[39m[39;1m
+  [39;22m[31m-    470 => 'ai.copilot.state.artifact',[39m[39;1m
+  [39;22m[31m-    471 => 'ai.copilot.state.busy',[39m[39;1m
+  [39;22m[31m-    472 => 'ai.copilot.state.cooldown',[39m[39;1m
+  [39;22m[31m-    473 => 'ai.copilot.state.degraded',[39m[39;1m
+  [39;22m[31m-    474 => 'ai.copilot.state.locked',[39m[39;1m
+  [39;22m[31m-    475 => 'ai.copilot.state.low_confidence',[39m[39;1m
+  [39;22m[31m-    476 => 'ai.copilot.state.refused',[39m[39;1m
+  [39;22m[31m-    477 => 'ai.deflection.template',[39m[39;1m
+  [39;22m[31m-    478 => 'ai.disclosure.sentence',[39m[39;1m
+  [39;22m[31m-    479 => 'ai.greeting.first',[39m[39;1m
+  [39;22m[31m-    480 => 'ai.handoff.template',[39m[39;1m
+  [39;22m[31m-    481 => 'ai.notify.anomaly',[39m[39;1m
+  [39;22m[31m-    482 => 'ai.notify.digest',[39m[39;1m
+  [39;22m[31m-    483 => 'ai.notify.killswitch_changed',[39m[39;1m
+  [39;22m[31m-    484 => 'ai.notify.quota_80',[39m[39;1m
+  [39;22m[31m-    485 => 'ai.rg.template',[39m[39;1m
+  [39;22m[31m-    486 => 'ai.supervisor.anomaly.intent_delta',[39m[39;1m
+  [39;22m[31m-    487 => 'ai.supervisor.anomaly.intent_new',[39m[39;1m
+  [39;22m[31m-    488 => 'ai.supervisor.anomaly.sentiment_drop',[39m[39;1m
+  [39;22m[31m-    489 => 'ai.supervisor.anomaly.volume_delta',[39m[39;1m
+  [39;22m[31m-    490 => 'ai.supervisor.digest.ai_resolved',[39m[39;1m
+  [39;22m[31m-    491 => 'ai.supervisor.digest.anomalies',[39m[39;1m
+  [39;22m[31m-    492 => 'ai.supervisor.digest.handoffs',[39m[39;1m
+  [39;22m[31m-    493 => 'ai.supervisor.digest.intents',[39m[39;1m
+  [39;22m[31m-    494 => 'ai.supervisor.digest.rg',[39m[39;1m
+  [39;22m[31m-    495 => 'ai.supervisor.digest.tickets',[39m[39;1m
+  [39;22m[31m-    496 => 'ai.ui.action_draft',[39m[39;1m
+  [39;22m[31m-    497 => 'ai.ui.action_improve',[39m[39;1m
+  [39;22m[31m-    498 => 'ai.ui.action_summarize',[39m[39;1m
+  [39;22m[31m-    499 => 'ai.ui.action_translate',[39m[39;1m
+  [39;22m[31m-    500 => 'ai.ui.ai_draft',[39m[39;1m
+  [39;22m[31m-    501 => 'ai.ui.ai_off_line',[39m[39;1m
+  [39;22m[31m-    502 => 'ai.ui.band_high',[39m[39;1m
+  [39;22m[31m-    503 => 'ai.ui.band_low',[39m[39;1m
+  [39;22m[31m-    504 => 'ai.ui.band_medium',[39m[39;1m
+  [39;22m[31m-    505 => 'ai.ui.banner_all',[39m[39;1m
+  [39;22m[31m-    506 => 'ai.ui.banner_off',[39m[39;1m
+  [39;22m[31m-    507 => 'ai.ui.busy_draft',[39m[39;1m
+  [39;22m[31m-    508 => 'ai.ui.busy_improve',[39m[39;1m
+  [39;22m[31m-    509 => 'ai.ui.busy_summarize',[39m[39;1m
+  [39;22m[31m-    510 => 'ai.ui.busy_translate',[39m[39;1m
+  [39;22m[31m-    511 => 'ai.ui.card_idle',[39m[39;1m
+  [39;22m[31m-    512 => 'ai.ui.card_improved',[39m[39;1m
+  [39;22m[31m-    513 => 'ai.ui.card_region',[39m[39;1m
+  [39;22m[31m-    514 => 'ai.ui.card_summary',[39m[39;1m
+  [39;22m[31m-    515 => 'ai.ui.card_translate',[39m[39;1m
+  [39;22m[31m-    516 => 'ai.ui.card_translate_mixed',[39m[39;1m
+  [39;22m[31m-    517 => 'ai.ui.chip_intent',[39m[39;1m
+  [39;22m[31m-    518 => 'ai.ui.chip_sentiment',[39m[39;1m
+  [39;22m[31m-    519 => 'ai.ui.chip_urgency',[39m[39;1m
+  [39;22m[31m-    520 => 'ai.ui.chips',[39m[39;1m
+  [39;22m[31m-    521 => 'ai.ui.chips_empty',[39m[39;1m
+  [39;22m[31m-    522 => 'ai.ui.chips_partial',[39m[39;1m
+  [39;22m[31m-    523 => 'ai.ui.confidence_aria',[39m[39;1m
+  [39;22m[31m-    524 => 'ai.ui.confidence_high',[39m[39;1m
+  [39;22m[31m-    525 => 'ai.ui.confidence_low',[39m[39;1m
+  [39;22m[31m-    526 => 'ai.ui.confidence_medium',[39m[39;1m
+  [39;22m[31m-    527 => 'ai.ui.degraded_sub',[39m[39;1m
+  [39;22m[31m-    528 => 'ai.ui.degraded_title',[39m[39;1m
+  [39;22m[31m-    529 => 'ai.ui.digits_verified',[39m[39;1m
+  [39;22m[31m-    530 => 'ai.ui.discard',[39m[39;1m
+  [39;22m[31m-    531 => 'ai.ui.dismiss',[39m[39;1m
+  [39;22m[31m-    532 => 'ai.ui.empty',[39m[39;1m
+  [39;22m[31m-    533 => 'ai.ui.generating',[39m[39;1m
+  [39;22m[31m-    534 => 'ai.ui.hint_draft',[39m[39;1m
+  [39;22m[31m-    535 => 'ai.ui.hint_improve',[39m[39;1m
+  [39;22m[31m-    536 => 'ai.ui.hint_insert',[39m[39;1m
+  [39;22m[31m-    537 => 'ai.ui.hint_summary',[39m[39;1m
+  [39;22m[31m-    538 => 'ai.ui.hint_translate',[39m[39;1m
+  [39;22m[31m-    539 => 'ai.ui.insert',[39m[39;1m
+  [39;22m[31m-    540 => 'ai.ui.insert_as_note',[39m[39;1m
+  [39;22m[31m-    541 => 'ai.ui.insert_failed',[39m[39;1m
+  [39;22m[31m-    542 => 'ai.ui.insert_forbidden',[39m[39;1m
+  [39;22m[31m-    543 => 'ai.ui.insert_link',[39m[39;1m
+  [39;22m[31m-    544 => 'ai.ui.insert_replaces',[39m[39;1m
+  [39;22m[31m-    545 => 'ai.ui.insert_translation',[39m[39;1m
+  [39;22m[31m-    546 => 'ai.ui.kb',[39m[39;1m
+  [39;22m[31m-    547 => 'ai.ui.kb_empty',[39m[39;1m
+  [39;22m[31m-    548 => 'ai.ui.kind_draft_reply',[39m[39;1m
+  [39;22m[31m-    549 => 'ai.ui.kind_improve_text',[39m[39;1m
+  [39;22m[31m-    550 => 'ai.ui.kind_note_draft',[39m[39;1m
+  [39;22m[31m-    551 => 'ai.ui.kind_translate',[39m[39;1m
+  [39;22m[31m-    552 => 'ai.ui.lang_am',[39m[39;1m
+  [39;22m[31m-    553 => 'ai.ui.lang_en',[39m[39;1m
+  [39;22m[31m-    554 => 'ai.ui.loading',[39m[39;1m
+  [39;22m[31m-    555 => 'ai.ui.locked_sub',[39m[39;1m
+  [39;22m[31m-    556 => 'ai.ui.locked_title',[39m[39;1m
+  [39;22m[31m-    557 => 'ai.ui.lowc_sub',[39m[39;1m
+  [39;22m[31m-    558 => 'ai.ui.lowc_sub_nopct',[39m[39;1m
+  [39;22m[31m-    559 => 'ai.ui.lowc_title',[39m[39;1m
+  [39;22m[31m-    560 => 'ai.ui.macro_use',[39m[39;1m
+  [39;22m[31m-    561 => 'ai.ui.macros',[39m[39;1m
+  [39;22m[31m-    562 => 'ai.ui.macros_empty',[39m[39;1m
+  [39;22m[31m-    563 => 'ai.ui.macros_seam',[39m[39;1m
+  [39;22m[31m-    564 => 'ai.ui.needs_text',[39m[39;1m
+  [39;22m[31m-    565 => 'ai.ui.panel_failed',[39m[39;1m
+  [39;22m[31m-    566 => 'ai.ui.regen_in',[39m[39;1m
+  [39;22m[31m-    567 => 'ai.ui.regen_left',[39m[39;1m
+  [39;22m[31m-    568 => 'ai.ui.regenerate',[39m[39;1m
+  [39;22m[31m-    569 => 'ai.ui.region_classification',[39m[39;1m
+  [39;22m[31m-    570 => 'ai.ui.region_kb',[39m[39;1m
+  [39;22m[31m-    571 => 'ai.ui.region_macros',[39m[39;1m
+  [39;22m[31m-    572 => 'ai.ui.region_reply',[39m[39;1m
+  [39;22m[31m-    573 => 'ai.ui.region_similar',[39m[39;1m
+  [39;22m[31m-    574 => 'ai.ui.region_status',[39m[39;1m
+  [39;22m[31m-    575 => 'ai.ui.region_summary',[39m[39;1m
+  [39;22m[31m-    576 => 'ai.ui.reject_digits',[39m[39;1m
+  [39;22m[31m-    577 => 'ai.ui.reject_missing',[39m[39;1m
+  [39;22m[31m-    578 => 'ai.ui.reject_sub',[39m[39;1m
+  [39;22m[31m-    579 => 'ai.ui.reject_title',[39m[39;1m
+  [39;22m[31m-    580 => 'ai.ui.reject_title_plain',[39m[39;1m
+  [39;22m[31m-    581 => 'ai.ui.resting',[39m[39;1m
+  [39;22m[31m-    582 => 'ai.ui.retry_refresh',[39m[39;1m
+  [39;22m[31m-    583 => 'ai.ui.sentiment_negative',[39m[39;1m
+  [39;22m[31m-    584 => 'ai.ui.sentiment_neutral',[39m[39;1m
+  [39;22m[31m-    585 => 'ai.ui.sentiment_positive',[39m[39;1m
+  [39;22m[31m-    586 => 'ai.ui.similar',[39m[39;1m
+  [39;22m[31m-    587 => 'ai.ui.similar_empty',[39m[39;1m
+  [39;22m[31m-    588 => 'ai.ui.state_artifact',[39m[39;1m
+  [39;22m[31m-    589 => 'ai.ui.state_busy',[39m[39;1m
+  [39;22m[31m-    590 => 'ai.ui.state_cooldown',[39m[39;1m
+  [39;22m[31m-    591 => 'ai.ui.state_degraded',[39m[39;1m
+  [39;22m[31m-    592 => 'ai.ui.state_locked',[39m[39;1m
+  [39;22m[31m-    593 => 'ai.ui.state_low_confidence',[39m[39;1m
+  [39;22m[31m-    594 => 'ai.ui.state_pending',[39m[39;1m
+  [39;22m[31m-    595 => 'ai.ui.state_refused',[39m[39;1m
+  [39;22m[31m-    596 => 'ai.ui.stop',[39m[39;1m
+  [39;22m[31m-    597 => 'ai.ui.suggest',[39m[39;1m
+  [39;22m[31m-    598 => 'ai.ui.suggested_reply',[39m[39;1m
+  [39;22m[31m-    599 => 'ai.ui.summary',[39m[39;1m
+  [39;22m[31m-    600 => 'ai.ui.summary_empty',[39m[39;1m
+  [39;22m[31m-    601 => 'ai.ui.summary_fresh',[39m[39;1m
+  [39;22m[31m-    602 => 'ai.ui.summary_refreshing',[39m[39;1m
+  [39;22m[31m-    603 => 'ai.ui.summary_stale',[39m[39;1m
+  [39;22m[31m-    604 => 'ai.ui.summary_stamp',[39m[39;1m
+  [39;22m[31m-    605 => 'ai.ui.tag_am',[39m[39;1m
+  [39;22m[31m-    606 => 'ai.ui.tag_en',[39m[39;1m
+  [39;22m[31m-    607 => 'ai.ui.tag_in',[39m[39;1m
+  [39;22m[31m-    608 => 'ai.ui.translated_from',[39m[39;1m
+  [39;22m[31m-    609 => 'ai.ui.urgency_high',[39m[39;1m
+  [39;22m[31m-    610 => 'ai.ui.urgency_low',[39m[39;1m
+  [39;22m[31m-    611 => 'ai.ui.urgency_medium',[39m[39;1m
+  [39;22m[31m-    612 => 'ai.unsupported_language.template',[39m[39;1m
+  [39;22m[32m+    2 => 'ai.backoffice.after',[39m[39;1m
+  [39;22m[32m+    3 => 'ai.backoffice.all',[39m[39;1m
+  [39;22m[32m+    4 => 'ai.backoffice.before',[39m[39;1m
+  [39;22m[32m+    5 => 'ai.backoffice.blocked_topics',[39m[39;1m
+  [39;22m[32m+    6 => 'ai.backoffice.cancel',[39m[39;1m
+  [39;22m[32m+    7 => 'ai.backoffice.chatbot_enabled',[39m[39;1m
+  [39;22m[32m+    8 => 'ai.backoffice.confirm',[39m[39;1m
+  [39;22m[32m+    9 => 'ai.backoffice.confirm_off',[39m[39;1m
+  [39;22m[32m+    10 => 'ai.backoffice.confirm_on',[39m[39;1m
+  [39;22m[32m+    11 => 'ai.backoffice.confirm_title',[39m[39;1m
+  [39;22m[32m+    12 => 'ai.backoffice.decisions_title',[39m[39;1m
+  [39;22m[32m+    13 => 'ai.backoffice.destructive_tier',[39m[39;1m
+  [39;22m[32m+    14 => 'ai.backoffice.dialog',[39m[39;1m
+  [39;22m[32m+    15 => 'ai.backoffice.disclosure_required',[39m[39;1m
+  [39;22m[32m+    16 => 'ai.backoffice.disclosure_wording',[39m[39;1m
+  [39;22m[32m+    17 => 'ai.backoffice.draft_saved',[39m[39;1m
+  [39;22m[32m+    18 => 'ai.backoffice.endpoint',[39m[39;1m
+  [39;22m[32m+    19 => 'ai.backoffice.greeting',[39m[39;1m
+  [39;22m[32m+    20 => 'ai.backoffice.guardrails_title',[39m[39;1m
+  [39;22m[32m+    21 => 'ai.backoffice.history',[39m[39;1m
+  [39;22m[32m+    22 => 'ai.backoffice.killswitches_help',[39m[39;1m
+  [39;22m[32m+    23 => 'ai.backoffice.killswitches_title',[39m[39;1m
+  [39;22m[32m+    24 => 'ai.backoffice.load_failed',[39m[39;1m
+  [39;22m[32m+    25 => 'ai.backoffice.load_more',[39m[39;1m
+  [39;22m[32m+    26 => 'ai.backoffice.max_ai_messages',[39m[39;1m
+  [39;22m[32m+    27 => 'ai.backoffice.name',[39m[39;1m
+  [39;22m[32m+    28 => 'ai.backoffice.off',[39m[39;1m
+  [39;22m[32m+    29 => 'ai.backoffice.off_label',[39m[39;1m
+  [39;22m[32m+    30 => 'ai.backoffice.off_since',[39m[39;1m
+  [39;22m[32m+    31 => 'ai.backoffice.on',[39m[39;1m
+  [39;22m[32m+    32 => 'ai.backoffice.on_label',[39m[39;1m
+  [39;22m[32m+    33 => 'ai.backoffice.outcome',[39m[39;1m
+  [39;22m[32m+    34 => 'ai.backoffice.persona_help',[39m[39;1m
+  [39;22m[32m+    35 => 'ai.backoffice.persona_title',[39m[39;1m
+  [39;22m[32m+    36 => 'ai.backoffice.pii_redaction',[39m[39;1m
+  [39;22m[32m+    37 => 'ai.backoffice.preview',[39m[39;1m
+  [39;22m[32m+    38 => 'ai.backoffice.preview_first',[39m[39;1m
+  [39;22m[32m+    39 => 'ai.backoffice.preview_running',[39m[39;1m
+  [39;22m[32m+    40 => 'ai.backoffice.preview_timeout',[39m[39;1m
+  [39;22m[32m+    41 => 'ai.backoffice.profanity_allow',[39m[39;1m
+  [39;22m[32m+    42 => 'ai.backoffice.profanity_block',[39m[39;1m
+  [39;22m[32m+    43 => 'ai.backoffice.profanity_policy',[39m[39;1m
+  [39;22m[32m+    44 => 'ai.backoffice.profanity_soften',[39m[39;1m
+  [39;22m[32m+    45 => 'ai.backoffice.publish',[39m[39;1m
+  [39;22m[32m+    46 => 'ai.backoffice.published',[39m[39;1m
+  [39;22m[32m+    47 => 'ai.backoffice.reason',[39m[39;1m
+  [39;22m[32m+    48 => 'ai.backoffice.remove',[39m[39;1m
+  [39;22m[32m+    49 => 'ai.backoffice.reply',[39m[39;1m
+  [39;22m[32m+    50 => 'ai.backoffice.rg_template',[39m[39;1m
+  [39;22m[32m+    51 => 'ai.backoffice.rollback',[39m[39;1m
+  [39;22m[32m+    52 => 'ai.backoffice.save_draft',[39m[39;1m
+  [39;22m[32m+    53 => 'ai.backoffice.scope_all',[39m[39;1m
+  [39;22m[32m+    54 => 'ai.backoffice.scope_channel',[39m[39;1m
+  [39;22m[32m+    55 => 'ai.backoffice.simulate',[39m[39;1m
+  [39;22m[32m+    56 => 'ai.backoffice.simulate_first',[39m[39;1m
+  [39;22m[32m+    57 => 'ai.backoffice.simulated_day',[39m[39;1m
+  [39;22m[32m+    58 => 'ai.backoffice.simulation',[39m[39;1m
+  [39;22m[32m+    59 => 'ai.backoffice.surface',[39m[39;1m
+  [39;22m[32m+    60 => 'ai.backoffice.surface_chatbot',[39m[39;1m
+  [39;22m[32m+    61 => 'ai.backoffice.surface_copilot',[39m[39;1m
+  [39;22m[32m+    62 => 'ai.backoffice.surface_supervisor',[39m[39;1m
+  [39;22m[32m+    63 => 'ai.backoffice.th_auto_resolve_min',[39m[39;1m
+  [39;22m[32m+    64 => 'ai.backoffice.th_handoff_below',[39m[39;1m
+  [39;22m[32m+    65 => 'ai.backoffice.th_rg_min',[39m[39;1m
+  [39;22m[32m+    66 => 'ai.backoffice.th_spam_min',[39m[39;1m
+  [39;22m[32m+    67 => 'ai.backoffice.thresholds_title',[39m[39;1m
+  [39;22m[32m+    68 => 'ai.backoffice.tone_brief',[39m[39;1m
+  [39;22m[32m+    69 => 'ai.backoffice.tone_detailed',[39m[39;1m
+  [39;22m[32m+    70 => 'ai.backoffice.tone_formal',[39m[39;1m
+  [39;22m[32m+    71 => 'ai.backoffice.tone_friendly',[39m[39;1m
+  [39;22m[32m+    72 => 'ai.backoffice.total',[39m[39;1m
+  [39;22m[32m+    73 => 'ai.copilot.kind.draft_reply',[39m[39;1m
+  [39;22m[32m+    74 => 'ai.copilot.kind.improve_text',[39m[39;1m
+  [39;22m[32m+    75 => 'ai.copilot.kind.note_draft',[39m[39;1m
+  [39;22m[32m+    76 => 'ai.copilot.kind.translate',[39m[39;1m
+  [39;22m[32m+    77 => 'ai.copilot.notice.busy',[39m[39;1m
+  [39;22m[32m+    78 => 'ai.copilot.notice.cooldown',[39m[39;1m
+  [39;22m[32m+    79 => 'ai.copilot.notice.degraded',[39m[39;1m
+  [39;22m[32m+    80 => 'ai.copilot.notice.digit_mismatch',[39m[39;1m
+  [39;22m[32m+    81 => 'ai.copilot.notice.low_confidence',[39m[39;1m
+  [39;22m[32m+    82 => 'ai.copilot.notice.regenerate_exhausted',[39m[39;1m
+  [39;22m[32m+    83 => 'ai.copilot.notice.retrieval_degraded',[39m[39;1m
+  [39;22m[32m+    84 => 'ai.copilot.notice.unavailable',[39m[39;1m
+  [39;22m[32m+    85 => 'ai.copilot.notice.verify_reference',[39m[39;1m
+  [39;22m[32m+    86 => 'ai.copilot.state.artifact',[39m[39;1m
+  [39;22m[32m+    87 => 'ai.copilot.state.busy',[39m[39;1m
+  [39;22m[32m+    88 => 'ai.copilot.state.cooldown',[39m[39;1m
+  [39;22m[32m+    89 => 'ai.copilot.state.degraded',[39m[39;1m
+  [39;22m[32m+    90 => 'ai.copilot.state.locked',[39m[39;1m
+  [39;22m[32m+    91 => 'ai.copilot.state.low_confidence',[39m[39;1m
+  [39;22m[32m+    92 => 'ai.copilot.state.refused',[39m[39;1m
+  [39;22m[32m+    93 => 'ai.deflection.template',[39m[39;1m
+  [39;22m[32m+    94 => 'ai.disclosure.sentence',[39m[39;1m
+  [39;22m[32m+    95 => 'ai.greeting.first',[39m[39;1m
+  [39;22m[32m+    96 => 'ai.handoff.template',[39m[39;1m
+  [39;22m[32m+    97 => 'ai.notify.anomaly',[39m[39;1m
+  [39;22m[32m+    98 => 'ai.notify.digest',[39m[39;1m
+  [39;22m[32m+    99 => 'ai.notify.killswitch_changed',[39m[39;1m
+  [39;22m[32m+    100 => 'ai.notify.quota_80',[39m[39;1m
+  [39;22m[32m+    101 => 'ai.rg.template',[39m[39;1m
+  [39;22m[32m+    102 => 'ai.supervisor.anomaly.intent_delta',[39m[39;1m
+  [39;22m[32m+    103 => 'ai.supervisor.anomaly.intent_new',[39m[39;1m
+  [39;22m[32m+    104 => 'ai.supervisor.anomaly.sentiment_drop',[39m[39;1m
+  [39;22m[32m+    105 => 'ai.supervisor.anomaly.volume_delta',[39m[39;1m
+  [39;22m[32m+    106 => 'ai.supervisor.digest.ai_resolved',[39m[39;1m
+  [39;22m[32m+    107 => 'ai.supervisor.digest.anomalies',[39m[39;1m
+  [39;22m[32m+    108 => 'ai.supervisor.digest.handoffs',[39m[39;1m
+  [39;22m[32m+    109 => 'ai.supervisor.digest.intents',[39m[39;1m
+  [39;22m[32m+    110 => 'ai.supervisor.digest.rg',[39m[39;1m
+  [39;22m[32m+    111 => 'ai.supervisor.digest.tickets',[39m[39;1m
+  [39;22m[32m+    112 => 'ai.ui.action_draft',[39m[39;1m
+  [39;22m[32m+    113 => 'ai.ui.action_improve',[39m[39;1m
+  [39;22m[32m+    114 => 'ai.ui.action_summarize',[39m[39;1m
+  [39;22m[32m+    115 => 'ai.ui.action_translate',[39m[39;1m
+  [39;22m[32m+    116 => 'ai.ui.banner_all',[39m[39;1m
+  [39;22m[32m+    117 => 'ai.ui.banner_off',[39m[39;1m
+  [39;22m[32m+    118 => 'ai.ui.card_idle',[39m[39;1m
+  [39;22m[32m+    119 => 'ai.ui.chip_intent',[39m[39;1m
+  [39;22m[32m+    120 => 'ai.ui.chip_sentiment',[39m[39;1m
+  [39;22m[32m+    121 => 'ai.ui.chip_urgency',[39m[39;1m
+  [39;22m[32m+    122 => 'ai.ui.chips',[39m[39;1m
+  [39;22m[32m+    123 => 'ai.ui.confidence_high',[39m[39;1m
+  [39;22m[32m+    124 => 'ai.ui.confidence_low',[39m[39;1m
+  [39;22m[32m+    125 => 'ai.ui.confidence_medium',[39m[39;1m
+  [39;22m[32m+    126 => 'ai.ui.discard',[39m[39;1m
+  [39;22m[32m+    127 => 'ai.ui.dismiss',[39m[39;1m
+  [39;22m[32m+    128 => 'ai.ui.empty',[39m[39;1m
+  [39;22m[32m+    129 => 'ai.ui.insert',[39m[39;1m
+  [39;22m[32m+    130 => 'ai.ui.insert_failed',[39m[39;1m
+  [39;22m[32m+    131 => 'ai.ui.insert_forbidden',[39m[39;1m
+  [39;22m[32m+    132 => 'ai.ui.insert_link',[39m[39;1m
+  [39;22m[32m+    133 => 'ai.ui.kb',[39m[39;1m
+  [39;22m[32m+    134 => 'ai.ui.kb_empty',[39m[39;1m
+  [39;22m[32m+    135 => 'ai.ui.kind_draft_reply',[39m[39;1m
+  [39;22m[32m+    136 => 'ai.ui.kind_improve_text',[39m[39;1m
+  [39;22m[32m+    137 => 'ai.ui.kind_note_draft',[39m[39;1m
+  [39;22m[32m+    138 => 'ai.ui.kind_translate',[39m[39;1m
+  [39;22m[32m+    139 => 'ai.ui.loading',[39m[39;1m
+  [39;22m[32m+    140 => 'ai.ui.macros',[39m[39;1m
+  [39;22m[32m+    141 => 'ai.ui.macros_seam',[39m[39;1m
+  [39;22m[32m+    142 => 'ai.ui.needs_text',[39m[39;1m
+  [39;22m[32m+    143 => 'ai.ui.panel_failed',[39m[39;1m
+  [39;22m[32m+    144 => 'ai.ui.regenerate',[39m[39;1m
+  [39;22m[32m+    145 => 'ai.ui.similar',[39m[39;1m
+  [39;22m[32m+    146 => 'ai.ui.similar_empty',[39m[39;1m
+  [39;22m[32m+    147 => 'ai.ui.state_artifact',[39m[39;1m
+  [39;22m[32m+    148 => 'ai.ui.state_busy',[39m[39;1m
+  [39;22m[32m+    149 => 'ai.ui.state_cooldown',[39m[39;1m
+  [39;22m[32m+    150 => 'ai.ui.state_degraded',[39m[39;1m
+  [39;22m[32m+    151 => 'ai.ui.state_locked',[39m[39;1m
+  [39;22m[32m+    152 => 'ai.ui.state_low_confidence',[39m[39;1m
+  [39;22m[32m+    153 => 'ai.ui.state_pending',[39m[39;1m
+  [39;22m[32m+    154 => 'ai.ui.state_refused',[39m[39;1m
+  [39;22m[32m+    155 => 'ai.ui.suggest',[39m[39;1m
+  [39;22m[32m+    156 => 'ai.ui.suggested_reply',[39m[39;1m
+  [39;22m[32m+    157 => 'ai.ui.summary',[39m[39;1m
+  [39;22m[32m+    158 => 'ai.ui.summary_empty',[39m[39;1m
+  [39;22m[32m+    159 => 'ai.ui.summary_fresh',[39m[39;1m
+  [39;22m[32m+    160 => 'ai.ui.summary_refreshing',[39m[39;1m
+  [39;22m[32m+    161 => 'ai.ui.translated_from',[39m[39;1m
+  [39;22m[32m+    162 => 'ai.unsupported_language.template',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Ai/AiI18nParityTest.php[39m:[32m50[39m
+     46▕     $listed = array_column($queue['entries'], 'key');
+     47▕     sort($listed);
+     48▕     $expected = array_map(fn (string $k): string => 'ai.'.$k, array_keys($am));
+     49▕     sort($expected);
+  ➜  50▕     expect($listed)->toBe($expected);
+     51▕     $destructive = array_column(array_filter($queue['entries'], fn (array $e): bool => $e['tier'] === 'destructive'), 'key');
+     52▕     foreach (['ai.rg.template', 'ai.backoffice.confirm_off', 'ai.backoffice.rg_template', 'ai.backoffice.rollback', 'ai.backoffice.remove'] as $mustFlag) {
+     53▕         expect($destructive)->toContain($mustFlag);
+     54▕     }
+
+  [33m1   [39m[39;1mtests/Feature/Ai/AiI18nParityTest.php[39;22m:[39;1m50[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m156 passed[39;22m[90m (2083 assertions)[39m
+  [90mDuration:[39m [39m65.54s[39m
+
+EXIT=1

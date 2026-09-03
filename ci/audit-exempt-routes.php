@@ -123,6 +123,7 @@ return [
     'ai.backoffice.publish' => 'Doc 09 FR-04/SEC-05: ConfigVersions::publish writes ai.config.published itself (actor + old/new) — no second row.',
     'ai.backoffice.rollback' => 'Doc 09 FR-04/SEC-05: ConfigVersions::rollbackTo writes ai.config.rolled_back itself.',
     'ai.backoffice.thresholds.simulate' => 'Doc 09 FR-11/BR-07: a READ (yesterday recomputed); the token it returns is consumed by the publish door.',
+    'ai.backoffice.thresholds.flips' => 'SESSION-F1 (B8-S05 E03): the simulate door\'s drill-down — the SAME rows and RoutePolicy call recomputed for two threshold sets (SimulationEngine::flips, read-only); a POST because both value sets ride the body. Nothing mutates; publish stays the audited door.',
     'ai.backoffice.thresholds.publish' => 'Doc 09 BR-07/SEC-05: ThresholdPublisher -> ConfigVersions::publish writes ai.config.published itself.',
     'ai.backoffice.killswitches.flip' => 'Doc 09 FR-18/SEC-05: KillSwitches::flip writes ai.killswitch.changed itself (actor + old/new, flipped_at = the audit stamp).',
     // Doc 10 (S10 step 3): the editor's presence + working-copy doors — inert by design.

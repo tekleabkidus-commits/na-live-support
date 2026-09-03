@@ -1,0 +1,39 @@
+
+Running 2 tests using 1 worker
+
+
+  ✘  1 [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark (1.3s)
+
+  ✓  2 [chromium] › tests/Browser/f1-b8.spec.ts:473:5 › B8-S04 — the persona editor › §F at 375: the editor stacks above the preview; every control clears 44 px; axe-clean both themes (2.5s)
+
+
+  1) [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('persona-disclosure-lock')
+    Expected substring: "Presence is platform law"
+    Error: strict mode violation: getByTestId('persona-disclosure-lock') resolved to 2 elements:
+        1) <div data-v-6334a269="" class="ai-lockrow mt-1.5" data-testid="persona-disclosure-lock">…</div> aka getByRole('tabpanel').getByTestId('persona-disclosure-lock')
+        2) <div data-v-6334a269="" class="ai-lockrow mt-1.5" data-testid="persona-disclosure-lock">…</div> aka getByTestId('persona-disclosure-lock').nth(1)
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('persona-disclosure-lock')
+
+
+      437 |         // D04 / X3: the disclosure is read-only wording under the permanent lock
+      438 |         await expect(page.getByTestId('persona-disclosure-en')).toHaveAttribute('readonly', '');
+    > 439 |         await expect(page.getByTestId('persona-disclosure-lock')).toContainText('Presence is platform law');
+          |                                                                   ^
+      440 |         await expect(page.locator('[data-testid="persona-disclosure-lock"] input[type="checkbox"]')).toHaveCount(0);
+      441 |         // D02: the preview select cycles the five canned conversations; the customer turn renders before any run
+      442 |         await expect(page.getByTestId('persona-dialog').locator('option')).toHaveCount(5);
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:439:67
+
+    Error Context: test-results/f1-b8-B8-S04-—-the-persona-c4414-sions-listed-axe-light-dark-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+  1 passed (10.8s)
+EXIT=1

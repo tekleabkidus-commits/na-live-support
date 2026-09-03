@@ -1,0 +1,73 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone (2.7s)
+  ✓  2 [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas (1.7s)
+
+  ✘  3 [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark (30.0s)
+
+  ✓  4 [chromium] › tests/Browser/f1-b8.spec.ts:473:5 › B8-S04 — the persona editor › §F at 375: the editor stacks above the preview; every control clears 44 px; axe-clean both themes (3.1s)
+  ✘  5 [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark (9.5s)
+
+  ✓  6 [chromium] › tests/Browser/f1-b8.spec.ts:564:5 › B8-S05 — thresholds & simulation › §H at 375: the simulation stacks under the sliders; publish and simulate clear 44 px; axe-clean both themes (3.0s)
+
+
+  1) [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('persona-preview-text')
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 90000ms
+      - waiting for getByTestId('persona-preview-text')
+      - Test timeout of 30000ms exceeded.
+
+
+      456 |         await page.getByTestId('persona-name').fill('Selam');
+      457 |         await page.getByTestId('persona-preview').click();
+    > 458 |         await expect(page.getByTestId('persona-preview-text')).toBeVisible({ timeout: 90_000 });
+          |                                                                ^
+      459 |         await expect(page.getByTestId('persona-chip')).toContainText('Previewed 5 of 5');
+      460 |         await expect(page.getByTestId('persona-publish')).toBeEnabled();
+      461 |         await expect(page.getByTestId('persona-publish')).toHaveText(/^Publish v\d+$/);
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:458:64
+
+    Error Context: test-results/f1-b8-B8-S04-—-the-persona-c4414-sions-listed-axe-light-dark-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('thresholds-publish-dialog')
+    Expected pattern: /Publish thresholds v\d+\?/
+    Received string:  "Publish persona v2?Applies instantly to every endpoint where the chatbot is on — no deploy. Every AI decision will log config v:version. You can roll back to v1 in one click at any time.CancelPublish now"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('thresholds-publish-dialog')
+        14 × locator resolved to <div role="dialog" class="ai-modal" aria-modal="true" data-v-3fdd9c9a="" aria-label="Publish persona v2?" data-testid="thresholds-publish-dialog">…</div>
+           - unexpected value "Publish persona v2?Applies instantly to every endpoint where the chatbot is on — no deploy. Every AI decision will log config v:version. You can roll back to v1 in one click at any time.CancelPublish now"
+
+
+      552 |         await page.getByTestId('thresholds-publish').click();
+      553 |         const dialog = page.getByTestId('thresholds-publish-dialog');
+    > 554 |         await expect(dialog).toContainText(/Publish thresholds v\d+\?/);
+          |                              ^
+      555 |         await expect(dialog).toContainText('auto-resolved');
+      556 |         await page.locator('.ai-shell').screenshot({ path: `${SHOTS}/B8-S05-confirm-build-1440-light.jpg`, type: 'jpeg', quality: 70 });
+      557 |         await dialog.getByRole('button', { name: 'Cancel' }).click();
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:554:30
+
+    Error Context: test-results/f1-b8-B8-S05-—-thresholds--b0646-the-headline-axe-light-dark-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+    [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark 
+  4 passed (1.1m)
+EXIT=1

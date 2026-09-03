@@ -1,0 +1,39 @@
+
+Running 9 tests using 1 worker
+
+
+  ✓  1 [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark (7.0s)
+  ✓  2 [chromium] › tests/Browser/f1-b8.spec.ts:475:5 › B8-S04 — the persona editor › §F at 375: the editor stacks above the preview; every control clears 44 px; axe-clean both themes (3.3s)
+  ✓  3 [chromium] › tests/Browser/f1-b8.spec.ts:708:5 › B8-S08 — providers & status › §A–§E: its own screen (no channel-health link); one chain per tier with the breaker state in WORDS; credentials as vault references only; the ladder as live status; the model map with Change; config versions with the honesty layer as a hash; the quota meter with the 80% mark and the reserve; axe light + dark (3.4s)
+  ✘  4 [chromium] › tests/Browser/f1-b8.spec.ts:740:5 › B8-S08 — providers & status › §G at 375: the chains stack vertically; axe-clean both themes (1.5m)
+
+  ✓  5 [chromium] › tests/Browser/f1-b8.spec.ts:757:5 › B8-S09 — decision log & quality loop › §A–§E: the enriched table under "AI · Decisions" with the today chip; filter chips compose and the empty state names them; the row record view (no payload door); exactly TWO quality tabs and NO RG vocabulary; the calibration table + finding; axe light + dark (4.4s)
+  ✓  6 [chromium] › tests/Browser/f1-b8.spec.ts:791:5 › B8-S09 — decision log & quality loop › §G at 375: rows become cards; the two tabs persist; axe-clean both themes (3.8s)
+  ✓  7 [chromium] › tests/Browser/f1-b8.spec.ts:807:5 › B8-S10 — supervisor outputs & the RG review queue › §A–§E: the feed, the digest, the QA pre-score labelled advisory, and the RG queue present for the RG key (this agent holds it) with the month figure and the calm slate; axe light + dark (3.0s)
+  ✓  8 [chromium] › tests/Browser/f1-b8.spec.ts:827:5 › B8-S10 — supervisor outputs & the RG review queue › J06 — the same page for a viewer WITHOUT the RG key carries no RG row, no count, no vocabulary (1.5s)
+  ✓  9 [chromium] › tests/Browser/f1-b8.spec.ts:840:5 › B8-S10 — supervisor outputs & the RG review queue › §G at 375: the feed reads on a phone; RG actions stack full-width; axe-clean both themes (2.8s)
+
+
+  1) [chromium] › tests/Browser/f1-b8.spec.ts:740:5 › B8-S08 — providers & status › §G at 375: the chains stack vertically; axe-clean both themes 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.evaluate: Target page, context or browser has been closed
+
+      59 |     let builder = new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']);
+      60 |     if (include) builder = builder.include(include);
+    > 61 |     const results = await builder.analyze();
+         |                                   ^
+      62 |     expect(
+      63 |         results.violations,
+      64 |         `${context}: ${JSON.stringify(results.violations.map((v) => v.id))}`,
+        at AxeBuilder.analyze (/home/kidus/projects/na-live-support/node_modules/@axe-core/playwright/dist/index.mjs:201:16)
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:61:35)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:748:15
+
+    Error Context: test-results/f1-b8-B8-S08-—-providers-s-7adf3-cally-axe-clean-both-themes-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/f1-b8.spec.ts:740:5 › B8-S08 — providers & status › §G at 375: the chains stack vertically; axe-clean both themes 
+  8 passed (2.2m)
+EXIT=1

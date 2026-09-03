@@ -1,0 +1,29 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\BackofficeConfigTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit persona: draft → preview (queued on ai-background, the DRAFT per[39m[90m…[39m [90m9.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit guardrails: draft → publish writes the SEC-05 audit row (ai.conf[39m[90m…[39m [90m2.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit thresholds/scope (BR-07, US-06): simulate returns before/after/d[39m[90m…[39m [90m2.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kill switches (FR-18/US-07/AC-08 bannered): the grid page; a fli[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit permissions: every Backoffice door is gated by its closed key —[39m[90m… [39m [90m0.62s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\ProviderSwitchDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-D10-1: the catalog is 114 by EXECUTED count, ai.providers.mana[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the switch door: 403 without the key; GET answers the model map;[39m[90m…[39m [90m0.66s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\KillSwitchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08 BOTH DIRECTIONS: an endpoint switch silences EXACTLY its e[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: a channel-wide switch covers every endpoint on that chann[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: every flip is audited with actor + old/new and evented w[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE #16 CONTROL (amendment R-19b): flipped_at is a BYTE-COP[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 enablement (SwitchesAndFlags): scope config ON + no switch[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the scope grid is a singleton per combination — a second flip UP[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ai\SimulationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 (the two-halves form): live(T1) == sim(T1); then live(T2)[39m[90m… [39m [90m1.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07 AS PHYSICS: a thresholds draft publishes ONLY with the tok[39m[90m…[39m [90m0.08s[39m  
+
+  [90mTests:[39m    [32;1m15 passed[39;22m[90m (166 assertions)[39m
+  [90mDuration:[39m [39m19.08s[39m
+
+EXIT=0

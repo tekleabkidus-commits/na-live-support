@@ -1,0 +1,49 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      b8-gates
+# set:        F1-B8
+# command:    make gates
+# started:    2026-09-03T09:02:24Z
+# git:        02cde75 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+make[1]: Entering directory '/home/kidus/projects/na-live-support'
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               FAIL
+      string-lint: resources/js/Pages/Admin/Ai/Decisions.vue:136: hardcoded text node "0 ? '+' : p.gap"
+      string-lint: resources/js/Pages/Admin/Ai/Guardrails.vue:97: hardcoded text node "max_ai_messages"
+      string-lint: resources/js/Pages/Admin/Ai/Persona.vue:71: hardcoded text node "t['gate_' + m.toLowerCase()] ?? m).join(', '), lang: t['lang_' + activeLang] ?? activeLang }) }}"
+      string-lint: resources/js/Pages/Admin/Ai/Providers.vue:58: hardcoded text node "h.provider + ' · ' + h.model).join(' → ') || '—' }}"
+      string-lint: resources/js/Pages/Admin/Ai/Thresholds.vue:100: hardcoded text node "0 ? '+' : '') + (sim.deltas[m.key] ?? 0) + ' ' + t.conversations_word }}"
+      string-lint: resources/js/Pages/Admin/Ai/Thresholds.vue:121: hardcoded text node "a + Math.abs(b), 0) / 2 : 0 }) }}"
+      string-lint: resources/js/Pages/Admin/Ai/Thresholds.vue:181: hardcoded text node "auto_resolve_min"
+      string-lint: resources/js/Pages/Admin/Ai/Thresholds.vue:181: hardcoded text node "handoff_below"
+      string-lint: resources/js/Pages/Admin/Ai/Thresholds.vue:181: hardcoded text node "rg_min"
+      string-lint: FAIL (9 violation(s)). User-visible strings must be i18n keys (Doc 01 FR-09). Genuine exceptions go in ci/string-lint-allowlist.php with a reason.
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            FAIL
+      audit-coverage: FAIL mutating route without audit coverage: POST admin/ai/thresholds/flips (ai.backoffice.thresholds.flips)
+      audit-coverage: FAIL (1 uncovered mutating route(s)).
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 12 passed, 2 failed, 0 skipped.
+FAILED: string-lint audit-coverage
+make[1]: *** [Makefile:97: gates] Error 1
+make[1]: Leaving directory '/home/kidus/projects/na-live-support'
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-03T09:07:23Z
+# duration:   299s
+# EXIT:       2

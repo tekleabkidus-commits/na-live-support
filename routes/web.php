@@ -259,6 +259,9 @@ Route::middleware([
         ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds.simulate');
     Route::post('thresholds/publish', [App\Http\Controllers\Ai\AiBackofficeController::class, 'thresholdsPublish'])
         ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds.publish');
+    // SESSION-F1 (B8-S05 E03): the flips drill-down — a READ of the same simulation (no audit, no mutation).
+    Route::post('thresholds/flips', [App\Http\Controllers\Ai\AiBackofficeController::class, 'flips'])
+        ->middleware('permission:ai.thresholds.edit')->name('ai.backoffice.thresholds.flips');
     Route::get('kill-switches', [App\Http\Controllers\Ai\AiBackofficeController::class, 'killSwitches'])
         ->middleware('permission:ai.killswitch')->name('ai.backoffice.killswitches');
     Route::post('kill-switches/flip', [App\Http\Controllers\Ai\AiBackofficeController::class, 'killSwitchFlip'])
@@ -267,6 +270,10 @@ Route::middleware([
         ->middleware('permission:tickets.view')->name('ai.backoffice.banner'); // AC-08: every staff member sees the banner
     Route::get('decisions', [App\Http\Controllers\Ai\AiBackofficeController::class, 'decisions'])
         ->middleware('permission:ai.decisions.view')->name('ai.backoffice.decisions');
+    // SESSION-F1 (B8-S10, rulings Q2/Q3): the supervisor artefacts page — FR-17's outputs are decision rows (the
+    // same key as the log); the RG queue inside it renders only for customers.rg_flag.view (J06 absence).
+    Route::get('supervisor', [App\Http\Controllers\Ai\AiBackofficeController::class, 'supervisor'])
+        ->middleware('permission:ai.decisions.view')->name('ai.backoffice.supervisor');
     // S10 step 0.4 (R-D10-1 as amended at the plan rulings): the provider SWITCH
     // DOOR — JSON only; the B8-S08 screen lands in the [B8] pass. The mutation
     // rides ConfigVersions (ai.config.published) + the ai.providers.switched

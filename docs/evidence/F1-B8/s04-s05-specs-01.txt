@@ -1,0 +1,101 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone (2.5s)
+  ✘  2 [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas (6.2s)
+
+  ✘  3 [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark (6.5s)
+
+  ✓  4 [chromium] › tests/Browser/f1-b8.spec.ts:473:5 › B8-S04 — the persona editor › §F at 375: the editor stacks above the preview; every control clears 44 px; axe-clean both themes (2.5s)
+  ✘  5 [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark (21.9s)
+
+  ✓  6 [chromium] › tests/Browser/f1-b8.spec.ts:564:5 › B8-S05 — thresholds & simulation › §H at 375: the simulation stacks under the sliders; publish and simulate clear 44 px; axe-clean both themes (2.4s)
+
+
+  1) [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas 
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByTestId('thresholds-publish')
+    Expected: enabled
+    Received: disabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeEnabled" with timeout 5000ms
+      - waiting for getByTestId('thresholds-publish')
+        - locator resolved to <button disabled type="button" data-v-25b79fb3="" class="ai-btn ai-btn-pri" data-testid="thresholds-publish" title="Simulate these exact values first">Publish — simulate these values first</button>
+        13 × unexpected value "disabled"
+           - locator resolved to <button disabled title="" type="button" data-v-25b79fb3="" class="ai-btn ai-btn-pri" data-testid="thresholds-publish">Publish — needs a simulation</button>
+        - unexpected value "disabled"
+
+
+       97 |     await expect(page.getByTestId('simulation-results')).toBeVisible();
+       98 |     await expect(page.getByTestId('delta-eligible')).toBeVisible();
+    >  99 |     await expect(page.getByTestId('thresholds-publish')).toBeEnabled();
+          |                                                          ^
+      100 |     await page.getByTestId('slider-handoff_below').fill('0.35');
+      101 |     await expect(page.getByTestId('thresholds-publish')).toBeDisabled(); // values moved → the token no longer matches
+      102 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/ai-backoffice.spec.ts:99:58
+
+    Error Context: test-results/ai-backoffice-FR-11-BR-07--a3d15-as-a-text-table-with-deltas-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('persona-publish')
+    Expected substring: "preview the change first"
+    Received string:    "Publish — simulate these values first"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('persona-publish')
+        14 × locator resolved to <button disabled type="button" data-v-600460a3="" class="ai-btn ai-btn-pri" data-testid="persona-publish">Publish — simulate these values first</button>
+           - unexpected value "Publish — simulate these values first"
+
+
+      445 |         // D03 / FR-18: Publish is locked with the reason ON the button
+      446 |         await expect(page.getByTestId('persona-publish')).toBeDisabled();
+    > 447 |         await expect(page.getByTestId('persona-publish')).toContainText('preview the change first');
+          |                                                           ^
+      448 |         await axeClean(page, 'persona editor (light)');
+      449 |         await page.locator('.ai-shell').screenshot({ path: `${SHOTS}/B8-S04-editor-build-1440-light.jpg`, type: 'jpeg', quality: 70 });
+      450 |         await setTheme(page, 'dark');
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:447:59
+
+    Error Context: test-results/f1-b8-B8-S04-—-the-persona-c4414-sions-listed-axe-light-dark-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('th-fresh')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 20000ms
+      - waiting for getByTestId('th-fresh')
+
+
+      512 |         // E02/E04: simulate → fresh, bars + worded deltas, Publish unlocked with the version
+      513 |         await page.getByTestId('simulate').click();
+    > 514 |         await expect(page.getByTestId('th-fresh')).toBeVisible({ timeout: 20_000 });
+          |                                                    ^
+      515 |         await expect(page.getByTestId('simulation-results')).toBeVisible();
+      516 |         for (const k of ['eligible_auto_resolve', 'handoff_low_confidence', 'spam', 'rg_override', 'eligible']) {
+      517 |             await expect(page.getByTestId('delta-' + k)).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b8.spec.ts:514:52
+
+    Error Context: test-results/f1-b8-B8-S05-—-thresholds--b0646-the-headline-axe-light-dark-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas 
+    [chromium] › tests/Browser/f1-b8.spec.ts:424:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark 
+    [chromium] › tests/Browser/f1-b8.spec.ts:492:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark 
+  3 passed (59.6s)
+EXIT=1

@@ -1,0 +1,25 @@
+CAPTURE_SET=F1-B8 bash ci/capture.sh b8-gates make gates
+make[1]: Entering directory '/home/kidus/projects/na-live-support'
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 14 passed, 0 failed, 0 skipped.
+make[1]: Leaving directory '/home/kidus/projects/na-live-support'
+capture: full output -> docs/evidence/F1-B8/b8-gates-03.txt  (exit 0, 86s)
