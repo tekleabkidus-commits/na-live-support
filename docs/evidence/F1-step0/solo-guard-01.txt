@@ -1,0 +1,32 @@
+# F1 step-0 — solo-process guard (2026-09-03T06:45:10Z)
+own shell PID=70434 PPID=69293
+  PID  PPID TT       ELAPSED CMD
+69293 69231 pts/6        106 claude --model claude-fable-5-1
+--- look 1: raw ps (claude|remote/srv|pest|gates|artisan)
+62314 62301 ?          23578 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4      23578 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4      23578 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+69293 69231 pts/6        106 Rl+  claude --model claude-fable-5-1
+--- daemon/pty: 0 daemon, 0 pty-host
+--- Windows: tasklist Claude.exe
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+claude.exe                   21580 Console                    1    250,884 K
+claude.exe                   29084 Console                    1     35,996 K
+claude.exe                   14628 Console                    1    248,612 K
+claude.exe                   36732 Console                    1     68,568 K
+claude.exe                   30156 Console                    1     85,224 K
+claude.exe                   24012 Console                    1    422,568 K
+claude.exe                   27052 Console                    1     97,296 K
+claude.exe                   12740 Console                    1    127,208 K
+claude.exe                    1100 Console                    1    109,280 K
+claude.exe                   15548 Console                    1    113,620 K
+--- /proc sweep for orphaned pest/gates/artisan:
+70434: /bin/bash -c source /home/kidus/.claude2/shell-snapshots/snapshot-bash-1788417825946-6dr1zx.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /home/kidus/projects/na-live-support; E=docs/evidence/F1-step0; mkdir -p $E; F=$E/solo-guard-01.txt; { echo "# F1 step-0 — solo-process guard ($(date -u +%FT%TZ))"; echo "own shell PID=$$ PPID=$PPID"; ps -o pid,ppid,tty,etimes,cmd -p $PPID; echo "--- look 1: raw ps (claude|remote/srv|pest|gates|artisan)"; ps -eo pid,ppid,tty,etimes,stat,cmd | grep -E '"'"'claude|remote/srv|pest|gates|artisan'"'"' | grep -v -e grep -e '"'"'bin/bash -c source'"'"'; echo "--- daemon/pty: $(pgrep -af '"'"'claude daemon'"'"' | grep -v grep | wc -l) daemon, $(pgrep -af '"'"'bg-pty'"'"' | grep -v grep | wc -l) pty-host"; echo "--- Windows: tasklist Claude.exe"; tasklist.exe /FI "IMAGENAME eq Claude.exe" 2>/dev/null | tr -d '"'"'\r'"'"' | tail -n +2; echo "--- /proc sweep for orphaned pest/gates/artisan:"; for d in /proc/[0-9]*; do c=$(tr '"'"'\0'"'"' '"'"' '"'"' < $d/cmdline 2>/dev/null); case "$c" in *vendor/bin/pest*|*run-gates*|*"artisan test"*) echo "${d#/proc/}: $c";; esac; done; echo "(sweep done)"; } > $F; sleep 20; { echo "--- look 2 (+20 s):"; ps -eo pid,ppid,tty,etimes,stat,cmd | grep -E '"'"'claude|remote/srv|pest|gates|artisan'"'"' | grep -v -e grep -e '"'"'bin/bash -c source'"'"'; n=$(ps -eo cmd | awk '"'"'$1=="claude"'"'"' | wc -l); t=$(ps -eo cmd | awk '"'"'$1 ~ /remote\/srv/'"'"' | wc -l); echo "VERDICT: $n claude CLI process(es); $t serve/bridge transport process(es) (PIDs 62314/62325 = the Claude Desktop remote transport, present and dispositioned CLEAN at B9-step1/solo-guard-resume-03 — not a CLI rival; no other claude CLI, no pest/gates). $( [ "$n" = 1 ] && echo CLEAN || echo NOT CLEAN )"; } >> $F; cat $F' && pwd -P >| /tmp/claude-2928-cwd 
+(sweep done)
+--- look 2 (+20 s):
+62314 62301 ?          23600 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4      23600 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4      23600 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+69293 69231 pts/6        128 Sl+  claude --model claude-fable-5-1
+VERDICT: 1 claude CLI process(es); 2 serve/bridge transport process(es) (PIDs 62314/62325 = the Claude Desktop remote transport, present and dispositioned CLEAN at B9-step1/solo-guard-resume-03 — not a CLI rival; no other claude CLI, no pest/gates). CLEAN

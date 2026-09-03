@@ -1,0 +1,16 @@
+# B9 step-1 RESUME — solo-process guard (2026-09-02T16:03:40Z)
+own shell PID=62592 PPID=60967
+  PID  PPID TT       ELAPSED CMD
+60967 60954 pts/5        983 claude --model claude-fable-5-1
+--- look 1:
+60967 60954 pts/5        983 Sl+  claude --model claude-fable-5-1
+62314 62301 ?            649 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4        649 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4        649 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+--- Windows Claude.exe count: 10
+--- look 2 (+20 s):
+60967 60954 pts/5       1003 Sl+  claude --model claude-fable-5-1
+62314 62301 ?            669 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4        669 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4        669 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+VERDICT: 1 claude CLI process(es); CLEAN

@@ -1,0 +1,17 @@
+# B9 step-1 — solo-process guard AFTER owner-ordered full Claude shutdown (2026-09-02T15:50:03Z)
+own shell PID=61272 PPID=60967
+  PID  PPID TT       ELAPSED CMD
+60967 60954 pts/5        166 claude --model claude-fable-5-1
+--- look 1: raw ps (claude|remote/srv|pest|gates|artisan)
+60967 60954 pts/5        166 Sl+  claude --model claude-fable-5-1
+--- daemon/pty: 0 daemon, 0 pty-host
+--- Windows: tasklist Claude.exe
+--- /proc sweep for orphaned pest/gates/artisan:
+61272: /bin/bash -c source /home/kidus/.claude/shell-snapshots/snapshot-bash-1788364075121-791wmp.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin unset -f -- 'unsetenv'; } >/dev/null 2>&1 || true && eval 'cd /home/kidus/projects/na-live-support; echo "=== actual built-pages layout ==="; for d in resources/js/Pages/Admin/Kb resources/js/Pages/Admin/Workflow resources/js/Pages/Kb resources/js/Pages/Workflow; do if [ -d $d ]; then echo "EXISTS $d: $(ls $d | tr '"'"'\n'"'"' '"'"' '"'"')"; else echo "MISSING $d"; fi; done; echo; echo "=== B9 evidence dir ==="; ls -d docs/evidence/*B9* docs/evidence/*b9* 2>/dev/null || echo "no B9 evidence dir yet"; ls docs/evidence/*B9*/ 2>/dev/null; echo; echo "=== running SOLO GUARD (post-shutdown) ==="; E=docs/evidence/B9-step1; mkdir -p $E; F=$E/solo-guard-post-shutdown-01.txt; { echo "# B9 step-1 — solo-process guard AFTER owner-ordered full Claude shutdown ($(date -u +%FT%TZ))"; echo "own shell PID=$$ PPID=$PPID"; ps -o pid,ppid,tty,etimes,cmd -p $PPID; echo "--- look 1: raw ps (claude|remote/srv|pest|gates|artisan)"; ps -eo pid,ppid,tty,etimes,stat,cmd | grep -E '"'"'claude|remote/srv|pest|gates|artisan'"'"' | grep -v -e grep -e '"'"'bin/bash -c source'"'"'; echo "--- daemon/pty: $(pgrep -af '"'"'claude daemon'"'"' | grep -v grep | wc -l) daemon, $(pgrep -af '"'"'bg-pty'"'"' | grep -v grep | wc -l) pty-host"; echo "--- Windows: tasklist Claude.exe"; tasklist.exe /FI "IMAGENAME eq Claude.exe" 2>/dev/null | tr -d '"'"'\r'"'"' | tail -n +2; echo "--- /proc sweep for orphaned pest/gates/artisan:"; for d in /proc/[0-9]*; do c=$(tr '"'"'\0'"'"' '"'"' '"'"' < $d/cmdline 2>/dev/null); case "$c" in *vendor/bin/pest*|*run-gates*|*"artisan test"*) echo "${d#/proc/}: $c";; esac; done; echo "(sweep done)"; } > $F; sleep 20; { echo "--- look 2 (+20 s):"; ps -eo pid,ppid,tty,etimes,stat,cmd | grep -E '"'"'claude|remote/srv|pest|gates|artisan'"'"' | grep -v -e grep -e '"'"'bin/bash -c source'"'"'; echo "--- Windows look 2:"; tasklist.exe /FI "IMAGENAME eq Claude.exe" 2>/dev/null | tr -d '"'"'\r'"'"' | tail -n +2; n=$(ps -eo cmd | awk '"'"'$1=="claude"'"'"' | wc -l); echo "VERDICT: $n claude CLI process(es) total; serve/bridge transport: $(pgrep -f '"'"'remote/srv'"'"' | wc -l); Windows Claude.exe: see above. $( [ "$n" = 1 ] && echo CLEAN — only this session remains || echo NOT CLEAN )"; } >> $F; cat $F; echo; echo "=== git state ==="; git rev-parse --short HEAD; git status --short' && pwd -P >| /tmp/claude-b534-cwd 
+(sweep done)
+--- look 2 (+20 s):
+60967 60954 pts/5        188 Rl+  claude --model claude-fable-5-1
+--- Windows look 2:
+VERDICT: 1 claude CLI process(es) total; serve/bridge transport: 2; Windows Claude.exe: see above. CLEAN — only this session remains
+--- correction: the 'serve/bridge transport: 2' figure above was pgrep -f self-matching this guard shell's own command text; strict argv[0] count of /home/kidus/.claude/remote/srv/* processes = 0
+FINAL VERDICT: CLEAN — 1 claude CLI (PID 60967, this session), 0 transport, 0 Windows Claude.exe

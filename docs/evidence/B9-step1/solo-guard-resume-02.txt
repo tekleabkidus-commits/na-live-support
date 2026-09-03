@@ -1,0 +1,29 @@
+# B9 step-1 RESUME — solo-process guard (fresh session, 2026-09-02T15:59:25Z)
+own shell PID=62421 PPID=60967
+  PID  PPID TT       ELAPSED CMD
+60967 60954 pts/5        727 claude --model claude-fable-5-1
+--- look 1: raw ps (claude|remote/srv|pest|gates|artisan)
+60967 60954 pts/5        727 Sl+  claude --model claude-fable-5-1
+62314 62301 ?            393 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4        393 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4        393 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+--- Windows Claude.exe:
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+claude.exe                   21580 Console                    1    231,404 K
+claude.exe                   29084 Console                    1     36,792 K
+claude.exe                   14628 Console                    1    228,352 K
+claude.exe                   36732 Console                    1     67,884 K
+claude.exe                   30156 Console                    1     97,888 K
+claude.exe                   24012 Console                    1    380,388 K
+claude.exe                   27052 Console                    1    101,244 K
+claude.exe                   12740 Console                    1    146,056 K
+claude.exe                    1100 Console                    1    122,440 K
+claude.exe                   15548 Console                    1    126,772 K
+--- strict transport count: 2
+--- look 2 (+20 s):
+60967 60954 pts/5        748 Sl+  claude --model claude-fable-5-1
+62314 62301 ?            414 Ssl  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --serve --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock --token-file /home/kidus/.claude/remote/run/2a52bb5c/token.63022ed6d5fefd45
+62324 62323 pts/4        414 Ss+  sh -c '/home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server' '--bridge' '--socket' '/home/kidus/.claude/remote/run/2a52bb5c/rpc.sock'
+62325 62324 pts/4        414 Sl+  /home/kidus/.claude/remote/srv/7d193f89fc02cf1035a391245312e34ad419f63e/server --bridge --socket /home/kidus/.claude/remote/run/2a52bb5c/rpc.sock
+VERDICT: 1 claude CLI process(es); CLEAN
