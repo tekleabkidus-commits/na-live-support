@@ -156,7 +156,7 @@ final class CategoryTree
         });
     }
 
-    /** @return list<array<string, mixed>> the tree, ordered by (depth, position), deleted rows absent */
+    /** @return list<array{id: string, parent_id: string|null, depth: int, name: array<string, string>, slug: string, position: int, icon: string|null, ai_usable: bool, visibility_default: string}> the tree, ordered by (depth, position), deleted rows absent */
     public function tree(): array
     {
         /** @var list<object{id: string, parent_id: string|null, depth: int|string, name: string, slug: string, position: int|string, icon: string|null, ai_usable: bool, visibility_default: string}> $rows */
@@ -164,7 +164,16 @@ final class CategoryTree
             ->get(['id', 'parent_id', 'depth', 'name', 'slug', 'position', 'icon', 'ai_usable', 'visibility_default'])->all();
         $out = [];
         foreach ($rows as $row) {
-            $out[] = ['id' => $row->id, 'parent_id' => $row->parent_id, 'depth' => (int) $row->depth, 'name' => json_decode($row->name, true), 'slug' => $row->slug, 'position' => (int) $row->position, 'icon' => $row->icon, 'ai_usable' => (bool) $row->ai_usable, 'visibility_default' => $row->visibility_default];
+            $name = json_decode($row->name, true);
+            $names = [];
+            if (is_array($name)) {
+                foreach ($name as $k => $v) {
+                    if (is_string($k) && is_string($v)) {
+                        $names[$k] = $v;
+                    }
+                }
+            }
+            $out[] = ['id' => $row->id, 'parent_id' => $row->parent_id, 'depth' => (int) $row->depth, 'name' => $names, 'slug' => $row->slug, 'position' => (int) $row->position, 'icon' => $row->icon, 'ai_usable' => (bool) $row->ai_usable, 'visibility_default' => $row->visibility_default];
         }
 
         return $out;

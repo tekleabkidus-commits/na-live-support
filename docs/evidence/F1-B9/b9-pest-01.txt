@@ -1,0 +1,155 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\AiAuthoringTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit draft-from-source: 202 + an AI-born draft; the job writes accen[39m[90m…[39m [90m15.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit simplify + FAQ variants: rewrite in place (every text block acce[39m[90m…[39m [90m3.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit US-06 / SS-03 / [D10] rows 2+5: the Doc 09 top-10 cluster (ids o[39m[90m…[39m [90m1.38s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\AiUsableRederivationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FLAG 3 closed by ruling: the chunk flag IS the category flag at[39m[90m… [39m [90m0.74s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArchiveTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-09: archive retires chunks + events + audits + tombstones; th[39m[90m…[39m [90m0.71s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleDeleteTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-43: delete → soft, chunks retired, citations tombstone, audite[39m[90m…[39m [90m0.80s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleMediaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02/FR-05: a clean upload scans then stores (signed editing U[39m[90m…[39m [90m0.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: the widget media door serves ONLY public+published articl[39m[90m…[39m [90m0.67s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-02/BR-03/§14: an Amharic-first article gets a transliterated[39m[90m… [39m [90m0.90s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: moving an article into a non-ai_usable category retires i[39m[90m…[39m [90m1.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\CachesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-05: the tree and renders are served FROM CACHE (a poisoned ent[39m[90m…[39m [90m1.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: a failing purge is DEGRADED — the publish still succeeds,[39m[90m…[39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\CategoryTreeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: depth 3 is the ceiling (4 refused), names are per languag[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: a category holding articles is NOT deleted — the refusal[39m[90m… [39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ChunkerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: summary is chunk 0, heading paths prefix the rest, the SAM[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 cost fixture: a minor edit to ONE section changes only that[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-08 + the target: a 20,000-word article chunks into ~target-si[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\FeedbackTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-10 dedupe: one score per visitor per article, latest wins (ro[39m[90m…[39m [90m1.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: the stats header reconciles against the Doc 15 input fixt[39m[90m…[39m [90m1.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\GenerationSwapTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the swap is ONE statement: generation 2 lands non-retrievable be[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit STOP-A condition 5: only the PLATFORM-role prune removes a super[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\IndexRebuildTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit kb:index-rebuild reindexes both partitions' hnsw + gin indexes c[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\KbBellDeliveryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit kb.variant.submitted → every kb.articles.publish holder EXCEPT t[39m[90m…[39m [90m0.67s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit kb.variant.changes_requested → the SUBMITTER only (resolved from[39m[90m…[39m [90m0.70s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\KbCitationRenderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH it[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-02/BR-02 (sabotage #8 target): a money question with NO retri[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: an out-of-enum action → ONE repair retry → still invented[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: customer requests a human → the FR-11 packet via Doc 06's[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/EC-08: resolve sends the closing text + ai.resolved; a rep[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: betting advice → the deflection TEMPLATE (never generated[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/EC-02/EC-11/EC-12/FS-01 (AC-09 customer side): message_lim[39m[90m…[39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 handoff_path: with the chatbot DISABLED (default OFF) an i[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04 MID-FORM PREEMPTION (the step-9 re-proof): an active form[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-01 (AC-01's pipeline clause): a six-message burst yields ONE[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P2: a real article cites as 📄 /kb/cite/{article}/{version} + kb[39m[90m…[39m [90m0.96s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P6: the Copilot kb card fills to three — retrieval first, keywor[39m[90m…[39m [90m2.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\KbI18nParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit C-08: every kb.* key exists in BOTH en and am, no empty values,[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\KbInsertLinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P3: the door emits the event with the version pin and returns th[39m[90m…[39m [90m0.65s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\LocksTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit locks: first acquire wins, the second editor is refused naming t[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-05: with the lock service down every lock door answers mode=o[39m[90m…[39m [90m0.57s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\PublishPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: the consumer is REGISTERED for kb.article.published on[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13/T-05: publish → consumer → chunks (summary = chunk 0, head[39m[90m…[39m [90m0.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12 cost: a re-publish with one changed section re-embeds ONLY t[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: embeddings DOWN → generation N+1 lands but is NOT swapped[39m[90m…[39m [90m0.66s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-03 stage-kill chaos + idempotency: a kill after embed leaves[39m[90m… [39m [90m0.77s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: two variants (en + am) publish independently — one provid[39m[90m…[39m [90m1.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\PublishRetireRoundTripTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the resolver contract behind ONE interface (step 1 bound t[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit round trip: index → served + Current → retire → not served, row[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\SanitizerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the shared package (step 5) — never the unbound placeholde[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-05 shared fixture suite: every poisoned fixture flags the off[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06 at the door: flags → 409 with the sentences; an override r[39m[90m…[39m [90m0.95s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\StaffSearchTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: publish → indexer → hits on title/body/tags; internal abs[39m[90m…[39m [90m2.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true (no 500, no em[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Copilot blend: retrieval chunks first (deduped by article), keyw[39m[90m…[39m [90m2.91s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\StarterSeedingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: the consumer seeds five DRAFTS in the tenant default lang[39m[90m…[39m [90m2.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\TelegramFlowContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-19/BR-04: a category renders numbered public-published option[39m[90m…[39m [90m1.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P7 (countersigned): the widened CHECK accepts kb targets bound t[39m[90m…[39m [90m0.48s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\TombstoneTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit binds the truth-fed resolver at step 7 and legacy chunk refs sti[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06/SS-04: supersede → the old citation is Retired WITH a link[39m[90m…[39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-06/EC-06: a slug change keeps the OLD URL working (redirect vi[39m[90m…[39m [90m1.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: an internal article's citation and slug are ABSENT (unknow[39m[90m…[39m [90m0.61s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\TranslateAllTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14: one click → an am DRAFT born translation_source=ai + one qu[39m[90m…[39m [90m1.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 guard: altered digits → refused, working copy stays EMPTY (a[39m[90m…[39m [90m1.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\TranslationStateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-02: the matrix — source publish → published siblings outdated[39m[90m…[39m [90m1.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05: the OUTDATED exact-language variant serves (stale-but-pub[39m[90m…[39m [90m0.99s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VersionImmutabilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 runtime: a published version cannot be rewritten in place[39m[90m  [39m [90m0.60s[39m  
+
+NFR-04 history page (1k versions, limit 100): 15.2 ms dev-indicative
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VersioningTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit publish mints versions 1..n with author/note/hash; the diff pair[39m[90m…[39m [90m0.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 determinism + the diff fixture set: identical content → ide[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: 1,000 versions on one variant list by cursor (limit ≤ 10[39m[90m…[39m [90m0.77s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\VisibilityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: internal → public through the door = high-visibility audi[39m[90m…[39m [90m0.70s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FLAG A sole-writer sweep: Visibility.php is the ONLY file under[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feedb[39m[90m…[39m [90m2.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m1.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WorkflowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-01: the matrix — submit → request changes (comment, back to d[39m[90m…[39m [90m1.00s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-07 self-publish collapse: edit+publish on one person publishe[39m[90m…[39m [90m0.73s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-10: with kb.require_alt on, a PUBLIC publish with an image la[39m[90m…[39m [90m1.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit sole-writer sweep (the Doc 06 status-writer class): Transitions.[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WorkingCopyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit autosave: working copy + DB stamp, no version minted; recover re[39m[90m…[39m [90m0.66s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\KbAiNeverPublishesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit STATIC: no AI authoring path writes status, names a publish tran[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RUNTIME: every AI-accented variant on record is a draft — no pub[39m[90m…[39m [90m0.60s[39m  
+
+  [90mTests:[39m    [32;1m81 passed[39;22m[90m (2776 assertions)[39m
+  [90mDuration:[39m [39m76.42s[39m
+
+EXIT=0

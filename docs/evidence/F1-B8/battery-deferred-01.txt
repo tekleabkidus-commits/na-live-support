@@ -1,0 +1,4 @@
+# RULE 13 — battery gate (SESSION-F1 [B8])
+# checked: 2026-09-03T09:39:11Z
+# powershell.exe (Get-CimInstance Win32_Battery).BatteryStatus = 1 (DISCHARGING) — earlier today it read 2 (AC, 45%).
+# The full `make test` battery is DEFERRED until the machine is on wall power; the per-bucket Pest record (b8-pest-record-02: 157 passed) and the CI look stand as the bucket's test evidence meanwhile.
