@@ -12,6 +12,7 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 | `make gates` (capture-first) | `docs/evidence/F1-B8/b8-gates-03.txt` | 14 passed, 0 failed · EXIT 0 |
 | Hex extraction (tokens only, 148 declarations) | `docs/evidence/F1-B8/tokens-hex-02.txt` | 148 declarations · RESULT: PASS |
 | Full battery `make test` (wall power, rule 13) | `docs/evidence/F1-B8/battery-01.txt` | see file |
+| Packets landed (advisor countersign, owner-relayed at 5e8a953): `ai-honesty` + `ai-backoffice` + `ai-copilot` + `inbox-thread` (byte-untouched) + `f1-b8` with the three packet proofs | `docs/evidence/F1-B8/packets-specs-01.txt` | 44 passed · EXIT 0 |
 | CI look (one per bucket) | `docs/evidence/F1-B8/ci-look-01.txt` | see file |
 
 ## X. The five hard absences (re-audited on every delivered screen — L07)
@@ -63,7 +64,7 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 | Row | Status | Proof / note |
 |---|---|---|
 | C01 | DONE (template level) | `lang/{en,am}/ai.php` `greeting.first` carries the persona name + disclosure; Pest "AC-05 … a persona publishes ONLY if every declared greeting carries its language's disclosure" |
-| C02 | NOT-DONE | Doc 07's `MessageBubble.vue` — packet **P-F1-BUBBLE** clause 1 (PROPOSED, stop #1) |
+| C02 | DONE | packet **P-F1-BUBBLE** clause 1 LANDED under the advisor's countersign (owner-relayed at 5e8a953): ai-bg · 1 px ai-border · 3 px ai-edge · body text-primary · ✦ in ai-fg — f1-b8 packets proof (edge 3 px, border 1 px) |
 | C03 | DONE (template level) | claim-framing is the grounding contract: Pest "BR-02/AC-02 … an answer WITHOUT a citation is refused by the schema itself"; "sabotage #8 … no_grounding" |
 | C04 | DONE | Pest "FR-08/FR-10/AC-02 (positive): a grounded answer goes out WITH its citation rendered per channel capability" |
 | C05 | DONE (absence) | no edit affordance exists on an AI message (`ai-honesty.spec` AC-05 DOM: marker + accent only) |
@@ -117,7 +118,7 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 | G02 | DONE | `switch-*` role=switch cells, 64×44 targets (B8-D20) |
 | G03 | DONE | red OFF with `since-<surface>` "OFF since {time} by {actor}" (live flip, restored) |
 | G04 | DONE | `killswitch-confirm` with `ks-blast` (B8-D22) |
-| G05 | PARTIAL — packet **P-F1-BANNER** | the inbox mirror exists (S09) and counts; the LINK to the grid waits on the countersign (B8-D24) |
+| G05 | DONE | packet **P-F1-BANNER** LANDED (countersigned): the inbox mirror counts AND links to the grid (`ai-banner-details`, `ai.ui.banner_details` en + am) — f1-b8 packets proof; B8-D24 closed |
 | G06 | DONE | `ks-audit` strip (B8-D23) |
 
 ## H. B8-S08 providers & status — `Pages/Admin/Ai/Providers.vue` (new page on the existing route, B8-D29)
@@ -165,7 +166,7 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 | K05 | NOT-DONE | FS-02 retrieval-corruption banner — no retrieval-health read exists (plan §4; follow-on: retrieval health read, Doc 09/10) |
 | K06 | DONE | see I. (Decisions note) |
 | K07 | DONE | S07 off banner + "what customers get meanwhile" line; the inbox mirror (G05) |
-| K08 | NOT-DONE | FS-03 transcript-unavailable label — Doc 07 file, packet **P-F1-BUBBLE** clause 2 (plan §4) |
+| K08 | DONE | packet **P-F1-BUBBLE** clause 2 LANDED (countersigned): the transcript-unavailable line on a transcript-less voice message; the seeder carries a dedicated fixed-id voice fixture under the 0l law (`00000000-0000-7000-8000-0000000a0f03`) — proven visible in f1-b8 packets proof |
 
 ## L. B8-S12 cross-cutting
 
@@ -174,7 +175,7 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 | L01 | DONE | hex extraction PASS (`tokens-hex-02.txt`); dark shots for every screen |
 | L02 | DONE | every screen block has a 375 test asserting ≥ 44 px on its controls |
 | L03 | DONE | axe (wcag2a + wcag2aa) light + dark per screen, both viewports; every chip/meter/switch carries its word |
-| L04 | DONE (one finding outside the bucket) | f1-b8 S12 L04: real Amharic in the am locale on every AI page, 1440 + 375, both themes, zero overflow on the AI surfaces; the Copilot sheet measured on its own box. Finding B8-D37: Doc 07's inbox top bar overflows 48 px at 375 in am (packet **P-F1-TOPBAR**, stop #1). Machine am → R-14 queue (`fixtures/i18n/r14-queue-doc09.json`, +450 keys; `docs/evidence/F1-B8/r14-am-keys.txt`) |
+| L04 | DONE (the finding closed by P-F1-TOPBAR, countersigned) | f1-b8 S12 L04: real Amharic in the am locale on every AI page, 1440 + 375, both themes, zero overflow on the AI surfaces; the Copilot sheet measured on its own box. Finding B8-D37: Doc 07's inbox top bar overflows 48 px at 375 in am (packet **P-F1-TOPBAR**, stop #1). Machine am → R-14 queue (`fixtures/i18n/r14-queue-doc09.json`, +450 keys; `docs/evidence/F1-B8/r14-am-keys.txt`) |
 | L05 | DONE | f1-b8 S12 L05: zero animated/transitioning elements under `prefers-reduced-motion` on the card, thresholds and the grid |
 | L06 | DONE | fixture names only (`[FIXTURE]`, `@fixture_*`, "Fixture Agent") — no operator brand in any lang key or shot |
 | L07 | DONE | f1-b8 S12 L07 |
@@ -182,6 +183,6 @@ Legend: **DONE** = built and proven (the proof named in the row) · **PARTIAL** 
 ## Totals
 
 Rows: 100 (X 5 + A 16 + B 8 + C 13 + D 5 + E 7 + F 6 + G 6 + H 6 + I 6 + J 6 + K 8 + L 7 + K06 counted once).
-DONE 92 · PARTIAL 4 (E06, F01, G05, J05 — each with a named follow-on or packet) · NOT-DONE 4 (C02, K05, K08 + F01's wording half counted in F01).
+DONE 95 · PARTIAL 3 (E06, F01, J05 — each with a named follow-on) · NOT-DONE 2 (K05 + F01's wording half counted in F01). Was at 0dfda21: 92 / 4 / 4 — C02, K08 (P-F1-BUBBLE) and G05 (P-F1-BANNER) flipped when the packets landed under the countersign; B8-D37 (P-F1-TOPBAR) closed at the same landing.
 
 Follow-ons named here: **F1-FO-1** live RG precision surfacing (harness result store) · **F1-FO-2** per-topic deflection wording field · **F1-FO-3** RG-queue clear door · packets **P-F1-BUBBLE** (C02, K08), **P-F1-BANNER** (G05) and **P-F1-TOPBAR** (B8-D37) awaiting the advisor's countersign (stop #1).

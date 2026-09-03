@@ -249,6 +249,8 @@ return [
         'media_infected' => 'Attachment blocked — failed the malware scan.',
         'media_failed' => 'Attachment could not be loaded.',
         'media_pending' => 'Attachment is being processed…',
+        // P-F1-BUBBLE clause 2 (SESSION-F1, countersigned): FS-03 transcription down — Doc 04 EC-07 semantics.
+        'transcript_unavailable' => 'Transcript unavailable — transcription is down; retrying automatically. The audio plays as normal.',
     ],
     'composer' => [
         'mode_reply' => 'Reply',

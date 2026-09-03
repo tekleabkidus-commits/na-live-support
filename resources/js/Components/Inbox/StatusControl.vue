@@ -164,7 +164,7 @@ const label = computed(() => props.t['status_' + status.value] ?? status.value);
                               : 'var(--ds-text-muted)',
                 }"
             ></span>
-            {{ label }}
+            <span class="status-word">{{ label }}</span>
             <span
                 v-if="setByName"
                 data-testid="status-forced-attribution"
@@ -221,3 +221,18 @@ const label = computed(() => props.t['status_' + status.value] ?? status.value);
         </div>
     </div>
 </template>
+
+<style scoped>
+/* P-F1-TOPBAR (countersigned shape): under 640 px the status WORD hides; the dot and the
+   aria-label stay, so the top bar fits 375 in both languages (B8-D37). */
+@media (max-width: 639px) {
+    .status-word {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+}
+</style>

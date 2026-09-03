@@ -10,7 +10,13 @@
 // US-03 (Doc 05 closing row): owner-phone attribution renders MARKED.
 import { computed, ref } from 'vue';
 
-type Media = { url?: string; kind?: string; alt_text?: string | null; scan_status?: string };
+type Media = {
+    url?: string;
+    kind?: string;
+    alt_text?: string | null;
+    scan_status?: string;
+    transcript_ref?: string | null;
+};
 
 const props = defineProps<{
     message: Record<string, unknown>;
@@ -88,6 +94,14 @@ const visibleBody = computed(() =>
 const mediaItems = computed(() =>
     Array.isArray(props.message.media) ? (props.message.media as Media[]) : [],
 );
+// P-F1-BUBBLE clause 2 (countersigned) — Doc 04 EC-07 / Doc 09 FS-03: a voice message whose
+// transcript is absent (no transcript text, no transcript_ref on the voice media) carries a
+// labelled degrade line; the audio itself is Doc 04's media and plays as normal.
+const transcriptUnavailable = computed(() => {
+    const voice = str('kind') === 'voice' || mediaItems.value.some((m) => m.kind === 'voice');
+    if (!voice || str('transcript') !== '') return false;
+    return !mediaItems.value.some((m) => m.kind === 'voice' && !!m.transcript_ref);
+});
 
 const time = computed(() => {
     const stamp = str('created_at');
@@ -115,9 +129,13 @@ const time = computed(() => {
                       }
                     : isAi
                       ? {
+                            // P-F1-BUBBLE clause 1 (countersigned): the B1-DS AI anatomy —
+                            // ai-bg, a 1 px ai-border, a 3 px ai-edge inline-start edge, body in
+                            // text-primary; the ✦ marker keeps ai-fg on its own style.
                             background: 'var(--ds-ai-bg)',
-                            color: 'var(--ds-ai-fg)',
-                            border: '1px solid var(--ds-ai-fg)',
+                            color: 'var(--ds-text-primary)',
+                            border: '1px solid var(--ds-ai-border)',
+                            borderInlineStart: '3px solid var(--ds-ai-edge)',
                         }
                       : isOut
                         ? { background: 'var(--ds-accent)', color: 'var(--ds-accent-contrast)' }
@@ -137,6 +155,7 @@ const time = computed(() => {
                 v-if="isAi"
                 class="mb-1 text-[10px] font-bold uppercase tracking-wide"
                 data-role="ai-marker"
+                :style="{ color: 'var(--ds-ai-fg)' }"
             >
                 ✦ {{ t.ai_author }}
             </p>
@@ -222,6 +241,15 @@ const time = computed(() => {
                         {{ t.media_pending }}
                     </span>
                 </div>
+
+                <p
+                    v-if="transcriptUnavailable"
+                    data-role="transcript-unavailable"
+                    class="mb-1 text-xs"
+                    :style="{ color: 'var(--ds-text-muted)' }"
+                >
+                    {{ t.transcript_unavailable }}
+                </p>
 
                 <!-- Body with EC-10's clamp. -->
                 <p

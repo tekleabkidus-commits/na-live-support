@@ -1,4 +1,4 @@
-# PACKET P-F1-TOPBAR (SESSION-F1 [B8]; escalate-first — PROPOSED, countersign before landing)
+# PACKET P-F1-TOPBAR (SESSION-F1 [B8]; escalate-first — COUNTERSIGNED by the advisor, owner-relayed at 5e8a953 — LANDED)
 
 THE FILE: Doc 07's inbox shell top bar (the component carrying `data-testid="agent-status"` and `data-testid="profile-menu"`).
 
@@ -9,3 +9,5 @@ THE EDIT (one file, presentation only): let the top-bar's right cluster shrink �
 CONTROLS: `inbox-*.spec.ts` byte-untouched; the F1 sweep re-measures the document overflow on `/inbox` at 375 in am after landing.
 
 UNTIL COUNTERSIGNED: the shell stays as built; the fidelity register carries L04 as DONE for the AI surfaces with this finding named (B8-D37).
+
+**LANDED with the countersigned shape: the status WORD hides under 640 px (`.status-word`, scoped style on StatusControl.vue); the dot and the aria-label stay — NOT ellipsis. The F1 sweep re-measures `/inbox` at 375 in am (f1-b8 packets proof).**

@@ -1220,3 +1220,99 @@ test.describe('B8-S12 — the cross-cutting proof sheet', () => {
         await expect(page.locator('.ai-shell')).not.toContainText(/rg_risk|RG review/i);
     });
 });
+
+// ── SESSION-F1 packets LANDED under the advisor's countersign (owner-relayed at 5e8a953) ──
+test.describe('P-F1 packets — BUBBLE · BANNER · TOPBAR (countersigned, landed)', () => {
+    test('P-F1-BUBBLE: the AI bubble wears the B1-DS anatomy (ai-bg · 1 px ai-border · 3 px ai-edge inline-start · body in text-primary · the ✦ marker in ai-fg); the transcript-less voice fixture shows the FS-03 degrade line', async ({
+        page,
+    }) => {
+        await login(page);
+        await page.setViewportSize(V1440);
+        await openCopilotThread(page);
+        const ai = page.locator('[data-role="ai-marker"]').first().locator('xpath=..');
+        await expect(ai).toBeVisible();
+        const edge = await ai.evaluate((el) => {
+            const s = getComputedStyle(el);
+            return { w: s.borderInlineStartWidth, bw: s.borderTopWidth };
+        });
+        expect(edge.w).toBe('3px');
+        expect(edge.bw).toBe('1px');
+        const line = page.locator('[data-role="transcript-unavailable"]').first();
+        await expect(line).toBeVisible();
+        await expect(line).toContainText('Transcript unavailable');
+        await expect(line).toContainText('The audio plays as normal');
+        await page.locator('[data-testid="thread-pane"]').screenshot({
+            path: `${SHOTS}/B8-S03-bubble-anatomy-build-1440-light.jpg`,
+            type: 'jpeg',
+            quality: 70,
+        });
+    });
+
+    test('P-F1-BANNER: the inbox kill-switch mirror carries the link to the grid ("Details in Settings → AI → Kill switches") while a switch is off; gone with the flip back', async ({
+        page,
+    }) => {
+        await login(page);
+        await page.setViewportSize(V1440);
+        await page.goto('/admin/ai/kill-switches');
+        const toggle = page.getByTestId('switch-chatbot-telegram-all');
+        await expect(toggle).toHaveAttribute('aria-checked', 'true');
+        await toggle.click();
+        await page.getByTestId('killswitch-reason').fill('f1 packet drill');
+        await page.getByTestId('killswitch-confirm-yes').click();
+        await expect(toggle).toHaveAttribute('aria-checked', 'false');
+        try {
+            await page.goto('/inbox');
+            await dismissCoachMarks(page);
+            const banner = page.getByTestId('ai-killswitch-banner');
+            await expect(banner).toBeVisible();
+            const link = banner.locator('[data-role="ai-banner-details"]');
+            await expect(link).toContainText('Details in Settings');
+            await expect(link).toHaveAttribute('href', '/admin/ai/kill-switches');
+            await page.locator('[data-testid="ai-killswitch-banner"]').screenshot({
+                path: `${SHOTS}/B8-S07-banner-link-build-1440-light.jpg`,
+                type: 'jpeg',
+                quality: 70,
+            });
+        } finally {
+            await page.goto('/admin/ai/kill-switches');
+            await page.getByTestId('switch-chatbot-telegram-all').click();
+            await page.getByTestId('killswitch-confirm-yes').click();
+            await expect(page.getByTestId('switch-chatbot-telegram-all')).toHaveAttribute(
+                'aria-checked',
+                'true',
+            );
+        }
+        await page.goto('/inbox');
+        await dismissCoachMarks(page);
+        await expect(page.getByTestId('ai-killswitch-banner')).toHaveCount(0);
+    });
+
+    test('P-F1-TOPBAR: at 375 in the am locale the inbox list no longer overflows; the status WORD hides under 640 px while the dot and the aria-label keep it (B8-D37 closed)', async ({
+        page,
+    }) => {
+        await login(page);
+        setAgentLocale('am');
+        try {
+            await page.setViewportSize(V375);
+            await page.goto('/inbox');
+            await dismissCoachMarks(page);
+            const overflow = await page.evaluate(
+                () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            );
+            expect(overflow, 'document overflow at 375 (am)').toBeLessThanOrEqual(0);
+            const status = page.getByTestId('agent-status');
+            await expect(status).toBeVisible();
+            await expect(status.locator('.status-word')).not.toBeInViewport();
+            const aria = (await status.getAttribute('aria-label')) ?? '';
+            expect(aria.length).toBeGreaterThan(3);
+            await expect(status.locator('span').first()).toBeVisible(); // the dot
+            await page.locator('body').screenshot({
+                path: `${SHOTS}/B8-S12-topbar-375-am-build-light.jpg`,
+                type: 'jpeg',
+                quality: 70,
+            });
+        } finally {
+            setAgentLocale('en');
+        }
+    });
+});

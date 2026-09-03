@@ -1,4 +1,4 @@
-# PACKET P-F1-BUBBLE (SESSION-F1 [B8]; escalate-first — PROPOSED, countersign before landing)
+# PACKET P-F1-BUBBLE (SESSION-F1 [B8]; escalate-first — COUNTERSIGNED by the advisor, owner-relayed at 5e8a953 — LANDED)
 
 THE FILE: Doc 07's `resources/js/Components/Inbox/Thread/MessageBubble.vue` (a CORE document's file for this session).
 
@@ -15,3 +15,5 @@ THE EDIT (one file):
 CONTROLS: `ai-honesty.spec.ts` byte-untouched (the marker text and the ai-bg ≠ customer-bg assertions still hold — the background is unchanged); `inbox-thread.spec.ts` untouched; the F1 proof adds one visibility assertion for the edge on an AI bubble and one for the transcript line on a transcript-less voice fixture if the InboxBrowserSeeder carries one (else recorded as unproven-live).
 
 UNTIL COUNTERSIGNED: the thread bubble stays as built; the fidelity register carries B8-S03 C02 and B8-S11 K08 as NOT-DONE (packet pending), not as ✅.
+
+**LANDED: both clauses as filed; the seeder gained a dedicated fixed-id transcript-less voice row under the 0l law (AiBrowserSeeder, `00000000-0000-7000-8000-0000000a0f03`) so the degrade line is proven visible (f1-b8 packets proof), never recorded unproven-live.**

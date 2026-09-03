@@ -121,6 +121,20 @@ final class AiBrowserSeeder extends Seeder
             'channel_meta' => json_encode(['ai_translation' => ['artifact_id' => (string) Str::uuid7(), 'original_text' => 'We are checking your 2,500 ETB withdrawal now.', 'source_language' => 'en', 'target_language' => 'am', 'edited' => false]])]);
         DB::table('messages')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'conversation_id' => $aiTicket->conversation_id, 'direction' => 'in', 'author_type' => 'customer', 'kind' => 'text',
             'body' => 'S09-BROWSER-COPILOT where is my 2,500 ETB withdrawal? [FIXTURE]', 'language' => 'en']);
+        // P-F1-BUBBLE clause 2 (SESSION-F1, countersigned; the 0l law — a dedicated fixed-id row that
+        // heals per seed): a customer VOICE message whose transcript is absent, so the FS-03 /
+        // Doc 04 EC-07 degrade line is proven visible in the browser, never recorded unproven.
+        $voiceId = '00000000-0000-7000-8000-0000000a0f03';
+        if (! DB::table('messages')->where('id', $voiceId)->exists()) {
+            DB::table('messages')->insert(['id' => $voiceId, 'tenant_id' => $tenantId, 'conversation_id' => $aiTicket->conversation_id, 'direction' => 'in', 'author_type' => 'customer', 'kind' => 'voice',
+                'body' => null, 'language' => 'am', 'media' => json_encode([
+                    ['kind' => 'voice', 'storage_key' => 't/'.$tenantId.'/voice/f1-fixture-no-transcript.ogg', 'scan_status' => 'clean',
+                        'source_url' => null, 'mime' => 'audio/ogg', 'bytes' => 8192, 'width' => null, 'height' => null,
+                        'duration_seconds' => 4, 'thumb_key' => null, 'transcript_ref' => null, 'ocr_ref' => null, 'alt_text' => null],
+                ], JSON_THROW_ON_ERROR)]);
+        } else {
+            DB::table('messages')->where('id', $voiceId)->update(['deleted_at' => null]);
+        }
         $projector->recomputeTicket($aiTicket->id);
         if (! DB::table('ai_decisions')->where('conversation_id', $aiTicket->conversation_id)->where('task', 'classify_message')->exists()) {
             $writer = app(\App\Domain\Ai\DecisionLog\DecisionWriter::class);

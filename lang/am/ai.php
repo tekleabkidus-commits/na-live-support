@@ -83,6 +83,7 @@ return [
     'ui' => [
         'banner_off' => 'የረዳት :surface ለ:scope ጠፍቷል — ከ:time ጀምሮ በ:actor (:count ማብሪያ(ዎች) ጠፍተዋል)',
         'banner_all' => 'ሁሉም ቻናሎች',
+        'banner_details' => 'ዝርዝሮች በቅንብሮች → AI → ማብሪያ ማጥፊያዎች',
         'empty' => 'ረዳቱን እዚህ ለማየት ውይይት ይክፈቱ።',
         'loading' => 'ረዳት በመጫን ላይ…',
 

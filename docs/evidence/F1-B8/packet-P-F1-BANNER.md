@@ -1,4 +1,4 @@
-# PACKET P-F1-BANNER (SESSION-F1 [B8]; escalate-first — PROPOSED, countersign before landing)
+# PACKET P-F1-BANNER (SESSION-F1 [B8]; escalate-first — COUNTERSIGNED by the advisor, owner-relayed at 5e8a953 — LANDED)
 
 THE FILE: Doc 07's `resources/js/Pages/Inbox/Workspace.vue` (a CORE document's file for this session).
 
@@ -9,3 +9,5 @@ THE EDIT (one file, one line): inside the existing `data-testid="ai-killswitch-b
 CONTROLS: `ai-backoffice.spec.ts` (banner absent while on, present with "chatbot" while off, gone after the flip back) byte-untouched and green; `ai-copilot.spec.ts`'s no-banner assertion untouched.
 
 UNTIL COUNTERSIGNED: the banner stays as built; the fidelity register carries B8-S07 G05 as PARTIAL (count present, link pending the packet).
+
+**LANDED as filed: one `<a href="/admin/ai/kill-switches">` inside the banner paragraph carrying `ai.ui.banner_details` (en + am); the visibility rule untouched; `ai-backoffice.spec` byte-untouched.**

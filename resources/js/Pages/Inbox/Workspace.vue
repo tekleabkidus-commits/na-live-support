@@ -1388,6 +1388,13 @@ function dismissCoach(): void {
             }"
         >
             ✦ {{ aiBannerText() }}
+            <!-- P-F1-BANNER (countersigned): the link to the grid — no logic change. -->
+            <a
+                href="/admin/ai/kill-switches"
+                class="underline underline-offset-2"
+                data-role="ai-banner-details"
+                >{{ tAiFlat.banner_details ?? '' }}</a
+            >
         </p>
 
         <!-- ═══ FR-29/FR-30/FS-05 (step 13): the whole-workspace banner stack
@@ -1592,8 +1599,8 @@ function dismissCoach(): void {
                     </button>
                 </div>
                 <ThreadPane
-                    ref="threadPaneRef"
                     v-if="activeThread"
+                    ref="threadPaneRef"
                     :key="activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick"
                     :conversation-id="activeThread"
                     :initial-anchor="activeAnchor"
@@ -1894,8 +1901,8 @@ function dismissCoach(): void {
                     tabindex="-1"
                 >
                     <ThreadPane
-                        ref="threadPaneRef"
                         v-if="activeThread"
+                        ref="threadPaneRef"
                         :key="
                             activeThread + (activeAnchor ?? '') + '-' + connection.threadRemountTick
                         "

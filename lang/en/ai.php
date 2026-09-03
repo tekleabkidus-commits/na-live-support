@@ -94,6 +94,7 @@ return [
     'ui' => [
         'banner_off' => 'Assistant :surface is OFF for :scope — since :time by :actor (:count switch(es) off)',
         'banner_all' => 'all channels',
+        'banner_details' => 'Details in Settings → AI → Kill switches',
         'empty' => 'Open a conversation to see the assistant here.',
         'loading' => 'Loading assistant…',
 

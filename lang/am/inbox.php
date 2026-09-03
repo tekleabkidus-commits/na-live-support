@@ -244,6 +244,7 @@ return [
         'media_infected' => 'አባሪ ታግዷል — የቫይረስ ቅኝቱን አላለፈም።',
         'media_failed' => 'አባሪው መጫን አልቻለም።',
         'media_pending' => 'አባሪው በሂደት ላይ ነው…',
+        'transcript_unavailable' => 'ግልባጭ አይገኝም — ግልባጭ ማድረግ ተቋርጧል፤ በራስ-ሰር እንደገና እየሞከረ ነው። ድምጹ እንደተለመደው ይጫወታል።',
     ],
     'composer' => [
         'mode_reply' => 'መልስ',
