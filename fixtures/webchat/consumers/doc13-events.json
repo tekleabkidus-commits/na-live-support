@@ -1,7 +1,7 @@
 {
   "doc": "Doc13",
   "spec": "Doc 13 — consumer contracts for the NON-ticket events Doc 13 consumes (S13 step 5; ADR 0011 / Doc 06 NFR-06 shape). The ticket.* slices live in fixtures/tickets/consumers/doc13.json.",
-  "note": "The keys Doc 13's consumers DEPEND ON, per event. channel.health.changed → the Health tab's channel indicator (A-45: the catalog's declared Doc13/ChannelSurfaces, implemented). A producer removing or renaming any `reads` key breaks this document; a schema_version bump must be reconciled deliberately (WebchatEventConsumerContractsTest enforces both).",
+  "note": "The keys Doc 13's consumers DEPEND ON, per event. channel.health.changed → the Health tab's channel indicator (A-45: the catalog's declared Doc13/ChannelSurfaces, implemented). A producer removing or renaming any `reads` key breaks this document; a schema_version bump must be reconciled deliberately (WebchatEventConsumerContractsTest enforces both). media.stored / media.infected → Doc13/MediaStatePush (S13 step 9b): the scan verdict wakes the visitor's thread; the cursor page is the record.",
   "entries": [
     {
       "event": "channel.health.changed",
@@ -23,6 +23,28 @@
         "message_id",
         "conversation_id",
         "customer_id"
+      ]
+    },
+    {
+      "event": "media.stored",
+      "consumer": "Doc13/MediaStatePush",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "message_id",
+        "conversation_id",
+        "index"
+      ]
+    },
+    {
+      "event": "media.infected",
+      "consumer": "Doc13/MediaStatePush",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "message_id",
+        "conversation_id",
+        "index"
       ]
     }
   ]

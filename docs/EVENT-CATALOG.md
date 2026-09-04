@@ -624,7 +624,7 @@ The scan found malware: item blocked with NO download path for any role (SEC-04)
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`, `signature`
 - **Producers:** Doc04/MediaPipeline
-- **Consumers:** Doc07/Realtime, Doc18/SecurityMonitoring
+- **Consumers:** Doc07/Realtime, Doc18/SecurityMonitoring, Doc13/MediaStatePush
 
 ## `media.needs_ocr`
 
@@ -651,7 +651,7 @@ One media item passed the scan CLEAN and was stored (FR-10 step 5, T-04); only t
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `message_id`, `conversation_id`, `index`
 - **Producers:** Doc04/MediaPipeline
-- **Consumers:** Doc07/Realtime, Doc15/Reporting
+- **Consumers:** Doc07/Realtime, Doc15/Reporting, Doc13/MediaStatePush
 
 ## `message.canceled`
 

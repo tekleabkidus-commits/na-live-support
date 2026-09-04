@@ -19,11 +19,11 @@ import { lazy, Suspense } from 'preact/compat';
 import type { WidgetApi } from '../api';
 import { Composer } from './Composer';
 import { Home } from './Home';
-import { Thread } from './Thread';
+import { lightbox, Thread } from './Thread';
 
 interface Props {
     onClose: () => void;
-    onSend: (text: string) => void;
+    onSend: (text: string, media?: { reference: string; mime: string }) => void;
     onTyping: () => void;
     onStar: (token: string, score: number) => void;
     onShortcut: (s: Shortcut) => void;
@@ -86,6 +86,10 @@ export const Panel: FunctionComponent<Props> = (p) => {
         const trap = (e: KeyboardEvent): void => {
             if (e.key === 'Escape') {
                 e.preventDefault();
+                if (lightbox.value) {
+                    lightbox.value = null;
+                    return;
+                }
                 p.onClose();
                 return;
             }
@@ -320,9 +324,13 @@ export const Panel: FunctionComponent<Props> = (p) => {
             ) : null}
             {gate === 'none' && (tab.value === 'messages' || !tabs.home) ? (
                 <Composer
+                    api={p.api}
                     onSend={p.onSend}
                     onTyping={p.onTyping}
                     maxText={c?.capabilities.max_text ?? 4000}
+                    maxMb={c?.capabilities.max_mb ?? 25}
+                    voice={!!c?.capabilities.voice}
+                    fileUpload={c?.config.behavior.file_upload ?? true}
                 />
             ) : null}
             {tabsShown.value && gate === 'none' ? (
@@ -365,6 +373,26 @@ export const Panel: FunctionComponent<Props> = (p) => {
                         </button>
                     ) : null}
                 </nav>
+            ) : null}
+            {lightbox.value ? (
+                <div
+                    class="nlw-lightbox"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={lightbox.value.alt}
+                    data-role="lightbox"
+                    onClick={() => (lightbox.value = null)}
+                >
+                    <img src={lightbox.value.url} alt={lightbox.value.alt} />
+                    <button
+                        type="button"
+                        class="nlw-icon"
+                        aria-label={t('upload.lightbox_close')}
+                        onClick={() => (lightbox.value = null)}
+                    >
+                        ✕
+                    </button>
+                </div>
             ) : null}
             <div
                 class="nlw-sr"

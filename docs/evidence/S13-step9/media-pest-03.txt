@@ -1,0 +1,19 @@
+### 9b media — Pest (refusal mapped) — 2026-09-04T20:24:59Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Widget\WidgetMediaTest
+  ✓ it POST media: a photo lands in the intake (kind from the mime); o… 10.15s  
+  ✓ it the pipeline fetches the intake through the egress proxy, scans…  0.51s  
+
+   PASS  Tests\Feature\Widget\WidgetMessagesTest
+  ✓ it POST messages ACKs 202 and enqueues NormalizeInbound on webchat-… 0.13s  
+  ✓ it idempotency: the same client_message_id POSTed twice lands ONE r… 0.15s  
+  ✓ it GET messages is the visitor-curated cursor page: notes and quara… 0.22s  
+  ✓ it POST receipts: the FIRST delivered producer — an outbound row mo… 0.24s  
+  ✓ it POST typing records the customer signal with its TTL (EC-12) and… 0.27s  
+  ✓ it GET config: the live config over the neutral defaults, the adapt… 0.20s  
+
+  Tests:    8 passed (79 assertions)
+  Duration: 11.97s
+
+exit=0

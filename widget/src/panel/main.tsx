@@ -186,7 +186,9 @@ async function bootSequence(): Promise<void> {
 
 /** T-04: the leader tab owns the socket; the socket is the wake-up, the cursor page the record; polling only while the socket is down. */
 function startTransport(cfg: ConfigEnvelope): void {
-    leader = new TabLeader('nlw.' + widgetKey);
+    // I05: the lock and the mirror are per VISITOR (the thread channel is the visitor's stable name), so two tabs
+    // of one visitor share one socket even when the install key differs between them (a rotated key, the harness).
+    leader = new TabLeader('nlw.' + (cfg.transport.channels.thread || widgetKey));
     leader.onMessage((msg) => {
         if ((msg as { type?: string }).type === 'sync') void sync(api);
     });
@@ -312,7 +314,7 @@ function ready(): Promise<void> {
 
 let pendingPreChat: Record<string, unknown> | null = null;
 let seq = 0;
-async function send(text: string): Promise<void> {
+async function send(text: string, media?: { reference: string; mime: string }): Promise<void> {
     const clientId = `wc_${Date.now().toString(36)}_${(seq++).toString(36)}`;
     const now = new Date().toISOString();
     messages.value = [
@@ -323,9 +325,27 @@ async function send(text: string): Promise<void> {
             created_at: now,
             direction: 'in',
             author: 'customer',
-            kind: 'text',
-            body: text,
-            media: [],
+            kind: media
+                ? media.mime.startsWith('image/')
+                    ? 'photo'
+                    : media.mime.startsWith('video/')
+                      ? 'video'
+                      : media.mime.startsWith('audio/')
+                        ? 'voice'
+                        : 'document'
+                : 'text',
+            body: text || null,
+            media: media
+                ? [
+                      {
+                          kind: media.mime.startsWith('image/') ? 'photo' : 'document',
+                          mime: media.mime,
+                          bytes: null,
+                          scan: 'pending',
+                          url: null,
+                      },
+                  ]
+                : [],
             delivery_state: null,
             external_message_id: clientId,
             occurred_at: now,
@@ -340,12 +360,22 @@ async function send(text: string): Promise<void> {
             ? { version_id: config.value.forms.pre_chat.version_id, answers: pendingPreChat }
             : undefined;
     pendingPreChat = null;
+    const kind = media
+        ? media.mime.startsWith('image/')
+            ? 'photo'
+            : media.mime.startsWith('video/')
+              ? 'video'
+              : media.mime.startsWith('audio/')
+                ? 'voice'
+                : 'document'
+        : 'text';
     const ok = await api.send({
         client_message_id: clientId,
-        kind: 'text',
-        body: text,
+        kind,
+        body: text || null,
         page_url: host.value?.url,
         form,
+        media: media ? [{ reference: media.reference, mime: media.mime }] : undefined,
     });
     messages.value = messages.value.map((m) =>
         m.client_id === clientId ? { ...m, local: ok ? 'sent' : 'sending' } : m,
@@ -634,7 +664,7 @@ function PanelFrame(): preact.JSX.Element {
                 closePanel();
                 post('api', { method: 'close', args: [] });
             }}
-            onSend={(text) => void send(text)}
+            onSend={(text, media) => void send(text, media)}
             onTyping={() => void api.typing()}
             onStar={(token, score) => {
                 void api.csat(token, score).then(() => sync(api));

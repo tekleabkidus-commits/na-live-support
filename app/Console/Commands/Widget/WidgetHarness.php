@@ -112,11 +112,12 @@ final class WidgetHarness extends Command
             $preChat = DB::table('forms')->where('name', \App\Domain\Webchat\Seeding\WidgetFormSeeder::PRE_CHAT)->value('id');
             $offline = DB::table('forms')->where('name', \App\Domain\Webchat\Seeding\WidgetFormSeeder::OFFLINE)->value('id');
             $mode = (string) ($this->option('value') ?: 'off');
+            $messagesOnly = $mode === 'messages-only'; // B3-A01's matrix: Messages-only mode (no Home, no Help)
             $config = [
-                'content' => ['pre_chat_form_id' => $preChat, 'pre_chat_mode' => in_array($mode, ['off', 'optional', 'required'], true) ? $mode : 'off', 'offline_form_id' => $offline,
+                'content' => ['tabs' => ['home' => ! $messagesOnly, 'help' => ! $messagesOnly], 'pre_chat_form_id' => $preChat, 'pre_chat_mode' => in_array($mode, ['off', 'optional', 'required'], true) ? $mode : 'off', 'offline_form_id' => $offline,
                     'shortcuts' => [['kind' => 'chat', 'label' => ['en' => 'Where is my withdrawal?', 'am' => 'ገንዘቤ የት ደረሰ?'], 'target' => 'withdrawal'], ['kind' => 'url', 'label' => ['en' => 'Payment methods', 'am' => 'የክፍያ ዘዴዎች'], 'target' => 'https://customer.harness.localhost:8443/payments.html']]],
                 'behavior' => [
-                    'proactive' => [['id' => 'deposit-help', 'condition' => ['kind' => 'url', 'match' => '/deposit'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Stuck? I can check how long your deposit should take.', 'am' => '[FIXTURE] ተጣብቀዋል? ተቀማጭዎ ምን ያህል ጊዜ እንደሚወስድ ማረጋገጥ እችላለሁ።']]]],
+                    'proactive' => [['id' => 'deposit-help', 'condition' => ['kind' => 'url', 'match' => '/deposit'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Stuck? I can check how long your deposit should take.', 'am' => '[FIXTURE] ተጣብቀዋል? ተቀማጭዎ ምን ያህል ጊዜ እንደሚወስድ ማረጋገጥ እችላለሁ።']]], ['id' => 'payments-help', 'condition' => ['kind' => 'url', 'match' => '/payments'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Questions about a payment method? Ask here.', 'am' => '[FIXTURE] ስለ ክፍያ ዘዴ ጥያቄ አለዎት? እዚህ ይጠይቁ።']]]],
                     'context_allowlist' => ['page', 'plan'],
                 ],
             ];
@@ -243,6 +244,14 @@ final class WidgetHarness extends Command
                 $this->line('MESSAGE='.$message->identifier());
 
                 return self::SUCCESS;
+            case 'block':
+            case 'unblock':
+                // G02: a blocked visitor sees the paused copy (vocabulary-gated), never a failure word; through Doc 04's own door.
+                $blocking = app(\App\Domain\Conversations\Actions\ConversationBlocking::class);
+                $conversation = $action === 'block' ? $blocking->block($conversation, null, 'harness fixture') : $blocking->unblock($conversation, null, 'harness fixture');
+                $this->line('STATE='.$conversation->state);
+
+                return self::SUCCESS;
             case 'resolve':
                 $ticket = $this->openTicket($conversation);
                 app(ResolveTicket::class)->resolve($ticket, $agent, 'Resolved from the harness (fixture).');
@@ -250,7 +259,7 @@ final class WidgetHarness extends Command
 
                 return self::SUCCESS;
             default:
-                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve');
+                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|block|unblock');
 
                 return self::FAILURE;
         }

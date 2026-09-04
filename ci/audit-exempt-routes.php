@@ -154,4 +154,5 @@ return [
     'widget.beacon' => 'Doc 13 T-08: health COUNTERS (monotone increments) and sampled scrubbed stacks are the record; anonymous, high-volume, no actor.',
     'widget.identify' => 'Doc 13 FR-07 / A-61: the customer.created / customer.identity.linked EVENTS and, on a switch, the widget.identity.switched AUDIT row (recorded by the linker with the system actor) are the record; a refused assertion mutates only a health counter.',
     'widget.forms.steps' => 'Doc 13 FR-06/FR-15: a step validation mutates nothing; the offline completion\'s ticket.created + form.submitted EVENTS (Doc 06/12\'s own doors) are the record.',
+    'widget.media.store' => 'Doc 13 FR-16 / Doc 04 FR-10 step 5: the intake stores an OPAQUE, unscanned object under a visitor-scoped key that nothing can read back except the message door; the message row that references it + Doc 04\'s media.stored / media.infected EVENTS are the record (SEC-04). No staff actor; an audit row per upload attempt would be a second, unreconciled record.',
 ];

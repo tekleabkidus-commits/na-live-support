@@ -99,6 +99,9 @@ final class ConsumerRegistry
         // the waiting set's order moves on placement, assignment and the age-cap boost (bounded fan-out).
         'ticket.waiting' => [\App\Jobs\Webchat\QueuePositionPush::class],
         'routing.starvation_boosted' => [\App\Jobs\Webchat\QueuePositionPush::class],
+        // Doc 13 (S13 step 9b): a scan verdict wakes the visitor's thread — the cursor page is the record.
+        'media.stored' => [\App\Jobs\Webchat\MediaStatePush::class],
+        'media.infected' => [\App\Jobs\Webchat\MediaStatePush::class],
         'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of

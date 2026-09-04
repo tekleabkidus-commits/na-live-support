@@ -444,7 +444,7 @@ final class EventCatalog
             'schema_version' => 1,
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index'],
             'producers' => ['Doc04/MediaPipeline'],
-            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting'],
+            'consumers' => ['Doc07/Realtime', 'Doc15/Reporting', 'Doc13/MediaStatePush'],
             'description' => 'One media item passed the scan CLEAN and was stored (FR-10 step 5, T-04); only this branch ever writes a storage_key.',
         ],
         'media.infected' => [
@@ -453,7 +453,7 @@ final class EventCatalog
             // and the thing Doc 18's threshold alerting groups by (SEC-04).
             'payload' => ['tenant_id', 'message_id', 'conversation_id', 'index', 'signature'],
             'producers' => ['Doc04/MediaPipeline'],
-            'consumers' => ['Doc07/Realtime', 'Doc18/SecurityMonitoring'],
+            'consumers' => ['Doc07/Realtime', 'Doc18/SecurityMonitoring', 'Doc13/MediaStatePush'],
             'description' => 'The scan found malware: item blocked with NO download path for any role (SEC-04); bytes never stored.',
         ],
         'media.needs_transcript' => [

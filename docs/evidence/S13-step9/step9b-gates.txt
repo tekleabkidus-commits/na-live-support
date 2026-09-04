@@ -1,0 +1,29 @@
+== make gates ==
+bash ci/run-gates.sh
+Running 16 gates (registries/gates.yaml order):
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+  widget-bundle-budget      PASS
+  widget-vocabulary         PASS
+Gate summary: 16 passed, 0 failed, 0 skipped.
+== make lint ==
+  70:5  warning  Prop "recent_events" is not in camelCase  vue/prop-name-casing
+  71:5  warning  Prop "rule_count" is not in camelCase     vue/prop-name-casing
+
+✖ 38 problems (0 errors, 38 warnings)
+  0 errors and 13 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+npx tsc --noEmit -p widget/tsconfig.json

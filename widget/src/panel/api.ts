@@ -37,10 +37,11 @@ export class WidgetApi {
 
     async send(body: {
         client_message_id: string;
-        kind: 'text';
-        body: string;
+        kind: string;
+        body: string | null;
         page_url?: string;
         form?: unknown;
+        media?: Array<{ reference: string; mime: string }>;
     }): Promise<boolean> {
         const r = await this.call('POST', '/api/widget/v1/messages', body);
         return !!r && r.status === 202;
@@ -151,6 +152,45 @@ export class WidgetApi {
     async identify(signed: { payload: Record<string, unknown>; sig: string }): Promise<boolean> {
         const r = await this.call('POST', '/api/widget/v1/identify', signed);
         return !!r && r.ok;
+    }
+
+    /** FR-16 — the INTAKE (multipart, with progress and a cancel handle); the cap is the server's too (EC-08). */
+    upload(
+        file: File,
+        onProgress: (done: number, total: number) => void,
+        signal: AbortSignal,
+    ): Promise<{ ok: boolean; status: number; body: Record<string, unknown> }> {
+        return new Promise((resolve) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', this.platform + '/api/widget/v1/media');
+            xhr.withCredentials = true;
+            xhr.setRequestHeader('X-Tenant-Key', this.widgetKey);
+            xhr.setRequestHeader('Accept', 'application/json');
+            if (this.token) xhr.setRequestHeader('X-Visitor-Token', this.token);
+            xhr.upload.onprogress = (e) =>
+                onProgress(e.loaded, e.lengthComputable ? e.total : file.size);
+            xhr.onload = () => {
+                let body: Record<string, unknown> = {};
+                try {
+                    body = JSON.parse(xhr.responseText) as Record<string, unknown>;
+                } catch {
+                    /* an empty or non-JSON body */
+                }
+                resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status, body });
+            };
+            xhr.onerror = () => resolve({ ok: false, status: 0, body: {} });
+            xhr.onabort = () => resolve({ ok: false, status: -1, body: {} });
+            signal.addEventListener('abort', () => xhr.abort());
+            const form = new FormData();
+            // a pasted screenshot has no name; PHP drops a nameless part, so it gets one from its type
+            form.append(
+                'file',
+                file,
+                file.name ||
+                    'pasted.' + (file.type.split('/')[1] || 'bin').replace(/[^a-z0-9]/gi, ''),
+            );
+            xhr.send(form);
+        });
     }
 
     /** FR-24 — page context, allowlist-filtered SERVER-side (an undeclared key never persists). */

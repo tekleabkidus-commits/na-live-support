@@ -31,6 +31,10 @@ final class WebchatServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        // FR-16: the intake's opaque source scheme — Doc 04's resolver door (N-20: keyed on the scheme, never a channel name).
+        $this->app->make(\App\Domain\Conversations\Media\SourceUrlResolvers::class)
+            ->register(\App\Domain\Webchat\Media\WidgetIntake::SCHEME, fn (string $reference): string => $this->app->make(\App\Domain\Webchat\Media\WidgetIntake::class)->resolve($reference));
+
         $pusher = fn (): WebchatPusher => $this->app->make(WebchatPusher::class);
         $cache = fn (): TenantCache => $this->app->make(TenantCache::class);
 

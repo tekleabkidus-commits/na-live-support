@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
+import { signal } from '@preact/signals';
 import { t } from '../i18n';
 import { config, envelope, language, messages } from '../state';
 import type { Message } from '../types';
@@ -39,6 +40,44 @@ function glyph(m: Message): { text: string; label: string } | null {
     return { text: '…', label: t('messages.sending') };
 }
 
+/** D15/G06: a clean image is a thumbnail that opens the themed lightbox; a document is a card; pending/blocked are labeled, never a broken icon. */
+export const lightbox = signal<{ url: string; alt: string } | null>(null);
+const MediaItem: FunctionComponent<{ item: Message['media'][number] }> = ({ item }) => {
+    if (item.scan !== 'clean' || !item.url) {
+        return (
+            <span
+                class="nlw-media-state"
+                data-role="media-state"
+                data-scan={item.scan ?? 'pending'}
+            >
+                {item.scan === 'pending' || item.scan === 'scanning'
+                    ? t('media.checking')
+                    : t('media.blocked')}
+            </span>
+        );
+    }
+    if (item.kind === 'photo') {
+        return (
+            <button
+                type="button"
+                class="nlw-media-thumb"
+                data-role="media"
+                onClick={() =>
+                    (lightbox.value = { url: item.url ?? '', alt: t('a11y.attachment') })
+                }
+            >
+                <img src={item.url} alt={t('a11y.attachment')} loading="lazy" />
+            </button>
+        );
+    }
+    return (
+        <a class="nlw-media-doc" data-role="media" href={item.url} target="_blank" rel="noopener">
+            <span aria-hidden="true">▤</span> {item.mime ?? item.kind ?? ''}{' '}
+            {item.bytes ? '· ' + Math.round(item.bytes / 1024) + ' KB' : ''}
+        </a>
+    );
+};
+
 const Bubble: FunctionComponent<{ m: Message }> = ({ m }) => {
     const g = glyph(m);
     const agentIdentity = config.value?.settings.agent_identity;
@@ -73,9 +112,7 @@ const Bubble: FunctionComponent<{ m: Message }> = ({ m }) => {
             <div class="nlw-bubble">
                 {m.body}
                 {m.media.map((a, i) => (
-                    <div key={i} class="nlw-meta">
-                        {t('a11y.attachment')} · {a.kind ?? ''}
-                    </div>
+                    <MediaItem key={i} item={a} />
                 ))}
             </div>
             <span class="nlw-meta">

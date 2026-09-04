@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Webchat\Visitor;
 
 use App\Domain\Auth\Widget\WidgetVisitor;
-use App\Domain\Conversations\Media\MediaStore;
 use App\Domain\Routing\Estimator\Estimator;
 use App\Domain\Webchat\WebchatAdapter;
 use App\Http\Middleware\ResolveTenant;
@@ -29,7 +28,6 @@ final class VisitorConversation
 
     public function __construct(
         private readonly Estimator $estimator,
-        private readonly MediaStore $media,
         private readonly TenantCache $cache,
     ) {}
 
@@ -89,8 +87,8 @@ final class VisitorConversation
     {
         $media = [];
         $decoded = is_string($row->media) ? json_decode($row->media, true) : [];
-        foreach (is_array($decoded) ? $decoded : [] as $item) {
-            if (! is_array($item)) {
+        foreach (is_array($decoded) ? $decoded : [] as $i => $item) {
+            if (! is_array($item) || ! is_int($i)) {
                 continue;
             }
             $status = is_string($item['scan_status'] ?? null) ? $item['scan_status'] : 'pending';
@@ -102,11 +100,10 @@ final class VisitorConversation
                 'height' => $item['height'] ?? null,
                 'duration_seconds' => $item['duration_seconds'] ?? null,
                 'scan' => $status, // clean | pending | infected | … (never `status`: the ticket-status-writer gate's key)
-                'url' => null,
+                // the same-origin read door for CLEAN items only (SEC-04); everything else has no URL
+                'url' => $status === 'clean' && is_string($row->id) ? '/api/widget/v1/media/'.$row->id.'/'.$i : null,
             ];
-            if ($status === 'clean' && is_string($item['storage_key'] ?? null)) {
-                $entry['url'] = $this->media->signedUrl($item['storage_key'], 'clean');
-            }
+            // (the media-origin signed URL is NOT handed to the panel: its CSP is img-src 'self' — the door streams it)
             $media[] = $entry;
         }
 
@@ -145,7 +142,12 @@ final class VisitorConversation
      */
     public function mediaDescriptors(Widget $widget, array $items): array
     {
-        return [];
+        $visitor = request()->user('widget');
+        if (! $visitor instanceof WidgetVisitor || $items === []) {
+            return [];
+        }
+
+        return app(\App\Domain\Webchat\Media\WidgetIntake::class)->describe($widget, $visitor, $items);
     }
 
     /**

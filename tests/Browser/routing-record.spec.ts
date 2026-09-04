@@ -20,7 +20,19 @@ const V1440 = { width: 1440, height: 900 };
 function artisan(...args: string[]): void {
     execFileSync(
         'docker',
-        ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml', 'exec', '-T', 'app', 'php', 'artisan', ...args],
+        [
+            'compose',
+            '-f',
+            'docker/compose.yaml',
+            '-f',
+            'docker/compose.dev.yaml',
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            ...args,
+        ],
         { stdio: 'pipe' },
     );
 }
@@ -45,7 +57,9 @@ async function openTicketOne(page: Page, email: string = AGENT_EMAIL): Promise<v
     await dismissCoachMarks(page);
 }
 
-test('C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text', async ({ page }) => {
+test('C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text', async ({
+    page,
+}) => {
     await openTicketOne(page);
 
     const toggle = page.locator('[data-record-toggle]').first();
@@ -56,14 +70,19 @@ test('C09: the routed timeline row expands into the record card — title, numbe
     await expect(card).toBeVisible();
     await expect(page.getByTestId('record-title')).toContainText(/Why this ticket/);
     await expect(card.locator('[data-record-step]').first()).toBeVisible();
-    await expect(card.locator('[data-record-step="wait"], [data-record-step="assign"]').first()).toBeVisible();
+    await expect(
+        card.locator('[data-record-step="wait"], [data-record-step="assign"]').first(),
+    ).toBeVisible();
     await expect(page.getByTestId('record-copy')).toBeVisible();
     // Collapse again — the card is an expandable, not a page (C09's collapsed system event).
     await toggle.click();
     await expect(card).toHaveCount(0);
 });
 
-test('C11 + §13: the elided card for a viewer without individual-metrics rights (the READ ONLY fixture — every non-high .view key, so tickets.view without reports.agents.individual) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean', async ({ page, browser }) => {
+test('C11 + §13: the elided card for a viewer without individual-metrics rights (the READ ONLY fixture — every non-high .view key, so tickets.view without reports.agents.individual) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean', async ({
+    page,
+    browser,
+}) => {
     await openTicketOne(page, READ_ONLY_EMAIL);
     await page.locator('[data-record-toggle]').first().click();
     const card = page.getByTestId('routing-record-card');
@@ -74,11 +93,20 @@ test('C11 + §13: the elided card for a viewer without individual-metrics rights
     // VISIBLE ABSENCE of AGENT facts: no agent-bearing key renders at all (queue/department ids
     // in the mono lines are routing facts SEC-02 keeps auditable — the C11 drawing's own point).
     const body = (await card.innerText()).toLowerCase();
-    for (const agentKey of ['candidate=', 'pointer=', 'next=', 'assigned_to=', 'by=', 'candidates=']) {
+    for (const agentKey of [
+        'candidate=',
+        'pointer=',
+        'next=',
+        'assigned_to=',
+        'by=',
+        'candidates=',
+    ]) {
         expect(body.includes(agentKey)).toBeFalsy();
     }
 
-    const lightScan = await new AxeBuilder({ page }).include('[data-testid="routing-record-card"]').analyze();
+    const lightScan = await new AxeBuilder({ page })
+        .include('[data-testid="routing-record-card"]')
+        .analyze();
     expect(lightScan.violations).toEqual([]);
 
     const dark = await browser.newContext({ colorScheme: 'dark' });
@@ -86,7 +114,9 @@ test('C11 + §13: the elided card for a viewer without individual-metrics rights
     await openTicketOne(darkPage, READ_ONLY_EMAIL);
     await darkPage.locator('[data-record-toggle]').first().click();
     await expect(darkPage.getByTestId('routing-record-card')).toBeVisible();
-    const darkScan = await new AxeBuilder({ page: darkPage }).include('[data-testid="routing-record-card"]').analyze();
+    const darkScan = await new AxeBuilder({ page: darkPage })
+        .include('[data-testid="routing-record-card"]')
+        .analyze();
     expect(darkScan.violations).toEqual([]);
     await dark.close();
 });

@@ -1,0 +1,117 @@
+### 9b media — Pest (reference shape) — 2026-09-04T20:24:23Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Widget\WidgetMediaTest
+  ⨯ it POST media: a photo lands in the intake (kind from the mime); o… 11.10s  
+  ✓ it the pipeline fetches the intake through the egress proxy, scans…  0.70s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\WidgetMediaTest > it POST media: a photo lan…   
+  Expected response status code [422] but received 500.
+Failed asserting that 500 is identical to 422.
+
+The following exception occurred during the last request:
+
+InvalidArgumentException: unknown_media in /app/app/Domain/Webchat/Media/WidgetIntake.php:103
+Stack trace:
+#0 /app/app/Domain/Webchat/Visitor/VisitorConversation.php(150): App\Domain\Webchat\Media\WidgetIntake->describe(Object(App\Models\Widget), Object(App\Domain\Auth\Widget\WidgetVisitor), Array)
+#1 /app/app/Http/Controllers/Widget/WidgetMessagesController.php(92): App\Domain\Webchat\Visitor\VisitorConversation->mediaDescriptors(Object(App\Models\Widget), Array)
+#2 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Widget\WidgetMessagesController->store(Object(Illuminate\Http\Request))
+#3 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Widget\WidgetMessagesController), 'store')
+#4 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#5 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#6 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#7 /app/app/Http/Middleware/ThrottleVisitorToken.php(78): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#8 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ThrottleVisitorToken->handle(Object(Illuminate\Http\Request), Object(Closure), 'messages')
+#9 /app/app/Http/Middleware/ThrottleVisitorToken.php(78): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#10 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ThrottleVisitorToken->handle(Object(Illuminate\Http\Request), Object(Closure))
+#11 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#12 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'inbound')
+#13 /app/app/Http/Middleware/AuthenticateWidgetVisitor.php(53): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#14 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\AuthenticateWidgetVisitor->handle(Object(Illuminate\Http\Request), Object(Closure))
+#15 /app/app/Http/Middleware/WidgetCors.php(82): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\WidgetCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#18 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'widget_key')
+#19 /app/app/Http/Middleware/SecurityHeaders.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#23 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#25 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#27 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#28 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#29 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#30 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#31 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#32 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#33 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#34 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#35 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#36 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#38 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#39 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#40 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#41 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#42 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#43 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#44 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#45 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#46 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#47 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#48 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#49 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#50 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#51 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#53 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#54 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#55 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#56 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#57 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#58 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', '/api/widget/v1/...', Array, Array, Array, Array, '{"client_messag...')
+#59 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', '/api/widget/v1/...', Array, Array, 0)
+#60 /app/tests/Feature/Widget/WidgetMediaTest.php(73): Illuminate\Foundation\Testing\TestCase->postJson('/api/widget/v1/...', Array)
+#61 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Feature\Widget\WidgetMediaTest->{closure:/app/tests/Feature/Widget/WidgetMediaTest.php:24}()
+#62 [internal function]: P\Tests\Feature\Widget\WidgetMediaTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#63 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#64 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Feature\Widget\WidgetMediaTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#65 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#66 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Feature\Widget\WidgetMediaTest->__callClosure(Object(Closure), Array)
+#67 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(17): P\Tests\Feature\Widget\WidgetMediaTest->__runTest(Object(Closure))
+#68 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Feature\Widget\WidgetMediaTest->__pest_evaluable_it_POST_media__a_photo_lands_in_the_intake__kind_from_the_mime___over_the_cap___413_BEFORE_any_byte_is_stored__the_descriptor_becomes_a_Doc_04_media_item_with_the_opaque_source__a_foreign_upload__id_is_refused()
+#69 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#70 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#71 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#72 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Feature\Widget\WidgetMediaTest))
+#73 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#74 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#75 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#76 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#77 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#78 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#79 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#80 {main}
+
+----------------------------------------------------------------------------------
+
+unknown_media
+
+  at tests/Feature/Widget/WidgetMediaTest.php:75
+     71▕     $otherToken = $other->json('token');
+     72▕     $otherCookie = visitorCookieFrom($other);
+     73▕     widgetClient($key, $otherToken, $otherCookie)->postJson('/api/widget/v1/messages', [
+     74▕         'client_message_id' => 'cm_media_2', 'kind' => 'photo', 'media' => [['reference' => $r->json('upload_id')]],
+  ➜  75▕     ])->assertStatus(422);
+     76▕ });
+     77▕ 
+     78▕ it('the pipeline fetches the intake through the egress proxy, scans it, stores a clean copy — and the same-origin door streams it to the visitor, and only to that visitor', function (): void {
+     79▕     [$tenant, $widget, $key] = widgetFixture();
+
+
+  Tests:    1 failed, 1 passed (34 assertions)
+  Duration: 11.91s
+
+exit=1

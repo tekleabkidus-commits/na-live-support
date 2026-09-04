@@ -1,0 +1,73 @@
+### 9b media — Pest — 2026-09-04T20:23:28Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Widget\WidgetMediaTest
+  ⨯ it POST media: a photo lands in the intake (kind from the mime); o… 10.57s  
+  ⨯ it the pipeline fetches the intake through the egress proxy, scans…  0.18s  
+
+   PASS  Tests\Feature\Widget\WidgetMessagesTest
+  ✓ it POST messages ACKs 202 and enqueues NormalizeInbound on webchat-… 0.16s  
+  ✓ it idempotency: the same client_message_id POSTed twice lands ONE r… 0.18s  
+  ✓ it GET messages is the visitor-curated cursor page: notes and quara… 0.26s  
+  ✓ it POST receipts: the FIRST delivered producer — an outbound row mo… 0.29s  
+  ✓ it POST typing records the customer signal with its TTL (EC-12) and… 0.23s  
+  ✓ it GET config: the live config over the neutral defaults, the adapt… 0.14s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\WidgetMediaTest > it POST media: a photo lan…   
+  Expected response status code [202] but received 422.
+Failed asserting that 422 is identical to 202.
+
+The following errors occurred during the last request:
+
+{
+    "message": "The media.0.reference field is required when media is present.",
+    "errors": {
+        "media.0.reference": [
+            "The media.0.reference field is required when media is present."
+        ]
+    }
+}
+
+  at tests/Feature/Widget/WidgetMediaTest.php:51
+     47▕     Queue::fake();
+     48▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', [
+     49▕         'client_message_id' => 'cm_media_1', 'kind' => 'photo', 'body' => null,
+     50▕         'media' => [['upload_id' => $r->json('upload_id'), 'kind' => 'photo', 'mime' => 'image/png']],
+  ➜  51▕     ])->assertStatus(202);
+     52▕     drainWebchatInbound();
+     53▕     bindTenant($tenant);
+     54▕     $conversation = Conversation::query()->where('external_chat_id', $visitorId)->sole();
+     55▕     $message = DB::table('messages')->where('conversation_id', $conversation->identifier())->sole();
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\WidgetMediaTest > it the pipeline fetches th…   
+  Expected response status code [202] but received 422.
+Failed asserting that 422 is identical to 202.
+
+The following errors occurred during the last request:
+
+{
+    "message": "The media.0.reference field is required when media is present.",
+    "errors": {
+        "media.0.reference": [
+            "The media.0.reference field is required when media is present."
+        ]
+    }
+}
+
+  at tests/Feature/Widget/WidgetMediaTest.php:89
+     85▕     bindTenant($tenant);
+     86▕     $png = UploadedFile::fake()->image('receipt.png', 64, 48);
+     87▕     $up = widgetClient($key, $token, $cookie)->post('/api/widget/v1/media', ['file' => $png])->assertStatus(201)->json();
+     88▕     Queue::fake();
+  ➜  89▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', ['client_message_id' => 'cm_media_3', 'kind' => 'photo', 'media' => [['upload_id' => $up['upload_id'], 'kind' => 'photo', 'mime' => 'image/png']]])->assertStatus(202);
+     90▕     drainWebchatInbound();
+     91▕     bindTenant($tenant);
+     92▕     $conversation = Conversation::query()->where('external_chat_id', $visitorId)->sole();
+     93▕     $message = DB::table('messages')->where('conversation_id', $conversation->identifier())->sole();
+
+
+  Tests:    2 failed, 6 passed (56 assertions)
+  Duration: 12.12s
+
+exit=1

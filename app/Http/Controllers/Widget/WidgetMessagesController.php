@@ -15,6 +15,8 @@ use App\Domain\Webchat\WebchatAdapter;
 use App\Jobs\Conversations\NormalizeInbound;
 use App\Models\Conversation;
 use App\Support\Http\CursorPagination;
+use App\Support\Problem\ErrorCode;
+use App\Support\Problem\ProblemDetails;
 use App\Support\Quota\Quota;
 use App\Support\Quota\QuotaMeter;
 use Illuminate\Http\JsonResponse;
@@ -70,6 +72,9 @@ final class WidgetMessagesController
             'body' => ['nullable', 'string', 'max:4000'],
             'media' => ['sometimes', 'array', 'max:1'],
             'media.*.reference' => ['required_with:media', 'string', 'max:128'],
+            'media.*.mime' => ['nullable', 'string', 'max:100'],
+            'media.*.width' => ['nullable', 'integer'],
+            'media.*.height' => ['nullable', 'integer'],
             'reply_to' => ['nullable', 'string', 'max:64'],
             'occurred_at' => ['nullable', 'date'],
             'page_url' => ['nullable', 'string', 'max:2048'],
@@ -80,13 +85,25 @@ final class WidgetMessagesController
 
         $this->quota->allow(Quota::MessagesPerMinute);
 
+        try {
+
+            $media = $this->conversations->mediaDescriptors($widget, $input['media'] ?? []);
+
+        } catch (\InvalidArgumentException $e) {
+
+            // FR-16: a descriptor that names no intake object of THIS visitor's (or a malformed one) is refused, never a 500
+
+            return ProblemDetails::response(ErrorCode::ValidationFailed, 422, 'widget.upload.'.$e->getMessage());
+
+        }
+
         $envelope = [
             'visitor_id' => $visitor->visitorId,
             'widget_id' => VisitorConversation::widgetId($widget),
             'message_id' => $input['client_message_id'],
             'kind' => $input['kind'],
             'body' => $input['body'] ?? null,
-            'media' => $this->conversations->mediaDescriptors($widget, $input['media'] ?? []),
+            'media' => $media,
             'reply_to' => $input['reply_to'] ?? null,
             'occurred_at' => $input['occurred_at'] ?? now('UTC')->toIso8601String(),
             'page_url' => $input['page_url'] ?? null,

@@ -560,6 +560,11 @@ Route::group([], function (): void {
                     Route::post('messages', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'store'])
                         ->middleware(App\Http\Middleware\ThrottleVisitorToken::class.':messages')
                         ->name('widget.messages.store');
+                    Route::post('media', [App\Http\Controllers\Widget\WidgetMediaController::class, 'store'])
+                        ->middleware(App\Http\Middleware\ThrottleVisitorToken::class.':messages') // FR-16: an upload spends the message budget
+                        ->name('widget.media.store');
+                    Route::get('media/{messageId}/{index}', [App\Http\Controllers\Widget\WidgetMediaController::class, 'show'])
+                        ->where('index', '[0-9]{1,2}')->name('widget.media.show');
                     Route::post('typing', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'typing'])
                         ->name('widget.typing');
                     Route::post('receipts', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'receipts'])
