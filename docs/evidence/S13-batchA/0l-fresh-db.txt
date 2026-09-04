@@ -1,0 +1,36 @@
+### 0l FRESH-DB VERDICT (CI Stage-4 shape, locally) — 2026-09-04T13:46:51Z: migrate:fresh (migrator role) → BrowserFixtureSeeder → inbox:views-rebuild → the three 0l-class reds re-run ONCE. The heal (0l-heal.txt) did NOT clear them: residue rows (14 stacked bell rows, +1 unread, a CSAT prompt as Kidist's snippet) survive a reseed, which is the accumulation class's signature. Power at run: 55% discharging (≥40%).
+  2026_09_04_000100_schema_amendment_7_widgets ................. 218.87ms DONE
+  2026_09_04_000200_schema_amendment_7_rider_1_vault_secrets .... 33.60ms DONE
+
+
+   INFO  Seeding database.  
+
+Browser fixtures ready: tenant A 01a06cac-3f7b-7353-9891-c1668353363f, tenant B 01a06cac-445f-71a5-9d1f-aec72a70569a
+rebuilt unassigned
+rebuilt sla_at_risk
+rebuilt expiring_windows
+rebuilt rescue
+rebuilt per-user views
+rebuilt saved views; scoped variants dropped for lazy rebuild
+rebuilt unassigned
+rebuilt sla_at_risk
+rebuilt expiring_windows
+rebuilt rescue
+rebuilt per-user views
+rebuilt saved views; scoped variants dropped for lazy rebuild
+inbox:views-rebuild complete
+--- rerun ---
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE (2.3s)
+  ✓  2 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (3.4s)
+  ✓  3 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (1.9s)
+
+  3 passed (50.6s)
+exit=0
+--- harness seed restored (key redacted from the capture) ---
+
+   INFO  Seeding database.  
+
+HARNESS_WIDGET_KEY=<redacted>

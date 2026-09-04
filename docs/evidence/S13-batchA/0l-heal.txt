@@ -1,0 +1,121 @@
+### 0l HEAL (batch-A checkpoint) — 2026-09-04T13:45:36Z: reseed + inbox:views-rebuild, then the three 0l-class reds re-run ONCE (the heal's run is their verdict). Power at heal: 55% discharging (≥40%).
+
+   INFO  Seeding database.  
+
+Browser fixtures ready: tenant A 01a06ba5-6331-7346-bdc0-410ae425d95b, tenant B 01a06ba5-657d-70bf-96dc-203ccc7687c7
+rebuilt unassigned
+rebuilt sla_at_risk
+rebuilt expiring_windows
+rebuilt rescue
+rebuilt per-user views
+rebuilt saved views; scoped variants dropped for lazy rebuild
+rebuilt unassigned
+rebuilt sla_at_risk
+rebuilt expiring_windows
+rebuilt rescue
+rebuilt per-user views
+rebuilt saved views; scoped variants dropped for lazy rebuild
+inbox:views-rebuild complete
+--- rerun ---
+
+Running 3 tests using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE (2.3s)
+  ✘  2 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (6.9s)
+  ✘  3 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (7.2s)
+
+
+  1) [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]')
+    Expected substring: "#4801 was assigned to you"
+    Error: strict mode violation: getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]') resolved to 14 elements:
+        1) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 8' })
+        2) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 9' })
+        3) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 12 min ago' })
+        4) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 13 min ago' })
+        5) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).nth(2)
+        6) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).nth(3)
+        7) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).nth(4)
+        8) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).nth(5)
+        9) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#4802 was assigned to you 1 h' })
+        10) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 2' }).first()
+        ...
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]')
+
+
+      85 |     await expect(dropdown).toBeVisible();
+      86 |
+    > 87 |     await expect(dropdown.locator('[data-bell-row="notify.inbox.assignment"]')).toContainText(
+         |                                                                                 ^
+      88 |         '#4801 was assigned to you',
+      89 |     );
+      90 |     await expect(dropdown.locator('[data-bell-row="notify.inbox.sla_warning"]')).toContainText(
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bell.spec.ts:87:81
+
+    Error Context: test-results/inbox-bell-FR-26-the-badge-b418f-inks-to-its-thread-IN-PLACE-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="unread-count"]')
+    Expected: "2"
+    Received: "3"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="unread-count"]')
+        14 × locator resolved to <span role="img" data-v-3577dc5a="" aria-label="3 unread" data-role="unread-count" class="rounded-full px-1.5 text-[10px] font-bold tabular-nums">3</span>
+           - unexpected value "3"
+
+
+      77 |     await expect(row).toBeVisible();
+      78 |     await expect(row.locator('[data-role="sla-pill"]')).toContainText('SLA breached');
+    > 79 |     await expect(row.locator('[data-role="unread-count"]')).toHaveText('2');
+         |                                                             ^
+      80 |     await expect(row.locator('[data-role="language-chip"]')).toHaveText('AM');
+      81 |     await expect(row.locator('[data-role="sentiment-dot"]')).toHaveAttribute(
+      82 |         'aria-label',
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:79:61
+
+    Error Context: test-results/inbox-list-FR-09-line-1-2--d4371-ag-overflow-assignee-avatar-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-ticket]').filter({ hasText: 'Kidist Haile' }).locator('[data-role="snippet"]')
+    Expected: "📷 Photo"
+    Received: "How did we do? Tap a star — 1 (poor) to 5 (great)."
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Kidist Haile' }).locator('[data-role="snippet"]')
+        14 × locator resolved to <span data-v-3577dc5a="" data-role="snippet" class="min-w-0 flex-1 truncate text-xs font-semibold">How did we do? Tap a star — 1 (poor) to 5 (great).</span>
+           - unexpected value "How did we do? Tap a star — 1 (poor) to 5 (great)."
+
+
+      106 |     const kidist = page.locator('[data-ticket]', { hasText: 'Kidist Haile' });
+      107 |     await expect(kidist).toBeVisible();
+    > 108 |     await expect(kidist.locator('[data-role="snippet"]')).toHaveText('📷 Photo');
+          |                                                           ^
+      109 |     await expect(kidist.getByText(/^Window \d/).first()).toBeVisible(); // the SHARED WindowChip, closing
+      110 |     await expect(kidist.locator('[data-role="draft-pencil"]')).toBeVisible();
+      111 |     await expect(kidist.locator('[data-role="unassigned-ring"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:108:59
+
+    Error Context: test-results/inbox-list-FR-09-Unassigne-f9180--ONE-older-activity-warning-chromium/error-context.md
+
+  3 failed
+    [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE 
+    [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+    [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+exit=1
