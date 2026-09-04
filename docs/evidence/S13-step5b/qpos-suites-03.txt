@@ -1,0 +1,453 @@
+### S13 step 5b — P-QPOS wider suites (Widget + Routing + Contract) — 2026-09-04T15:59:13Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Widget\MetricExclusionTestModeTest
+  ✓ it N-14 second half (P-N14): a ticket whose conversation opened un… 10.76s  
+  ✓ it positive control: a LIVE widget's ticket stays INCLUDED by both…  0.12s  
+
+   PASS  Tests\Feature\Widget\NoGhostProfileTest
+  ✓ it FR-05: a session + a config read + a cursor read mint NO custome… 0.31s  
+
+[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member
+
+   PASS  Tests\Feature\Widget\QueuePositionTest
+  ✓ it P-QPOS: forWaitingTicket answers band + the ticket's own positio… 0.47s  
+  ✓ it Doc13/QueuePositionPush: ONE ordered read + ONE membership query… 0.55s  
+
+   PASS  Tests\Feature\Widget\SecretRotationTest
+  ✓ it rotates with an overlap window: old + new verify inside it, only… 0.15s  
+
+   PASS  Tests\Feature\Widget\WidgetBeaconTest
+  ✓ it T-08: load/open/blocked-origin/mount-fail beacons increment the…  0.23s  
+  ✓ it T-08: a panel error beacon with a stack is SCRUBBED before sampl… 0.13s  
+
+   PASS  Tests\Feature\Widget\WidgetContextAllowlistTest
+  ✓ it FR-24: only allowlisted custom keys survive; the row is one per…  0.30s  
+
+   PASS  Tests\Feature\Widget\WidgetFormStepsTest
+  ✓ it validates a pre-chat step against the published schema: required… 0.37s  
+
+   PASS  Tests\Feature\Widget\WidgetFormsSeedTest
+  ✓ it seeds the pre-chat and offline forms once, byte-equal to the Doc… 0.15s  
+
+   PASS  Tests\Feature\Widget\WidgetMediaOriginTest
+  ✓ it P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed… 0.23s  
+  ✓ it SEC-04 stands: an unscanned key has no download path even on the… 0.09s  
+
+   PASS  Tests\Feature\Widget\WidgetMessagesTest
+  ✓ it POST messages ACKs 202 and enqueues NormalizeInbound on webchat-… 0.16s  
+  ✓ it idempotency: the same client_message_id POSTed twice lands ONE r… 0.21s  
+  ✓ it GET messages is the visitor-curated cursor page: notes and quara… 0.19s  
+  ✓ it POST receipts: the FIRST delivered producer — an outbound row mo… 0.26s  
+  ✓ it POST typing records the customer signal with its TTL (EC-12) and… 0.19s  
+  ✓ it GET config: the live config over the neutral defaults, the adapt… 0.18s  
+
+   PASS  Tests\Feature\Widget\WidgetModelTest
+  ✓ it P-WIDGET: the Designer's columns are mass-assignable on the Widg… 0.11s  
+
+   PASS  Tests\Feature\Widget\WidgetOfflineFormTest
+  ✓ it FR-15: the offline form lands a REAL offline-tagged ticket (sour… 0.27s  
+  ✓ it FR-15 refusals are inline and neutral: a missing required answer… 0.15s  
+
+   FAIL  Tests\Feature\Routing\AssignBySystemDoorTest
+  ✓ it is UNREACHABLE from HTTP: no route action names assignBySystem,…  0.07s  
+  ⨯ it assigns as the SYSTEM: assignee set, FR-05 new → open through th… 0.06s  
+  ⨯ it carries FR-15's as-if-assigned check exactly as the staff path:…  0.04s  
+  ⨯ it loses the FR-16 race to a manual claim that landed first (BR-03:… 0.05s  
+
+   FAIL  Tests\Feature\Routing\AssignmentStatsConsumerTest
+  ✓ it is registered as a DURABLE consumer of the four assignment-shape… 0.06s  
+  ⨯ it recomputes FROM TRUTH: a manual claim, a pending move and an una… 0.06s  
+  ✓ it a redelivered event whose ticket no longer names the agent still… 0.08s  
+
+   FAIL  Tests\Feature\Routing\CapacityRaceTest
+  ⨯ it AC-03 (1): capacity C admits exactly C assignments; the C+1th an… 0.06s  
+  ⨯ it AC-03 (2): the commit path WAITS on the stats row lock held by a… 0.05s  
+  ⨯ it FR-06: pending_customer does not consume a slot unless count_pen… 0.05s  
+
+   PASS  Tests\Feature\Routing\ConnectionRoutingTagSeamTest
+  ✓ it reads the fixture in local/testing and returns null for unknown…  0.06s  
+
+   PASS  Tests\Feature\Routing\DecisionOrderTest
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ex… 0.30s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.28s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "AI… 0.21s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "co… 0.13s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "te… 0.11s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "ru… 0.13s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "de… 0.12s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.12s  
+  ✓ it AC-01: FR-08's order holds for the fixture case with dataset "RG… 0.11s  
+
+   PASS  Tests\Feature\Routing\DecisionRecordTest
+  ✓ it FR-17/BR-06: every automatic routing writes a COMPLETE record —…  0.14s  
+  ✓ it waits honestly (BR-05): no online agent → outcome waiting, the t… 0.11s  
+  ✓ it FS-04: an engine exception PARKS the ticket in the department de… 0.11s  
+  ✓ it SEC-02: the read door ELIDES per-agent facts for a viewer withou… 0.17s  
+
+   PASS  Tests\Feature\Routing\DispatcherTest
+  ✓ it FS-02: the head is READ, not removed — a dying worker leaves the… 0.18s  
+  ✓ it EC-01/EC-03: two waiting tickets, one free slot — exactly one is… 0.21s  
+  ✓ it the AvailabilityConsumer is the dispatcher's ONLY trigger (durab… 0.18s  
+
+   PASS  Tests\Feature\Routing\EligibilityTest
+  ✓ it FR-05/BR-05: only ONLINE members with a free slot are routable;…  0.11s  
+  ✓ it FR-06/US-07: capacity = queue rule ?? routing.capacity.default;…  0.09s  
+  ✓ it FR-14/EC-09: hours never touch eligibility — an Online agent at…  0.09s  
+
+   PASS  Tests\Feature\Routing\EstimatorTest
+  ✓ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 0.17s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.08s  
+  ✓ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.12s  
+  ✓ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.14s  
+  ✓ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.13s  
+
+   PASS  Tests\Feature\Routing\HoursTest
+  ✓ it FR-14 / A-53: the fixture-shaped contract — default always open,… 0.09s  
+  ✓ it EC-09 NO CLIFF: outside the department's hours an Online agent i… 0.15s  
+
+   PASS  Tests\Feature\Routing\LoadBasedTest
+  ✓ it orders by load, then by last_assigned_at (never-assigned first),… 0.04s  
+
+   PASS  Tests\Feature\Routing\RebuildDrillTest
+  ✓ it FS-01: after the ZSETs and pointers are FLUSHED, routing:rebuild… 0.17s  
+
+   PASS  Tests\Feature\Routing\ReopenHoldTest
+  ✓ it EC-08: a reopened ticket whose retained assignee is Away gets a…  0.23s  
+  ✓ it EC-08 expiry — THE REAL PATH (9b, P-C6 landed; CONVERTED from st… 0.15s  
+
+   PASS  Tests\Feature\Routing\RescueTest
+  ✓ it FR-16a / AC-06 heartbeat fixture: heartbeat loss with open assig… 0.20s  
+  ✓ it FR-16a with routing.rescue.auto ON — THE REAL PATH (9b, P-C6 lan… 0.22s  
+  ✓ it FR-16b / AC-06 unreachable fixture: channel_unreachable populate… 0.13s  
+  ✓ it FR-16c / EC-06 / AC-06 orphan fixture: org.queue.deleted → every… 0.13s  
+  ✓ it P-C1 physics: one LIVE flag per ticket (the second refused by th… 0.13s  
+
+   PASS  Tests\Feature\Routing\RgFinalityTest
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.02s  
+  ✓ it BR-02 table: no rule, boost, strategy, bulk action, AI suggestio… 0.03s  
+  ✓ it BR-02 exception, exactly as narrow as drawn: INDIVIDUAL manual r… 0.02s  
+  ✓ it FR-08 step 2: RG intake is FORCED to the is_rg queue when one ex… 0.03s  
+
+   PASS  Tests\Feature\Routing\RoundRobinSpliceTest
+  ✓ it rotates fairly, splices on join/leave without resetting, and ski… 0.04s  
+
+   PASS  Tests\Feature\Routing\RoutingI18nParityTest
+  ✓ it §14: routing.* and org.* have FULL en↔am parity — both direction… 0.03s  
+  ✓ it §14: the destructive tier is PRESENT in both languages — typed c… 0.02s  
+  ✓ it §14: every record sentence code the writers emit has a routing.r… 0.03s  
+  ✓ it §14 END-TO-END: a routed ticket's record steps carry LOCALIZED s… 0.12s  
+
+   PASS  Tests\Feature\Routing\SkillBasedTest
+  ✓ it filters to skill-matching agents then load-based among them (US-… 0.06s  
+  ✓ it nearest_skill: no language match → the language requirement drop… 0.05s  
+  ✓ it wait: no language match → HOLD (no candidates) with the online/s… 0.05s  
+
+   PASS  Tests\Feature\Routing\SupervisorOpsTest
+  ✓ it FR-15 / BR-03 / FR-17: a supervisor reassigns a WAITING ticket t… 0.19s  
+  ✓ it SEC-01 scope matrix: an out-of-scope ticket is the 404 pattern f… 0.19s  
+  ✓ it SEC-06 / BR-02's one exception: a ticket in the RG queue is reas… 0.18s  
+  ✓ it FR-15 pull-in DOOR: 201 with the grant linkage; the SEC-04 reaso… 0.18s  
+  ✓ it FR-15 broadcast ([D16], P-C5): the door returns EXACTLY the deli… 0.14s  
+  ✓ it FR-15 force status is Doc 07's door, CONSUMED not re-implemented… 0.04s  
+
+   PASS  Tests\Feature\Routing\TemporaryMembershipTest
+  ✓ it AC-05 / FR-15 / SEC-03 / A-56: a pull-in creates the Doc 03 gran… 0.12s  
+  ✓ it A-50 obligation 3 shape for the pull-in: a failure on the LAST r… 0.11s  
+  ✓ it A-53 / FR-15: the expiry DEFAULTS to the tenant-local shift end…  0.17s  
+  ✓ it SEC-01: pull-in requires org.queues.pull_in AND the queue within… 0.15s  
+  ✓ it T-07 / FS-05 — PATH A ALONE (sweep never run): an expired tempor… 0.12s  
+  ✓ it T-07 — PATH B ALONE (the sweep, resolver untouched): the due mem… 0.12s  
+  ✓ it EC-07: expiry mid-conversation — the assignment already made PER… 0.17s  
+  ✓ it BR-07: the same pull-in recurring ≥ routing.pull_in.recurrence_h… 0.16s  
+  ✓ it manual end: the Doc 03 override is removed THROUGH its door (rba… 0.11s  
+  ✓ it order-independence with Doc 03's tidy (rbac:expire-overrides end… 0.43s  
+
+   PASS  Tests\Feature\Routing\TriggersTest
+  ✓ it is registered DURABLY on the five trigger events (ADR 0011) — ex… 0.07s  
+  ✓ it created: a new ticket with no department reaches the tenant defa… 0.33s  
+  ✓ it transferred: the new department is explicit; the router assigns…  0.41s  
+  ✓ it unassigned: a manual unassign (ticket.assigned with a null new a… 0.39s  
+  ✓ it deactivation hand-back (EC-06) and reopened-with-inactive-assign… 0.42s  
+
+   PASS  Tests\Contract\AdapterConformance\FakeAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.08s  
+  ✓ dedupe key is stable for identical payloads                          0.04s  
+  ✓ dedupe keys differ across distinct payloads                          0.04s  
+  ✓ normalization is pure per item and never reorders                    0.04s  
+  ✓ channel timestamp survives as metadata                               0.07s  
+  ✓ an adapter cannot emit an internal note                              0.05s  
+  ✓ send success reports state sent                                      0.05s  
+  ✓ error classification matches the frozen table                        0.06s  
+  ✓ capability matrix gates every operation                              0.06s  
+  ✓ health answers with the contract shape                               0.04s  
+  ✓ send paths accept only deliverable payloads                          0.04s  
+
+   PASS  Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.07s  
+  ✓ dedupe key is stable for identical payloads                          0.05s  
+  ✓ dedupe keys differ across distinct payloads                          0.05s  
+  ✓ normalization is pure per item and never reorders                    0.03s  
+  ✓ channel timestamp survives as metadata                               0.04s  
+  ✓ an adapter cannot emit an internal note                              0.02s  
+  ✓ send success reports state sent                                      0.03s  
+  ✓ error classification matches the frozen table                        0.03s  
+  ✓ capability matrix gates every operation                              0.02s  
+  ✓ health answers with the contract shape                               0.06s  
+  ✓ send paths accept only deliverable payloads                          0.05s  
+
+   PASS  Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest
+  ✓ SS-02: the second adapter implements ONLY the base contract — the m… 0.06s  
+  ✓ SS-02: the whole inbound pipeline works on the second adapter uncha… 0.10s  
+  ✓ SS-02: the whole outbound pipeline works on the second adapter unch… 0.10s  
+  ✓ SS-02: the capability envelope binds the core, not conditionals — a… 0.14s  
+
+   PASS  Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.05s  
+  ✓ dedupe key is stable for identical payloads                          0.05s  
+  ✓ dedupe keys differ across distinct payloads                          0.04s  
+  ✓ normalization is pure per item and never reorders                    0.05s  
+  ✓ channel timestamp survives as metadata                               0.07s  
+  ✓ an adapter cannot emit an internal note                              0.06s  
+  ✓ send success reports state sent                                      0.05s  
+  ✓ error classification matches the frozen table                        0.04s  
+  ✓ capability matrix gates every operation                              0.04s  
+  ✓ health answers with the contract shape                               0.03s  
+  ✓ send paths accept only deliverable payloads                          0.05s  
+
+   PASS  Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest
+  ✓ normalization maps every contract field                              0.08s  
+  ✓ dedupe key is stable for identical payloads                          0.06s  
+  ✓ dedupe keys differ across distinct payloads                          0.04s  
+  ✓ normalization is pure per item and never reorders                    0.04s  
+  ✓ channel timestamp survives as metadata                               0.03s  
+  ✓ an adapter cannot emit an internal note                              0.03s  
+  ✓ send success reports state sent                                      0.04s  
+  ✓ error classification matches the frozen table                        0.04s  
+  ✓ capability matrix gates every operation                              0.05s  
+  ✓ health answers with the contract shape                               0.06s  
+  ✓ send paths accept only deliverable payloads                          0.06s  
+
+   PASS  Tests\Contract\AiEventConsumerContractsTest
+  ✓ FR-21: the ai.* family is CLOSED at seven (six + the approved rule-… 0.07s  
+  ✓ Q7/SEC-06: every ai.* payload is identifiers + closed categories —…  0.04s  
+  ✓ FR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata… 0.06s  
+  ✓ ai.decision.logged is SAMPLED by a registered platform setting (FR-… 0.04s  
+  ✓ fidelity: every Doc 09 fixture entry matches the catalog — event ex… 0.03s  
+  ✓ completeness: every event the registry maps to an App\Jobs\Ai durab… 0.05s  
+
+   PASS  Tests\Contract\Automation\ExternalContractsTest
+  ✓ it fixtures/automation/doc16-notify-contract.json + doc14-sms-reque… 0.06s  
+  ✓ it fixtures/automation/doc12-events.json (Doc 12's NON-ticket durab… 0.06s  
+
+   PASS  Tests\Contract\Automation\MacroPaletteContractTest
+  ✓ it B12-S03: personal lists FIRST, fuzzy matches letters anywhere, o… 0.13s  
+  ✓ it B12-S03: INSERT NEVER SENDS — the palette classes hold NO send c… 0.13s  
+
+   PASS  Tests\Contract\CustomerEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.04s  
+  ✓ completeness: every event the registry maps to a Doc 08 durable con… 0.04s  
+  ✓ the rollup consumer is registered for the customer merge family — t… 0.05s  
+
+   PASS  Tests\Contract\Forms\DualRenderConformanceTest
+  ✓ it one schema, three renders, ONE submission shape: widget-path, di… 0.19s  
+  ✓ it §14 language resolution is ONE chain for both renderers: custome… 0.14s  
+
+   PASS  Tests\Contract\Forms\FormPreChatContractTest
+  ✓ it B3-S05: the two-field pre-chat publishes in both variants; requi… 0.16s  
+  ✓ it B3-S05 offline shape: name + phone + what-happened submits as a…  0.15s  
+  ✓ it NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v… 0.33s  
+
+   PASS  Tests\Contract\InboxEventConsumerContractsTest
+  ✓ fidelity: every fixture entry matches the catalog — event exists, s… 0.05s  
+  ✓ completeness: every event the registry maps to a Doc 07 durable con… 0.05s  
+  ✓ the health consumer is registered for channel.health.changed — the…  0.07s  
+
+   PASS  Tests\Contract\KbEventConsumerContractsTest
+  ✓ it FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six t… 0.06s  
+  ✓ it ADR 0011: every kb.* event a Doc 10 job consumes durably carries… 0.05s  
+
+   PASS  Tests\Contract\Routing\SupervisorSeamContractsTest
+  ✓ it §8: QueueTableRow::row() answers EXACTLY the doc15-queue-table-r… 0.19s  
+  ✓ it §8/FR-15: PullInDialog::payload() answers EXACTLY the doc15-pull… 0.14s  
+  ✓ it §8/BR-03: DragReassign::context() answers EXACTLY the doc15-drag… 0.14s  
+  ✓ it FR-16/§8: RescueAlerts::rows() answers EXACTLY the doc07-rescue-… 0.16s  
+  ✓ it C06: the force-status door the doc07-force-status contract cites… 0.10s  
+  ✓ it C07/[D16]: the broadcast contract fixture stands (P-C5 — cited,…  0.05s  
+
+   PASS  Tests\Contract\RoutingEventConsumerContractsTest
+  ✓ the routing family is exactly EIGHTEEN events (FR-19; grown only by… 0.06s  
+  ✓ completeness: every routing-family event has a contract entry in EV… 0.06s  
+  ✓ fidelity: every fixture entry names a real catalog relationship, re… 0.06s  
+  ✓ Doc 11's own durable consumers are contracted: the availability con… 0.07s  
+
+   PASS  Tests\Contract\Sla\SlaChipContractTest
+  ✓ it FR-11: shape, step states, pause reason and most-urgent selectio… 0.15s  
+
+   FAIL  Tests\Contract\TicketEventConsumerContractsTest
+  ⨯ NFR-06 completeness: every ticket.* event has a contract entry in E… 0.04s  
+  ✓ NFR-06 fidelity: every fixture entry names a real relationship, rea… 0.05s  
+  ✓ T-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia… 0.03s  
+
+   PASS  Tests\Contract\WebchatEventConsumerContractsTest
+  ✓ A-45: every consumer the catalog declares for Doc 13 is registered…  0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignBySystemDoorTest > it assigns…   Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/AssignBySystemDoorTest.php:33
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  1   tests/Feature/Routing/AssignBySystemDoorTest.php:33
+  2   tests/Feature/Routing/AssignBySystemDoorTest.php:59
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignBySystemDoorTest > it carries…   Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/AssignBySystemDoorTest.php:33
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  1   tests/Feature/Routing/AssignBySystemDoorTest.php:33
+  2   tests/Feature/Routing/AssignBySystemDoorTest.php:90
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignBySystemDoorTest > it loses th…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/AssignBySystemDoorTest.php:33
+     29▕ 
+     30▕ /** @return array{0: Ticket, 1: User} an unassigned `new` ticket and an Own-scoped agent who can view */
+     31▕ function systemDoorFixture(): array
+     32▕ {
+  ➜  33▕     [, $conversation] = creationFixture();
+     34▕     $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent));
+     35▕     $agent = ticketActor(['tickets.view'], 'Fixture Routed Agent');
+     36▕ 
+     37▕     return [$ticket, $agent];
+
+  1   tests/Feature/Routing/AssignBySystemDoorTest.php:33
+  2   tests/Feature/Routing/AssignBySystemDoorTest.php:103
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignmentStatsConsumerTest > it rec…  Error   
+  Call to undefined function assignmentFixture()
+
+  at tests/Feature/Routing/AssignmentStatsConsumerTest.php:30
+     26▕     expect(ConsumerRegistry::consumersFor('ticket.created'))->not->toContain(AssignmentStatsConsumer::class);
+     27▕ });
+     28▕ 
+     29▕ it('recomputes FROM TRUTH: a manual claim, a pending move and an unassign each drive the counters; a REPLAY of the same event converges (C-09); rebuild == the same truth (FS-01)', function () {
+  ➜  30▕     [$ticket, $agent] = assignmentFixture(['tickets.view', 'tickets.assign', 'tickets.assign_self', 'tickets.status.change']);
+     31▕     app(AssignTicket::class)->claim($ticket, $agent);
+     32▕     $assigned = relayOutboxRow('ticket.assigned');   // the REAL published payload, relayed in-harness
+     33▕ 
+     34▕     (new AssignmentStatsConsumer($assigned))->handle(app(AssignmentStats::class), app(App\Domain\Routing\Estimator\Counters::class));
+
+  1   tests/Feature/Routing/AssignmentStatsConsumerTest.php:30
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (1): cap…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:74
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it AC-03 (2): the…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:98
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\CapacityRaceTest > it FR-06: pending…  Error   
+  Call to undefined function creationFixture()
+
+  at tests/Feature/Routing/CapacityRaceTest.php:45
+     41▕  * @return array{0: list<Ticket>, 1: User}
+     42▕  */
+     43▕ function capacityFixture(int $tickets): array
+     44▕ {
+  ➜  45▕     [$tenant, $first] = creationFixture();
+     46▕     $agent = ticketActor(['tickets.view'], 'Fixture Capacity Agent');
+     47▕     $list = [app(CreateTicket::class)->create(new NewTicket($first, TicketSource::Agent))];
+     48▕     for ($i = 1; $i < $tickets; $i++) {
+     49▕         $conversationId = (string) Str::uuid7();
+
+  1   tests/Feature/Routing/CapacityRaceTest.php:45
+  2   tests/Feature/Routing/CapacityRaceTest.php:134
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Contract\TicketEventConsumerContractsTest > NFR-06 complete…   
+  NFR-06: 1 catalog consumer relationship(s) have no contract fixture:
+ticket.waiting → Doc13/QueuePositionPush
+Add the entry to fixtures/tickets/consumers/<doc>.json — an uncontracted consumer is exactly what NFR-06 forbids.
+Failed asserting that two arrays are identical.
+  -Array &0 []
+  +Array &0 [
+  +    0 => 'ticket.waiting → Doc13/QueuePositionPush',
+  +]
+  
+
+  at tests/Contract/TicketEventConsumerContractsTest.php:81
+     77▕             }
+     78▕         }
+     79▕     }
+     80▕ 
+  ➜  81▕     expect($missing)->toBe([], sprintf(
+     82▕         "NFR-06: %d catalog consumer relationship(s) have no contract fixture:\n%s\nAdd the entry to fixtures/tickets/consumers/<doc>.json — an uncontracted consumer is exactly what NFR-06 forbids.",
+     83▕         count($missing),
+     84▕         implode("\n", $missing),
+     85▕     ));
+
+  1   tests/Contract/TicketEventConsumerContractsTest.php:81
+
+
+  Tests:    8 failed, 184 passed (4109 assertions)
+  Duration: 32.32s
+
+exit=2

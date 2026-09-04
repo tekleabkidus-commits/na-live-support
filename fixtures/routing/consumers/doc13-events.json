@@ -1,0 +1,17 @@
+{
+  "doc": "Doc13",
+  "spec": "Doc 11 FR-19 / Doc 06 NFR-06 shape — consumer contracts for the routing-family events Doc 13's QueuePositionPush reads (S13 step 5b, P-QPOS countersigned).",
+  "note": "Identifiers only. `ticket.waiting` is a ticket-family event and is contracted in fixtures/tickets/consumers/doc13.json (Doc 06 NFR-06's completeness rule); this file holds the routing-family slice. The consumer re-reads the WHOLE waiting set in one ordered read and pushes only the webchat visitors whose position or band changed (bounded fan-out — no push storm).",
+  "entries": [
+    {
+      "event": "routing.starvation_boosted",
+      "consumer": "Doc13/QueuePositionPush",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "queue_id"
+      ]
+    }
+  ]
+}

@@ -95,6 +95,10 @@ final class ConsumerRegistry
         'rescue.auto_returned' => [ListProjectorConsumer::class],
         'agent.status_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Routing\RescueConsumer::class],
         'queue.membership_changed' => [\App\Jobs\Routing\AvailabilityConsumer::class],
+        // Doc 13 (S13 step 5b, P-QPOS countersigned): the visitor's queue card follows the truth —
+        // the waiting set's order moves on placement, assignment and the age-cap boost (bounded fan-out).
+        'ticket.waiting' => [\App\Jobs\Webchat\QueuePositionPush::class],
+        'routing.starvation_boosted' => [\App\Jobs\Webchat\QueuePositionPush::class],
         'queue.temporary_grant.created' => [\App\Jobs\Routing\AvailabilityConsumer::class],
         'ticket.status_changed' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         // ── Doc 10 FR-13/T-04/T-05 (S10 step 6): the index-maintenance consumer of
@@ -115,7 +119,7 @@ final class ConsumerRegistry
         //    field definitions at provisioning — the KB seeder shape (fixture doc12.json; the
         //    ReopenConsumerDrillTest + OrganizationSeederTest pins move in THIS commit).
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, \App\Jobs\Fields\CustomerFieldSeederConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Webchat\QueuePositionPush::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],

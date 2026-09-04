@@ -1,7 +1,7 @@
 {
   "doc": "Doc13",
   "spec": "Doc 06 NFR-06/T-09 — consumer contract (S13 step 5): the ticket-family and message events Doc 13's durable consumers read.",
-  "note": "The keys this document's consumers DEPEND ON, per ticket.* event. Doc13/PreChat snapshots form answers that rode the first message into form_data on ticket.created (BR-06); its message.received slice lives in fixtures/webchat/consumers/doc13-events.json. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately.",
+  "note": "The keys this document's consumers DEPEND ON, per ticket.* event. Doc13/PreChat snapshots form answers that rode the first message into form_data on ticket.created (BR-06); its message.received slice lives in fixtures/webchat/consumers/doc13-events.json. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Doc13/QueuePositionPush recomputes the queue's waiting webchat positions on ticket.assigned (P-QPOS, S13 step 5b); its routing-family slices live in fixtures/routing/consumers/doc13-events.json.",
   "entries": [
     {
       "event": "ticket.created",
@@ -11,6 +11,25 @@
         "tenant_id",
         "ticket_id",
         "conversation_id"
+      ]
+    },
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc13/QueuePositionPush",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id"
+      ]
+    },
+    {
+      "event": "ticket.waiting",
+      "consumer": "Doc13/QueuePositionPush",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "queue"
       ]
     }
   ]

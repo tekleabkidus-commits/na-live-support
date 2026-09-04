@@ -1,0 +1,88 @@
+### S13 step 5b — P-QPOS targeted suites — 2026-09-04T15:57:55Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Widget\QueuePositionTest
+  ⨯ it P-QPOS: forWaitingTicket answers band + the ticket's own positi… 10.40s  
+  ⨯ it Doc13/QueuePositionPush: ONE ordered read + ONE membership query… 0.29s  
+
+   PASS  Tests\Security\EstimatorLeakageTest
+  ✓ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 0.52s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.31s  
+  ✓ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.06s  
+  ✓ it P-QPOS pin (S13 step 5b): the STAFF door never references the vi… 0.06s  
+
+   FAIL  Tests\Contract\WebchatEventConsumerContractsTest
+  ⨯ A-45: every consumer the catalog declares for Doc 13 is registered…  0.05s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.06s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.39s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.20s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.53s  
+
+   PASS  Tests\Feature\Routing\EstimatorTest
+  ✓ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 0.40s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.19s  
+  ✓ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.30s  
+  ✓ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.31s  
+  ✓ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.28s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\QueuePositionTest > it P-QPOS: forWaitingTic…   
+  Failed asserting that two strings are identical.
+  -'off_hours'
+  +'medium'
+  
+
+  at tests/Feature/Widget/QueuePositionTest.php:70
+     66▕         ->and($estimator->forWaitingTicket($queue, $t1, $noon)['position'])->toBeNull('an assigned ticket has no position');
+     67▕ 
+     68▕     $night = new DateTimeImmutable('2026-09-07 23:30:00', new DateTimeZone('Africa/Addis_Ababa'));
+     69▕     $off = $estimator->forWaitingTicket($queue, $t2, $night);
+  ➜  70▕     expect($off['band'])->toBe('off_hours')->and($off['opens_at'])->not->toBeNull();
+     71▕ 
+     72▕     // The staff shape is untouched by construction: forTicket still answers exactly the two keys.
+     73▕     expect(array_keys($estimator->forTicket($queue, $t2, $noon)))->toBe(['band', 'degraded']);
+     74▕ });
+
+  1   tests/Feature/Widget/QueuePositionTest.php:70
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\QueuePositionTes…  BindingResolutionException   
+  Target class [App\Support\TenantContext] does not exist.
+
+  at vendor/laravel/framework/src/Illuminate/Container/Container.php:1144
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      +6 vendor frames 
+  7   tests/Feature/Widget/QueuePositionTest.php:46
+  8   tests/Feature/Widget/QueuePositionTest.php:93
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Contract\WebchatEventConsumerContractsTest > A-45: every co…   
+  Expecting [] not to be empty 'ticket.assigned: contracted f…stered'.
+
+  at tests/Contract/WebchatEventConsumerContractsTest.php:53
+     49▕         $definition = EventCatalog::definition($entry['event']);
+     50▕         expect($entry['schema_version'])->toBe($definition['schema_version'], "{$entry['event']}: schema_version drifted")
+     51▕             ->and(array_diff($entry['reads'], $definition['payload']))->toBe([], "{$entry['event']}: reads a key the payload does not carry");
+     52▕         $jobs = array_filter(ConsumerRegistry::consumersFor($entry['event']), static fn (string $class): bool => str_starts_with($class, 'App\\Jobs\\Webchat\\'));
+  ➜  53▕         expect($jobs)->not->toBeEmpty("{$entry['event']}: contracted for Doc 13 but no Doc 13 job is registered");
+     54▕     }
+     55▕ });
+     56▕
+
+  1   tests/Contract/WebchatEventConsumerContractsTest.php:53
+
+
+  Tests:    3 failed, 13 passed (119 assertions)
+  Duration: 14.51s
+
+exit=2

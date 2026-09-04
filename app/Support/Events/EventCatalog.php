@@ -568,7 +568,7 @@ final class EventCatalog
             // FR-15 names this payload exactly: "{old, new, by}".
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_assignee_id', 'new_assignee_id', 'by'],
             'producers' => ['Doc06/AssignTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit', 'Doc08/SearchIndexer'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit', 'Doc08/SearchIndexer', 'Doc13/QueuePositionPush'],
             'description' => 'FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS the unassign that returns it to Doc 11\'s queue.',
         ],
         'ticket.priority_changed' => [
@@ -1130,14 +1130,14 @@ final class EventCatalog
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'queue', 'position'],
             'producers' => ['Doc11/Routing'],
-            'consumers' => ['Doc07/Inbox', 'Doc09/Chatbot', 'Doc15/Reporting'],
+            'consumers' => ['Doc07/Inbox', 'Doc09/Chatbot', 'Doc15/Reporting', 'Doc13/QueuePositionPush'],
             'description' => 'Doc 11 FR-19/FR-08 step 5: the ticket waits in `queue` at integer `position` (null = placed, not yet ranked); the estimator recomputes on it (T-06).',
         ],
         'routing.starvation_boosted' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'queue_id', 'waited_seconds', 'cap_minutes'],
             'producers' => ['Doc11/Routing'],
-            'consumers' => ['Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc15/Reporting', 'Doc17/Audit', 'Doc13/QueuePositionPush'],
             'description' => 'Doc 11 FR-12/NFR-06/SEC-06: the age cap promoted a ticket to the queue head — standard audit.',
         ],
         'routing.no_skill_match' => [

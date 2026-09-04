@@ -984,7 +984,7 @@ Doc 11 FR-12/NFR-06/SEC-06: the age cap promoted a ticket to the queue head — 
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `queue_id`, `waited_seconds`, `cap_minutes`
 - **Producers:** Doc11/Routing
-- **Consumers:** Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc15/Reporting, Doc17/Audit, Doc13/QueuePositionPush
 
 ## `sla.breached`
 
@@ -1164,7 +1164,7 @@ FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_assignee_id`, `new_assignee_id`, `by`
 - **Producers:** Doc06/AssignTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit, Doc08/SearchIndexer
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit, Doc08/SearchIndexer, Doc13/QueuePositionPush
 
 ## `ticket.assignee_deactivated`
 
@@ -1380,7 +1380,7 @@ Doc 11 FR-19/FR-08 step 5: the ticket waits in `queue` at integer `position` (nu
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `queue`, `position`
 - **Producers:** Doc11/Routing
-- **Consumers:** Doc07/Inbox, Doc09/Chatbot, Doc15/Reporting
+- **Consumers:** Doc07/Inbox, Doc09/Chatbot, Doc15/Reporting, Doc13/QueuePositionPush
 
 ## `transcript.exported`
 

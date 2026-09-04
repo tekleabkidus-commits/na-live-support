@@ -166,9 +166,10 @@ final class VisitorConversation
             return null;
         }
 
-        $estimate = $this->estimator->forTicket($ticket->queue_id, $ticket->id);
+        // P-QPOS (countersigned): the ticket's OWN position while it waits; null once ranked out.
+        $estimate = $this->estimator->forWaitingTicket($ticket->queue_id, $ticket->id);
 
-        return ['band' => $estimate['band'], 'degraded' => $estimate['degraded'], 'position' => null];
+        return ['band' => $estimate['band'], 'degraded' => $estimate['degraded'], 'position' => $estimate['position'], 'opens_at' => $estimate['opens_at']];
     }
 
     /**

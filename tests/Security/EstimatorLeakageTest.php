@@ -89,3 +89,13 @@ it('SEC-05 structural: the customer-facing shape is a CONSTANT of the source —
         expect(str_contains($endpoint, "'{$word}"))->toBeFalse('the endpoint mentions '.$word);
     }
 });
+
+it('P-QPOS pin (S13 step 5b): the STAFF door never references the visitor method forWaitingTicket — and the same sweep DOES find it in Doc 13\'s consumer and envelope (the positive control that the sweep can see)', function () {
+    $sweep = static fn (string $path): bool => str_contains((string) file_get_contents(app_path($path)), 'forWaitingTicket');
+    foreach (['Domain/Routing/Estimator/EstimateEndpoint.php', 'Http/Controllers/Routing/EstimateController.php', 'Domain/Routing/Estimator/QueueWaitVariable.php'] as $staff) {
+        expect($sweep($staff))->toBeFalse("{$staff} references the visitor shape — a position could reach a staff surface");
+    }
+    foreach (['Jobs/Webchat/QueuePositionPush.php', 'Domain/Webchat/Visitor/VisitorConversation.php'] as $visitor) {
+        expect($sweep($visitor))->toBeTrue("positive control: {$visitor} is the visitor consumer and must reference forWaitingTicket");
+    }
+});

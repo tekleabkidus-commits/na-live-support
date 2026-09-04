@@ -1,0 +1,35 @@
+### S13 step 5b — P-QPOS targeted suites (rerun after three fixes: registry line, TenantContext namespace, off-hours queue) — 2026-09-04T15:58:41Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member
+
+   PASS  Tests\Feature\Widget\QueuePositionTest
+  ✓ it P-QPOS: forWaitingTicket answers band + the ticket's own positi… 11.02s  
+  ✓ it Doc13/QueuePositionPush: ONE ordered read + ONE membership query… 0.61s  
+
+   PASS  Tests\Security\EstimatorLeakageTest
+  ✓ it SEC-05: GET /internal/routing/estimate/{queue} answers EXACTLY {… 0.39s  
+  ✓ it SEC-05: the Estimator's customer methods return the two-key shap… 0.31s  
+  ✓ it SEC-05 structural: the customer-facing shape is a CONSTANT of th… 0.05s  
+  ✓ it P-QPOS pin (S13 step 5b): the STAFF door never references the vi… 0.04s  
+
+   PASS  Tests\Contract\WebchatEventConsumerContractsTest
+  ✓ A-45: every consumer the catalog declares for Doc 13 is registered…  0.04s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.04s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.37s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.23s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.47s  
+
+   PASS  Tests\Feature\Routing\EstimatorTest
+  ✓ it FR-13 / A-52: bands from the raw estimate — position × 30 / assi… 0.48s  
+  ✓ it NFR-04 hysteresis: the shown band moves only when the raw estima… 0.19s  
+  ✓ it FS-03: a corrupted counter bucket → depth-only heuristic with de… 0.31s  
+  ✓ it T-06: the cached endpoint answers {band, degraded} — nothing els… 0.32s  
+  ✓ it FR-14 / US-01: the {{queue_wait}} provider gives the localized B… 0.35s  
+
+  Tests:    16 passed (150 assertions)
+  Duration: 15.30s
+
+exit=0

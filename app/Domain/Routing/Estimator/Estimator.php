@@ -69,4 +69,25 @@ final class Estimator
 
         return ['band' => $this->mapper->shownBand($queueId, $raw, $nowEpoch), 'degraded' => $degraded, 'position' => $position, 'throughput30' => $throughput, 'raw_minutes' => $raw, 'opens_at' => null];
     }
+
+    /**
+     * Doc 13 T-05 (P-QPOS, countersigned 2026-09-04): the VISITOR surface's
+     * queue card — band + the ticket's OWN 1-based position while it waits
+     * unassigned, from the same detail() every staff figure reads. Consumed
+     * ONLY server-side by the widget's sync envelope and its push consumer;
+     * the staff estimate door keeps its two-key shape (SEC-05 —
+     * EstimatorLeakageTest pins it, and pins that the staff door never
+     * references this method). EC-06 is the WIDGET's rendering law over this
+     * (the number never rises on screen); the server answers the truth.
+     * A-58's constant is untouched.
+     *
+     * @return array{band: string, degraded: bool, position: ?int, opens_at: ?string}
+     */
+    public function forWaitingTicket(string $queueId, string $ticketId, ?\DateTimeImmutable $now = null): array
+    {
+        $d = $this->detail($queueId, $ticketId, $now);
+        $own = $this->waiting->position($queueId, $ticketId);
+
+        return ['band' => $d['band'], 'degraded' => $d['degraded'], 'position' => $own, 'opens_at' => $d['opens_at']];
+    }
 }

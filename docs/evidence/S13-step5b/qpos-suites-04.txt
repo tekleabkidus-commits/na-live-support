@@ -1,0 +1,51 @@
+### S13 step 5b — contracts rerun after moving ticket.waiting into the tickets fixture; AssignBySystemDoorTest run WITH CreationPathsTest (the per-file function-loading class, proven) — 2026-09-04T16:02:17Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Contract\TicketEventConsumerContractsTest
+  ✓ NFR-06 completeness: every ticket.* event has a contract entry in…  10.82s  
+  ✓ NFR-06 fidelity: every fixture entry names a real relationship, rea… 0.06s  
+  ✓ T-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia… 0.06s  
+
+   PASS  Tests\Contract\WebchatEventConsumerContractsTest
+  ✓ A-45: every consumer the catalog declares for Doc 13 is registered…  0.07s  
+
+   PASS  Tests\Feature\Tickets\CreationPathsTest
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.16s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.11s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.12s  
+  ✓ FR-12/13/14: every door produces a new ticket that records its sour… 0.08s  
+  ✓ FR-14: the offline form is tagged offline by the path itself, not b… 0.07s  
+  ✓ FR-12: an open-family ticket blocks a second create and hands back…  0.06s  
+  ✓ FR-13: an idempotency key makes a replayed create return the SAME t… 0.07s  
+  ✓ AC-02 (concurrent half): concurrent creates on one conversation yie… 0.42s  
+  ✓ FR-21: a split target takes NO open slot — the one sanctioned multi… 0.12s  
+  ✓ FR-03: a subject given at creation is marked staff-authored; an abs… 0.10s  
+
+   FAIL  Tests\Feature\Routing\AssignBySystemDoorTest
+  ✓ it is UNREACHABLE from HTTP: no route action names assignBySystem,…  0.06s  
+  ✓ it assigns as the SYSTEM: assignee set, FR-05 new → open through th… 0.36s  
+  ⨯ it carries FR-15's as-if-assigned check exactly as the staff path:…  0.10s  
+  ✓ it loses the FR-16 race to a manual claim that landed first (BR-03:… 0.14s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Routing\AssignBySystemDoorTest > it carries…   Error   
+  Call to undefined function scopedActor()
+
+  at tests/Feature/Routing/AssignBySystemDoorTest.php:91
+     87▕ });
+     88▕ 
+     89▕ it('carries FR-15\'s as-if-assigned check exactly as the staff path: a Team-scoped assignee outside the department is REFUSED assignee_out_of_scope, and an agent without tickets.view too', function () {
+     90▕     [$ticket] = systemDoorFixture();
+  ➜  91▕     $teamScoped = scopedActor(['tickets.view'], 'Team', 'Fixture Team Routed Role');   // Team membership: fail-closed until step 3 binds it
+     92▕     expect(fn () => app(AssignTicket::class)->assignBySystem($ticket, $teamScoped, routingCommit()))
+     93▕         ->toThrow(AssigneeOutOfScope::class);
+     94▕ 
+     95▕     $blind = ticketActor([], 'Fixture Blind Role');
+
+  1   tests/Feature/Routing/AssignBySystemDoorTest.php:91
+
+
+  Tests:    1 failed, 18 passed (1219 assertions)
+  Duration: 13.19s
+
+exit=2
