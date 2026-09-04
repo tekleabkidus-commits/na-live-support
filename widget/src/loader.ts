@@ -238,28 +238,48 @@ declare const __NLW_CFG: ShimConfig | undefined;
         f.setAttribute('allow', 'microphone; clipboard-write');
         f.setAttribute('aria-hidden', id === 'nlw-panel' ? 'true' : 'false');
         const side = c.position === 'bottom_left' ? 'left' : 'right';
-        f.style.cssText = `position:fixed;${side}:${c.offset.side}px;bottom:${c.offset.bottom}px;width:${size.width};height:${size.height};border:0;background:transparent;z-index:2147483000;color-scheme:normal;max-width:100vw;max-height:100vh;`;
+        // Every inline property carries !important: a hostile host's `* { all: unset !important }`
+        // (SS-03) beats a plain inline style, but an inline !important beats the author's — the
+        // frames keep their own size and place on any page.
+        important(f, {
+            position: 'fixed',
+            [side]: `${c.offset.side}px`,
+            bottom: `${c.offset.bottom}px`,
+            width: size.width,
+            height: size.height,
+            border: '0',
+            background: 'transparent',
+            'z-index': '2147483000',
+            'color-scheme': 'normal',
+            'max-width': '100vw',
+            'max-height': '100vh',
+            display: 'block',
+        });
         return f;
+    }
+
+    function important(el: HTMLElement, props: Record<string, string>): void {
+        for (const k of Object.keys(props)) el.style.setProperty(k, props[k] ?? '', 'important');
     }
 
     function sizePanel(s: { open: boolean; sheet: boolean }): void {
         if (!panel) return;
         if (!s.open) {
-            panel.style.width = '0px';
-            panel.style.height = '0px';
+            important(panel, { width: '0px', height: '0px' });
             panel.setAttribute('aria-hidden', 'true');
             return;
         }
         panel.setAttribute('aria-hidden', 'false');
         if (s.sheet) {
-            panel.style.width = '100vw';
-            panel.style.height = '100vh';
-            panel.style.left = '0';
-            panel.style.right = '0';
-            panel.style.bottom = '0';
+            important(panel, {
+                width: '100vw',
+                height: '100vh',
+                left: '0',
+                right: '0',
+                bottom: '0',
+            });
         } else {
-            panel.style.width = '380px';
-            panel.style.height = '640px';
+            important(panel, { width: '380px', height: '640px' });
         }
     }
 

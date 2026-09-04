@@ -30,6 +30,24 @@ function onLoaderMessage(ev: MessageEvent): void {
         formRequested.value = true;
         void import('./forms/FormRenderer');
     }
+    // FR-02 open/close on the shell: the loader sizes the panel frame from THIS frame's answer
+    // (380×640, or the full sheet under 640 px — the drawn 375 law) and the host's hooks hear
+    // the event NAME only. The tabs and the thread arrive at step 8.
+    if (data.data.method === 'open' || data.data.method === 'close') {
+        const open = data.data.method === 'open';
+        window.parent.postMessage(
+            {
+                nlw: 1,
+                type: 'size',
+                data: { open, sheet: open && window.matchMedia('(max-width: 640px)').matches },
+            },
+            '*',
+        );
+        window.parent.postMessage(
+            { nlw: 1, type: 'event', data: { name: open ? 'open' : 'close' } },
+            '*',
+        );
+    }
 }
 
 const root = document.getElementById('nlw-root');

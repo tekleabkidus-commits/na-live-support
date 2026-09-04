@@ -1,0 +1,21 @@
+### step 7 browser legs 2–4 — rerun after: inline !important sizing (SS-03 caught the unset-all defeat), the shell's open/close size frames, the audit baseline/frame-index rule — 2026-09-04T17:49:36Z
+
+Running 14 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (701ms)
+  ✓   2 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (725ms)
+  ✓   3 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (724ms)
+  ✓   4 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (678ms)
+  ✓   5 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (811ms)
+  ✓   6 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.5s)
+  ✓   7 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (964ms)
+  ✓   8 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (702ms)
+  ✓   9 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (632ms)
+  ✓  10 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (620ms)
+  ✓  11 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (570ms)
+  ✓  12 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (567ms)
+  ✓  13 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  14 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (915ms)
+
+  14 passed (13.2s)
+exit=0

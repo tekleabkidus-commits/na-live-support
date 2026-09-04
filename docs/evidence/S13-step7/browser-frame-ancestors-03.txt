@@ -1,0 +1,26 @@
+### THE OWED CONTROL — widget-frame-ancestors.spec.ts, projects widget + widget-375 (charging) — after TWO harness/environment fixes: Caddy {host}→{hostport} (the port had been stripped from Host) and octane:reload (a stale worker still served the pre-step-6 route table: one of two concurrent frame requests answered Laravel's HTML 404; sequential requests never did) — 2026-09-04T17:47:55Z
+
+Running 2 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.2s)
+  ✘  2 [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2ms)
+
+
+  1) [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin 
+
+    Error: browserType.launch: Executable doesn't exist at /home/kidus/.cache/ms-playwright/webkit-2336/pw_run.sh
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/widget-frame-ancestors-the-e7ed0-ed-from-the-platform-origin-widget-375/error-context.md
+
+  1 failed
+    [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin 
+  1 passed (3.5s)
+exit=1

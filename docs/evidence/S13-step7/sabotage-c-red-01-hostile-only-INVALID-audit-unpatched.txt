@@ -1,0 +1,39 @@
+### SABOTAGE (c) — a document.querySelector('#host-input') planted in the loader's boot; the footprint audit must go RED — 2026-09-04T17:50:38Z
+
+Running 2 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (635ms)
+  ✘  2 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (5.6s)
+
+
+  1) [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-launcher')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('iframe#nlw-launcher')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      13 |     page.on('pageerror', (e) => errors.push(e.message));
+      14 |     await page.goto(`${CUSTOMER}/hostile.html?key=${encodeURIComponent(key)}`);
+    > 15 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+         |                                                       ^
+      16 |     const box = await page.locator('iframe#nlw-launcher').boundingBox();
+      17 |     expect(box?.width).toBe(64);
+      18 |     expect(box?.height).toBe(64);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-hostile-host.spec.ts:15:55
+
+    Error Context: test-results/widget-hostile-host-SS-03--a356c-e-keeps-its-own-input-value-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+  1 passed (6.9s)
+exit=1

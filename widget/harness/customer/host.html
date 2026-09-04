@@ -21,8 +21,22 @@
   window.__harnessListeners = [];
   const origAdd = window.addEventListener.bind(window);
   window.addEventListener = function (type, fn, opts) { window.__harnessListeners.push(type); return origAdd(type, fn, opts); };
-  window.__harnessBaselineGlobals = Object.getOwnPropertyNames(window);
+  // FR-24's structural clause, audited: the host counts every DOM READ the widget could make on
+  // this page (querySelector*, getElementById, getElementsBy*, document.cookie, localStorage).
+  // The loader's own writes (appendChild of its two iframes) and its allowed reads (location,
+  // document.referrer, activeElement PRESENCE) are not counted. Zero is the only passing count.
+  window.__harnessHostReads = [];
+  for (const m of ['querySelector', 'querySelectorAll', 'getElementById', 'getElementsByTagName', 'getElementsByClassName']) {
+    const orig = document[m].bind(document);
+    document[m] = function (...a) { window.__harnessHostReads.push(m); return orig(...a); };
+  }
+  const cookieDesc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
+  Object.defineProperty(document, 'cookie', { get() { window.__harnessHostReads.push('cookie'); return cookieDesc.get.call(document); }, set(v) { cookieDesc.set.call(document, v); } });
+  const lsDesc = Object.getOwnPropertyDescriptor(window, 'localStorage');
+  Object.defineProperty(window, 'localStorage', { get() { window.__harnessHostReads.push('localStorage'); return lsDesc.get.call(window); } });
   window.__harnessPush = history.pushState; window.__harnessReplace = history.replaceState;
+  window.__harnessBaselineGlobals = null; // declared before the snapshot so the snapshot contains it
+  window.__harnessBaselineGlobals = Object.getOwnPropertyNames(window);
   const key = new URLSearchParams(location.search).get('key');
   const platform = new URLSearchParams(location.search).get('platform') || 'https://platform.harness.localhost:8443';
   if (key) {

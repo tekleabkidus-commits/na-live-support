@@ -1,0 +1,37 @@
+### THE OWED CONTROL — rerun after the harness proxy fix (Caddy {host} → {hostport}: the port had been stripped from Host, so the app derived its origin without :8443 and the panel iframe pointed at a port nothing serves) — 2026-09-04T17:44:55Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (5.7s)
+
+
+  1) [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('#nlw-root')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('#nlw-root')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      13 |     await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(key)}`);
+      14 |     const panel = page.frameLocator('iframe#nlw-panel');
+    > 15 |     await expect(panel.locator('#nlw-root')).toHaveCount(1);
+         |                                              ^
+      16 |
+      17 |     // The negative half: a document on the platform origin (the app's own root) framing the panel.
+      18 |     await page.goto(`${PLATFORM}/`);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frame-ancestors.spec.ts:15:46
+
+    Error Context: test-results/widget-frame-ancestors-the-e7ed0-ed-from-the-platform-origin-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin 
+exit=1

@@ -64,7 +64,7 @@ export default defineConfig({
         },
         {
             name: 'widget-375',
-            use: { ...devices['iPhone 13'], baseURL: process.env.WIDGET_BASE_URL ?? 'https://customer.harness.localhost:8443' },
+            use: { ...devices['iPhone 13'], browserName: 'chromium', baseURL: process.env.WIDGET_BASE_URL ?? 'https://customer.harness.localhost:8443' }, // the 375 viewport + mobile emulation on CHROMIUM (ADR 0020 item 4: WebKit is not installed and never claimed)
             testMatch: /widget-.*\.spec\.ts/,
         },
     ],

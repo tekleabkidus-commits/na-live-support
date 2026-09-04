@@ -23,8 +23,8 @@ https://platform.harness.localhost:8443 {
 		transport http {
 			tls_server_name app
 		}
-		header_up Host {host}
-		header_up X-Forwarded-Host {host}
+		header_up Host {hostport}
+		header_up X-Forwarded-Host {hostport}
 		header_up X-Forwarded-Proto https
 	}
 }

@@ -1,0 +1,161 @@
+### step 7 browser legs 2–4 — loader, footprint, hostile-host; projects widget + widget-375 — 2026-09-04T17:48:17Z
+
+Running 14 tests using 1 worker
+
+  ✘   1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (684ms)
+  ✘   2 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (805ms)
+  ✘   3 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (5.9s)
+  ✓   4 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (702ms)
+  ✓   5 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (559ms)
+  ✓   6 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓   7 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (914ms)
+  ✘   8 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (698ms)
+  ✘   9 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (674ms)
+  ✘  10 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (5.7s)
+  ✓  11 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (638ms)
+  ✓  12 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (607ms)
+  ✓  13 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  14 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (917ms)
+
+
+  1) [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 5
+
+      Array [
+    +   "0",
+    +   "1",
+        "PlatformChat",
+    +   "__harnessBaselineGlobals",
+    +   "__harnessPush",
+    +   "__harnessReplace",
+        "__nlwLoaded",
+      ]
+
+      33 |         };
+      34 |     });
+    > 35 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+         |                         ^
+      36 |     expect(audit.listeners).toEqual(['message', 'popstate']);
+      37 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      38 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:35:25
+
+    Error Context: test-results/widget-footprint-AC-02-glo-9490b-he-page-input-is-never-read-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 64
+    Received: 300
+
+      15 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+      16 |     const box = await page.locator('iframe#nlw-launcher').boundingBox();
+    > 17 |     expect(box?.width).toBe(64);
+         |                        ^
+      18 |     expect(box?.height).toBe(64);
+      19 |     const mutations = await page.evaluate(() =>
+      20 |         (window as unknown as { __harnessMutations: string[] }).__harnessMutations.filter((m) =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-hostile-host.spec.ts:17:24
+
+    Error Context: test-results/widget-hostile-host-SS-03--a356c-e-keeps-its-own-input-value-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "true"
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      37 |                 .evaluate((el) => (el as HTMLIFrameElement).getAttribute('aria-hidden')),
+      38 |         )
+    > 39 |         .not.toBe('true');
+         |              ^
+      40 | });
+      41 |
+      42 | test('T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:39:14
+
+    Error Context: test-results/widget-loader-FR-01-FR-02--944ad-es-until-the-panel-is-ready-widget/error-context.md
+
+  4) [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 5
+
+      Array [
+    +   "0",
+    +   "1",
+        "PlatformChat",
+    +   "__harnessBaselineGlobals",
+    +   "__harnessPush",
+    +   "__harnessReplace",
+        "__nlwLoaded",
+      ]
+
+      33 |         };
+      34 |     });
+    > 35 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+         |                         ^
+      36 |     expect(audit.listeners).toEqual(['message', 'popstate']);
+      37 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      38 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:35:25
+
+    Error Context: test-results/widget-footprint-AC-02-glo-9490b-he-page-input-is-never-read-widget-375/error-context.md
+
+  5) [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 64
+    Received: 300
+
+      15 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+      16 |     const box = await page.locator('iframe#nlw-launcher').boundingBox();
+    > 17 |     expect(box?.width).toBe(64);
+         |                        ^
+      18 |     expect(box?.height).toBe(64);
+      19 |     const mutations = await page.evaluate(() =>
+      20 |         (window as unknown as { __harnessMutations: string[] }).__harnessMutations.filter((m) =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-hostile-host.spec.ts:17:24
+
+    Error Context: test-results/widget-hostile-host-SS-03--a356c-e-keeps-its-own-input-value-widget-375/error-context.md
+
+  6) [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "true"
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      37 |                 .evaluate((el) => (el as HTMLIFrameElement).getAttribute('aria-hidden')),
+      38 |         )
+    > 39 |         .not.toBe('true');
+         |              ^
+      40 | });
+      41 |
+      42 | test('T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:39:14
+
+    Error Context: test-results/widget-loader-FR-01-FR-02--944ad-es-until-the-panel-is-ready-widget-375/error-context.md
+
+  6 failed
+    [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+    [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+    [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready 
+    [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+    [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value 
+    [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready 
+  8 passed (26.3s)
+exit=1
