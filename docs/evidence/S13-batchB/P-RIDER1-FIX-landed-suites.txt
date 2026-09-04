@@ -1,0 +1,39 @@
+### P-RIDER1-FIX landing — scrubber suites + SecretRotationTest + WidgetGrantPhysicsTest — 2026-09-04T16:21:01Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Security\VaultRefScrubberPatternsTest
+  ✓ it RIDER 1 control (P-RIDER1-FIX): a vault:// ref and an encrypter… 10.43s  
+
+   PASS  Tests\Security\LogScrubberTest
+  ✓ it SEC-08: every configured channel carries SecurityLogTap — null a… 0.04s  
+  ✓ it scrubs secret-shaped keys on the rendered sink and passes benign… 0.03s  
+  ✓ it scrubs the webhook auth headers in nested access-log shapes (ste… 0.04s  
+  ✓ it never scrubs identifier suffixes — token_id and key_id stay trac… 0.03s  
+  ✓ it SEC-08/C-14: every rendered record carries trace_id and tenant_i… 0.04s  
+  ✓ it a real refused request logs WITH a trace_id and WITHOUT the pres… 0.08s  
+  ✓ it AC-08: seeded credentials from every real flow are absent from t… 4.89s  
+
+   PASS  Tests\Security\TelegramScrubberPatternsTest
+  ✓ it NFR-06: a bot-token-shaped VALUE under an innocent key never rea… 0.03s  
+  ✓ it NFR-06: a token inside the MESSAGE string is scrubbed — free tex… 0.03s  
+  ✓ it T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or… 0.03s  
+
+   PASS  Tests\Security\PhoneEmailScrubberPatternsTest
+  ✓ it SEC-03: near-miss controls survive to the sink — the scanner and… 0.03s  
+  ✓ it SEC-03: phone and email VALUES under innocent keys never reach t… 0.03s  
+  ✓ it SEC-03: phone and email VALUES inside the message string itself…  0.03s  
+  ✓ it SEC-03: benign context survives — UUIDs, timezone offsets, _id k… 0.03s  
+  ✓ it SEC-03: the four DB sinks — per-sink plant→detect→rollback contr… 0.08s  
+
+   PASS  Tests\Feature\Widget\SecretRotationTest
+  ✓ it rotates with an overlap window: old + new verify inside it, only… 0.08s  
+
+   PASS  Tests\Isolation\WidgetGrantPhysicsTest
+  ✓ it R-19b/ADR-0003: the app denied set per widget table and privileg… 0.11s  
+  ✓ it N-01: every widget tenant table is FORCED RLS with tenant_isolat… 0.03s  
+  ✓ it FR-20 / Doc 02 physics: a config-version UPDATE and a widgets ke… 0.09s  
+
+  Tests:    20 passed (284 assertions)
+  Duration: 16.26s
+
+exit=0

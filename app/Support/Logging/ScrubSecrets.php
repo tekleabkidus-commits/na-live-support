@@ -107,6 +107,12 @@ final class ScrubSecrets implements ProcessorInterface
         // Local Ethiopian format: 09/07 + 8 digits, separator-tolerant
         // (R-D09-1 names both formats; 07 covers the 7-series mobiles).
         '/(?<!\d)0[79](?:[\s-]?\d){8}(?!\d)/',
+        // RIDER 1 (SCHEMA AMENDMENT 7, the C-13 interim; P-RIDER1-FIX): a
+        // `vault://` REF names a secret's address and a Laravel-encrypter
+        // CIPHERTEXT (base64 of the {"iv":…} envelope) is the secret at rest —
+        // neither may reach a sink under an innocent key or inside the message.
+        '~vault://[A-Za-z0-9_-]+/\S+~',
+        '/eyJpdiI6[A-Za-z0-9+\/]{40,}={0,2}/',
     ];
 
     /**
