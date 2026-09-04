@@ -2592,3 +2592,105 @@ entries:
     status: covered
     justification: >-
       FLIPPED AT S12 STEP 13: SEC-01 floor REAL (ActivatorFloorTest — capture, demoted-author floor_refused, drift); SEC-02 REAL (WebhookEgressTest — the SSRF rules at destination birth with the stable code, url immutable by grant 42501, no direct egress when the proxy is empty, signed headers verifying against the inbound contract's arithmetic, unsigned never sends; ExternalArmsTest's EC-13 drill: retry ×8 → abandon + auto-disable + alert); SEC-03 elision REAL (LogElisionTest role fixtures).
+
+  # ── Doc 13 (Web Chat Widget) — SESSION-13 PLANNED rows (the S11 precedent: partial, each naming its flipping step; grown as suites land) ──
+  - ac_ref: "Doc13 AC-01"
+    suite_path: tests/Contract/AdapterConformance/WebchatAdapterConformanceTest.php
+    type: automated
+    tier: contract
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED AT S13 STEP 1 (plan of record 0f2949e): the conformance half is REAL now — the unmodified suite green on the real WebchatAdapter (56 passed, zero core edits; the fail-first capability lie captured RED first); the truthful-delivery DOM half (double check ONLY after the receipt ack) flips at step 8 (tests/Browser/widget-thread.spec.ts).
+  - ac_ref: "Doc13 AC-02"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the suite lands — the registry gate requires an existing path): flips at step 7 — tests/Browser/widget-footprint.spec.ts + the hostile-host suite (tests/Browser/widget-hostile-host.spec.ts, SS-03) green + the loader footprint audit asserting globals/listeners/DOM EXACTLY.
+  - ac_ref: "Doc13 AC-03"
+    suite_path: tests/Feature/Auth/WidgetSessionTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED AT S13 STEP 1 (the server layer is REAL today in WidgetSessionTest — AC-06 of Doc 02 by removal): flips at step 3 with tests/Security/WidgetOriginLayersTest.php — each of SEC-02's three layers blocks alone (disable two, the third holds; loader/CORS/server) on THE HARNESS; EC-12's wildcard boundary re-pinned. Doc 02's server layer is already proven (WidgetSessionTest).
+  - ac_ref: "Doc13 AC-04"
+    suite_path: tests/Security/WidgetPartitionTest.php
+    type: automated
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED AT S13 STEP 1 (the Reverb-channel half is REAL today in WidgetPartitionTest): flips at step 3 with tests/Security/WidgetVisitorScopeTest.php — the visitor-scope matrix (a token reaches exactly its own conversation/survey/context; cross-visitor 404). The Reverb-channel half is proven NOW from the customer origin (tests/Browser/widget-reverb-auth.spec.ts: own channel subscribed, foreign channel 403 never 500).
+  - ac_ref: "Doc13 AC-05"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the suite lands): flips at steps 8-9 with tests/Browser/widget-thread.spec.ts — the four scripted journeys (AI-resolve+CSAT, handoff+queue+agent, off-hours form, blocked visitor) rendering every §8 state; EC-06 queue honesty in tests/Browser/widget-queue.spec.ts.
+  - ac_ref: "Doc13 AC-06"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the suite lands): flips at step 9 with tests/Browser/widget-proactive.spec.ts — cooldown, dismissal-respect, focus-politeness (EC-05), SPA re-evaluation.
+  - ac_ref: "Doc13 AC-07"
+    suite_path: manual
+    type: manual
+    tier: security
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the suite lands): flips at step 4 with tests/Security/SignedIdentityTest.php — valid/invalid/replayed/switched (EC-04) fixtures with Doc 08 BR-01 provenance labels; A-61 as ruled.
+  - ac_ref: "Doc13 AC-08"
+    suite_path: tests/Browser/widget-reverb-auth.spec.ts
+    type: automated
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED AT S13 STEP 1 (the channel-auth precondition is REAL today in widget-reverb-auth.spec.ts): flips at step 8 with tests/Browser/widget-transport.spec.ts — the FR-21 fallback drill (socket killed mid-chat → polling ≤ 10 s → resume → converge, zero duplicates) + multi-tab leader hand-off ≤ 2 s. The channel-auth precondition is proven now (widget-reverb-auth.spec.ts).
+  - ac_ref: "Doc13 AC-09"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the gate lands): ci/widget-bundle-budget.sh — the NFR-01 budgets become a CI GATE at step 6 (first build); zero host-page layout shift measured at step 7; throttled-profile and WebView-lab legs are [OA]/[D19] — stated per row, never claimed.
+  - ac_ref: "Doc13 AC-10"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      PLANNED (justified manual until the suite lands): flips at steps 8-9 with tests/Browser/widget-i18n.spec.ts — axe (WCAG 2.2 AA) both themes both viewports, announcements asserted; the language-resolution matrix incl. setLanguage() and completeness gates; screen-reader legs NVDA/VoiceOver are [OA].

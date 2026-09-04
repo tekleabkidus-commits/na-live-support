@@ -1,0 +1,49 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      conformance-lie-red
+# set:        S13-step1
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Contract/AdapterConformance/WebchatAdapterConformanceTest.php
+# started:    2026-09-04T05:51:14Z
+# git:        0f2949e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                            [39m [90m11.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\AdapterConformance\WebchatAdapterConformanceTest[22m [90m>[39m…   
+[39;1m  [webchat] supports_edit declared but extension missing
+Failed asserting that an instance of class App\Domain\Webchat\WebchatAdapter is an instance of interface App\Domain\Conversations\Adapters\SupportsEdit.[39;22m
+
+  at [32mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39m:[32m265[39m
+    261▕         }
+    262▕ 
+    263▕         // supports_edit / supports_delete (FR-22): same pairing rule.
+    264▕         if ($capabilities->supportsEdit) {
+  ➜ 265▕             $this->assertInstanceOf(SupportsEdit::class, $adapter, "[$label] supports_edit declared but extension missing");
+    266▕             $edit = $adapter->editMessage('fixture-chat-3', 'fixture-msg-1', DeliverablePayload::text('edited'));
+    267▕             $this->assertSame(SendState::Sent, $edit->state, "[$label] declared edit must succeed");
+    268▕         } elseif ($adapter instanceof SupportsEdit) {
+    269▕             $edit = $adapter->editMessage('fixture-chat-3', 'fixture-msg-1', DeliverablePayload::text('edited'));
+
+  [33m1   [39m[39;1mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39;22m:[39;1m265[39;22m
+  [33m2   [39m[39;1mtests/Contract/AdapterConformance/AdapterConformanceCase.php[39;22m:[39;1m223[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m10 passed[39;22m[90m (45 assertions)[39m
+  [90mDuration:[39m [39m11.70s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T05:51:26Z
+# duration:   12s
+# EXIT:       1

@@ -1,0 +1,65 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      battery-pest
+# set:        S13-step1
+# command:    make test
+# started:    2026-09-04T06:05:33Z
+# git:        0f2949e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan octane:reload
+
+   INFO  Reloading workers...  
+
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml restart worker scheduler reverb
+ Container na-live-support-reverb-1 Restarting 
+ Container na-live-support-scheduler-1 Restarting 
+ Container na-live-support-worker-1 Restarting 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-worker-1 Started 
+docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml up -d --wait app worker scheduler reverb
+time="2026-09-04T09:05:38+03:00" level=warning msg="Found orphan containers (na-live-support-harness-1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container na-live-support-redis-durable-1 Running 
+ Container na-live-support-postgres-1 Running 
+ Container na-live-support-reverb-1 Running 
+ Container na-live-support-worker-1 Running 
+ Container na-live-support-redis-volatile-1 Running 
+ Container na-live-support-app-1 Running 
+ Container na-live-support-scheduler-1 Running 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-reverb-1 Waiting 
+ Container na-live-support-worker-1 Waiting 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-app-1 Waiting 
+ Container na-live-support-scheduler-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-app-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-reverb-1 Healthy 
+ Container na-live-support-worker-1 Healthy 

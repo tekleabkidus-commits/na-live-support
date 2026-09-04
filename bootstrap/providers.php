@@ -11,4 +11,5 @@ return [
     App\Providers\TelegramServiceProvider::class,
     App\Providers\TenancyServiceProvider::class,
     App\Providers\KbServiceProvider::class,
+    App\Providers\WebchatServiceProvider::class,
 ];

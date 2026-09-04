@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      reverb-visitor-principal
+# set:        S13-step1
+# command:    npx playwright test tests/Browser/widget-reverb-auth.spec.ts --project=chromium
+# started:    2026-09-04T05:56:52Z
+# git:        0f2949e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 1 test using 1 worker
+
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06afd-e3e6-72d3-a33e-d04fc413bf7e","authStatus":200,"subscribed":"private-tenant.01a0598c-b639-7328-9465-78be166c45e8.visitor.01a06afd-e3e6-72d3-a33e-d04fc413bf7e.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  1 [chromium] › tests/Browser/widget-reverb-auth.spec.ts:42:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (488ms)
+
+  1 passed (5.3s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T05:56:59Z
+# duration:   7s
+# EXIT:       0

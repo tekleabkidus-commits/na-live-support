@@ -1,0 +1,45 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      gates
+# set:        S13-step1
+# command:    make gates
+# started:    2026-09-04T05:58:50Z
+# git:        0f2949e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            FAIL
+      registry-check: traceability[143]: suite_path "tests/Browser/widget-footprint.spec.ts" does not exist
+      registry-check: traceability[144]: suite_path "tests/Security/WidgetOriginLayersTest.php" does not exist
+      registry-check: traceability[145]: suite_path "tests/Security/WidgetVisitorScopeTest.php" does not exist
+      registry-check: traceability[146]: suite_path "tests/Browser/widget-thread.spec.ts" does not exist
+      registry-check: traceability[147]: suite_path "tests/Browser/widget-proactive.spec.ts" does not exist
+      registry-check: traceability[148]: suite_path "tests/Security/SignedIdentityTest.php" does not exist
+      registry-check: traceability[149]: suite_path "tests/Browser/widget-transport.spec.ts" does not exist
+      registry-check: traceability[150]: suite_path "ci/widget-bundle-budget.sh" does not exist
+      registry-check: traceability[151]: suite_path "tests/Browser/widget-i18n.spec.ts" does not exist
+      registry-check: FAIL (9 violation(s))
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 1 failed, 0 skipped.
+FAILED: registry-check
+make: *** [Makefile:97: gates] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T06:00:42Z
+# duration:   112s
+# EXIT:       2

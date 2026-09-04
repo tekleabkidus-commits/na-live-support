@@ -1,0 +1,36 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      reverb-visitor-principal
+# set:        S13-step1
+# command:    npx playwright test tests/Browser/widget-reverb-auth.spec.ts --project=chromium
+# started:    2026-09-04T05:55:37Z
+# git:        0f2949e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/Browser/widget-reverb-auth.spec.ts:42:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (0ms)
+
+
+  1) [chromium] › tests/Browser/widget-reverb-auth.spec.ts:42:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) 
+
+    Error: Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan db:seed --class=Database\Seeders\WidgetHarnessSeeder --force
+
+      23 |
+      24 | function artisan(...args: string[]): string {
+    > 25 |     return execFileSync('docker', ['compose', '--profile', 'embeddings', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml',
+         |            ^
+      26 |         'exec', '-T', 'app', 'php', 'artisan', ...args], { stdio: 'pipe' }).toString();
+      27 | }
+      28 |
+        at artisan (/home/kidus/projects/na-live-support/tests/Browser/widget-reverb-auth.spec.ts:25:12)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-reverb-auth.spec.ts:34:17
+
+    Error Context: test-results/widget-reverb-auth-a-visit-c9f73-3-T-04-Doc-02-FR-21-STOP-E--chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/widget-reverb-auth.spec.ts:42:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) 
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T05:55:44Z
+# duration:   7s
+# EXIT:       1
