@@ -1,14 +1,15 @@
 // SESSION-F1 [B12-batch] — the visibility proofs for Doc 12's Workflow surfaces against the
 // frozen Batch 9 record (design/frozen/B9-S05…S13, 67dc4e4). The existing Workflow specs
 // (workflow-screens, structure-admin, inbox-palette) stay byte-untouched and run beside this
-// file; this file proves what the frames DRAW. Build shots land under docs/evidence/F1-B12/shots/.
+// file; this file proves what the frames DRAW. Build shots land under test-results/f1-shots/F1-B12/shots/ (untracked; the committed docs/evidence/F1-B12/shots/ set is the accepted record).
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { shotsDir } from './support/shots';
 
 const V1440 = { width: 1440, height: 900 };
 const V375 = { width: 375, height: 812 };
-const SHOTS = 'docs/evidence/F1-B12/shots';
+const SHOTS = shotsDir('F1-B12'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
 
 function artisan(...args: string[]): string {
     return execFileSync(
@@ -52,7 +53,6 @@ ${code}`,
 }
 
 test.beforeAll(() => {
-    execFileSync('mkdir', ['-p', SHOTS]);
     artisan('auth:session-inspect', 'clear-throttle');
     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
 });

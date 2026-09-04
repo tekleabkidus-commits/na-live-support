@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, Page, test } from '@playwright/test';
+import { shotsDir } from './support/shots';
 import { dismissCoachMarks } from './support/coach';
 
 /*
@@ -9,13 +10,13 @@ import { dismissCoachMarks } from './support/coach';
  * adds the frame-level proofs the mandate asks for: the drawn states are
  * VISIBLE (not merely present), axe-clean in BOTH themes, 44 px targets at 375,
  * and the build side of every frame-vs-build screenshot pair is written under
- * docs/evidence/F1-B8/shots/ so the owner can compare it with the frame.
+ * test-results/f1-shots/F1-B8/shots/ (untracked; the committed docs/evidence/F1-B8/shots/ set is the accepted record) so the owner can compare it with the frame.
  */
 const PASSWORD = 'browser-fixture-password';
 const AGENT_EMAIL = 'agent@fixture.example';
 const V1440 = { width: 1440, height: 900 };
 const V375 = { width: 375, height: 812 };
-const SHOTS = 'docs/evidence/F1-B8/shots';
+const SHOTS = shotsDir('F1-B8'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
 
 // The staff user's stored locale always wins over the login cookie (ApplyUserLocale), so the
 // Amharic sweep flips the fixture agent's users.locale under the tenant's own RLS context and
@@ -52,7 +53,6 @@ function artisan(...args: string[]): void {
     );
 }
 test.beforeAll(() => {
-    execFileSync('mkdir', ['-p', SHOTS]);
     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
     artisan('db:seed', '--class=Database\\Seeders\\InboxBrowserSeeder', '--force');
     artisan('db:seed', '--class=Database\\Seeders\\AiBrowserSeeder', '--force');

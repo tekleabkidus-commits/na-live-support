@@ -3,14 +3,15 @@
 // (kb-manager, kb-a11y, inbox-palette) stays byte-untouched and runs beside this file; this
 // file proves what the frames DRAW: the chrome, the anatomy, the states, the absences, the
 // 44 px targets at 375, axe in both themes, the Amharic sweep, reduced motion. Build shots
-// land under docs/evidence/F1-B9/shots/ beside the frame shots.
+// land under test-results/f1-shots/F1-B9/shots/ (untracked; the committed docs/evidence/F1-B9/shots/ set is the accepted record) beside the frame shots.
 import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { shotsDir } from './support/shots';
 
 const V1440 = { width: 1440, height: 900 };
 const V375 = { width: 375, height: 812 };
-const SHOTS = 'docs/evidence/F1-B9/shots';
+const SHOTS = shotsDir('F1-B9'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
 const A1 = '018f6b2e-0000-7000-8000-00000000ed11';
 const A2 = '018f6b2e-0000-7000-8000-00000000ed12';
 const A4 = '018f6b2e-0000-7000-8000-00000000ed14';
@@ -52,7 +53,6 @@ DB::table('users')->where('email','agent@fixture.example')->update(['locale' => 
 }
 
 test.beforeAll(() => {
-    execFileSync('mkdir', ['-p', SHOTS]);
     artisan('auth:session-inspect', 'clear-throttle');
     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
     artisan('db:seed', '--class=Database\\Seeders\\KbBrowserSeeder', '--force');
