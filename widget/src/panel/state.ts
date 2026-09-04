@@ -26,6 +26,12 @@ export const online = signal(navigator.onLine);
 export const unread = signal(0);
 /** I01: the widget's own notification question — opened ONLY after the first sent message. */
 export const notifyPromptOpen = signal(false);
+/** FR-06: the pre-chat gate — `pending` until answered/skipped; `done` once the first message may go. */
+export const preChat = signal<'none' | 'pending' | 'done'>('none');
+/** FR-14: the proactive rule currently shown (its id), or null. */
+export const proactive = signal<{ id: string; text: string } | null>(null);
+/** the Help tab's article to open (a shortcut or openHelp(slug)) */
+export const helpArticle = signal<string | null>(null);
 export const lastSeenId = signal<string | null>(null);
 /** The HOST viewport (the loader's fact — this frame is 0×0 until it opens): the full sheet under 480 px (B10). */
 export const hostViewport = signal<{ width: number; height: number } | null>(null);

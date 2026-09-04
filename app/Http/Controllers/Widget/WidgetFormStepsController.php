@@ -35,6 +35,21 @@ final class WidgetFormStepsController
         private readonly OfflineSubmission $offline,
     ) {}
 
+    /** FR-06 / FR-15: the immutable version's schema for the visitor (Doc 12's `widgetContract`, NFR-04's ≤ 30 KB payload). */
+    public function show(Request $request, string $versionId): JsonResponse
+    {
+        if (! $request->user('widget') instanceof WidgetVisitor) {
+            throw new NotFoundHttpException;
+        }
+        try {
+            $contract = $this->versions->widgetContract($versionId);
+        } catch (\Throwable) {
+            throw new NotFoundHttpException;
+        }
+
+        return (new JsonResponse($contract))->setCache(['private' => true, 'max_age' => 300]);
+    }
+
     public function store(Request $request, string $versionId): JsonResponse
     {
         $visitor = $request->user('widget');

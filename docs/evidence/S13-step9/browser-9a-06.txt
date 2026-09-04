@@ -1,0 +1,97 @@
+### 9a — help (split) + proactive rerun — 2026-09-04T20:00:36Z
+
+Running 6 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-help.spec.ts:7:1 › E01/E02: browse lists the published article; search finds it as you type (debounced, highlighted); the start-a-chat footer is pinned (3.3s)
+  ✘  2 [widget] › tests/Browser/widget-help.spec.ts:28:1 › E03/E04: the reader shows the blocks; 👍 lands; the footer wording shifts on an article (7.9s)
+  ✘  3 [widget] › tests/Browser/widget-help.spec.ts:52:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders (8.4s)
+  ✓  4 [widget] › tests/Browser/widget-help.spec.ts:69:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works (1.7s)
+  ✘  5 [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads (6.7s)
+  ✓  6 [widget] › tests/Browser/widget-proactive.spec.ts:45:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered (5.2s)
+
+
+  1) [widget] › tests/Browser/widget-help.spec.ts:28:1 › E03/E04: the reader shows the blocks; 👍 lands; the footer wording shifts on an article 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=help]')
+    Expected: "article"
+    Received: "browse"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=help]')
+        14 × locator resolved to <div data-role="help" class="nlw-help" data-view="browse">…</div>
+           - unexpected value "browse"
+
+
+      41 |         .first()
+      42 |         .click({ timeout: 10000 });
+    > 43 |     await expect(help).toHaveAttribute('data-view', 'article');
+         |                        ^
+      44 |     await expect(help.locator('.nlw-article h2')).toContainText('How long do withdrawals take');
+      45 |     await expect(help.locator('.nlw-article p').first()).toContainText('within 15 minutes');
+      46 |     await expect(panel.locator('[data-role=help-footer]')).toContainText('This did not answer it');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-help.spec.ts:43:24
+
+    Error Context: test-results/widget-help-E03-E04-the-re-d8868-ording-shifts-on-an-article-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-help.spec.ts:52:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=help]').locator('[data-role=language-fallback]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=help]').locator('[data-role=language-fallback]')
+
+
+      63 |         .first()
+      64 |         .click({ timeout: 10000 });
+    > 65 |     await expect(help.locator('[data-role=language-fallback]')).toBeVisible();
+         |                                                                 ^
+      66 |     await expect(help.locator('.nlw-article h2')).toContainText('How long do withdrawals take');
+      67 | });
+      68 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-help.spec.ts:65:65
+
+    Error Context: test-results/widget-help-E07-an-Amharic-4087d-e-the-article-still-renders-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('#host-input')
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for locator('#host-input')
+        14 × locator resolved to <input id="host-input" value="FIXTURE host value"/>
+           - unexpected value "inactive"
+
+
+      21 |     await page.goto(`${CUSTOMER}/deposit.html?key=${encodeURIComponent(key)}`);
+      22 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+    > 23 |     await expect(page.locator('#host-input')).toBeFocused();
+         |                                               ^
+      24 |     const launcher = page.frameLocator('iframe#nlw-launcher');
+      25 |     await page.waitForTimeout(2500);
+      26 |     expect(await launcher.locator('[data-role=proactive]').count()).toBe(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-proactive.spec.ts:23:47
+
+    Error Context: test-results/widget-proactive-H01-H02-H-4a608-oldown-holds-across-reloads-widget/error-context.md
+
+  3 failed
+    [widget] › tests/Browser/widget-help.spec.ts:28:1 › E03/E04: the reader shows the blocks; 👍 lands; the footer wording shifts on an article 
+    [widget] › tests/Browser/widget-help.spec.ts:52:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders 
+    [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+  3 passed (37.4s)
+exit=1

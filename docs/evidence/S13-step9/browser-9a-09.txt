@@ -1,0 +1,55 @@
+### 9a — proactive rerun (drain on the panel frame's ready) — 2026-09-04T20:05:57Z
+
+Running 2 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads (30.1s)
+  ✓  2 [widget] › tests/Browser/widget-proactive.spec.ts:48:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered (5.0s)
+
+
+  1) [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive] button[aria-label=Dismiss]')
+        - locator resolved to <button type="button" class="nlw-icon" aria-label="Dismiss">✕</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <svg class="nlw-x" aria-hidden="true" viewBox="0 0 24 24">…</svg> from <button type="button" data-open="false" data-nudge="false" class="nlw-launcher" aria-label="Open support chat">…</button> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <svg class="nlw-x" aria-hidden="true" viewBox="0 0 24 24">…</svg> from <button type="button" data-open="false" data-nudge="false" class="nlw-launcher" aria-label="Open support chat">…</button> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        44 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <svg class="nlw-x" aria-hidden="true" viewBox="0 0 24 24">…</svg> from <button type="button" data-open="false" data-nudge="false" class="nlw-launcher" aria-label="Open support chat">…</button> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      35 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCSS('width', '320px'); // the frame grew for the card
+      36 |     // H02: dismiss → gone; reload the same page → still gone
+    > 37 |     await launcher.locator('[data-role=proactive] button[aria-label=Dismiss]').click();
+         |                                                                                ^
+      38 |     await expect(launcher.locator('[data-role=proactive]')).toHaveCount(0);
+      39 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCSS('width', '64px');
+      40 |     await page.reload();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-proactive.spec.ts:37:80
+
+    Error Context: test-results/widget-proactive-H01-H02-H-4a608-oldown-holds-across-reloads-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+  1 passed (36.7s)
+exit=1

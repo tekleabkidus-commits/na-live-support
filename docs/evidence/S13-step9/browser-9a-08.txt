@@ -1,0 +1,37 @@
+### 9a — proactive rerun (probe at show time) — 2026-09-04T20:03:32Z
+
+Running 2 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads (14.5s)
+  ✓  2 [widget] › tests/Browser/widget-proactive.spec.ts:48:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered (5.1s)
+
+
+  1) [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected substring: "how long your deposit should take"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      29 |     expect(await launcher.locator('[data-role=proactive]').count()).toBe(0);
+      30 |     await page.locator('#host-input').blur();
+    > 31 |     await expect(launcher.locator('[data-role=proactive]')).toContainText(
+         |                                                             ^
+      32 |         'how long your deposit should take',
+      33 |         { timeout: 10000 },
+      34 |     );
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-proactive.spec.ts:31:61
+
+    Error Context: test-results/widget-proactive-H01-H02-H-4a608-oldown-holds-across-reloads-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+  1 passed (21.4s)
+exit=1

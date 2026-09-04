@@ -16,14 +16,10 @@ return [
         'voice_recording' => 'Widget voice notes',
     ],
     'identity' => [
+        // customer-facing (F06): continuity only — the word "verified" appears nowhere (BR-05)
+        'signed_in_as' => 'Signed in as :name',
+        'from_site' => 'from your account on the site',
         // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
-        'switched_note' => 'Site identity changed: the site now asserts :asserted (was :previous). Nothing was re-linked — review and merge by hand if these are one person.',
-    ],
-    // STOP-5A (a): the STAFF-visible system lines a pre-chat phone drops (never rendered to the visitor;
-    // the phone is a staff-collected value — an identity only through Doc 08's FR-09 staff door).
-    'prechat' => [
-        'phone_provided' => 'Phone provided in the pre-chat form: :phone (staff-collected, not linked). Link it from the profile if it is theirs.',
-        'phone_conflict' => 'Phone provided in the pre-chat form: :phone — this number already sits on another customer. Nothing was attached; review both profiles before linking.',
     ],
     // ── The PANEL's customer-facing copy (S13 step 8; every key swept by the vocabulary gate) ──
     'tabs' => ['home' => 'Home', 'messages' => 'Messages', 'help' => 'Help'],
@@ -121,6 +117,52 @@ return [
         'new_system' => ':text',
         'typing' => ':name is typing',
         'attachment' => 'Attachment',
+    ],
+    // ── Help, forms, hours, identity, proactive (S13 step 9a) ──
+    'help' => [
+        'search' => 'Search help',
+        'search_placeholder' => 'Search for an answer',
+        'popular' => 'Popular right now',
+        'categories' => 'Categories',
+        'results' => '{0} No results|{1} :count result|[2,*] :count results',
+        'still_need' => 'Still need help?',
+        'start_chat' => 'Start a chat',
+        'not_answered' => 'This did not answer it — start a chat',
+        'helpful' => 'Was this helpful?',
+        'thanks' => 'Thanks for telling us.',
+        'updated' => 'Updated :date',
+        'back' => 'Back',
+        'index_down' => 'Articles are unavailable — chat still works.',
+        'language_fallback' => 'This article is not in your language yet; here it is in :language.',
+        'articles_count' => '{1} :count article|[2,*] :count articles',
+    ],
+    'prechat' => [
+        'optional_intro' => 'Leave a name and number if you would like us to follow up — or skip and start typing.',
+        'required_intro' => 'So we can find your account, please tell us who you are.',
+        'optional' => 'Optional',
+        'required' => 'Required',
+        'continue' => 'Continue',
+        'skip' => 'Skip',
+        'start' => 'Start the chat',
+    ],
+    'offline' => [
+        'title' => 'We are closed right now',
+        'intro' => 'The team opens at :time — leave this with us.',
+        'send' => 'Send it',
+        'receipt_title' => 'We have it — ticket #:number',
+        'receipt_body' => 'An agent picks this up at :time.',
+        'receipt_sms' => 'We will text :phone the moment someone starts on it.',
+        'receipt_done' => 'Nothing else to do — you can close this.',
+    ],
+    'proactive' => [
+        'dismiss' => 'Dismiss',
+        'open' => 'Reply',
+    ],
+    // STAFF-visible lines only (never rendered to the visitor; the config envelope drops this branch): EC-04's identity switch, STOP-5A's phone lines.
+    'staff' => [
+        'identity_switched' => 'Site identity changed: the site now asserts :asserted (was :previous). Nothing was re-linked — review and merge by hand if these are one person.',
+        'phone_provided' => 'Phone provided in the pre-chat form: :phone (staff-collected, not linked). Link it from the profile if it is theirs.',
+        'phone_conflict' => 'Phone provided in the pre-chat form: :phone — this number already sits on another customer. Nothing was attached; review both profiles before linking.',
     ],
     // FR-06/FR-15 inline refusals (R-D13-5.1: calm, no failure vocabulary).
     'form' => [

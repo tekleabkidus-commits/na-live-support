@@ -86,6 +86,80 @@ final class WidgetHarness extends Command
             return self::FAILURE;
         }
 
+        if ($action === 'kb-seed') {
+            // Doc 10's doors: a category + a PUBLISHED public article in en (the am fallback serves en — E07), reindexed.
+            $slug = 'harness-payments-'.Str::lower(Str::random(5));
+            $categoryId = app(\App\Domain\Kb\Categories\CategoryTree::class)->create(['en' => '[FIXTURE] Deposits & withdrawals', 'am' => '[FIXTURE] ተቀማጭ እና ማውጣት'], $slug, null, true, 'public', $agent->identifier());
+            $article = app(\App\Domain\Kb\Articles\ArticleWriter::class)->create($categoryId, 'public', 'en', '[FIXTURE] How long do withdrawals take?', $agent->identifier());
+            app(\App\Domain\Kb\Editor\WorkingCopy::class)->save($article['variant_id'], ['blocks' => [
+                ['id' => 'b1', 'type' => 'paragraph', 'text' => '[FIXTURE] Withdrawals to telebirr and CBE Birr normally arrive within 15 minutes of approval. Bank transfers take up to one business day.'],
+                ['id' => 'b2', 'type' => 'paragraph', 'text' => '[FIXTURE] Requests made after 17:00 are processed the next morning.'],
+            ]]);
+            app(\App\Domain\Kb\Workflow\Transitions::class)->publish($article['variant_id'], $agent, 'harness');
+            app(\App\Domain\Kb\Search\KbSearchDocuments::class)->writeFor($article['variant_id']);
+            $this->line('KB_CATEGORY='.$categoryId);
+            $this->line('KB_ARTICLE='.$article['article_id']);
+            $this->line('KB_VARIANT='.$article['variant_id']);
+
+            return self::SUCCESS;
+        }
+
+        if ($action === 'config') {
+            // A LIVE widget config version for the harness widget (the Designer's publish door lands at step 10 and
+            // replaces this fixture write): pre-chat mode, the seeded forms, a proactive rule, the context allowlist.
+            $widget = \App\Models\Widget::query()->findOrFail(\Database\Seeders\WidgetHarnessSeeder::WIDGET_ID);
+            app(\App\Domain\Webchat\Seeding\WidgetFormSeeder::class)->seed($agent->identifier());
+            $preChat = DB::table('forms')->where('name', \App\Domain\Webchat\Seeding\WidgetFormSeeder::PRE_CHAT)->value('id');
+            $offline = DB::table('forms')->where('name', \App\Domain\Webchat\Seeding\WidgetFormSeeder::OFFLINE)->value('id');
+            $mode = (string) ($this->option('value') ?: 'off');
+            $config = [
+                'content' => ['pre_chat_form_id' => $preChat, 'pre_chat_mode' => in_array($mode, ['off', 'optional', 'required'], true) ? $mode : 'off', 'offline_form_id' => $offline,
+                    'shortcuts' => [['kind' => 'chat', 'label' => ['en' => 'Where is my withdrawal?', 'am' => 'ገንዘቤ የት ደረሰ?'], 'target' => 'withdrawal'], ['kind' => 'url', 'label' => ['en' => 'Payment methods', 'am' => 'የክፍያ ዘዴዎች'], 'target' => 'https://customer.harness.localhost:8443/payments.html']]],
+                'behavior' => [
+                    'proactive' => [['id' => 'deposit-help', 'condition' => ['kind' => 'url', 'match' => '/deposit'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Stuck? I can check how long your deposit should take.', 'am' => '[FIXTURE] ተጣብቀዋል? ተቀማጭዎ ምን ያህል ጊዜ እንደሚወስድ ማረጋገጥ እችላለሁ።']]]],
+                    'context_allowlist' => ['page', 'plan'],
+                ],
+            ];
+            $max = DB::table('widget_config_versions')->where('widget_id', $widget->getKey())->max('version');
+            $version = (is_numeric($max) ? (int) $max : 0) + 1;
+            $id = (string) Str::uuid7();
+            DB::table('widget_config_versions')->insert(['id' => $id, 'tenant_id' => app(TenantContext::class)->tenantId(), 'widget_id' => $widget->getKey(), 'version' => $version, 'config' => json_encode($config, JSON_THROW_ON_ERROR), 'published_by' => $agent->identifier(), 'note' => 'harness']);
+            $widget->forceFill(['live_version_id' => $id])->save();
+            $this->line('CONFIG_VERSION='.$id.' pre_chat='.$mode);
+
+            return self::SUCCESS;
+        }
+
+        if ($action === 'hours-close' || $action === 'hours-open') {
+            // Doc 12's calendar door: the tenant default calendar's weekdays — closed = a one-minute window at 00:00, open = all day.
+            $writer = app(\App\Domain\Hours\CalendarWriter::class);
+            $calendarId = DB::table('business_calendars')->where('is_tenant_default', true)->whereNull('department_id')->value('id');
+            $weekdays = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $weekdays[(string) $d] = $action === 'hours-open' ? [['open' => '00:00', 'close' => '24:00']] : [['open' => '00:00', 'close' => '00:01']];
+            }
+            if (is_string($calendarId)) {
+                $writer->update($calendarId, ['weekdays' => $weekdays], $agent->identifier());
+            } else {
+                $calendarId = $writer->create('[FIXTURE] Harness hours', 'Africa/Addis_Ababa', $weekdays, $agent->identifier(), true, null);
+            }
+            $this->line('CALENDAR='.$calendarId.' '.$action);
+
+            return self::SUCCESS;
+        }
+
+        if ($action === 'identity-sign') {
+            // FR-07: a signed payload for THIS widget — the secret minted through the one minter when none exists.
+            $widget = \App\Models\Widget::query()->findOrFail(\Database\Seeders\WidgetHarnessSeeder::WIDGET_ID);
+            $secret = app(\App\Domain\Webchat\Identity\WidgetSecretMinter::class)->mint($widget, $agent->identifier());
+            $payload = ['user_ref' => (string) ($this->option('key') ?: 'ab_4417'), 'name' => (string) ($this->option('text') ?: 'አበበ ታደሰ'), 'ts' => time()];
+            ksort($payload);
+            $sig = hash_hmac('sha256', json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), $secret);
+            $this->line('SIGNED='.json_encode(['payload' => $payload, 'sig' => $sig], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+
+            return self::SUCCESS;
+        }
+
         if ($action === 'setting') {
             $key = (string) $this->option('key');
             $raw = (string) $this->option('value');

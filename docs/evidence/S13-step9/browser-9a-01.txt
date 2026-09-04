@@ -1,0 +1,227 @@
+### 9a browser legs — first run, project widget — 2026-09-04T19:48:39Z
+
+Running 9 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named (13.1s)
+  ✘  2 [widget] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread (12.2s)
+  ✘  3 [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (8.8s)
+  ✘  4 [widget] › tests/Browser/widget-help.spec.ts:7:1 › E01–E04: browse lists the published article; search finds it as you type; the reader shows the blocks; 👍 lands; the footer never leaves (14.0s)
+  ✘  5 [widget] › tests/Browser/widget-help.spec.ts:36:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders (30.1s)
+  ✘  6 [widget] › tests/Browser/widget-help.spec.ts:53:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works (6.4s)
+  ✘  7 [widget] › tests/Browser/widget-identity.spec.ts:8:1 › F06: a valid signature → the badge; an invalid one → nothing, no error; "verified" appears nowhere (13.5s)
+  ✘  8 [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads (14.4s)
+  ✓  9 [widget] › tests/Browser/widget-proactive.spec.ts:40:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered (5.9s)
+
+
+  1) [widget] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]')
+    Expected: "true"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 10000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]')
+
+
+      13 |     await panel.locator('#nlw-tab-messages').click();
+      14 |     const form = panel.locator('[data-role=prechat]');
+    > 15 |     await expect(form).toHaveAttribute('data-required', 'true', { timeout: 10000 });
+         |                        ^
+      16 |     expect(await panel.locator('[role=tablist]').count()).toBe(0); // the tab bar is suppressed beside a form
+      17 |     expect(await form.locator('button', { hasText: 'Skip' }).count()).toBe(0);
+      18 |     await form.locator('button[type=submit]').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:15:24
+
+    Error Context: test-results/widget-forms-hours-F03-opt-63a92-inline-with-the-field-named-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]')
+    Expected: "false"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 10000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]')
+
+
+      39 |     await panel.locator('#nlw-tab-messages').click();
+      40 |     const form = panel.locator('[data-role=prechat]');
+    > 41 |     await expect(form).toHaveAttribute('data-required', 'false', { timeout: 10000 });
+         |                        ^
+      42 |     await form.locator('button', { hasText: 'Skip' }).click();
+      43 |     await expect(panel.locator('textarea')).toBeVisible();
+      44 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:41:24
+
+    Error Context: test-results/widget-forms-hours-F03-opt-30414-goes-straight-to-the-thread-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('.nlw-band')
+    Expected substring: "opens at"
+    Received string:    ""
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('.nlw-band')
+        14 × locator resolved to <div class="nlw-band">…</div>
+           - unexpected value ""
+
+
+      51 |     try {
+      52 |         const { panel } = await openWidget(page);
+    > 53 |         await expect(panel.locator('.nlw-band')).toContainText('opens at');
+         |                                                  ^
+      54 |         await panel.locator('#nlw-tab-messages').click();
+      55 |         const form = panel.locator('[data-role=offline-form]');
+      56 |         await expect(form).toBeVisible({ timeout: 10000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:53:50
+
+    Error Context: test-results/widget-forms-hours-F09-F10-1cf25-ticket-and-the-MASKED-phone-widget/error-context.md
+
+  4) [widget] › tests/Browser/widget-help.spec.ts:7:1 › E01–E04: browse lists the published article; search finds it as you type; the reader shows the blocks; 👍 lands; the footer never leaves 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=help-footer]')
+    Expected substring: "Start a chat"
+    Received string:    "help.still_needhelp.start_chat"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=help-footer]')
+        14 × locator resolved to <div data-role="help-footer" class="nlw-help-footer">…</div>
+           - unexpected value "help.still_needhelp.start_chat"
+
+
+      13 |     const help = panel.locator('[data-role=help]');
+      14 |     await expect(help).toHaveAttribute('data-view', 'browse');
+    > 15 |     await expect(panel.locator('[data-role=help-footer]')).toContainText('Start a chat');
+         |                                                            ^
+      16 |     await expect(
+      17 |         help.locator('.nlw-btn', { hasText: 'How long do withdrawals take' }).first(),
+      18 |     ).toBeVisible({ timeout: 10000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-help.spec.ts:15:60
+
+    Error Context: test-results/widget-help-E01–E04-browse-25bb2-nds-the-footer-never-leaves-widget/error-context.md
+
+  5) [widget] › tests/Browser/widget-help.spec.ts:36:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[role=menuitemradio]').filter({ hasText: 'አማርኛ' })
+
+
+      40 |     const { panel } = await openWidget(page);
+      41 |     await panel.locator('button[aria-label="More options"]').click();
+    > 42 |     await panel.locator('[role=menuitemradio]', { hasText: 'አማርኛ' }).click();
+         |                                                                      ^
+      43 |     await panel.locator('#nlw-tab-help').click();
+      44 |     const help = panel.locator('[data-role=help]');
+      45 |     await help
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-help.spec.ts:42:70
+
+    Error Context: test-results/widget-help-E07-an-Amharic-4087d-e-the-article-still-renders-widget/error-context.md
+
+  6) [widget] › tests/Browser/widget-help.spec.ts:53:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=index-down]')
+    Expected substring: "chat still works"
+    Received string:    "help.index_down"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=index-down]')
+        11 × locator resolved to <p class="nlw-notice" data-role="index-down">help.index_down</p>
+           - unexpected value "help.index_down"
+
+
+      64 |     await panel.locator('#nlw-tab-help').click();
+      65 |     await panel.locator('[data-role=help] input[type=search]').fill('withdrawals');
+    > 66 |     await expect(panel.locator('[data-role=index-down]')).toContainText('chat still works');
+         |                                                           ^
+      67 |     await panel.locator('[data-role=help-footer] button').click();
+      68 |     await expect(panel.locator('textarea')).toBeVisible();
+      69 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-help.spec.ts:66:59
+
+    Error Context: test-results/widget-help-K05-FS-02-the--32e62-m-line-the-chat-still-works-widget/error-context.md
+
+  7) [widget] › tests/Browser/widget-identity.spec.ts:8:1 › F06: a valid signature → the badge; an invalid one → nothing, no error; "verified" appears nowhere 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+    Expected substring: "Signed in as አበበ ታደሰ"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+
+
+      31 |         signed,
+      32 |     );
+    > 33 |     await expect(panel.locator('[data-role=identity]')).toContainText('Signed in as አበበ ታደሰ', {
+         |                                                         ^
+      34 |         timeout: 10000,
+      35 |     });
+      36 |     await expect(panel.locator('[data-role=identity]')).toContainText(
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-identity.spec.ts:33:57
+
+    Error Context: test-results/widget-identity-F06-a-vali-f05bc-or-verified-appears-nowhere-widget/error-context.md
+
+  8) [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected substring: "how long your deposit should take"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      21 |     expect(await launcher.locator('[data-role=proactive]').count()).toBe(0);
+      22 |     await page.locator('#host-input').blur();
+    > 23 |     await expect(launcher.locator('[data-role=proactive]')).toContainText(
+         |                                                             ^
+      24 |         'how long your deposit should take',
+      25 |         { timeout: 10000 },
+      26 |     );
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-proactive.spec.ts:23:61
+
+    Error Context: test-results/widget-proactive-H01-H02-H-4a608-oldown-holds-across-reloads-widget/error-context.md
+
+  8 failed
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named 
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread 
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone 
+    [widget] › tests/Browser/widget-help.spec.ts:7:1 › E01–E04: browse lists the published article; search finds it as you type; the reader shows the blocks; 👍 lands; the footer never leaves 
+    [widget] › tests/Browser/widget-help.spec.ts:36:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders 
+    [widget] › tests/Browser/widget-help.spec.ts:53:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works 
+    [widget] › tests/Browser/widget-identity.spec.ts:8:1 › F06: a valid signature → the badge; an invalid one → nothing, no error; "verified" appears nowhere 
+    [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+  1 passed (2.1m)
+exit=1

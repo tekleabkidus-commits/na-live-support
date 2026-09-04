@@ -9,13 +9,10 @@ return [
         'voice_recording' => 'የዊጀት የድምጽ ማስታወሻዎች',
     ],
     'identity' => [
+        // customer-facing (F06): continuity only — the word "verified" appears nowhere (BR-05)
+        'signed_in_as' => 'እንደ :name ገብተዋል',
+        'from_site' => 'በድረ-ገጹ ላይ ካለው አካውንትዎ',
         // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
-        'switched_note' => 'የድረ-ገጽ ማንነት ተቀይሯል፦ ድረ-ገጹ አሁን :asserted ይላል (ቀድሞ :previous ነበር)። ምንም እንደገና አልተገናኘም — አንድ ሰው ከሆኑ በእጅ ይገምግሙና ያዋህዱ።',
-    ],
-    // STOP-5A (a): the STAFF-visible system lines a pre-chat phone drops (never rendered to the visitor).
-    'prechat' => [
-        'phone_provided' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone (በሠራተኛ የተሰበሰበ፣ አልተገናኘም)። የእሱ/የእሷ ከሆነ ከመገለጫው ያገናኙት።',
-        'phone_conflict' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone — ይህ ቁጥር አስቀድሞ በሌላ ደንበኛ ላይ አለ። ምንም አልተያያዘም፤ ከማገናኘትዎ በፊት ሁለቱን መገለጫዎች ይገምግሙ።',
     ],
     // ── The PANEL's customer-facing copy (S13 step 8; machine-authored Amharic, R-14 queue) ──
     'tabs' => ['home' => 'መነሻ', 'messages' => 'መልእክቶች', 'help' => 'እገዛ'],
@@ -113,6 +110,52 @@ return [
         'new_system' => ':text',
         'typing' => ':name እየጻፈ ነው',
         'attachment' => 'አባሪ',
+    ],
+    // ── Help, forms, hours, identity, proactive (S13 step 9a; machine-authored Amharic, R-14 queue) ──
+    'help' => [
+        'search' => 'እገዛ ፈልግ',
+        'search_placeholder' => 'መልስ ይፈልጉ',
+        'popular' => 'አሁን ታዋቂ',
+        'categories' => 'ምድቦች',
+        'results' => '{0} ውጤት የለም|{1} :count ውጤት|[2,*] :count ውጤቶች',
+        'still_need' => 'አሁንም እገዛ ይፈልጋሉ?',
+        'start_chat' => 'ውይይት ይጀምሩ',
+        'not_answered' => 'ይህ መልስ አልሰጠም — ውይይት ይጀምሩ',
+        'helpful' => 'ይህ ጠቃሚ ነበር?',
+        'thanks' => 'ስለነገሩን እናመሰግናለን።',
+        'updated' => 'የተዘመነው :date',
+        'back' => 'ተመለስ',
+        'index_down' => 'ጽሑፎች ለጊዜው አይገኙም — ውይይቱ ይሠራል።',
+        'language_fallback' => 'ይህ ጽሑፍ እስካሁን በቋንቋዎ የለም፤ በ:language ይኸውና።',
+        'articles_count' => '{1} :count ጽሑፍ|[2,*] :count ጽሑፎች',
+    ],
+    'prechat' => [
+        'optional_intro' => 'እንድንከታተልዎ ከፈለጉ ስም እና ቁጥር ይተዉ — ወይም ዘለው መጻፍ ይጀምሩ።',
+        'required_intro' => 'አካውንትዎን እንድናገኝ፣ እባክዎ ማን እንደሆኑ ይንገሩን።',
+        'optional' => 'አማራጭ',
+        'required' => 'ያስፈልጋል',
+        'continue' => 'ቀጥል',
+        'skip' => 'ዝለል',
+        'start' => 'ውይይቱን ጀምር',
+    ],
+    'offline' => [
+        'title' => 'አሁን ዝግ ነን',
+        'intro' => 'ቡድኑ :time ላይ ይከፍታል — ይህን ለእኛ ይተዉት።',
+        'send' => 'ላክ',
+        'receipt_title' => 'ደርሶናል — ቲኬት #:number',
+        'receipt_body' => 'አንድ ወኪል :time ላይ ይመለከተዋል።',
+        'receipt_sms' => 'ሰው መሥራት እንደጀመረ ወዲያውኑ ወደ :phone መልእክት እንልካለን።',
+        'receipt_done' => 'ሌላ ምንም አያስፈልግም — ይህን መዝጋት ይችላሉ።',
+    ],
+    'proactive' => [
+        'dismiss' => 'አሰናብት',
+        'open' => 'መልስ',
+    ],
+    // STAFF-visible lines only (never rendered to the visitor; the config envelope drops this branch): EC-04's identity switch, STOP-5A's phone lines.
+    'staff' => [
+        'identity_switched' => 'የድረ-ገጽ ማንነት ተቀይሯል፦ ድረ-ገጹ አሁን :asserted ይላል (ቀድሞ :previous ነበር)። ምንም እንደገና አልተገናኘም — አንድ ሰው ከሆኑ በእጅ ይገምግሙና ያዋህዱ።',
+        'phone_provided' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone (በሠራተኛ የተሰበሰበ፣ አልተገናኘም)። የእሱ/የእሷ ከሆነ ከመገለጫው ያገናኙት።',
+        'phone_conflict' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone — ይህ ቁጥር አስቀድሞ በሌላ ደንበኛ ላይ አለ። ምንም አልተያያዘም፤ ከማገናኘትዎ በፊት ሁለቱን መገለጫዎች ይገምግሙ።',
     ],
     // FR-06/FR-15 inline refusals (R-D13-5.1: calm, no failure vocabulary).
     'form' => [

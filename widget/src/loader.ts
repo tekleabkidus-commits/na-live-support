@@ -57,7 +57,12 @@ interface ShimConfig {
     offset: { side: number; bottom: number };
     proactive: Array<{
         id: string;
-        condition: { kind: 'url' | 'time'; match?: string; seconds?: number };
+        condition: {
+            kind: 'url' | 'time' | 'exit' | 'capture';
+            match?: string;
+            seconds?: number;
+            key?: string;
+        };
     }>;
 }
 
@@ -217,9 +222,41 @@ declare const __NLW_CFG: ShimConfig | undefined;
     };
     window.PlatformChat = api;
 
+    // FR-14 — the proactive TRIGGERS live here (the loader sees the page's URL, time and the pointer
+    // leaving; the panel holds the copy, the cooldown, the dismissals and EC-05's defer). A rule fires
+    // at most once per page load; the panel's guards decide whether anything shows.
+    const fired = new Set<string>();
+    const firedBeforeReady: string[] = [];
+    const fire = (id: string): void => {
+        if (fired.has(id)) return;
+        fired.add(id);
+        // a rule that fires at mount lands before the panel frame can listen: held until `ready`
+        if (!ready) firedBeforeReady.push(id);
+        else post('proactive', { id, url: location.href });
+    };
+    const armProactive = (): void => {
+        for (const rule of cfg!.proactive ?? []) {
+            const c = rule.condition;
+            if (c.kind === 'url' && c.match && location.href.includes(c.match)) fire(rule.id);
+            if (c.kind === 'time' && typeof c.seconds === 'number')
+                window.setTimeout(() => fire(rule.id), Math.max(1, c.seconds) * 1000);
+        }
+    };
+    // exit-intent (desktop only) is read on WINDOW — the loader never touches the host's DOM (B10/FR-24).
+    const exitRules =
+        (cfg.proactive ?? []).some((r) => r.condition.kind === 'exit') &&
+        matchMedia('(pointer: fine)').matches;
+    if (exitRules) {
+        window.addEventListener('mouseout', (e) => {
+            if (e.relatedTarget === null && e.clientY <= 0)
+                for (const r of cfg!.proactive) if (r.condition.kind === 'exit') fire(r.id);
+        });
+    }
+
     // T-07: SPA hooks — namespaced wrappers, restorable, no monkey-patch leaks.
     function onRoute(): void {
         post('route', { url: location.href });
+        armProactive(); // SPA route re-eval (FR-14)
     }
     history.pushState = function (this: History, ...a: Parameters<History['pushState']>) {
         const r = origPush.apply(this, a);
@@ -242,6 +279,9 @@ declare const __NLW_CFG: ShimConfig | undefined;
         switch (type) {
             case 'ready':
                 ready = true;
+                if (ev.source === panel?.contentWindow)
+                    for (const id of firedBeforeReady.splice(0))
+                        post('proactive', { id, url: location.href });
                 // The host facts + the minted session go to the PANEL frame only (targeted origin):
                 // origin, the ancestor chain, the page URL — never the page's content.
                 // ONLY the panel frame's ready mints the session: the launcher frame boots the same file and
@@ -286,6 +326,25 @@ declare const __NLW_CFG: ShimConfig | undefined;
             case 'size':
                 sizePanel(data as { open: boolean; sheet: boolean });
                 break;
+            case 'proactive-dismiss':
+            case 'focus-state-for-panel':
+                try {
+                    panel?.contentWindow?.postMessage(
+                        {
+                            nlw: 1,
+                            type:
+                                type === 'proactive-dismiss' ? 'proactive-dismiss' : 'focus-state',
+                            data,
+                        },
+                        cfg!.frame_origin,
+                    );
+                } catch {
+                    /* silent */
+                }
+                break;
+            case 'launcher-size':
+                sizeLauncher(!!(data as { card?: boolean } | undefined)?.card);
+                break;
             case 'event': {
                 const name = (data as { name: string }).name;
                 for (const cb of handlers[name] ?? []) {
@@ -322,6 +381,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
         document.body.appendChild(panel);
 
         beacon(cfg, 'load');
+        armProactive();
     } catch {
         // EC-02: a host CSP that blocks the frame — silent, beaconed with the copy-paste fix's reason.
         beacon(cfg, 'mount_fail', 'csp');
@@ -362,6 +422,14 @@ declare const __NLW_CFG: ShimConfig | undefined;
 
     function important(el: HTMLElement, props: Record<string, string>): void {
         for (const k of Object.keys(props)) el.style.setProperty(k, props[k] ?? '', 'important');
+    }
+
+    function sizeLauncher(card: boolean): void {
+        if (!launcher) return;
+        important(
+            launcher,
+            card ? { width: '320px', height: '150px' } : { width: '64px', height: '64px' },
+        );
     }
 
     function sizePanel(s: { open: boolean; sheet: boolean }): void {
@@ -405,11 +473,13 @@ declare const __NLW_CFG: ShimConfig | undefined;
             globals: ['PlatformChat', '__nlwLoaded'],
             nodes: [launcher?.id ?? '', panel?.id ?? ''].filter(Boolean),
             listeners: [
+                'focus',
                 'message',
                 'popstate',
                 'resize',
                 'history.pushState',
                 'history.replaceState',
+                ...(exitRules ? ['mouseout'] : []),
             ],
         };
     }

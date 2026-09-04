@@ -88,7 +88,7 @@ final class SignedIdentityLinker
                 $switched = true;
                 $conversation = $this->conversations->find($widget, $visitor);
                 if ($conversation !== null) {
-                    $this->notes->addSystemNote($conversation, (string) __('widget.identity.switched_note', [
+                    $this->notes->addSystemNote($conversation, (string) __('widget.staff.identity_switched', [
                         'asserted' => $assertedValue,
                         'previous' => (string) $own->value,
                     ]));

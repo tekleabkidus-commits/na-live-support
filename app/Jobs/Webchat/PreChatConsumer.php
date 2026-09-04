@@ -103,8 +103,8 @@ final class PreChatConsumer extends OutboxConsumer
         $conflicts = DB::table('customer_identities')->where('type', 'phone')->where('value', $e164)->where('customer_id', '!=', $customerId)->count();
         $masked = OfflineSubmission::mask($e164);
         $body = $conflicts > 0
-            ? (string) __('widget.prechat.phone_conflict', ['phone' => $masked])
-            : (string) __('widget.prechat.phone_provided', ['phone' => $masked]);
+            ? (string) __('widget.staff.phone_conflict', ['phone' => $masked])
+            : (string) __('widget.staff.phone_provided', ['phone' => $masked]);
 
         $already = DB::table('messages')->where('conversation_id', $conversationId)->where('author_type', 'system')->where('kind', 'note')->where('body', $body)->exists();
         if ($already) {

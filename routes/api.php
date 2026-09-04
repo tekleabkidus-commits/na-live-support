@@ -568,6 +568,8 @@ Route::group([], function (): void {
                         ->name('widget.context');
                     Route::post('identify', [App\Http\Controllers\Widget\WidgetIdentifyController::class, 'store'])
                         ->name('widget.identify');
+                    Route::get('forms/{versionId}', [App\Http\Controllers\Widget\WidgetFormStepsController::class, 'show'])
+                        ->name('widget.forms.show');
                     Route::post('forms/{versionId}/steps', [App\Http\Controllers\Widget\WidgetFormStepsController::class, 'store'])
                         ->middleware(App\Http\Middleware\ThrottleVisitorToken::class.':messages') // STOP-5B: a form submit spends the visitor's message budget
                         ->name('widget.forms.steps');

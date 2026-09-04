@@ -22,6 +22,7 @@ import {
     config,
     envelope,
     frameKind,
+    helpArticle,
     host,
     hostViewport,
     language,
@@ -29,6 +30,8 @@ import {
     messages,
     notifyPromptOpen,
     open,
+    preChat,
+    proactive,
     sheet,
     tab,
     unread,
@@ -155,6 +158,9 @@ async function bootSequence(): Promise<void> {
     document.documentElement.lang = cfg.language;
     theme.value = cfg.config.appearance.theme;
     if (!cfg.config.content.tabs.home) tab.value = 'messages';
+    // FR-06: the pre-chat gate — pending while the mode is on and no message has ever been sent (the server's page is the truth).
+    preChat.value =
+        cfg.forms.pre_chat.mode !== 'off' && cfg.forms.pre_chat.version_id ? 'pending' : 'none';
     resetAcks();
     pollSeconds = cfg.transport.polling_interval_seconds;
     soundOn = cfg.config.behavior.sound ?? cfg.settings.sound_default;
@@ -171,6 +177,7 @@ async function bootSequence(): Promise<void> {
         void purgeCache();
     }
     await sync(api);
+    if (messages.value.length > 0) preChat.value = 'none';
     unread.value = 0;
     lastSeenId.value = messages.value[messages.value.length - 1]?.id ?? null;
     boot.value = 'ready';
@@ -245,6 +252,14 @@ function startTransport(cfg: ConfigEnvelope): void {
     );
 }
 
+async function refreshConfig(): Promise<void> {
+    const cfg = await api.config(language.value);
+    if (cfg) {
+        config.value = cfg;
+        strings.value = cfg.strings;
+    }
+}
+
 async function setLanguage(code: string): Promise<void> {
     try {
         localStorage.setItem('nlw.language', code);
@@ -295,6 +310,7 @@ function ready(): Promise<void> {
     });
 }
 
+let pendingPreChat: Record<string, unknown> | null = null;
 let seq = 0;
 async function send(text: string): Promise<void> {
     const clientId = `wc_${Date.now().toString(36)}_${(seq++).toString(36)}`;
@@ -319,11 +335,17 @@ async function send(text: string): Promise<void> {
     ];
     tab.value = 'messages';
     await ready();
+    const form =
+        pendingPreChat && config.value?.forms.pre_chat.version_id
+            ? { version_id: config.value.forms.pre_chat.version_id, answers: pendingPreChat }
+            : undefined;
+    pendingPreChat = null;
     const ok = await api.send({
         client_message_id: clientId,
         kind: 'text',
         body: text,
         page_url: host.value?.url,
+        form,
     });
     messages.value = messages.value.map((m) =>
         m.client_id === clientId ? { ...m, local: ok ? 'sent' : 'sending' } : m,
@@ -371,8 +393,71 @@ function onShortcut(s: Shortcut): void {
     void import('./forms/FormRenderer');
 }
 
+/** FR-14 guards (H02/H03): one per visitor per cooldown ACROSS all rules; a dismissal ends the rule on that page for good. */
+function proactiveAllowed(id: string, url: string): boolean {
+    try {
+        const hours = config.value?.settings.proactive_cooldown_hours ?? 24;
+        const last = Number(localStorage.getItem('nlw.proactive.last') ?? '0');
+        if (Date.now() - last < hours * 3600 * 1000) return false;
+        const page = new URL(url).pathname;
+        if (localStorage.getItem('nlw.proactive.dismissed:' + id + ':' + page)) return false;
+    } catch {
+        /* no storage: fire at most once per load (the loader's own dedupe) */
+    }
+    return true;
+}
+
+let pendingProactive: { id: string; url: string } | null = null;
+let proactiveReceived = 0;
+function launcherFrame(extra: Record<string, unknown> = {}): void {
+    const st = strings.value as { launcher?: unknown; proactive?: unknown };
+    post('launcher', {
+        strings: { launcher: st.launcher ?? {}, proactive: st.proactive ?? {} },
+        unread: unread.value,
+        open: open.value,
+        language: language.value,
+        ...extra,
+    });
+}
+function showProactive(id: string, url: string): void {
+    const rule = config.value?.config.behavior.proactive.find((r) => r.id === id);
+    if (!rule || !proactiveAllowed(id, url) || open.value) return;
+    const text = rule.action.message?.[language.value] ?? rule.action.message?.en ?? '';
+    proactive.value = { id, text };
+    try {
+        localStorage.setItem('nlw.proactive.last', String(Date.now()));
+    } catch {
+        /* per-viewer convenience */
+    }
+    launcherFrame({ proactive: proactive.value });
+    post('launcher-size', { card: true });
+}
+
+function dismissProactive(): void {
+    const p = proactive.value;
+    if (!p) return;
+    try {
+        localStorage.setItem(
+            'nlw.proactive.dismissed:' +
+                p.id +
+                ':' +
+                new URL(host.value?.url ?? location.href).pathname,
+            '1',
+        );
+    } catch {
+        /* ignore */
+    }
+    proactive.value = null;
+    launcherFrame({ proactive: null });
+    post('launcher-size', { card: false });
+}
+
 function openPanel(): void {
     open.value = true;
+    if (proactive.value) {
+        proactive.value = null;
+        post('launcher-size', { card: false });
+    }
     unread.value = 0;
     launcherNudge = false;
     post('size', { open: true, sheet: sheet.value });
@@ -398,11 +483,37 @@ function onLoaderMessage(ev: MessageEvent): void {
             unread: number;
             open: boolean;
             language: string;
+            proactive?: { id: string; text: string } | null;
         };
-        strings.value = d.strings;
+        strings.value = { ...strings.value, ...d.strings };
         unread.value = d.unread;
         open.value = d.open;
+        if (d.proactive !== undefined) proactive.value = d.proactive;
         document.documentElement.lang = d.language;
+        return;
+    }
+    if (data.type === 'proactive' && frameKind.value === 'panel') {
+        // EC-05: never over a keyboard — ask the loader whether a page field has focus; the card waits for blur.
+        pendingProactive = data.data as { id: string; url: string };
+        proactiveReceived++;
+        // the probe happens at SHOW time — after the boot (the config carries the rule) — never at fire time
+        void ready().then(() => post('focus-probe'));
+        return;
+    }
+    if (data.type === 'focus-state' && frameKind.value === 'panel') {
+        const typing = !!(data.data as { typing?: boolean } | null)?.typing;
+        if (!pendingProactive) return;
+        if (typing) {
+            window.setTimeout(() => post('focus-probe'), 1500); // re-ask until the field loses focus
+            return;
+        }
+        const p = pendingProactive;
+        pendingProactive = null;
+        showProactive(p.id, p.url);
+        return;
+    }
+    if (data.type === 'proactive-dismiss' && frameKind.value === 'panel') {
+        dismissProactive();
         return;
     }
     if (data.type === 'attended') {
@@ -436,8 +547,35 @@ function onLoaderMessage(ev: MessageEvent): void {
             break;
         case 'openHelp':
             openPanel();
+            helpArticle.value = typeof call.args[0] === 'string' ? call.args[0] : null;
             tab.value = 'help';
-            void import('./tabs/Help');
+            break;
+        case 'capture': {
+            // FR-24: the operator page's declared keys — the SERVER keeps only the allowlisted ones; a `capture` rule may fire.
+            const ctx = (call.args[0] ?? {}) as Record<string, unknown>;
+            void ready().then(() => api.context(ctx));
+            for (const rule of config.value?.config.behavior.proactive ?? []) {
+                if (
+                    rule.condition.kind === 'capture' &&
+                    rule.condition.key &&
+                    rule.condition.key in ctx
+                )
+                    showProactive(rule.id, host.value?.url ?? location.href);
+            }
+            break;
+        }
+        case 'identify':
+            // FR-07: the host page's signed assertion → the identify door (the server verifies; an invalid one is a 204 + a Health counter).
+            void ready()
+                .then(() =>
+                    api.identify(call.args[0] as { payload: Record<string, unknown>; sig: string }),
+                )
+                .then(async (ok) => {
+                    if (ok) {
+                        await sync(api);
+                        await refreshConfig();
+                    }
+                });
             break;
         case 'setLanguage':
             if (typeof call.args[0] === 'string') void setLanguage(call.args[0]);
@@ -448,15 +586,41 @@ function onLoaderMessage(ev: MessageEvent): void {
 }
 
 function LauncherFrame(): preact.JSX.Element {
+    const p = proactive.value;
     return (
-        <Launcher
-            nudge={launcherNudge}
-            onToggle={() => {
-                post('api', { method: open.value ? 'close' : 'open', args: [] });
-                if (open.value) closePanel();
-                else openPanel();
-            }}
-        />
+        <>
+            {p ? (
+                <div class="nlw-proactive" data-role="proactive" role="status">
+                    <span>{p.text}</span>
+                    <span class="nlw-meta">
+                        <button
+                            type="button"
+                            class="nlw-btn"
+                            style="width:auto"
+                            onClick={() => post('api', { method: 'open', args: [] })}
+                        >
+                            {t('proactive.open')}
+                        </button>
+                        <button
+                            type="button"
+                            class="nlw-icon"
+                            aria-label={t('proactive.dismiss')}
+                            onClick={() => post('proactive-dismiss')}
+                        >
+                            ✕
+                        </button>
+                    </span>
+                </div>
+            ) : null}
+            <Launcher
+                nudge={launcherNudge}
+                onToggle={() => {
+                    post('api', { method: open.value ? 'close' : 'open', args: [] });
+                    if (open.value) closePanel();
+                    else openPanel();
+                }}
+            />
+        </>
     );
 }
 
@@ -479,6 +643,12 @@ function PanelFrame(): preact.JSX.Element {
             onLanguage={(code) => void setLanguage(code)}
             onRetry={() => post('session', { token: storedToken() })}
             onNotify={(yes) => void answerNotifyPrompt(yes)}
+            api={api}
+            onPreChatDone={(answers) => {
+                preChat.value = 'done';
+                pendingPreChat = answers;
+            }}
+            onPreChatSkip={() => (preChat.value = 'done')}
         />
     );
 }
@@ -489,6 +659,12 @@ function PanelFrame(): preact.JSX.Element {
     isLeader: () => leader?.isLeader() ?? false,
     dropSocket: () => socket?.drop(),
     polling: () => isPolling(),
+    proactive: () => ({
+        received: proactiveReceived,
+        pending: pendingProactive,
+        shown: proactive.value,
+        rules: config.value?.config.behavior.proactive.length ?? -1,
+    }),
     boot: () => boot.value,
 };
 

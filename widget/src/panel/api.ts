@@ -5,7 +5,7 @@
  * FR-21). Every call is a plain fetch; a failed call answers null — the caller
  * decides what a labeled degrade looks like (§8, NFR-06).
  */
-import type { ConfigEnvelope, MessagesPage } from './types';
+import type { ConfigEnvelope, FormContract, HelpArticle, HelpTree, MessagesPage } from './types';
 
 export class WidgetApi {
     private token: string | null = null;
@@ -66,6 +66,99 @@ export class WidgetApi {
         return typeof body.auth === 'string' ? body.auth : null;
     }
 
+    /** Doc 10 FR-18 — the five Help doors (public + published only; `unavailable: true` is the honest degrade). */
+    async helpTree(): Promise<HelpTree | null> {
+        const r = await this.call('GET', '/api/widget/v1/kb/categories');
+        return r && r.ok ? ((await r.json()) as HelpTree) : null;
+    }
+
+    async helpSearch(
+        q: string,
+        language: string,
+    ): Promise<{
+        unavailable: boolean;
+        hits: Array<{
+            article_id: string;
+            title: string;
+            summary: string | null;
+            language: string;
+            slug: string;
+        }>;
+    } | null> {
+        const r = await this.call(
+            'GET',
+            `/api/widget/v1/kb/search?q=${encodeURIComponent(q)}&language=${encodeURIComponent(language)}`,
+        );
+        return r && r.ok
+            ? ((await r.json()) as {
+                  unavailable: boolean;
+                  hits: Array<{
+                      article_id: string;
+                      title: string;
+                      summary: string | null;
+                      language: string;
+                      slug: string;
+                  }>;
+              })
+            : null;
+    }
+
+    async helpArticle(articleId: string, language: string): Promise<HelpArticle | null> {
+        const r = await this.call(
+            'GET',
+            `/api/widget/v1/kb/articles/${encodeURIComponent(articleId)}?language=${encodeURIComponent(language)}`,
+            undefined,
+            true,
+            { 'Accept-Language': language },
+        );
+        return r && r.ok ? ((await r.json()) as HelpArticle) : null;
+    }
+
+    async helpFeedback(variantId: string, score: number): Promise<boolean> {
+        const r = await this.call('POST', '/api/widget/v1/kb/feedback', {
+            variant_id: variantId,
+            score,
+        });
+        return !!r && r.ok;
+    }
+
+    /** Doc 12 FR-20 — the immutable version's schema, and a step validated against it. */
+    async formSchema(versionId: string): Promise<FormContract | null> {
+        const r = await this.call('GET', `/api/widget/v1/forms/${encodeURIComponent(versionId)}`);
+        return r && r.ok ? ((await r.json()) as FormContract) : null;
+    }
+
+    async formStep(
+        versionId: string,
+        body: {
+            mode: 'form' | 'offline';
+            step_index?: number;
+            answers: Record<string, unknown>;
+            complete?: boolean;
+        },
+    ): Promise<{ ok: boolean; status: number; body: Record<string, unknown> }> {
+        const r = await this.call(
+            'POST',
+            `/api/widget/v1/forms/${encodeURIComponent(versionId)}/steps`,
+            body,
+        );
+        if (!r) return { ok: false, status: 0, body: {} };
+        const json = (await r.json().catch(() => ({}))) as Record<string, unknown>;
+        return { ok: r.ok, status: r.status, body: json };
+    }
+
+    /** FR-07 — the host page's signed assertion; the server answers 204 either way (an invalid one only counts). */
+    async identify(signed: { payload: Record<string, unknown>; sig: string }): Promise<boolean> {
+        const r = await this.call('POST', '/api/widget/v1/identify', signed);
+        return !!r && r.ok;
+    }
+
+    /** FR-24 — page context, allowlist-filtered SERVER-side (an undeclared key never persists). */
+    async context(context: Record<string, unknown>): Promise<boolean> {
+        const r = await this.call('POST', '/api/widget/v1/context', { context });
+        return !!r && r.ok;
+    }
+
     async csat(token: string, score: number): Promise<boolean> {
         const r = await this.call('POST', '/api/widget/v1/csat', { token, score }, false);
         return !!r && r.ok;
@@ -82,10 +175,12 @@ export class WidgetApi {
         path: string,
         body?: unknown,
         withVisitor = true,
+        extra: Record<string, string> = {},
     ): Promise<Response | null> {
         const headers: Record<string, string> = {
             'X-Tenant-Key': this.widgetKey,
             Accept: 'application/json',
+            ...extra,
         };
         if (body !== undefined) headers['Content-Type'] = 'application/json';
         if (withVisitor && this.token) headers['X-Visitor-Token'] = this.token;

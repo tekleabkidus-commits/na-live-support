@@ -58,7 +58,7 @@ it('lands the pre-chat answers: staff-collected fields on the first message, the
     $lines = DB::table('messages')->where('conversation_id', $conversation->identifier())->where('author_type', 'system')->where('kind', 'note')->get(['body', 'is_internal']);
     expect($lines)->toHaveCount(1)
         ->and((bool) $lines[0]->is_internal)->toBeTrue()
-        ->and($lines[0]->body)->toBe(__('widget.prechat.phone_provided', ['phone' => '+251 •• ••• 1234']))
+        ->and($lines[0]->body)->toBe(__('widget.staff.phone_provided', ['phone' => '+251 •• ••• 1234']))
         ->and($lines[0]->body)->not->toContain('+251900001234');
 
     // A ticket later: the snapshot lands ONCE in form_data.
@@ -101,7 +101,7 @@ it('STOP-5A (a): a pre-chat phone that ALREADY sits on another customer draws th
     app()->call([new PreChatConsumer($received), 'handle']);
 
     $lines = DB::table('messages')->where('conversation_id', $conversation->identifier())->where('author_type', 'system')->where('kind', 'note')->get(['body']);
-    expect($lines)->toHaveCount(1)->and($lines[0]->body)->toBe(__('widget.prechat.phone_conflict', ['phone' => '+251 •• ••• 1234']));
+    expect($lines)->toHaveCount(1)->and($lines[0]->body)->toBe(__('widget.staff.phone_conflict', ['phone' => '+251 •• ••• 1234']));
     // Read-only: the phone identity still belongs to the other customer alone; the visitor's customer gained none.
     $owners = DB::table('customer_identities')->where('type', 'phone')->where('value', '+251900001234')->pluck('customer_id')->all();
     expect($owners)->toBe([$other->identifier()])

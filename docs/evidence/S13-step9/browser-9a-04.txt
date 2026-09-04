@@ -1,0 +1,41 @@
+### 9a — forms/identity/proactive rerun (staff branch, t() prefix, early-fire hold) — 2026-09-04T19:58:01Z
+
+Running 6 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named (2.4s)
+  ✓  2 [widget] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread (1.9s)
+  ✓  3 [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (3.9s)
+  ✓  4 [widget] › tests/Browser/widget-identity.spec.ts:8:1 › F06: a valid signature → the badge; an invalid one → nothing, no error; "verified" appears nowhere (3.2s)
+  ✘  5 [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads (14.1s)
+  ✓  6 [widget] › tests/Browser/widget-proactive.spec.ts:40:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered (5.3s)
+
+
+  1) [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected substring: "how long your deposit should take"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      21 |     expect(await launcher.locator('[data-role=proactive]').count()).toBe(0);
+      22 |     await page.locator('#host-input').blur();
+    > 23 |     await expect(launcher.locator('[data-role=proactive]')).toContainText(
+         |                                                             ^
+      24 |         'how long your deposit should take',
+      25 |         { timeout: 10000 },
+      26 |     );
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-proactive.spec.ts:23:61
+
+    Error Context: test-results/widget-proactive-H01-H02-H-4a608-oldown-holds-across-reloads-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads 
+  5 passed (32.6s)
+exit=1

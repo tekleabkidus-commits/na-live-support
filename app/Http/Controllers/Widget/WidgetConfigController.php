@@ -44,6 +44,7 @@ final class WidgetConfigController
         private readonly SettingsRepository $settings,
         private readonly Estimator $estimator,
         private readonly TenantDefaultDepartment $defaultDepartment,
+        private readonly \App\Domain\Ai\Pipeline\ChatbotEnablement $enablement,
         private readonly TenantContext $context,
         private readonly FeatureRegistry $features,
     ) {}
@@ -76,6 +77,8 @@ final class WidgetConfigController
                 'buttons' => $capabilities->supportsButtons,
                 'max_mb' => self::int($this->settings->get('media.max_mb'), 25),
                 'voice' => $this->features->active('widget.voice_recording') && ($behavior['file_upload'] ?? true) === true,
+                // F08/F09: whether Doc 09's chatbot answers this widget out of hours (the offline form shows only when it does not).
+                'chatbot' => $this->enablement->enabledFor('chatbot', WebchatAdapter::CHANNEL, VisitorConversation::widgetId($widget)),
             ],
             'transport' => [
                 // The visitor's OWN two channels, named by the server (the tenant id never travels to the client
@@ -96,6 +99,11 @@ final class WidgetConfigController
             // Home's wait band (FR-09; BR-02 honest presence): Doc 11's estimate for the widget's department
             // queue — band only, never a count (SEC-05); off-hours carries opens_at below.
             'home' => ['band' => $this->homeBand($open, $department, $now)],
+            // FR-06 / FR-15: the pre-chat and offline forms as VERSION ids (Doc 12's immutable contract; the widget
+            // fetches the schema through `GET forms/{versionId}`), and the pre-chat mode (off | optional | required).
+            'forms' => $this->forms($config),
+            // FR-07 / F06: the site-asserted display for THIS visitor's customer — continuity only, never "verified" (BR-05).
+            'visitor' => ['display' => $this->assertedDisplay($visitor)],
             'hours' => [
                 'open' => $open,
                 'opens_at' => $open ? null : $this->hours->nextOpen($department, $now)->format(DATE_ATOM),
@@ -142,6 +150,45 @@ final class WidgetConfigController
             : ($this->defaultDepartment->resolve()['queue_id'] ?? null);
 
         return is_string($queue) ? $this->estimator->forQueue($queue, $now)['band'] : null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $config
+     * @return array{pre_chat: array{version_id: ?string, mode: string}, offline: array{version_id: ?string}}
+     */
+    private function forms(array $config): array
+    {
+        $content = is_array($config['content'] ?? null) ? $config['content'] : [];
+        $version = static function (mixed $formId): ?string {
+            if (! is_string($formId) || $formId === '') {
+                return null;
+            }
+            $v = DB::table('forms')->where('id', $formId)->value('current_version_id');
+
+            return is_string($v) ? $v : null;
+        };
+        $mode = $content['pre_chat_mode'] ?? 'off';
+
+        return [
+            'pre_chat' => ['version_id' => $version($content['pre_chat_form_id'] ?? null), 'mode' => in_array($mode, ['off', 'optional', 'required'], true) ? $mode : 'off'],
+            'offline' => ['version_id' => $version($content['offline_form_id'] ?? null)],
+        ];
+    }
+
+    /** The site-asserted `web` identity's display on the visitor's own customer (A-61's shape), or null. */
+    private function assertedDisplay(WidgetVisitor $visitor): ?string
+    {
+        /** @var object{customer_id: string}|null $own */
+        $own = DB::table('customer_identities')->where('type', 'web')->where('value', $visitor->visitorId)->first(['customer_id']);
+        if ($own === null) {
+            return null;
+        }
+        /** @var object{metadata: ?string}|null $site */
+        $site = DB::table('customer_identities')->where('type', 'web')->where('customer_id', $own->customer_id)->where('value', 'like', 'site:%')->orderByDesc('id')->first(['metadata']);
+        $meta = $site !== null && is_string($site->metadata) ? json_decode($site->metadata, true) : null;
+        $display = is_array($meta) ? ($meta['display'] ?? null) : null;
+
+        return is_string($display) && $display !== '' ? $display : null;
     }
 
     /** @param array<string, mixed> $config */
@@ -205,9 +252,9 @@ final class WidgetConfigController
         if (! is_array($strings)) {
             return [];
         }
-        // Customer-facing branches ONLY: the staff notes (`identity.*`, `prechat.*`), the Backoffice
+        // Customer-facing branches ONLY: the staff notes (`staff.*`), the Backoffice
         // label (`feature.*`) and the Designer (`designer.*`) never ride to the visitor.
-        foreach (['feature', 'identity', 'prechat', 'designer'] as $staff) {
+        foreach (['feature', 'staff', 'designer'] as $staff) {
             unset($strings[$staff]);
         }
         /** @var array<string, mixed> $customer */

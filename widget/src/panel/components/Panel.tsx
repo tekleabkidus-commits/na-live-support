@@ -5,14 +5,18 @@ import {
     boot,
     config,
     envelope,
+    helpArticle,
     language,
     notifyPromptOpen,
+    preChat,
     sheet,
     tab,
     tabsShown,
 } from '../state';
 import { theme } from '../theme';
 import type { Shortcut } from '../types';
+import { lazy, Suspense } from 'preact/compat';
+import type { WidgetApi } from '../api';
 import { Composer } from './Composer';
 import { Home } from './Home';
 import { Thread } from './Thread';
@@ -26,16 +30,51 @@ interface Props {
     onLanguage: (code: string) => void;
     onRetry: () => void;
     onNotify: (yes: boolean) => void;
+    api: WidgetApi;
+    onPreChatDone: (answers: Record<string, unknown>) => void;
+    onPreChatSkip: () => void;
     announcement: string;
 }
 
 /** B05–B09: a dialog (focus trapped, Esc closes, focus returns to the launcher — the loader's side), header per state, tab bar per config, full sheet under 480 px; K03 the last-resort card. */
+const HelpTab = lazy(() => import('../tabs/Help'));
+const FormRenderer = lazy(() => import('../forms/FormRenderer')); // a LAZY chunk (NFR-01) — the gate reads the manifest
+
 export const Panel: FunctionComponent<Props> = (p) => {
     const root = useRef<HTMLDivElement>(null);
     const [menu, setMenu] = useState(false);
     const c = config.value;
     const tabs = c?.config.content.tabs ?? { home: true, help: true };
     const connecting = envelope.value.queue !== null;
+    const [receipt, setReceipt] = useState<{
+        ticket_number: number;
+        phone_masked: string | null;
+    } | null>(null);
+    // F03/F04: a pending pre-chat form takes the whole panel (no tab bar); F09/F10: out of hours with the bot OFF and an
+    // offline form configured, the offline form replaces the composer — the bot ON (F08) keeps the thread.
+    const gate: 'none' | 'prechat' | 'offline' =
+        preChat.value === 'pending' && (tab.value === 'messages' || !tabs.home)
+            ? 'prechat'
+            : c &&
+                !c.hours.open &&
+                !c.capabilities.chatbot &&
+                c.forms.offline.version_id &&
+                (tab.value === 'messages' || !tabs.home)
+              ? 'offline'
+              : 'none';
+    const opensAt = (() => {
+        try {
+            return c?.hours.opens_at
+                ? new Intl.DateTimeFormat(language.value, {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZone: c.hours.timezone,
+                  }).format(new Date(c.hours.opens_at))
+                : '';
+        } catch {
+            return c?.hours.opens_at ?? '';
+        }
+    })();
 
     useEffect(() => {
         const el = root.current;
@@ -187,8 +226,80 @@ export const Panel: FunctionComponent<Props> = (p) => {
                 </div>
             ) : null}
             <div class="nlw-body" role="tabpanel" aria-labelledby={'nlw-tab-' + tab.value}>
-                {tab.value === 'home' && tabs.home ? (
-                    <Home onShortcut={p.onShortcut} onStartChat={() => (tab.value = 'messages')} />
+                {gate === 'prechat' && c?.forms.pre_chat.version_id ? (
+                    <Suspense fallback={<div class="nlw-form" />}>
+                        <FormRenderer
+                            api={p.api}
+                            versionId={c.forms.pre_chat.version_id}
+                            mode="form"
+                            required={c.forms.pre_chat.mode === 'required'}
+                            intro={
+                                c.forms.pre_chat.mode === 'required'
+                                    ? t('prechat.required_intro')
+                                    : t('prechat.optional_intro')
+                            }
+                            onComplete={p.onPreChatDone}
+                            onSkip={
+                                c.forms.pre_chat.mode === 'required' ? undefined : p.onPreChatSkip
+                            }
+                        />
+                    </Suspense>
+                ) : gate === 'offline' && c?.forms.offline.version_id ? (
+                    receipt ? (
+                        <div class="nlw-receipt" data-role="offline-receipt">
+                            <strong>
+                                ✓ {t('offline.receipt_title', { number: receipt.ticket_number })}
+                            </strong>
+                            <span>{t('offline.receipt_body', { time: opensAt })}</span>
+                            {receipt.phone_masked ? (
+                                <span>
+                                    {t('offline.receipt_sms', { phone: receipt.phone_masked })}
+                                </span>
+                            ) : null}
+                            <span class="nlw-meta">{t('offline.receipt_done')}</span>
+                        </div>
+                    ) : (
+                        <Suspense fallback={<div class="nlw-form" />}>
+                            <FormRenderer
+                                api={p.api}
+                                versionId={c.forms.offline.version_id}
+                                mode="offline"
+                                required
+                                title={t('offline.title')}
+                                intro={t('offline.intro', { time: opensAt })}
+                                onComplete={() => undefined}
+                                onReceipt={(r) => setReceipt(r)}
+                            />
+                        </Suspense>
+                    )
+                ) : tab.value === 'help' && tabs.help ? (
+                    <Suspense fallback={<div class="nlw-help" />}>
+                        <HelpTab
+                            api={p.api}
+                            initialArticle={helpArticle.value}
+                            onStartChat={() => (tab.value = 'messages')}
+                        />
+                    </Suspense>
+                ) : tab.value === 'home' && tabs.home ? (
+                    <>
+                        {c?.visitor.display ? (
+                            <div
+                                class="nlw-badge-identity"
+                                data-role="identity"
+                                style="margin: 14px 16px 0"
+                            >
+                                <span aria-hidden="true">{c.visitor.display.slice(0, 1)}</span>
+                                <span>
+                                    {t('identity.signed_in_as', { name: c.visitor.display })}{' '}
+                                    <small>{t('identity.from_site')}</small>
+                                </span>
+                            </div>
+                        ) : null}
+                        <Home
+                            onShortcut={p.onShortcut}
+                            onStartChat={() => (tab.value = 'messages')}
+                        />
+                    </>
                 ) : (
                     <Thread onStar={p.onStar} onShortcut={(label) => p.onSend(label)} />
                 )}
@@ -207,14 +318,14 @@ export const Panel: FunctionComponent<Props> = (p) => {
                     </div>
                 </section>
             ) : null}
-            {tab.value === 'messages' || !tabs.home ? (
+            {gate === 'none' && (tab.value === 'messages' || !tabs.home) ? (
                 <Composer
                     onSend={p.onSend}
                     onTyping={p.onTyping}
                     maxText={c?.capabilities.max_text ?? 4000}
                 />
             ) : null}
-            {tabsShown.value ? (
+            {tabsShown.value && gate === 'none' ? (
                 <nav class="nlw-tabs" role="tablist" aria-label={t('a11y.tabs')}>
                     {tabs.home ? (
                         <button

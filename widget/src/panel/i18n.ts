@@ -35,7 +35,8 @@ function choose(text: string, count: number): string {
 }
 
 export function t(key: string, params: Record<string, string | number> = {}): string {
-    let text = lookup(key) ?? key;
+    const k = key.startsWith('widget.') ? key.slice(7) : key; // the server names keys in full (widget.form.required)
+    let text = lookup(k) ?? key;
     if (typeof params.count === 'number') text = choose(text, params.count);
     for (const [k, v] of Object.entries(params)) text = text.split(':' + k).join(String(v));
     return text;

@@ -73,7 +73,13 @@ export interface ConfigEnvelope {
             default_language: string | null;
             pre_chat_mode: string;
         };
-        behavior: { csat: boolean; sound: boolean | null; file_upload: boolean };
+        behavior: {
+            csat: boolean;
+            sound: boolean | null;
+            file_upload: boolean;
+            proactive: ProactiveRule[];
+            context_allowlist: string[];
+        };
     };
     capabilities: {
         max_text: number;
@@ -82,7 +88,13 @@ export interface ConfigEnvelope {
         buttons: boolean;
         max_mb: number;
         voice: boolean;
+        chatbot: boolean;
     };
+    forms: {
+        pre_chat: { version_id: string | null; mode: 'off' | 'optional' | 'required' };
+        offline: { version_id: string | null };
+    };
+    visitor: { display: string | null };
     transport: {
         channels: { thread: string; queue: string };
         polling_interval_seconds: number;
@@ -111,4 +123,70 @@ export interface HostFacts {
     session: SessionResponse | null;
     viewport?: { width: number; height: number };
     strings?: Record<string, Record<string, unknown>>;
+}
+
+export interface ProactiveRule {
+    id: string;
+    condition: {
+        kind: 'url' | 'time' | 'exit' | 'capture';
+        match?: string;
+        seconds?: number;
+        key?: string;
+    };
+    action: { kind: 'message' | 'open' | 'shortcuts'; message?: Record<string, string> };
+}
+
+export interface FormField {
+    key: string;
+    type: string;
+    required?: boolean;
+    label: Record<string, string>;
+    placeholder?: Record<string, string>;
+    options?: Array<{ value: string; label: Record<string, string> }>;
+    visible_when?: { field: string; equals?: unknown };
+}
+
+export interface FormContract {
+    form_id: string;
+    version: number;
+    schema: {
+        languages?: string[];
+        steps: Array<{ key: string; title?: Record<string, string>; fields: FormField[] }>;
+    };
+}
+
+export interface HelpTree {
+    categories: Array<{
+        id: string;
+        parent_id: string | null;
+        name: Record<string, string>;
+        slug: string;
+        articles: Array<{
+            article_id: string;
+            variant_id: string;
+            language: string;
+            title: string;
+            slug: string;
+        }>;
+    }>;
+    start_chat: boolean;
+}
+
+export interface HelpArticle {
+    article_id: string;
+    variant_id: string;
+    language: string;
+    served_language_matches: boolean;
+    title: string;
+    summary: string | null;
+    blocks: Array<{
+        type: string;
+        text?: string;
+        items?: string[];
+        url?: string;
+        alt?: string;
+        level?: number;
+    }>;
+    updated_at?: string;
+    start_chat: boolean;
 }
