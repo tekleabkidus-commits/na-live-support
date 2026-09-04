@@ -57,7 +57,15 @@ it('FR-15: the offline form lands a REAL offline-tagged ticket (source offline_f
     // Idempotent: the same submission again lands no second ticket.
     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/forms/'.$versionId.'/steps', ['mode' => 'offline', 'complete' => true, 'answers' => ['name' => 'አበበ ታደሰ', 'phone' => '+251900001234', 'story' => 'My deposit of 500 birr has not arrived since this morning.']])->assertStatus(201);
     bindTenant($tenant);
-    expect(DB::table('tickets')->where('conversation_id', $conversation->id)->count())->toBe(1);
+    // STOP-5B's control: the form's checkpoint (version + answers) IS the idempotency key — ONE conversation, ONE ticket, ONE message.
+    expect(DB::table('tickets')->where('conversation_id', $conversation->id)->count())->toBe(1)
+        ->and(DB::table('conversations')->where('external_chat_id', $visitorId)->count())->toBe(1)
+        ->and(DB::table('messages')->where('conversation_id', $conversation->id)->count())->toBe(1)
+        ->and(DB::table('tickets')->count())->toBe(1);
+    // ...and the door sits under ThrottleVisitorToken (the visitor's message budget).
+    $route = app('router')->getRoutes()->getByName('widget.forms.steps');
+    expect($route)->not->toBeNull()
+        ->and(in_array(App\Http\Middleware\ThrottleVisitorToken::class.':messages', $route->gatherMiddleware(), true))->toBeTrue('the form door must sit under ThrottleVisitorToken');
 });
 
 it('FR-15 refusals are inline and neutral: a missing required answer answers 422 with the field named; an unpublished version is 404', function (): void {

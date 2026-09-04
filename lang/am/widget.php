@@ -12,6 +12,11 @@ return [
         // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
         'switched_note' => 'የድረ-ገጽ ማንነት ተቀይሯል፦ ድረ-ገጹ አሁን :asserted ይላል (ቀድሞ :previous ነበር)። ምንም እንደገና አልተገናኘም — አንድ ሰው ከሆኑ በእጅ ይገምግሙና ያዋህዱ።',
     ],
+    // STOP-5A (a): the STAFF-visible system lines a pre-chat phone drops (never rendered to the visitor).
+    'prechat' => [
+        'phone_provided' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone (በሠራተኛ የተሰበሰበ፣ አልተገናኘም)። የእሱ/የእሷ ከሆነ ከመገለጫው ያገናኙት።',
+        'phone_conflict' => 'በቅድመ-ውይይት ቅጹ የተሰጠ ስልክ፦ :phone — ይህ ቁጥር አስቀድሞ በሌላ ደንበኛ ላይ አለ። ምንም አልተያያዘም፤ ከማገናኘትዎ በፊት ሁለቱን መገለጫዎች ይገምግሙ።',
+    ],
     // FR-06/FR-15 inline refusals (R-D13-5.1: calm, no failure vocabulary).
     'form' => [
         'required' => 'ለመቀጠል ይህ ያስፈልጋል።',

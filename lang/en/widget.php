@@ -19,6 +19,12 @@ return [
         // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
         'switched_note' => 'Site identity changed: the site now asserts :asserted (was :previous). Nothing was re-linked — review and merge by hand if these are one person.',
     ],
+    // STOP-5A (a): the STAFF-visible system lines a pre-chat phone drops (never rendered to the visitor;
+    // the phone is a staff-collected value — an identity only through Doc 08's FR-09 staff door).
+    'prechat' => [
+        'phone_provided' => 'Phone provided in the pre-chat form: :phone (staff-collected, not linked). Link it from the profile if it is theirs.',
+        'phone_conflict' => 'Phone provided in the pre-chat form: :phone — this number already sits on another customer. Nothing was attached; review both profiles before linking.',
+    ],
     // FR-06/FR-15 inline refusals (R-D13-5.1: calm, no failure vocabulary).
     'form' => [
         'required' => 'This one is needed to continue.',
