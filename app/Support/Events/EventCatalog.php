@@ -936,7 +936,7 @@ final class EventCatalog
         'customer.created' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'customer_id', 'created_source'],
-            'producers' => ['Doc08/CustomerResolver', 'Doc08/Customers'],
+            'producers' => ['Doc08/CustomerResolver', 'Doc08/Customers', 'Doc13/SignedIdentityLinker'],
             'consumers' => ['Doc08/SearchIndexer', 'Doc15/Reporting', 'Doc17/Audit'],
             'description' => 'FR-22/FR-02: a customer came into existence — a resolver shell (created_source=telegram|webchat) or a staff/api creation. Shells are full customers (FR-02).',
         ],
@@ -952,7 +952,7 @@ final class EventCatalog
         'customer.identity.linked' => [
             'schema_version' => 1,
             'payload' => ['tenant_id', 'customer_id', 'identity_id', 'type', 'source'],
-            'producers' => ['Doc08/LinkIdentity', 'Doc08/CustomerResolver'],
+            'producers' => ['Doc08/LinkIdentity', 'Doc08/CustomerResolver', 'Doc13/SignedIdentityLinker'],
             'consumers' => ['Doc08/SearchIndexer', 'Doc17/Audit'],
             'description' => 'FR-22/FR-09 (and FR-07\'s shell creation): an identity attached to a customer. type=telegram|web|phone|email; source=channel_auto|staff|api (FR-05).',
         ],

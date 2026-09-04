@@ -1,0 +1,328 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      identity-green
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php tests/Isolation/WidgetGrantPhysicsTest.php tests/Feature/Customers tests/Feature/Widget tests/Security/WidgetVisitorScopeTest.php tests/Security/WidgetPartitionTest.php tests/Feature/Auth/WidgetSessionTest.php
+# started:    2026-09-04T11:36:06Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m11.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\WidgetGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per widget table and privileg[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every widget tenant table is FORCED RLS with tenant_isolat[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20 / Doc 02 physics: a config-version UPDATE and a widgets ke[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\BettingFieldsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-16: values write through the door — event carries NAMES only[39m[90m… [39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09: a RETIRED field is READ-ONLY — the write REFUSES (422), b[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-04's player_id half: a stored player_id is SEARCHABLE — the in[39m[90m…[39m [90m3.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: every seeded field label and the staff-collected/retired mi[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\BlockingCascadeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #3 (inverted R-19): blocked_at is a BYTE-COP[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06: the cascade quiets EVERY channel, unblock restores — and[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-06 (the mid-cascade clause, sabotage #8's subject): a convers[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04: a PARTIAL cascade (crash mid-way) leaves the guard holdin[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-07 (the documented limitation): a blocked customer's brand-ne[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-37 noops both directions: blocking a blocked customer and unbl[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE OWED CYCLE (step-7 acceptance): block → unblock → RE-block →[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit THE RACED WITHDRAW (fold ownership): a conversation blocked betw[39m[90m…[39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\CustomerExportTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04: the full journey — request audited at the door, the job[39m[90m… [39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the verdict is re-checked IN THE JOB — a revocation betw[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-05: a crash between build and put leaves NOTHING — no object,[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-38/[D17]: erasure INITIATION rides customers.delete with a man[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit H06 (step 12): the profile page REPORTS a pending erasure — requ[39m[90m…[39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\CustomerNotesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: adds notes through the door with author + audit + event;[39m[90m… [39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-04 STRUCTURALLY (sabotage #15's subject): NOTHING in the outbo[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-07: the notes-stay-on-profile onboarding copy ships as i18n S[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-17: an empty body is refused at the service boundary[39m[90m          [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\CustomerSearchIndexerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit indexes a customer from a customer.created delivery — and a REPL[39m[90m…[39m [90m3.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFRESHES the scope arrays on ticket.assigned — assignment grant[39m[90m…[39m [90m4.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REMOVES the tombstone on customer.merged (BR-05: tombstones redi[39m[90m…[39m [90m1.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\CustomerTabBadgeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit E03/BR-03: the badge answers FALSE for a viewer without customer[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-06 THROUGH THE BADGE PATH: a direct flag flip answers FRESH[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-03/EC-01: customer.merged recomputes every list row carrying t[39m[90m…[39m [90m0.87s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the retired doc08-customer-badge seam has NO code path left — th[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\DirectoryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-01: Meilisearch down → the dead-port drill — a LABELED degrad[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20/EC-08: the table door — rows ordered last-contact DESC NUL[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit G03/SEC-01/BR-03: for a viewer WITHOUT customers.rg_flag.view th[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-05: cursor pages walk the whole set exactly once — dated rows,[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20 scope: an Own-scoped viewer's table AND count hold only cu[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit G04: a hit found by a RENAMED username explains itself — matched[39m[90m…[39m [90m0.68s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a customer named only by their CHANNEL still renders and[39m[90m… [39m [90m0.63s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\FilesGalleryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-19: lists ALL the customer's inbound media flattened per item[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-19 / closing row 4a: a CLEAN item signs through Doc 04's own[39m[90m… [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityBackfillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit gives a shared phone to the OLDER customer, preserves the loser[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit breaks a created_at tie by the LOWEST UUIDv7 — deterministic, ne[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is idempotent — a second run changes nothing[39m[90m                     [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES loudly on an unmapped channel, naming it[39m[90m                 [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit mirrors customers.username into the telegram identity metadata —[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit drop gate: green after the backfill, RED for a value with no per[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING 1: a legacy-shaped straggler written AFTER the first back[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforce re-normalizes a backfilled phone to E.164 (ADR 0014), pr[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit enforce REFUSES when normalization would fuse two customers — me[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER: an identity-less customer derives created_source from its[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RIDER: a customer with neither identities nor conversations stil[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES a legacy NULL-typed insert after enforce — the C-12 wind[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADDITION 8 (condition 1b): every WRITER mirrors the legacy pair[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\InactiveHintTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fires for a deleted-account customer: the last three sends on th[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ONLY there: two failures → null; three failures then one sent →[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the chip's strings exist in both launch languages (C-08)[39m[90m         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\LinkUnlinkTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-09: a staff-linked phone stores E.164, source=staff, DB-time[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-09/AC-02 (the block half): the value on ANOTHER customer refu[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit linking the SAME value to the SAME customer is the A-37 noop — t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the typed confirmation and the executed move come from ON[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05: unlinking the ONLY identity is allowed — the profile keep[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-42's consequence: a phone identity anchors NO conversations —[39m[90m… [39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: a mismatched customer/identity pairing answers 404 — indis[39m[90m…[39m [90m0.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\LocalizationParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §14: the en and am customers catalogs are structurally identical[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeCollisionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: both sides open → the NEWER open ticket is auto-flagged l[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit one side only open → nothing is flagged (no collision exists)[39m[90m    [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: combined open linked_work beyond Doc 06's cap of 3 → BLOC[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11/FR-12: the full flow — chosen fields apply, tags/notes/fil[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02: a merge without a reason refuses before anything moves[39m[90m   [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit chain law: a tombstone can take part in NO merge — its only path[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeSagaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash AFTER the tickets chunk compensates back to the p[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: a crash after the FIRST chunk compensates identically — t[39m[90m…[39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\MergeUndoTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-03: the round-trip restores BYTE-IDENTICAL pointers (snapshot[39m[90m…[39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-04: chains undo OUTERMOST-FIRST — the inner link refuses whil[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-13: past the 30-day window the merge is PERMANENT, and a reve[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\PanelEndpointTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-07: the aggregate answers header + identities (provenance ALWA[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 THROUGH THE PANEL PATH: the unpermitted header carries NO[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-10: a cross-tenant panel fetch is a 404, indistinguishable fro[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05 SERVER HALF: a tombstoned customer's panel carries merged_[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\ProfileFieldsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-01: a staff write to language/country is STICKY — sources sta[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: simultaneous edits are LAST-WRITE-WINS with the honest co[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit A-37: the unchanged-value autosave is the SERVICE's own noop — n[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: the detected-latest disagreement is DERIVED data (chip),[39m[90m… [39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-02/BR-06: the customer schema carries NO consent or marketing[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\ResolverMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-40: every channel the AdapterRegistry knows has an identity-ty[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 create-shell: a first contact mints a shell + typed identi[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 exact-match: the second contact returns the SAME customer,[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 / FR-06 username change: display refreshes and the OLD nam[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 NO CROSS-TYPE AUTO-LINK (BR-02, the document's sharpest pr[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 05 EC-04 CLOSING (identity-resolution half): the same Telegr[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 RACE: six forked processes race the same first message — e[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 THE SPECULATIVE WINDOW (amendment addition 8): a loser raci[39m[90m…[39m [90m1.64s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Customers\RgStorageTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at[39m[90m…[39m [90m0.20s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 set (staff): flag + provenance columns, history row, outbo[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-14 set (ai, the [D09] fixture): actor NULL by the schema's ow[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15/EC-06 clear: permission + reason, history keeps BOTH rows[39m[90m… [39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-B4-02 (server half): the history exports WHOLE — authors, rea[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING A: window decay (stored > recomputed) heals QUIETLY, but[39m[90m… [39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\RollupStalenessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FS-03/H07: quiet stack ≠ outage — an aged beat with NO pending r[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-03: the consumer BEATS on every applied event — and the panel[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\TombstoneTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-05: a MERGED profile's page RESOLVES as the tombstone surface[39m[90m…[39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened und[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormsSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the pre-chat and offline forms once, byte-equal to the Doc[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetPartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a valid visitor session on the staff and bearer surfaces[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses staff credentials on the widget surface (BR-06, staff →[39m[90m… [39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the widget guard no user provider to misconfigure (BR-06 s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a visitor onto exactly their own Reverb channel and n[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the widget broadcasting door to anyone who is not a visi[39m[90m…[39m [90m0.26s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.10s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it SABOTAGE-16 CON… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m21[39m
+     17▕     legacyIdentityShapeEnforce();
+     18▕ });
+     19▕ 
+     20▕ it('SABOTAGE-16 CONTROL #2 (inverted R-19): customers.rg_flag_set_at is a BYTE-COPY of the owning history row\'s own DB stamp — never a fresh clock', function (): void {
+  ➜  21▕     [$customerId, $actorId] = rgScene();
+     22▕ 
+     23▕     $historyId = app(RgFlagService::class)->set($customerId, 'fixture: byte copy', 'staff', $actorId);
+     24▕ 
+     25▕     $historyStamp = (string) DB::selectOne('SELECT created_at::text AS s FROM rg_flag_history WHERE id = ?', [$historyId])->s;
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m21[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-14 set (staf… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m32[39m
+     28▕     expect($currentStamp)->toBe($historyStamp);
+     29▕ });
+     30▕ 
+     31▕ it('FR-14 set (staff): flag + provenance columns, history row, outbox event, audit entry — all in one transaction', function (): void {
+  ➜  32▕     [$customerId, $actorId] = rgScene();
+     33▕ 
+     34▕     $historyId = app(RgFlagService::class)->set($customerId, 'fixture: chasing losses over three sessions', 'staff', $actorId);
+     35▕ 
+     36▕     $customer = DB::table('customers')->where('id', $customerId)->first();
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-14 set (ai,…  [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m51[39m
+     47▕         ->and(DB::table('audit_log')->where('action_key', 'customer.rg_flag.set')->count())->toBe(1);
+     48▕ });
+     49▕ 
+     50▕ it('FR-14 set (ai, the [D09] fixture): actor NULL by the schema\'s own CHECK, excerpt reference MANDATORY and stored', function (): void {
+  ➜  51▕     [$customerId] = rgScene();
+     52▕     $service = app(RgFlagService::class);
+     53▕ 
+     54▕     // The mandatory-excerpt clause refuses first.
+     55▕     expect(fn () => $service->set($customerId, 'fixture: ai without excerpt', 'ai', null))
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m51[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it FR-15/EC-06 cle… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m67[39m
+     63▕         ->and(json_decode((string) $history->excerpt_ref, true)['message_id'])->toBe('01a0-fixture');
+     64▕ });
+     65▕ 
+     66▕ it('FR-15/EC-06 clear: permission + reason, history keeps BOTH rows forever; clearing an unset flag is the honest no-change the door will declare (A-37)', function (): void {
+  ➜  67▕     [$customerId, $actorId] = rgScene();
+     68▕     $service = app(RgFlagService::class);
+     69▕ 
+     70▕     // Clear on an unset flag: NO history row, no event — the null return is
+     71▕     // the causal fact the step-11 door ties its audit.noop declaration to.
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m67[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Customers\RgStorageTest[22m [90m>[39m it AC-B4-02 (serve… [41;1m Error [49;22m  
+[39;1m  Call to undefined function rgScene()[39;22m
+
+  at [32mtests/Feature/Customers/RgStorageTest.php[39m:[32m95[39m
+     91▕         ->and(DB::table('audit_log')->where('action_key', 'customer.rg_flag.cleared')->count())->toBe(1);
+     92▕ });
+     93▕ 
+     94▕ it('AC-B4-02 (server half): the history exports WHOLE — authors, reasons, sources, AI excerpt refs — including entries whose flag has since been cleared', function (): void {
+  ➜  95▕     [$customerId, $actorId] = rgScene();
+     96▕     $service = app(RgFlagService::class);
+     97▕ 
+     98▕     $service->set($customerId, 'fixture: manual set', 'staff', $actorId);
+     99▕     $service->clear($customerId, 'fixture: first review', $actorId);
+
+  [33m1   [39m[39;1mtests/Feature/Customers/RgStorageTest.php[39;22m:[39;1m95[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m145 passed[39;22m[90m (1044 assertions)[39m
+  [90mDuration:[39m [39m51.47s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:36:58Z
+# duration:   52s
+# EXIT:       2

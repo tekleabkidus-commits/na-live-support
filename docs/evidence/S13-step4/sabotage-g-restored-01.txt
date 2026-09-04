@@ -1,0 +1,26 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-g-restored
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php tests/Feature/Widget/SecretRotationTest.php
+# started:    2026-09-04T11:37:50Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m10.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.11s[39m  
+
+  [90mTests:[39m    [32;1m5 passed[39;22m[90m (64 assertions)[39m
+  [90mDuration:[39m [39m11.05s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:38:02Z
+# duration:   12s
+# EXIT:       0

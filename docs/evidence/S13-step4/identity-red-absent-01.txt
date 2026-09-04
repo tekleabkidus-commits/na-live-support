@@ -1,0 +1,120 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      identity-red-absent
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php tests/Feature/Widget/SecretRotationTest.php
+# started:    2026-09-04T11:31:33Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m10.20s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.08s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m i… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Webchat\Identity\WidgetSecretMinter] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m21[39;22m
+  [33m8   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m34[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m i… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Webchat\Identity\WidgetSecretMinter] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m21[39;22m
+  [33m8   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m60[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m i… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Webchat\Identity\WidgetSecretMinter] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m21[39;22m
+  [33m8   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m78[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m i… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Webchat\Identity\WidgetSecretMinter] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m21[39;22m
+  [33m8   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m105[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\SecretRotationTe[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Webchat\Identity\WidgetSecretMinter] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Feature/Widget/SecretRotationTest.php[39;22m:[39;1m21[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m10.63s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:31:44Z
+# duration:   11s
+# EXIT:       2

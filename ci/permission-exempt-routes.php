@@ -136,4 +136,5 @@ return [
     'widget.receipts' => 'Visitor surface (Doc 13 T-02): the visitor client\'s delivery ack on its OWN outbound rows (AC-04); the guard is the principal.',
     'widget.context' => 'Visitor surface (Doc 13 FR-24): page context for the visitor\'s OWN conversation, allowlist-filtered server-side.',
     'widget.beacon' => 'Loader/panel beacons (Doc 13 T-08): widget-key-authenticated, BEFORE any visitor session exists (a blocked origin has no visitor); answers 204 to everything (NFR-06).',
+    'widget.identify' => 'Visitor surface (Doc 13 FR-07/SEC-03): the host page\'s HMAC-signed assertion for THIS visitor; verified constant-time against the per-widget secret; an invalid signature is a 204 + a Health counter, never an error; no staff principal exists.',
 ];

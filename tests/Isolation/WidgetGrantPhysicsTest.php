@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
  * fill trigger on UPDATE (R-20 shape), and the ref_* table holding no app
  * write at all.
  */
-const DOC13_TABLES = ['widgets', 'widget_config_versions', 'widget_visitor_contexts', 'widget_health_counters', 'widget_beacon_samples'];
+const DOC13_TABLES = ['widgets', 'widget_config_versions', 'widget_visitor_contexts', 'widget_health_counters', 'widget_beacon_samples', 'vault_secrets'];
 
 /** The filed denied set per table AND PER PRIVILEGE (sorted). '*' = every column. */
 const DOC13_DENIED = [
@@ -45,6 +45,11 @@ const DOC13_DENIED = [
     'widget_beacon_samples' => [
         'INSERT' => ['occurred_at'],
         'UPDATE' => '*',
+    ],
+    'vault_secrets' => [
+        // RIDER 1: ciphertext behind a vault:// ref; INSERT-only; retire (never rewrite) a predecessor.
+        'INSERT' => ['created_at', 'retired_at'],
+        'UPDATE' => ['ciphertext', 'created_at', 'ref', 'tenant_id'],
     ],
 ];
 

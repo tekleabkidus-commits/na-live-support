@@ -152,4 +152,5 @@ return [
     'widget.receipts' => 'Doc 13 T-02: the delivery transition is DeliveryStateMachine\'s and publishes message.delivered — the event IS the record (Doc 04 FR-13).',
     'widget.context' => 'Doc 13 FR-24: the widget_visitor_contexts row (latest wins) IS the record; visitor-device facts, no staff actor.',
     'widget.beacon' => 'Doc 13 T-08: health COUNTERS (monotone increments) and sampled scrubbed stacks are the record; anonymous, high-volume, no actor.',
+    'widget.identify' => 'Doc 13 FR-07 / A-61: the customer.created / customer.identity.linked EVENTS and, on a switch, the widget.identity.switched AUDIT row (recorded by the linker with the system actor) are the record; a refused assertion mutates only a health counter.',
 ];

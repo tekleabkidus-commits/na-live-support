@@ -15,4 +15,8 @@ return [
     'feature' => [
         'voice_recording' => 'Widget voice notes',
     ],
+    'identity' => [
+        // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
+        'switched_note' => 'Site identity changed: the site now asserts :asserted (was :previous). Nothing was re-linked — review and merge by hand if these are one person.',
+    ],
 ];

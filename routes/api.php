@@ -566,6 +566,8 @@ Route::group([], function (): void {
                         ->name('widget.receipts');
                     Route::post('context', [App\Http\Controllers\Widget\WidgetContextController::class, 'store'])
                         ->name('widget.context');
+                    Route::post('identify', [App\Http\Controllers\Widget\WidgetIdentifyController::class, 'store'])
+                        ->name('widget.identify');
                 });
             });
     });

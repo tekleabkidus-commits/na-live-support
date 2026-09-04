@@ -1,0 +1,172 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      identity-green
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php tests/Feature/Widget/SecretRotationTest.php tests/Isolation/WidgetGrantPhysicsTest.php tests/Feature/Customers/IdentityInvariantsTest.php tests/Feature/Customers/ResolverMatrixTest.php tests/Feature/Widget/NoGhostProfileTest.php tests/Security/WidgetVisitorScopeTest.php
+# started:    2026-09-04T11:32:51Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m10.16s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.11s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.12s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.12s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\WidgetGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per widget table and privileg[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every widget tenant table is FORCED RLS with tenant_isolat[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20 / Doc 02 physics: a config-version UPDATE and a widgets ke[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES a legacy NULL-typed insert after enforce — the C-12 wind[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADDITION 8 (condition 1b): every WRITER mirrors the legacy pair[39m[90m… [39m [90m0.39s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\ResolverMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit A-40: every channel the AdapterRegistry knows has an identity-ty[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 create-shell: a first contact mints a shell + typed identi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 exact-match: the second contact returns the SAME customer,[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 / FR-06 username change: display refreshes and the OLD nam[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 NO CROSS-TYPE AUTO-LINK (BR-02, the document's sharpest pr[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc 05 EC-04 CLOSING (identity-resolution half): the same Telegr[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-01 RACE: six forked processes race the same first message — e[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-02 THE SPECULATIVE WINDOW (amendment addition 8): a loser raci[39m[90m…[39m [90m1.66s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m0.28s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.24s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it VALID: a c… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "widgets" where "id" = 01a06c31-8e8e-7280-9358-aeb45074f3d9 limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+10 vendor frames [22m
+  [33m11  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m25[39;22m
+  [33m12  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m34[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it INVALID +…  [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "widgets" where "id" = 01a06c31-8f11-72ff-b09d-ef00f6a121d5 limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+10 vendor frames [22m
+  [33m11  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m25[39;22m
+  [33m12  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m60[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it SWITCHED (… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "widgets" where "id" = 01a06c31-8f84-7027-a057-26b5bf4a5413 limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+10 vendor frames [22m
+  [33m11  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m25[39;22m
+  [33m12  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m78[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it SEC-03: th… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select * from "widgets" where "id" = 01a06c31-8ffd-7138-b1fb-67afc7b671ba limit 1)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+10 vendor frames [22m
+  [33m11  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m25[39;22m
+  [33m12  [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m105[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\SecretRotationTest[22m [90m>[39m it rotates with an over…   
+[39;1m  the first mint is not a rotation
+Failed asserting that Carbon\CarbonImmutable Object #1733 (
+    'endOfTime' => false,
+    'startOfTime' => false,
+    'constructedObjectId' => '00000000000006c50000000000000000',
+    'clock' => null,
+    'localMonthsOverflow' => null,
+    'localYearsOverflow' => null,
+    'localStrictModeEnabled' => null,
+    'localHumanDiffOptions' => null,
+    'localToStringFormat' => null,
+    'localSerializer' => null,
+    'localMacros' => null,
+    'localGenericMacros' => null,
+    'localFormatFunction' => null,
+    'localTranslator' => null,
+    'dumpProperties' => Array &0 [
+        0 => 'date',
+        1 => 'timezone_type',
+        2 => 'timezone',
+    ],
+    'dumpLocale' => null,
+    'dumpDateProperties' => null,
+    'date' => '2026-09-04 11:33:02.762993',
+    'timezone_type' => 1,
+    'timezone' => '+00:00',
+) is null.[39;22m
+
+  at [32mtests/Feature/Widget/SecretRotationTest.php[39m:[32m29[39m
+     25▕     $old = $minter->mint($widget, $actor);
+     26▕     $widget = $widget->fresh();
+     27▕     expect($widget->identity_secret_ref)->toBe('vault://widget/'.$widget->getKey().'/v1')
+     28▕         ->and($widget->identity_secret_previous_ref)->toBeNull()
+  ➜  29▕         ->and($widget->identity_secret_rotated_at)->toBeNull('the first mint is not a rotation');
+     30▕ 
+     31▕     $new = $minter->mint($widget, $actor);
+     32▕     $widget = $widget->fresh();
+     33▕     expect($widget->identity_secret_ref)->toBe('vault://widget/'.$widget->getKey().'/v2')
+
+  [33m1   [39m[39;1mtests/Feature/Widget/SecretRotationTest.php[39;22m:[39;1m29[39;22m
+
+
+  [90mTests:[39m    [31;1m5 failed[39;22m[90m,[39m[39m [39m[32;1m17 passed[39;22m[90m (143 assertions)[39m
+  [90mDuration:[39m [39m15.74s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:33:07Z
+# duration:   16s
+# EXIT:       2

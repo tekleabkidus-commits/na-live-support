@@ -23,6 +23,8 @@ return [
         'linked_work_note' => 'Flagged as linked work by a customer merge — both profiles held an open ticket (sanctioned multi-open).',
     ],
     'identity' => [
+        // Doc 13 FR-07 / A-61 — the THIRD provenance label (Doc 08 BR-01 wording: asserted by the site, never established by the platform).
+        'by_site' => 'operator site asserted',
         'duplicate' => 'That :type already belongs to another profile — a value can only be on one customer (merge instead?).',
     ],
     'notify' => [

@@ -371,7 +371,7 @@ FR-22/FR-02: a customer came into existence — a resolver shell (created_source
 
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `customer_id`, `created_source`
-- **Producers:** Doc08/CustomerResolver, Doc08/Customers
+- **Producers:** Doc08/CustomerResolver, Doc08/Customers, Doc13/SignedIdentityLinker
 - **Consumers:** Doc08/SearchIndexer, Doc15/Reporting, Doc17/Audit
 
 ## `customer.fields_changed`
@@ -389,7 +389,7 @@ FR-22/FR-09 (and FR-07's shell creation): an identity attached to a customer. ty
 
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `customer_id`, `identity_id`, `type`, `source`
-- **Producers:** Doc08/LinkIdentity, Doc08/CustomerResolver
+- **Producers:** Doc08/LinkIdentity, Doc08/CustomerResolver, Doc13/SignedIdentityLinker
 - **Consumers:** Doc08/SearchIndexer, Doc17/Audit
 
 ## `customer.identity.unlinked`

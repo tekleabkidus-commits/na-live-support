@@ -98,6 +98,8 @@ server-side message pipeline → Doc 04 (the adapter conforms) · chatbot logic 
 
 ## §3 — Steps (THIRTEEN, three batches; one commit per step; registries as we go; gates every commit — bare form, no pipes; DOC 13 SUITES + the three Doc 12/10 contract tests green at every widget step-commit; full battery every step-commit regardless of BAT1; ONE CI look per batch checkpoint, billing annotation first)
 
+_**R-D13-6 (owner directive, 2026-09-04, recorded in BUILD-STATUS's Doc 13 section): cadence is PER-BATCH from step 4 — targeted suites + gates + lint at every step-commit; the FULL battery once per batch checkpoint and at the close-out; the PC-power rule (read and state BAT1 before any full run; below 40% discharging = wait for the owner; timing legs wall power only). Supersedes the "full battery every step-commit" clause above._
+
 **Batch A — substrate (adapter + visitor API; Doc 13 §21 "the guarantees underneath are the product")**
 | Step | Content | Proof | Stops |
 |---|---|---|---|

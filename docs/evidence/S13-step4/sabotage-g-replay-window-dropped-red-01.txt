@@ -1,0 +1,39 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-g-replay-window-dropped-red
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php
+# started:    2026-09-04T11:37:39Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m10.48s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.16s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it INVALID + REPLAYED: a bad…    
+[39;1m  Expected response status code [204] but received 200.
+Failed asserting that 200 is identical to 204.[39;22m
+
+  at [32mtests/Security/SignedIdentityTest.php[39m:[32m67[39m
+     63▕     $stale = signed(['user_ref' => 'player-1', 'ts' => time() - 601], $secret);
+     64▕     $malformed = ['payload' => ['user_ref' => 'player-1', 'ts' => time()], 'sig' => 'zz'];
+     65▕ 
+     66▕     foreach ([$bad, $stale, $malformed] as $attempt) {
+  ➜  67▕         widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/identify', $attempt)->assertStatus(204);
+     68▕     }
+     69▕     bindTenant($tenant);
+     70▕     expect(DB::table('customer_identities')->count())->toBe(0)->and(DB::table('customers')->count())->toBe(0);
+     71▕     expect((int) DB::table('widget_health_counters')->where('widget_id', $widget->getKey())->value('invalid_signatures'))->toBe(3);
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (28 assertions)[39m
+  [90mDuration:[39m [39m11.23s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:37:50Z
+# duration:   11s
+# EXIT:       1

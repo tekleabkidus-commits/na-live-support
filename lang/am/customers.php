@@ -20,6 +20,8 @@ return [
         'linked_work_note' => 'በደንበኛ ውህደት ምክንያት እንደ የተያያዘ ሥራ ተለይቷል — ሁለቱም መገለጫዎች ክፍት ጥያቄ ነበራቸው (የተፈቀደ ባለብዙ-ክፍት)።',
     ],
     'identity' => [
+        // Doc 13 FR-07 / A-61 — the THIRD provenance label (Doc 08 BR-01 wording: asserted by the site, never established by the platform).
+        'by_site' => 'በኦፕሬተሩ ድረ-ገጽ የተነገረ',
         'duplicate' => 'ይህ :type አስቀድሞ በሌላ መገለጫ ላይ ነው — አንድ እሴት በአንድ ደንበኛ ላይ ብቻ ሊሆን ይችላል (በምትኩ ይዋሃዱ?)።',
     ],
     'notify' => [

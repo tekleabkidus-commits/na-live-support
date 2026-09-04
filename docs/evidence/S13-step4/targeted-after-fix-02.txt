@@ -1,0 +1,73 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      targeted-after-fix
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/NoVerifiedAffordanceTest.php tests/Security/SignedIdentityTest.php tests/Feature/Widget tests/Feature/Customers/IdentityInvariantsTest.php tests/Security/WidgetVisitorScopeTest.php
+# started:    2026-09-04T12:29:58Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\NoVerifiedAffordanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-shaped column on any customer table (schema swee[39m[90m…[39m [90m9.94s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit has no verified-named component anywhere in the client tree (BR-[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the customer UI namespaces and customers.* lang files free[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the Customers server namespaces free of any verified API f[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sour[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened und[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormsSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the pre-chat and offline forms once, byte-equal to the Doc[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\IdentityInvariantsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a direct-SQL duplicate (tenant, type, value) on the uniq[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit REFUSES a legacy NULL-typed insert after enforce — the C-12 wind[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADDITION 8 (condition 1b): every WRITER mirrors the legacy pair[39m[90m… [39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.18s[39m  
+
+  [90mTests:[39m    [32;1m30 passed[39;22m[90m (209 assertions)[39m
+  [90mDuration:[39m [39m14.47s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T12:30:13Z
+# duration:   15s
+# EXIT:       0

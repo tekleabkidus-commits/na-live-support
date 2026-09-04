@@ -1,0 +1,38 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-g-nonconstant-time-red
+# set:        S13-step4
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/SignedIdentityTest.php
+# started:    2026-09-04T11:37:26Z
+# git:        2165e9e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sou[39m[90m…[39m [90m10.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.24s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.15s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SignedIdentityTest[22m [90m>[39m it SEC-03: the compare is con…   
+[39;1m  Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Security/SignedIdentityTest.php[39m:[32m115[39m
+    111▕     $tampered['sig'] = substr($a['sig'], 0, -1).($a['sig'][63] === 'a' ? 'b' : 'a');
+    112▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/identify', $tampered)->assertStatus(204);
+    113▕     // The verifier's source uses hash_equals and nothing else for the compare.
+    114▕     $src = (string) file_get_contents(app_path('Domain/Webchat/Identity/SignedIdentityVerifier.php'));
+  ➜ 115▕     expect(substr_count($src, 'hash_equals('))->toBe(1)->and(preg_match('/=== \$signature|\$signature ===|== \$signature/', $src))->toBe(0);
+    116▕ });
+    117▕
+
+  [33m1   [39m[39;1mtests/Security/SignedIdentityTest.php[39;22m:[39;1m115[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (33 assertions)[39m
+  [90mDuration:[39m [39m11.67s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T11:37:39Z
+# duration:   12s
+# EXIT:       1
