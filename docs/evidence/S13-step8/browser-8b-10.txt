@@ -1,0 +1,37 @@
+### 8b — queue spec (join at fixture capacity) — 2026-09-04T19:01:37Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (26.7s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: 0
+    Received: 1
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        33 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      44 |
+      45 |     harness('agent-join');
+    > 46 |     await expect(card).toHaveCount(0, { timeout: 15000 });
+         |                        ^
+      47 |     await expect(panel.locator('[data-role=header-state]')).toHaveText('Support assistant');
+      48 | });
+      49 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:46:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-09800-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+exit=1

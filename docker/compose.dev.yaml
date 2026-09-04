@@ -45,3 +45,7 @@ services:
 
   reverb:
     <<: *dev-source
+  # The outbox RELAY consumes the working tree too (S13 step 8b finding): without this line it
+  # ran the baked image and never learned a consumer registered after the image was built.
+  relay:
+    <<: *dev-source

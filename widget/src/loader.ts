@@ -45,6 +45,8 @@ interface Inventory {
 }
 
 interface ShimConfig {
+    /** the minimal copy the panel needs BEFORE a session exists (the last-resort card), per language */
+    strings: Record<string, Record<string, unknown>>;
     widget_key: string;
     widget_id: string;
     platform_origin: string;
@@ -122,6 +124,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
      *  origin of record (the server refuses a declared origin that differs), and only this page can
      *  present the operator's origin. The visitor token travels ONLY to the panel frame, targeted
      *  at the frame origin; nothing of it is exposed on window.PlatformChat. */
+    let titleSaved: string | null = null;
     let session: Promise<unknown> | null = null;
     // No JSON.stringify here: a hostile host (SS-03) tampers it; the body is two strings and a list.
     const jsonString = (v: string): string =>
@@ -173,6 +176,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
                             url: location.href,
                             referrer: document.referrer,
                             viewport: viewport(),
+                            strings: cfg!.strings,
                             session: s,
                         },
                     },
@@ -229,6 +233,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
     };
     window.addEventListener('popstate', onRoute);
     window.addEventListener('resize', () => post('viewport', viewport()));
+    window.addEventListener('focus', () => post('attended'));
 
     // The panel's messages: ready, size, events for the host hooks (names only, FR-02), EC-05 focus probe.
     function onMessage(ev: MessageEvent): void {
@@ -245,6 +250,22 @@ declare const __NLW_CFG: ShimConfig | undefined;
                     handHost((data as { token?: string | null } | undefined)?.token ?? null);
                 for (const q of queue.splice(0)) post('api', { method: q.method, args: q.args });
                 break;
+            case 'title': {
+                // I02: the unread counter in the tab title — the loader's ONE declared host write (never a read),
+                // restored to the page's own title when the count returns to zero.
+                const n = typeof data === 'number' ? data : 0;
+                try {
+                    if (n > 0 && !titleSaved) titleSaved = document.title;
+                    document.title =
+                        n > 0
+                            ? `(${n}) ${titleSaved ?? document.title}`
+                            : (titleSaved ?? document.title);
+                    if (n === 0) titleSaved = null;
+                } catch {
+                    /* silent */
+                }
+                break;
+            }
             case 'launcher':
                 // The panel hands the launcher frame its strings, unread count and open state (one config
                 // fetch per page, not two); relayed frame-to-frame through this bus, targeted.

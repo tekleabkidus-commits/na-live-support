@@ -45,7 +45,7 @@ const Bubble: FunctionComponent<{ m: Message }> = ({ m }) => {
     const name =
         m.author === 'ai'
             ? t('messages.ai_label')
-            : m.author === 'staff'
+            : m.author === 'agent'
               ? agentIdentity === 'team'
                   ? t('header.team')
                   : t('header.team')

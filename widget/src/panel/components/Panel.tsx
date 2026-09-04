@@ -1,7 +1,16 @@
 import type { FunctionComponent } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { t } from '../i18n';
-import { boot, config, envelope, sheet, tab, tabsShown, language } from '../state';
+import {
+    boot,
+    config,
+    envelope,
+    language,
+    notifyPromptOpen,
+    sheet,
+    tab,
+    tabsShown,
+} from '../state';
 import { theme } from '../theme';
 import type { Shortcut } from '../types';
 import { Composer } from './Composer';
@@ -16,6 +25,7 @@ interface Props {
     onShortcut: (s: Shortcut) => void;
     onLanguage: (code: string) => void;
     onRetry: () => void;
+    onNotify: (yes: boolean) => void;
     announcement: string;
 }
 
@@ -183,6 +193,20 @@ export const Panel: FunctionComponent<Props> = (p) => {
                     <Thread onStar={p.onStar} onShortcut={(label) => p.onSend(label)} />
                 )}
             </div>
+            {notifyPromptOpen.value ? (
+                <section class="nlw-queue" data-role="notify-prompt" aria-label={t('notify.title')}>
+                    <strong>{t('notify.title')}</strong>
+                    <span>{t('notify.body')}</span>
+                    <div class="nlw-list" style="grid-template-columns: 1fr 1fr">
+                        <button type="button" class="nlw-btn" onClick={() => p.onNotify(true)}>
+                            {t('notify.yes')}
+                        </button>
+                        <button type="button" class="nlw-btn" onClick={() => p.onNotify(false)}>
+                            {t('notify.no')}
+                        </button>
+                    </div>
+                </section>
+            ) : null}
             {tab.value === 'messages' || !tabs.home ? (
                 <Composer
                     onSend={p.onSend}
@@ -238,7 +262,9 @@ export const Panel: FunctionComponent<Props> = (p) => {
                 aria-label={t('a11y.log')}
                 data-role="log"
             >
-                {p.announcement}
+                {p.announcement.split('\n').map((line, i) => (
+                    <p key={i}>{line}</p>
+                ))}
             </div>
         </div>
     );

@@ -1,0 +1,37 @@
+### 8b — queue spec (helper reports stderr) — 2026-09-04T18:57:37Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card (15.7s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: "1"
+    Received: "12"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        14 × locator resolved to <section aria-live="off" class="nlw-queue" data-role="queue" data-position="12">…</section>
+           - unexpected value "12"
+
+
+      15 |     const card = panel.locator('[data-role=queue]');
+      16 |     await expect(card).toHaveCount(1, { timeout: 15000 });
+    > 17 |     await expect(card).toHaveAttribute('data-position', '1');
+         |                        ^
+      18 |     await expect(card).toContainText('#1 in line');
+      19 |     await expect(panel.locator('[data-role=header-state]')).toHaveText(
+      20 |         'Connecting you to a specialist',
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:17:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-cae4f-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+exit=1

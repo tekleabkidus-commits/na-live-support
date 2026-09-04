@@ -50,14 +50,21 @@ final class QueuePositionPush extends OutboxConsumer
         }
         /** @var array<string, mixed> $payload */
         $payload = json_decode($event->payload, true, 16, JSON_THROW_ON_ERROR);
+        // D14 / FR-13: an ASSIGNMENT wakes the assigned visitor too — the queue card clears and the
+        // "joined" line renders with the agent's identity per `widget.agent_identity` (the frame is the
+        // wake-up; the cursor page stays the record). The waiting visitors are recomputed below.
+        $pushed = 0;
+        if ($event->name === 'ticket.assigned' && is_string($payload['new_assignee_id'] ?? null) && is_string($payload['ticket_id'] ?? null)) {
+            $pushed += $this->pushJoined($pusher, $cache, $payload['ticket_id'], $payload['new_assignee_id']);
+        }
         $queueId = $this->queueOf($payload);
         if ($queueId === null) {
-            return 0;
+            return $pushed;
         }
 
         $depth = $waiting->depth($queueId);
         if ($depth === 0) {
-            return 0;
+            return $pushed;
         }
         $ordered = $waiting->head($queueId, $depth);   // the ONE ordered read — index + 1 is the rank
 
@@ -68,7 +75,6 @@ final class QueuePositionPush extends OutboxConsumer
             ->where('c.channel', WebchatAdapter::CHANNEL)
             ->get(['t.id', 'c.external_chat_id'])->keyBy('id')->all();   // the ONE membership query
 
-        $pushed = 0;
         foreach ($ordered as $index => $ticketId) {
             $row = $webchat[$ticketId] ?? null;
             if ($row === null) {
@@ -92,6 +98,37 @@ final class QueuePositionPush extends OutboxConsumer
         }
 
         return $pushed;
+    }
+
+    /** The assigned webchat visitor's own frame: no position, no band, the agent's display per the identity setting. */
+    private function pushJoined(WebchatPusher $pusher, TenantCache $cache, string $ticketId, string $assigneeId): int
+    {
+        /** @var object{external_chat_id: string}|null $row */
+        $row = DB::table('tickets as t')->join('conversations as c', 'c.id', '=', 't.conversation_id')
+            ->where('t.id', $ticketId)->where('c.channel', WebchatAdapter::CHANNEL)->first(['c.external_chat_id']);
+        if ($row === null) {
+            return 0;
+        }
+        $mode = app(\App\Support\Settings\SettingsRepository::class)->get('widget.agent_identity');
+        $name = DB::table('users')->where('id', $assigneeId)->value('name');
+        $display = null;
+        if ($mode === 'team_name') {
+            $team = DB::table('team_members as tm')->join('teams as tt', 'tt.id', '=', 'tm.team_id')->where('tm.user_id', $assigneeId)->value('tt.name');
+            $display = is_string($team) ? $team : null;   // null → the client shows its team label
+        } elseif (is_string($name) && trim($name) !== '') {
+            // first_name; `alias` has no column of its own yet (Doc 03/07 own the profile) — the first name stands in, filed.
+            $display = explode(' ', trim($name))[0];
+        }
+        $pusher->toVisitor($row->external_chat_id, WebchatPusher::SUFFIX_QUEUE, 'webchat.queue', [
+            'ticket_ref' => $ticketId,
+            'band' => null,
+            'position' => null,
+            'opens_at' => null,
+            'joined' => ['display' => $display],
+        ]);
+        $cache->forget('webchat-queue-pushed:'.$ticketId);
+
+        return 1;
     }
 
     /** @param array<string, mixed> $payload */

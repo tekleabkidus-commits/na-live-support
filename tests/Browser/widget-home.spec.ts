@@ -37,7 +37,7 @@ test('BR-02: the band comes from the server (Doc 11) — the Home envelope carri
         (window as unknown as { PlatformChat: { open(): void } }).PlatformChat.open(),
     );
     await expect(page.frameLocator('iframe#nlw-panel').locator('.nlw-band')).toBeVisible();
-    expect(home).not.toBeNull();
+    await expect.poll(() => home, { timeout: 5000 }).not.toBeNull();
     expect(['short', 'medium', 'long', 'off_hours', null]).toContain(home!.band);
     expect(JSON.stringify(home)).not.toMatch(/agent|count|online/);
 });

@@ -24,6 +24,8 @@ export const envelope = signal<MessagesPage['envelope']>({
 });
 export const online = signal(navigator.onLine);
 export const unread = signal(0);
+/** I01: the widget's own notification question — opened ONLY after the first sent message. */
+export const notifyPromptOpen = signal(false);
 export const lastSeenId = signal<string | null>(null);
 /** The HOST viewport (the loader's fact — this frame is 0×0 until it opens): the full sheet under 480 px (B10). */
 export const hostViewport = signal<{ width: number; height: number } | null>(null);

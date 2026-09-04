@@ -1,0 +1,28 @@
+### 8b — queue spec (EC-06 as drawn: regressed → band) — 2026-09-04T19:01:04Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (14.9s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+
+    Error: widget:harness agent-join failed: CONVERSATION=01a06dcb-d76e-7020-b927-a14c5f3a9eef App\Domain\Tickets\Assignment\AtCapacity at_capacity: user 01a06cac-3fc0-730e-83c1-8e24cb5f62c6 holds 20 of 5 (Doc 11 FR-05). at app/Domain/Routing/Capacity/RoutingCapacity.php:73 69▕ $override = DB::table('user_routing_capacity')->where('user_id', $userId)->value('capacity'); 70▕ $capacity = $override !== null ? (int) $override : $commit->queueCapacity; 71▕ 72▕ if ($effective >= $capacity) { ➜ 73▕ throw new AtCapacity($userId, $capacity, $effective); 74▕ } 75▕ 76▕ // The reservation: the increment rides the caller's transaction and rolls back with it. 77▕ DB::table('agent_assignment_stats') 1 app/Domain/Tickets/Assignment/AssignTicket.php:135 App\Domain\Routing\Capacity\RoutingCapacity::reserveOrThrow(Object(App\Models\User), Object(App\Domain\Tickets\Assignment\RoutingCommit)) +3 vendor frames  5 app/Domain/Tickets/Assignment/AssignTicket.php:131 Illuminate\Support\Facades\Facade::__callStatic("transaction") Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan widget:harness agent-join --latest
+
+       at support/panel.ts:42
+
+      40 |     } catch (e) {
+      41 |         const err = e as { stdout?: string; stderr?: string; message: string };
+    > 42 |         throw new Error(
+         |               ^
+      43 |             `widget:harness ${action} failed: ${err.stderr ?? ''} ${err.stdout ?? ''} ${err.message}`
+      44 |                 .replace(/\s+/g, ' ')
+      45 |                 .slice(0, 1500),
+        at harness (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:42:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:45:5
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-09800-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+exit=1

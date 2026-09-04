@@ -1,0 +1,42 @@
+### 8b — notify, degrade, queue reruns (relay/worker restarted: stale ConsumerRegistry) — 2026-09-04T18:53:21Z
+
+Running 5 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.2s)
+  ✓  2 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (1.3s)
+  ✓  3 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (5.3s)
+  ✓  4 [widget] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (4.2s)
+  ✘  5 [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card (21.7s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        33 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      14 |     harness('handoff');
+      15 |     const card = panel.locator('[data-role=queue]');
+    > 16 |     await expect(card).toHaveCount(1, { timeout: 15000 });
+         |                        ^
+      17 |     await expect(card).toHaveAttribute('data-position', '1');
+      18 |     await expect(card).toContainText('#1 in line');
+      19 |     await expect(panel.locator('[data-role=header-state]')).toHaveText(
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:16:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-cae4f-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+  4 passed (34.6s)
+exit=1

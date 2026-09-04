@@ -55,6 +55,17 @@ export class WidgetApi {
         await this.call('POST', '/api/widget/v1/typing', {});
     }
 
+    /** Doc 02 FR-21: the visitor's OWN channels only — the door answers the Pusher auth signature or refuses. */
+    async broadcastAuth(socketId: string, channel: string): Promise<string | null> {
+        const r = await this.call('POST', '/api/widget/v1/broadcasting/auth', {
+            socket_id: socketId,
+            channel_name: channel,
+        });
+        if (!r || !r.ok) return null;
+        const body = (await r.json()) as { auth?: string };
+        return typeof body.auth === 'string' ? body.auth : null;
+    }
+
     async csat(token: string, score: number): Promise<boolean> {
         const r = await this.call('POST', '/api/widget/v1/csat', { token, score }, false);
         return !!r && r.ok;

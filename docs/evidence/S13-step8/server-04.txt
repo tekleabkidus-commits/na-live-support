@@ -1,0 +1,73 @@
+### 8b final server suites — 2026-09-04T19:29:58Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Widget\MetricExclusionTestModeTest
+  ✓ it N-14 second half (P-N14): a ticket whose conversation opened und… 9.83s  
+  ✓ it positive control: a LIVE widget's ticket stays INCLUDED by both…  0.09s  
+
+   PASS  Tests\Feature\Widget\NoGhostProfileTest
+  ✓ it FR-05: a session + a config read + a cursor read mint NO custome… 0.21s  
+
+[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 move frame + 1 joined frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member
+
+   PASS  Tests\Feature\Widget\QueuePositionTest
+  ✓ it P-QPOS: forWaitingTicket answers band + the ticket's own positio… 0.45s  
+  ✓ it Doc13/QueuePositionPush: ONE ordered read + ONE membership query… 0.63s  
+
+   PASS  Tests\Feature\Widget\SecretRotationTest
+  ✓ it rotates with an overlap window: old + new verify inside it, only… 0.18s  
+
+   PASS  Tests\Feature\Widget\WidgetBeaconTest
+  ✓ it T-08: load/open/blocked-origin/mount-fail beacons increment the…  0.21s  
+  ✓ it T-08: a panel error beacon with a stack is SCRUBBED before sampl… 0.16s  
+
+   PASS  Tests\Feature\Widget\WidgetBundlePointerTest
+  ✓ it FR-04: the pointer is the NEWEST live row of the widget's channe… 0.19s  
+  ✓ it C4: the pointer commands run on the platform connection in local… 0.14s  
+
+   PASS  Tests\Feature\Widget\WidgetContextAllowlistTest
+  ✓ it FR-24: only allowlisted custom keys survive; the row is one per…  0.25s  
+
+   PASS  Tests\Feature\Widget\WidgetFormStepsTest
+  ✓ it validates a pre-chat step against the published schema: required… 0.40s  
+
+   PASS  Tests\Feature\Widget\WidgetFormsSeedTest
+  ✓ it seeds the pre-chat and offline forms once, byte-equal to the Doc… 0.18s  
+
+   PASS  Tests\Feature\Widget\WidgetMediaOriginTest
+  ✓ it P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed… 0.18s  
+  ✓ it SEC-04 stands: an unscanned key has no download path even on the… 0.07s  
+
+   PASS  Tests\Feature\Widget\WidgetMessagesTest
+  ✓ it POST messages ACKs 202 and enqueues NormalizeInbound on webchat-… 0.13s  
+  ✓ it idempotency: the same client_message_id POSTed twice lands ONE r… 0.20s  
+  ✓ it GET messages is the visitor-curated cursor page: notes and quara… 0.24s  
+  ✓ it POST receipts: the FIRST delivered producer — an outbound row mo… 0.28s  
+  ✓ it POST typing records the customer signal with its TTL (EC-12) and… 0.13s  
+  ✓ it GET config: the live config over the neutral defaults, the adapt… 0.16s  
+
+   PASS  Tests\Feature\Widget\WidgetModelTest
+  ✓ it P-WIDGET: the Designer's columns are mass-assignable on the Widg… 0.10s  
+
+   PASS  Tests\Feature\Widget\WidgetOfflineFormTest
+  ✓ it FR-15: the offline form lands a REAL offline-tagged ticket (sour… 0.35s  
+  ✓ it FR-15 refusals are inline and neutral: a missing required answer… 0.21s  
+
+   PASS  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG…  0.15s  
+  ✓ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.12s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 0.22s  
+
+   PASS  Tests\Contract\WebchatEventConsumerContractsTest
+  ✓ A-45: every consumer the catalog declares for Doc 13 is registered…  0.04s  
+
+   PASS  Tests\Feature\Tickets\ReopenConsumerDrillTest
+  ✓ ADR 0011: the dispatch map is a registry, and message.received maps… 0.04s  
+  ✓ ADR 0011: relaying a mapped event queues the consumer once — event…  0.39s  
+  ✓ FS-02 drill: kill the consumer between persist and reopen; re-drive… 0.21s  
+  ✓ FS-02 end-to-end: relay dispatch → worker-style execution → the clo… 0.42s  
+
+  Tests:    32 passed (317 assertions)
+  Duration: 16.67s
+
+exit=0

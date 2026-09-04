@@ -1,4 +1,4 @@
-export type Author = 'customer' | 'staff' | 'ai' | 'system';
+export type Author = 'customer' | 'agent' | 'ai' | 'system';
 export type DeliveryState = 'sending' | 'sent' | 'delivered';
 
 export interface Message {
@@ -110,4 +110,5 @@ export interface HostFacts {
     referrer: string;
     session: SessionResponse | null;
     viewport?: { width: number; height: number };
+    strings?: Record<string, Record<string, unknown>>;
 }

@@ -108,14 +108,23 @@ it('Doc13/QueuePositionPush: ONE ordered read + ONE membership query per event; 
     expect($pushed)->toBe(0);
     Event::assertDispatchedTimes(RealtimePush::class, 2);
 
-    // t1 is assigned (its own effect: it leaves the set); ticket.assigned re-reads — ONLY t2 moved (3 → 2), one frame.
+    // t1 is assigned (its own effect: it leaves the set); ticket.assigned re-reads — t2 moved (3 → 2), one frame — AND the
+    // assigned visitor gets its own `joined` frame (D14/FR-13: no position, the agent's first name per widget.agent_identity).
     app(WaitingSets::class)->remove($queue, $t1);
-    DB::table('tickets')->where('id', $t1)->update(['assignee_id' => ticketActor([])->identifier()]);
+    $assigneeId = ticketActor([])->identifier();
     bindTenant($tenant);
-    $pushed = app()->call([new QueuePositionPush(queueEventRow('ticket.assigned', ['tenant_id' => $tenant->identifier(), 'ticket_id' => $t1, 'conversation_id' => 'x', 'old_assignee_id' => null, 'new_assignee_id' => 'y', 'by' => 'z'])), 'handle']);
-    expect($pushed)->toBe(1);
-    Event::assertDispatchedTimes(RealtimePush::class, 3);
-    expect($frames()[2])->toBe(['tenant.'.$tenant->identifier().'.visitor.'.$v2.'.queue', 2, $t2]);
+    DB::table('tickets')->where('id', $t1)->update(['assignee_id' => $assigneeId]);
+    $pushed = app()->call([new QueuePositionPush(queueEventRow('ticket.assigned', ['tenant_id' => $tenant->identifier(), 'ticket_id' => $t1, 'conversation_id' => 'x', 'old_assignee_id' => null, 'new_assignee_id' => $assigneeId, 'by' => 'z'])), 'handle']);
+    expect($pushed)->toBe(2);
+    Event::assertDispatchedTimes(RealtimePush::class, 4);
+    $all = array_map(static fn (array $a): RealtimePush => $a[0], Event::dispatched(RealtimePush::class)->all());
+    $joined = array_values(array_filter($all, static fn (RealtimePush $p): bool => isset($p->payload['joined'])));
+    expect($joined)->toHaveCount(1)
+        ->and($joined[0]->channelName)->toBe('tenant.'.$tenant->identifier().'.visitor.'.$v1.'.queue')
+        ->and($joined[0]->payload['position'])->toBeNull()
+        ->and($joined[0]->payload['joined']['display'])->toBe(explode(' ', (string) DB::table('users')->where('id', $assigneeId)->value('name'))[0]);
+    $moves = array_values(array_filter($all, static fn (RealtimePush $p): bool => ! isset($p->payload['joined'])));
+    expect([$moves[2]->channelName, $moves[2]->payload['position'], $moves[2]->payload['ticket_ref']])->toBe(['tenant.'.$tenant->identifier().'.visitor.'.$v2.'.queue', 2, $t2]);
 
-    fwrite(STDERR, "\n[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member\n");
+    fwrite(STDERR, "\n[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 move frame + 1 joined frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member\n");
 });

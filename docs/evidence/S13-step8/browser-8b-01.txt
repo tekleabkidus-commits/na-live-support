@@ -1,0 +1,214 @@
+### 8b browser legs — first run, project widget — 2026-09-04T18:44:29Z
+
+Running 12 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-cache.spec.ts:29:1 › cache ON: the thread is stored content-lite and paints on reload BEFORE the first cursor page answers (3.8s)
+  ✓   2 [widget] › tests/Browser/widget-cache.spec.ts:53:1 › cache OFF: nothing is stored and an existing store is purged (5.3s)
+  ✘   3 [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (16.4s)
+  ✓   4 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.7s)
+  ✘   5 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (6.1s)
+  ✘   6 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (18.1s)
+  ✘   7 [widget] › tests/Browser/widget-notify.spec.ts:39:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (16.4s)
+  ✘   8 [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card (16.4s)
+  ✓   9 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe (2.9s)
+  ✓  10 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe (2.6s)
+  ✓  11 [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (16.4s)
+  ✘  12 [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (16.1s)
+
+
+  1) [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Received: "sent"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+        - locator resolved to <div class="nlw-msg" data-author="customer" data-delivery="sending" data-message="local:wc_mtnazpea_0">…</div>
+        - unexpected value "sending"
+        32 × locator resolved to <div class="nlw-msg" data-delivery="sent" data-author="customer" data-message="local:wc_mtnazpea_0">…</div>
+           - unexpected value "sent"
+
+
+       at support/panel.ts:45
+
+      43 |     await panel.locator('textarea').fill(text);
+      44 |     await panel.locator('textarea').press('Enter');
+    > 45 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      46 |         'data-delivery',
+      47 |         'delivered',
+      48 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:45:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-csat.spec.ts:15:5
+
+    Error Context: test-results/widget-csat-D16-D17-the-st-56e2f-e-thread-—-no-reset-no-wall-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+    Expected substring: "Nothing you typed has been lost"
+    Received string:    "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+        14 × locator resolved to <div class="nlw-retry" data-role="retry">…</div>
+           - unexpected value "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+
+
+      34 |     const panel = page.frameLocator('iframe#nlw-panel');
+      35 |     await expect(panel.locator('[data-role=retry]')).toBeVisible({ timeout: 10000 });
+    > 36 |     await expect(panel.locator('[data-role=retry]')).toContainText(
+         |                                                      ^
+      37 |         'Nothing you typed has been lost',
+      38 |     );
+      39 |     expect(await panel.locator('[role=tablist]').count()).toBe(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-degrade.spec.ts:36:54
+
+    Error Context: test-results/widget-degrade-K03-the-ses-46372-oor-returns-boots-the-panel-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Received: "sent"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+        - locator resolved to <div class="nlw-msg" data-author="customer" data-delivery="sending" data-message="local:wc_mtnb0b0e_0">…</div>
+        - unexpected value "sending"
+        32 × locator resolved to <div class="nlw-msg" data-delivery="sent" data-author="customer" data-message="local:wc_mtnb0b0e_0">…</div>
+           - unexpected value "sent"
+
+
+       at support/panel.ts:45
+
+      43 |     await panel.locator('textarea').fill(text);
+      44 |     await panel.locator('textarea').press('Enter');
+    > 45 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      46 |         'data-delivery',
+      47 |         'delivered',
+      48 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:45:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-notify.spec.ts:31:5
+
+    Error Context: test-results/widget-notify-BR-03-Notifi-e93f7-rowser-is-asked-only-on-yes-widget/error-context.md
+
+  4) [widget] › tests/Browser/widget-notify.spec.ts:39:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Received: "sent"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+        - locator resolved to <div class="nlw-msg" data-author="customer" data-delivery="sending" data-message="local:wc_mtnb0oi4_0">…</div>
+        - unexpected value "sending"
+        32 × locator resolved to <div class="nlw-msg" data-delivery="sent" data-author="customer" data-message="local:wc_mtnb0oi4_0">…</div>
+           - unexpected value "sent"
+
+
+       at support/panel.ts:45
+
+      43 |     await panel.locator('textarea').fill(text);
+      44 |     await panel.locator('textarea').press('Enter');
+    > 45 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      46 |         'data-delivery',
+      47 |         'delivered',
+      48 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:45:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-notify.spec.ts:46:5
+
+    Error Context: test-results/widget-notify-EC-09-with-n-d8d1e-ing-asks-and-nothing-breaks-widget/error-context.md
+
+  5) [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Received: "sent"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+        - locator resolved to <div class="nlw-msg" data-author="customer" data-delivery="sending" data-message="local:wc_mtnb11xd_0">…</div>
+        - unexpected value "sending"
+        32 × locator resolved to <div class="nlw-msg" data-delivery="sent" data-author="customer" data-message="local:wc_mtnb11xd_0">…</div>
+           - unexpected value "sent"
+
+
+       at support/panel.ts:45
+
+      43 |     await panel.locator('textarea').fill(text);
+      44 |     await panel.locator('textarea').press('Enter');
+    > 45 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      46 |         'data-delivery',
+      47 |         'delivered',
+      48 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:45:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:13:5
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-cae4f-ent-joining-clears-the-card-widget/error-context.md
+
+  6) [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Received: "sent"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+        - locator resolved to <div class="nlw-msg" data-author="customer" data-delivery="sending" data-message="local:wc_mtnb1w04_0">…</div>
+        - unexpected value "sending"
+        32 × locator resolved to <div class="nlw-msg" data-delivery="sent" data-author="customer" data-message="local:wc_mtnb1w04_0">…</div>
+           - unexpected value "sent"
+
+
+       at support/panel.ts:45
+
+      43 |     await panel.locator('textarea').fill(text);
+      44 |     await panel.locator('textarea').press('Enter');
+    > 45 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      46 |         'data-delivery',
+      47 |         'delivered',
+      48 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:45:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:48:5
+
+    Error Context: test-results/widget-transport-AC-08-dri-132a6--reconnects-→-polling-stops-widget/error-context.md
+
+  6 failed
+    [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+    [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+    [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+    [widget] › tests/Browser/widget-notify.spec.ts:39:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks 
+    [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+    [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+  6 passed (2.1m)
+exit=1

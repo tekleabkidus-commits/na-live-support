@@ -1,0 +1,94 @@
+### 8a + 8b — THE FULL WIDGET SET, projects widget + widget-375 (charging) — 2026-09-04T19:18:35Z
+
+Running 58 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-cache.spec.ts:29:1 › cache ON: the thread is stored content-lite and paints on reload BEFORE the first cursor page answers (6.9s)
+  ✓   2 [widget] › tests/Browser/widget-cache.spec.ts:53:1 › cache OFF: nothing is stored and an existing store is purged (8.2s)
+  ✓   3 [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (18.7s)
+  ✓   4 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.2s)
+  ✓   5 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (1.2s)
+  ✓   6 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (1.1s)
+  ✓   7 [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.8s)
+  ✓   8 [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (1.1s)
+  ✓   9 [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (1.3s)
+  ✓  10 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (1.0s)
+  ✓  11 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (1.2s)
+  ✓  12 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (1.0s)
+  ✓  13 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (930ms)
+  ✓  14 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.5s)
+  ✓  15 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (994ms)
+  ✓  16 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (5.6s)
+  ✓  17 [widget] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (3.0s)
+  ✓  18 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.3s)
+  ✓  19 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (967ms)
+  ✓  20 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.2s)
+  ✓  21 [widget] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (832ms)
+  ✓  22 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (15.6s)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06ddd-0f2d-73fe-83ee-096d8762672c","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06ddd-0f2d-73fe-83ee-096d8762672c.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  23 [widget] › tests/Browser/widget-reverb-auth.spec.ts:63:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (238ms)
+  ✓  24 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe (3.2s)
+  ✓  25 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe (3.3s)
+  ✓  26 [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (7.1s)
+  ✓  27 [widget] › tests/Browser/widget-thread.spec.ts:60:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (1.1s)
+  ✓  28 [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (18.7s)
+  ✓  29 [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (3.4s)
+  ✓  30 [widget-375] › tests/Browser/widget-cache.spec.ts:29:1 › cache ON: the thread is stored content-lite and paints on reload BEFORE the first cursor page answers (5.1s)
+  ✓  31 [widget-375] › tests/Browser/widget-cache.spec.ts:53:1 › cache OFF: nothing is stored and an existing store is purged (8.6s)
+  ✘  32 [widget-375] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (3.2s)
+  ✓  33 [widget-375] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.1s)
+  ✓  34 [widget-375] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (1.2s)
+  ✓  35 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (1.1s)
+  ✓  36 [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.7s)
+  ✓  37 [widget-375] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (1.1s)
+  ✓  38 [widget-375] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (1.2s)
+  ✓  39 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (1.1s)
+  ✓  40 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (1.0s)
+  ✓  41 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (1.2s)
+  ✓  42 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (1.0s)
+  ✓  43 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.7s)
+  ✓  44 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (988ms)
+  ✓  45 [widget-375] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (3.9s)
+  ✓  46 [widget-375] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (4.4s)
+  ✓  47 [widget-375] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.2s)
+  ✓  48 [widget-375] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (1.2s)
+  ✓  49 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.3s)
+  ✓  50 [widget-375] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (1.3s)
+  ✓  51 [widget-375] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (23.1s)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06dde-c2e7-7177-8855-4ec2b95f23c0","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06dde-c2e7-7177-8855-4ec2b95f23c0.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  52 [widget-375] › tests/Browser/widget-reverb-auth.spec.ts:63:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (203ms)
+  ✓  53 [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe (2.8s)
+  ✓  54 [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe (2.8s)
+  ✓  55 [widget-375] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (9.1s)
+  ✓  56 [widget-375] › tests/Browser/widget-thread.spec.ts:60:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (1.1s)
+  ✓  57 [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (21.8s)
+  ✓  58 [widget-375] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (7.8s)
+
+
+  1) [widget-375] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+
+    Error: widget:harness handoff failed: CONVERSATION=01a06ddd-e11c-7010-96b4-349af8fbb2eb App\Domain\Conversations\Storage\OpenTicketExists conversation 01a06ddd-e11c-7010-96b4-349af8fbb2eb already has open ticket 01a06ddd-e57e-7048-ae53-38857d7c7172 ('open_ticket_exists') — transition it, do not duplicate (BR-05). at app/Domain/Conversations/Storage/ConversationRepository.php:101 97▕ 98▕ $current = Conversation::query()->whereKey($conversation->identifier())->first(); 99▕ $existing = $current?->open_ticket_id; 100▕ ➜ 101▕ throw new OpenTicketExists( 102▕ $conversation->identifier(), 103▕ is_string($existing) ? $existing : 'unknown', 104▕ ); 105▕ } 1 app/Domain/Tickets/Creation/CreateTicket.php:105 App\Domain\Conversations\Storage\ConversationRepository::claimOpenTicket(Object(App\Models\Conversation), "01a06ddd-e5b1-7235-a449-5ca0efe0cff4") +3 vendor frames  5 app/Domain/Tickets/Creation/CreateTicket.php:79 Illuminate\Support\Facades\Facade::__callStatic("transaction") Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan widget:harness handoff --latest
+
+       at support/panel.ts:42
+
+      40 |     } catch (e) {
+      41 |         const err = e as { stdout?: string; stderr?: string; message: string };
+    > 42 |         throw new Error(
+         |               ^
+      43 |             `widget:harness ${action} failed: ${err.stderr ?? ''} ${err.stdout ?? ''} ${err.message}`
+      44 |                 .replace(/\s+/g, ' ')
+      45 |                 .slice(0, 1500),
+        at harness (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:42:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-csat.spec.ts:16:5
+
+    Error Context: test-results/widget-csat-D16-D17-the-st-56e2f-e-thread-—-no-reset-no-wall-widget-375/error-context.md
+
+  1 failed
+    [widget-375] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+  57 passed (4.0m)
+exit=1

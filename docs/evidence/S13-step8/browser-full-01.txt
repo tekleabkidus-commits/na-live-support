@@ -1,0 +1,312 @@
+### 8a + 8b — THE FULL WIDGET SET, projects widget + widget-375 (charging) — 2026-09-04T19:06:29Z
+
+Running 58 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-cache.spec.ts:29:1 › cache ON: the thread is stored content-lite and paints on reload BEFORE the first cursor page answers (7.1s)
+  ✓   2 [widget] › tests/Browser/widget-cache.spec.ts:53:1 › cache OFF: nothing is stored and an existing store is purged (6.7s)
+  ✘   3 [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (4.3s)
+  ✓   4 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.3s)
+  ✓   5 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (1.0s)
+  ✘   6 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (998ms)
+  ✓   7 [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.8s)
+  ✓   8 [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (1.0s)
+  ✘   9 [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (1.1s)
+  ✓  10 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (1.1s)
+  ✓  11 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (1.2s)
+  ✓  12 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (1.1s)
+  ✓  13 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (995ms)
+  ✓  14 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.7s)
+  ✓  15 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (1.0s)
+  ✓  16 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (5.5s)
+  ✓  17 [widget] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (2.8s)
+  ✓  18 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.1s)
+  ✓  19 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (1.1s)
+  ✓  20 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.4s)
+  ✓  21 [widget] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (1.1s)
+  ✓  22 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (15.8s)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06dd1-c894-706e-b587-8f82b0670b2a","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06dd1-c894-706e-b587-8f82b0670b2a.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  23 [widget] › tests/Browser/widget-reverb-auth.spec.ts:63:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (243ms)
+  ✓  24 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe (3.2s)
+  ✓  25 [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe (2.8s)
+  ✘  26 [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (9.4s)
+  ✓  27 [widget] › tests/Browser/widget-thread.spec.ts:53:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (1.3s)
+  ✘  28 [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (15.7s)
+  ✘  29 [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (15.6s)
+  ✓  30 [widget-375] › tests/Browser/widget-cache.spec.ts:29:1 › cache ON: the thread is stored content-lite and paints on reload BEFORE the first cursor page answers (3.5s)
+  ✓  31 [widget-375] › tests/Browser/widget-cache.spec.ts:53:1 › cache OFF: nothing is stored and an existing store is purged (8.9s)
+  ✓  32 [widget-375] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (19.7s)
+  ✓  33 [widget-375] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.3s)
+  ✓  34 [widget-375] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (1.3s)
+  ✘  35 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (1.1s)
+  ✓  36 [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.9s)
+  ✓  37 [widget-375] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (1.2s)
+  ✓  38 [widget-375] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (1.1s)
+  ✓  39 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (890ms)
+  ✓  40 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (998ms)
+  ✓  41 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (998ms)
+  ✓  42 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (1.0s)
+  ✓  43 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.8s)
+  ✓  44 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (960ms)
+  ✓  45 [widget-375] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (7.2s)
+  ✓  46 [widget-375] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (6.4s)
+  ✓  47 [widget-375] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.0s)
+  ✓  48 [widget-375] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (868ms)
+  ✓  49 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.1s)
+  ✓  50 [widget-375] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (853ms)
+  ✓  51 [widget-375] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (11.9s)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06dd3-cdd9-70a3-bc5c-911bbfb1fe62","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06dd3-cdd9-70a3-bc5c-911bbfb1fe62.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  52 [widget-375] › tests/Browser/widget-reverb-auth.spec.ts:63:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (211ms)
+  ✓  53 [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe (3.1s)
+  ✓  54 [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe (2.9s)
+  ✘  55 [widget-375] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (9.5s)
+  ✓  56 [widget-375] › tests/Browser/widget-thread.spec.ts:53:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (1.1s)
+  ✘  57 [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (17.0s)
+  ✘  58 [widget-375] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (15.3s)
+
+
+  1) [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+
+    Error: widget:harness handoff failed: CONVERSATION=01a06dd0-fafa-732d-857d-830b5354cded App\Domain\Conversations\Storage\OpenTicketExists conversation 01a06dd0-fafa-732d-857d-830b5354cded already has open ticket 01a06dd0-fde5-73ea-8769-9169c1348fa6 ('open_ticket_exists') — transition it, do not duplicate (BR-05). at app/Domain/Conversations/Storage/ConversationRepository.php:101 97▕ 98▕ $current = Conversation::query()->whereKey($conversation->identifier())->first(); 99▕ $existing = $current?->open_ticket_id; 100▕ ➜ 101▕ throw new OpenTicketExists( 102▕ $conversation->identifier(), 103▕ is_string($existing) ? $existing : 'unknown', 104▕ ); 105▕ } 1 app/Domain/Tickets/Creation/CreateTicket.php:105 App\Domain\Conversations\Storage\ConversationRepository::claimOpenTicket(Object(App\Models\Conversation), "01a06dd1-017b-73fd-a243-4c44ee73b87a") +3 vendor frames  5 app/Domain/Tickets/Creation/CreateTicket.php:79 Illuminate\Support\Facades\Facade::__callStatic("transaction") Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan widget:harness handoff --latest
+
+       at support/panel.ts:42
+
+      40 |     } catch (e) {
+      41 |         const err = e as { stdout?: string; stderr?: string; message: string };
+    > 42 |         throw new Error(
+         |               ^
+      43 |             `widget:harness ${action} failed: ${err.stderr ?? ''} ${err.stdout ?? ''} ${err.message}`
+      44 |                 .replace(/\s+/g, ' ')
+      45 |                 .slice(0, 1500),
+        at harness (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:42:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-csat.spec.ts:16:5
+
+    Error Context: test-results/widget-csat-D16-D17-the-st-56e2f-e-thread-—-no-reset-no-wall-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+    +   "focus",
+        "message",
+        "popstate",
+        "resize",
+      ]
+
+      43 |     });
+      44 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+    > 45 |     expect(audit.listeners).toEqual(['message', 'popstate', 'resize']); // resize: the host viewport for the sheet decision (B10), declared in the inventory
+         |                             ^
+      46 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      47 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+      48 |     expect(audit.declared.nodes.sort()).toEqual(['nlw-launcher', 'nlw-panel']);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:45:29
+
+    Error Context: test-results/widget-footprint-AC-02-glo-60d9c-he-page-input-is-never-read-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+      38 |     );
+      39 |     await expect(page.frameLocator('iframe#nlw-panel').locator('.nlw-band')).toBeVisible();
+    > 40 |     expect(home).not.toBeNull();
+         |                      ^
+      41 |     expect(['short', 'medium', 'long', 'off_hours', null]).toContain(home!.band);
+      42 |     expect(JSON.stringify(home)).not.toMatch(/agent|count|online/);
+      43 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-home.spec.ts:40:22
+
+    Error Context: test-results/widget-home-BR-02-the-band-f8819-nd-never-a-number-of-agents-widget/error-context.md
+
+  4) [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=log]')
+    Timeout: 5000ms
+    - Expected substring  - 1
+    + Received string     + 3
+
+    - You wrote: ገንዘቤ አልደረሰኝም
+    + AI assistant wrote: Hi! I'm an AI assistant for this support team — a human colleague is one message away whenever you need one.
+    +
+    + Thanks for your message. A member of our team will be with you shortly — about 20 minutes.
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=log]')
+        11 × locator resolved to <div role="log" class="nlw-sr" data-role="log" aria-live="polite" aria-label="Conversation">You wrote: [FIXTURE] ገንዘቤ አልደረሰኝም — where is my w…</div>
+           - unexpected value "You wrote: [FIXTURE] ገንዘቤ አልደረሰኝም — where is my withdrawal?"
+        3 × locator resolved to <div role="log" class="nlw-sr" data-role="log" aria-live="polite" aria-label="Conversation">AI assistant wrote: Hi! I'm an AI assistant for t…</div>
+          - unexpected value "AI assistant wrote: Hi! I'm an AI assistant for this support team — a human colleague is one message away whenever you need one.
+    
+    Thanks for your message. A member of our team will be with you shortly — about 20 minutes."
+
+
+      39 |     await expect(own.locator('[data-role=delivery]')).toHaveText('✓✓');
+      40 |     await expect(panel.locator('.nlw-day').first()).toHaveText('Today');
+    > 41 |     await expect(panel.locator('[data-role=log]')).toContainText('You wrote: ገንዘቤ አልደረሰኝም');
+         |                                                    ^
+      42 |     // A reload restores the same conversation (FR-08 continuity): the bubble is back from the server.
+      43 |     await page.reload();
+      44 |     await page.evaluate(() =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:41:52
+
+    Error Context: test-results/widget-thread-D18-→-D02-em-645f3-n-announces-Today-separates-widget/error-context.md
+
+  5) [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 2
+
+      26 |     const g0 = gets;
+      27 |     await page.waitForTimeout(12000);
+    > 28 |     expect(gets - g0).toBe(0); // NFR-03: no polling while the socket is healthy
+         |                       ^
+      29 |     harness('staff-reply', '--text=Push me, harness');
+      30 |     await expect(panel.locator('[data-message][data-author=agent]')).toHaveCount(1, {
+      31 |         timeout: 10000,
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:28:23
+
+    Error Context: test-results/widget-transport-NFR-03-FR-63b2b-ake-up-sync-and-one-receipt-widget/error-context.md
+
+  6) [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3
+
+      61 |     const g1 = gets;
+      62 |     await page.waitForTimeout(8000);
+    > 63 |     expect(gets - g1).toBeLessThanOrEqual(1); // the converge sync at most; no polling cadence
+         |                       ^
+      64 | });
+      65 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:63:23
+
+    Error Context: test-results/widget-transport-AC-08-dri-132a6--reconnects-→-polling-stops-widget/error-context.md
+
+  7) [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+    +   "focus",
+        "message",
+        "popstate",
+        "resize",
+      ]
+
+      43 |     });
+      44 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+    > 45 |     expect(audit.listeners).toEqual(['message', 'popstate', 'resize']); // resize: the host viewport for the sheet decision (B10), declared in the inventory
+         |                             ^
+      46 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      47 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+      48 |     expect(audit.declared.nodes.sort()).toEqual(['nlw-launcher', 'nlw-panel']);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:45:29
+
+    Error Context: test-results/widget-footprint-AC-02-glo-60d9c-he-page-input-is-never-read-widget-375/error-context.md
+
+  8) [widget-375] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=log]')
+    Timeout: 5000ms
+    - Expected substring  - 1
+    + Received string     + 3
+
+    - You wrote: ገንዘቤ አልደረሰኝም
+    + AI assistant wrote: Hi! I'm an AI assistant for this support team — a human colleague is one message away whenever you need one.
+    +
+    + Thanks for your message. A member of our team will be with you shortly — about 20 minutes.
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=log]')
+        10 × locator resolved to <div role="log" class="nlw-sr" data-role="log" aria-live="polite" aria-label="Conversation">You wrote: [FIXTURE] ገንዘቤ አልደረሰኝም — where is my w…</div>
+           - unexpected value "You wrote: [FIXTURE] ገንዘቤ አልደረሰኝም — where is my withdrawal?"
+        4 × locator resolved to <div role="log" class="nlw-sr" data-role="log" aria-live="polite" aria-label="Conversation">AI assistant wrote: Hi! I'm an AI assistant for t…</div>
+          - unexpected value "AI assistant wrote: Hi! I'm an AI assistant for this support team — a human colleague is one message away whenever you need one.
+    
+    Thanks for your message. A member of our team will be with you shortly — about 20 minutes."
+
+
+      39 |     await expect(own.locator('[data-role=delivery]')).toHaveText('✓✓');
+      40 |     await expect(panel.locator('.nlw-day').first()).toHaveText('Today');
+    > 41 |     await expect(panel.locator('[data-role=log]')).toContainText('You wrote: ገንዘቤ አልደረሰኝም');
+         |                                                    ^
+      42 |     // A reload restores the same conversation (FR-08 continuity): the bubble is back from the server.
+      43 |     await page.reload();
+      44 |     await page.evaluate(() =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:41:52
+
+    Error Context: test-results/widget-thread-D18-→-D02-em-645f3-n-announces-Today-separates-widget-375/error-context.md
+
+  9) [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 2
+
+      26 |     const g0 = gets;
+      27 |     await page.waitForTimeout(12000);
+    > 28 |     expect(gets - g0).toBe(0); // NFR-03: no polling while the socket is healthy
+         |                       ^
+      29 |     harness('staff-reply', '--text=Push me, harness');
+      30 |     await expect(panel.locator('[data-message][data-author=agent]')).toHaveCount(1, {
+      31 |         timeout: 10000,
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:28:23
+
+    Error Context: test-results/widget-transport-NFR-03-FR-63b2b-ake-up-sync-and-one-receipt-widget-375/error-context.md
+
+  10) [widget-375] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3
+
+      61 |     const g1 = gets;
+      62 |     await page.waitForTimeout(8000);
+    > 63 |     expect(gets - g1).toBeLessThanOrEqual(1); // the converge sync at most; no polling cadence
+         |                       ^
+      64 | });
+      65 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:63:23
+
+    Error Context: test-results/widget-transport-AC-08-dri-132a6--reconnects-→-polling-stops-widget-375/error-context.md
+
+  10 failed
+    [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall 
+    [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read 
+    [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents 
+    [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+    [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+    [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+    [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read 
+    [widget-375] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+    [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+    [widget-375] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+  48 passed (4.2m)
+exit=1

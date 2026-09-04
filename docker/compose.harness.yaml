@@ -55,3 +55,37 @@ services:
       timeout: 5s
       retries: 6
       start_period: 10s
+
+  # ── The two processes the dev stack never had (filed at S13 step 8b): ──────────
+  # (1) the outbound LANES worker for the fixture tenant — Doc 04 T-05's one-process-
+  #     per-tenant rule (the multi-tenant wiring is Doc 18's); without it an outbound
+  #     row stays `queued` and no push ever reaches the visitor;
+  # (2) a consumer for the `default` queue, where every `RealtimePush` (ShouldBroadcast)
+  #     lands and which NO per-family Horizon supervisor drains (9964 stale pushes found
+  #     on the dev stack). The production topology for broadcasts is a Doc 07 / Doc 18
+  #     decision — this is the harness's own drain so the browser can be shown a real frame.
+  harness-lanes:
+    image: na-live-support/app:dev
+    entrypoint: ["/bin/sh", "/harness/lanes.sh"]
+    env_file: ../.env
+    volumes:
+      - ./harness:/harness:ro
+    networks: [na-net]
+    depends_on:
+      app:
+        condition: service_healthy
+  harness-broadcast:
+    image: na-live-support/app:dev
+    command: ["php", "artisan", "queue:work", "redis", "--queue=default", "--sleep=1", "--tries=1", "--timeout=30"]
+    env_file: ../.env
+    environment:
+      # The broadcaster's TARGET is the reverb service on the compose network — `.env`'s
+      # REVERB_HOST=localhost is the BROWSER-facing host and, inside a container, connects to
+      # nothing (cURL 7 on every push — the second half of the same filed finding).
+      REVERB_HOST: reverb
+      REVERB_PORT: "8080"
+      REVERB_SCHEME: https
+    networks: [na-net]
+    depends_on:
+      app:
+        condition: service_healthy

@@ -1,0 +1,12 @@
+### 8b — footprint/thread/transport reruns on widget — 2026-09-04T19:17:49Z
+
+Running 5 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (1.0s)
+  ✓  2 [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (4.9s)
+  ✓  3 [widget] › tests/Browser/widget-thread.spec.ts:60:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (981ms)
+  ✓  4 [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (21.7s)
+  ✓  5 [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (3.4s)
+
+  5 passed (33.1s)
+exit=0

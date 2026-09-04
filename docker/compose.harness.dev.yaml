@@ -1,0 +1,21 @@
+# LOCAL pairing of the HARNESS overlay with the dev overlay: the two harness
+# workers run the working tree (the same bind mounts compose.dev.yaml gives the
+# app/worker roles) instead of the baked image. CI never uses this file — its
+# image is built fresh from the checkout. Use:
+#   docker compose -f docker/compose.yaml -f docker/compose.dev.yaml \
+#                  -f docker/compose.harness.yaml -f docker/compose.harness.dev.yaml up -d
+name: na-live-support
+x-dev-source: &dev-source
+  volumes:
+    - ..:/app
+    - /app/vendor
+    - /app/node_modules
+    - /app/public/build
+    - /app/bootstrap/cache
+    - /app/storage
+    - ./harness:/harness:ro
+services:
+  harness-lanes:
+    <<: *dev-source
+  harness-broadcast:
+    <<: *dev-source

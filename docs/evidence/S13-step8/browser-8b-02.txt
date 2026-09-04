@@ -1,0 +1,101 @@
+### 8b browser legs — rerun of the six (send follow-up syncs; shim-carried minimal strings) — 2026-09-04T18:47:40Z
+
+Running 8 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-csat.spec.ts:7:1 › D16/D17: the star row arrives after resolve; a star scores; the visitor keeps typing in the same thread — no reset, no wall (14.3s)
+  ✓  2 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.2s)
+  ✘  3 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (5.8s)
+  ✘  4 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (10.4s)
+  ✓  5 [widget] › tests/Browser/widget-notify.spec.ts:39:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (2.8s)
+  ✘  6 [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card (18.1s)
+  ✓  7 [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt (20.6s)
+  ✓  8 [widget] › tests/Browser/widget-transport.spec.ts:39:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops (15.1s)
+
+
+  1) [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+    Expected substring: "Nothing you typed has been lost"
+    Received string:    "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+        14 × locator resolved to <div class="nlw-retry" data-role="retry">…</div>
+           - unexpected value "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+
+
+      34 |     const panel = page.frameLocator('iframe#nlw-panel');
+      35 |     await expect(panel.locator('[data-role=retry]')).toBeVisible({ timeout: 10000 });
+    > 36 |     await expect(panel.locator('[data-role=retry]')).toContainText(
+         |                                                      ^
+      37 |         'Nothing you typed has been lost',
+      38 |     );
+      39 |     expect(await panel.locator('[role=tablist]').count()).toBe(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-degrade.spec.ts:36:54
+
+    Error Context: test-results/widget-degrade-K03-the-ses-46372-oor-returns-boots-the-panel-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=notify-prompt]')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=notify-prompt]')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      30 |     expect(await panel.locator('[data-role=notify-prompt]').count()).toBe(0);
+      31 |     await sendFromPanel(panel, 'notify: first message');
+    > 32 |     await expect(panel.locator('[data-role=notify-prompt]')).toHaveCount(1); // the widget's OWN question, now
+         |                                                              ^
+      33 |     expect(await calls()).toBe(0); // still no browser dialog
+      34 |     await panel.locator('[data-role=notify-prompt] button', { hasText: 'Not now' }).click();
+      35 |     await expect(panel.locator('[data-role=notify-prompt]')).toHaveCount(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-notify.spec.ts:32:62
+
+    Error Context: test-results/widget-notify-BR-03-Notifi-e93f7-rowser-is-asked-only-on-yes-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        33 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      14 |     harness('handoff');
+      15 |     const card = panel.locator('[data-role=queue]');
+    > 16 |     await expect(card).toHaveCount(1, { timeout: 15000 });
+         |                        ^
+      17 |     await expect(card).toHaveAttribute('data-position', '1');
+      18 |     await expect(card).toContainText('#1 in line');
+      19 |     await expect(panel.locator('[data-role=header-state]')).toHaveText(
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:16:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-cae4f-ent-joining-clears-the-card-widget/error-context.md
+
+  3 failed
+    [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+    [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+    [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+  5 passed (1.5m)
+exit=1

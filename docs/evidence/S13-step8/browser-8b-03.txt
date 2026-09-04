@@ -1,0 +1,62 @@
+### 8b — K03 + notify reruns — 2026-09-04T18:51:06Z
+
+Running 4 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-degrade.spec.ts:8:1 › K02: offline → the calm banner in the composer, typing still works; back online → it goes (1.6s)
+  ✘  2 [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel (6.1s)
+  ✘  3 [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes (30.1s)
+  ✓  4 [widget] › tests/Browser/widget-notify.spec.ts:44:1 › EC-09: with no Notification API at all (a WebView) nothing asks and nothing breaks (6.3s)
+
+
+  1) [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+    Expected substring: "Nothing you typed has been lost"
+    Received string:    "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=retry]')
+        14 × locator resolved to <div class="nlw-retry" data-role="retry">…</div>
+           - unexpected value "⚠ retry.titleretry.bodyretry.actionretry.urgent"
+
+
+      34 |     const panel = page.frameLocator('iframe#nlw-panel');
+      35 |     await expect(panel.locator('[data-role=retry]')).toBeVisible({ timeout: 10000 });
+    > 36 |     await expect(panel.locator('[data-role=retry]')).toContainText(
+         |                                                      ^
+      37 |         'Nothing you typed has been lost',
+      38 |     );
+      39 |     expect(await panel.locator('[role=tablist]').count()).toBe(0);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-degrade.spec.ts:36:54
+
+    Error Context: test-results/widget-degrade-K03-the-ses-46372-oor-returns-boots-the-panel-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=notify-prompt] button').filter({ hasText: 'Not now' })
+
+
+      37 |     await expect(panel.locator('[data-role=notify-prompt]')).toHaveCount(1); // the widget's OWN question, now
+      38 |     expect(await calls()).toBe(0); // still no browser dialog
+    > 39 |     await panel.locator('[data-role=notify-prompt] button', { hasText: 'Not now' }).click();
+         |                                                                                     ^
+      40 |     await expect(panel.locator('[data-role=notify-prompt]')).toHaveCount(0);
+      41 |     expect(await calls()).toBe(0);
+      42 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-notify.spec.ts:39:85
+
+    Error Context: test-results/widget-notify-BR-03-Notifi-e93f7-rowser-is-asked-only-on-yes-widget/error-context.md
+
+  2 failed
+    [widget] › tests/Browser/widget-degrade.spec.ts:22:1 › K03: the session door down → the last-resort card (no tab bar), the launcher stays; Try again after the door returns boots the panel 
+    [widget] › tests/Browser/widget-notify.spec.ts:7:1 › BR-03: Notification.requestPermission is never called on load or open; the widget asks first after the first message; the browser is asked only on yes 
+  2 passed (47.5s)
+exit=1

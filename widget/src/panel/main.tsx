@@ -27,6 +27,7 @@ import {
     language,
     lastSeenId,
     messages,
+    notifyPromptOpen,
     open,
     sheet,
     tab,
@@ -34,8 +35,25 @@ import {
     visitorId,
 } from './state';
 import { theme } from './theme';
-import { onNewMessage, resetAcks, startPolling, stopPolling, sync } from './transport/poll';
-import type { HostFacts, Message, Shortcut } from './types';
+import {
+    isPolling,
+    onNewMessage,
+    resetAcks,
+    startPolling,
+    stopPolling,
+    sync,
+} from './transport/poll';
+import type { ConfigEnvelope, HostFacts, Message, Shortcut } from './types';
+import { ReverbClient } from './transport/reverb';
+import { TabLeader } from './transport/leader';
+import {
+    notificationsSupported,
+    notifyNew,
+    permissionState,
+    requestPermission,
+    wasAsked,
+} from './notify';
+import { purgeCache, readCache, writeCache } from './cache';
 import './../styles/panel.css';
 
 const params = new URLSearchParams(location.search);
@@ -49,6 +67,12 @@ let parentOrigin = '*';
 let announceText = '';
 let setAnnounce: ((s: string) => void) | null = null;
 let launcherNudge = false;
+let socket: ReverbClient | null = null;
+let leader: TabLeader | null = null;
+let pollSeconds = 5;
+let lastQueueAnnounced: string | null = null;
+let firstSendDone = false;
+let soundOn = true;
 
 function post(type: string, data?: unknown): void {
     try {
@@ -58,9 +82,12 @@ function post(type: string, data?: unknown): void {
     }
 }
 
+/** role=log: entries are APPENDED (a screen reader announces additions); the last five stay in the DOM. */
+let logEntries: string[] = [];
 function announce(text: string): void {
-    announceText = text;
-    setAnnounce?.(text);
+    logEntries = [...logEntries, text].slice(-5);
+    announceText = logEntries.join('\n');
+    setAnnounce?.(announceText);
 }
 
 /** §13: what a screen reader hears — author + kind, at sentence level, never every recompute. */
@@ -70,12 +97,27 @@ onNewMessage((m: Message) => {
     announce(
         m.author === 'ai'
             ? t('a11y.new_ai', { text })
-            : m.author === 'staff'
+            : m.author === 'agent'
               ? t('a11y.new_staff', { name: t('header.team'), text })
               : t('a11y.new_system', { text }),
     );
     if (!open.value || tab.value !== 'messages') unread.value += 1;
     if (!open.value) launcherNudge = true;
+    // I02/I03: only the LEADER tab speaks, and only while the page is not attended.
+    if (leader?.isLeader() !== false)
+        notifyNew(text, Math.max(1, unread.value), {
+            soundEnabled: () => soundOn,
+            onTitleCount: (n) => post('title', n),
+        });
+});
+
+/** D10–D13: the queue position is ANNOUNCED on change only, never on every recompute. */
+effect(() => {
+    const q = envelope.value.queue;
+    const key = q ? `${q.position ?? 'band'}:${q.band}` : null;
+    if (key === lastQueueAnnounced) return;
+    lastQueueAnnounced = key;
+    if (q && q.position !== null) announce(t('queue.announce', { n: q.position }));
 });
 
 async function bootSequence(): Promise<void> {
@@ -114,11 +156,93 @@ async function bootSequence(): Promise<void> {
     theme.value = cfg.config.appearance.theme;
     if (!cfg.config.content.tabs.home) tab.value = 'messages';
     resetAcks();
+    pollSeconds = cfg.transport.polling_interval_seconds;
+    soundOn = cfg.config.behavior.sound ?? cfg.settings.sound_default;
+    // FR-08/NFR-03: the content-lite cache paints the returning visitor's thread before the first page —
+    // only when the operator's `widget.cache.content` is on; off = nothing stored, the store purged.
+    if (cfg.settings.cache_content) {
+        const cached = await readCache(session.visitor_id);
+        if (cached.length && messages.value.length === 0)
+            messages.value = cached.map((m) => ({
+                ...m,
+                local: m.author === 'customer' ? 'delivered' : undefined,
+            }));
+    } else {
+        void purgeCache();
+    }
     await sync(api);
     unread.value = 0;
     lastSeenId.value = messages.value[messages.value.length - 1]?.id ?? null;
     boot.value = 'ready';
-    startPolling(api, cfg.transport.polling_interval_seconds);
+    startTransport(cfg);
+}
+
+/** T-04: the leader tab owns the socket; the socket is the wake-up, the cursor page the record; polling only while the socket is down. */
+function startTransport(cfg: ConfigEnvelope): void {
+    leader = new TabLeader('nlw.' + widgetKey);
+    leader.onMessage((msg) => {
+        if ((msg as { type?: string }).type === 'sync') void sync(api);
+    });
+    leader.elect(
+        () => {
+            const reverb = cfg.transport.reverb;
+            const host =
+                reverb.host && reverb.host !== 'localhost' && reverb.host !== '0.0.0.0'
+                    ? `${reverb.host}:${reverb.port}`
+                    : location.host;
+            const url = `wss://${host}/app/${encodeURIComponent(reverb.key)}?protocol=7&client=nlw&version=${encodeURIComponent(config.value?.version?.toString() ?? '0')}&flash=false`;
+            socket = new ReverbClient({
+                url,
+                channels: [cfg.transport.channels.thread, cfg.transport.channels.queue].map(
+                    (c) => 'private-' + c,
+                ),
+                authorize: (socketId, channel) => api.broadcastAuth(socketId, channel),
+                onEvent: (_channel, event, data) => {
+                    if (event === 'webchat.typing') {
+                        envelope.value = { ...envelope.value, typing: true };
+                        return;
+                    }
+                    const joined = (data as { joined?: { display: string | null } } | null)?.joined;
+                    if (event === 'webchat.queue' && joined) {
+                        // D14: the agent-joined line — a client-side system line (the record is the staff message that follows).
+                        const who = joined.display ?? t('header.team');
+                        const now = new Date().toISOString();
+                        messages.value = [
+                            ...messages.value,
+                            {
+                                id: 'local:joined:' + now,
+                                created_at: now,
+                                direction: 'out',
+                                author: 'system',
+                                kind: 'text',
+                                body: t('messages.joined', { name: who }),
+                                media: [],
+                                delivery_state: null,
+                                external_message_id: null,
+                                occurred_at: now,
+                                survey: null,
+                            },
+                        ];
+                        announce(t('messages.joined', { name: who }));
+                    }
+                    void sync(api).then(() =>
+                        leader?.broadcast({ type: 'sync', event, data: null }),
+                    );
+                },
+                onUp: () => {
+                    stopPolling();
+                    void sync(api); // converge: anything missed while the socket was down
+                },
+                onDown: () => startPolling(api, pollSeconds),
+            });
+            socket.connect();
+            startPolling(api, pollSeconds); // until the first subscription succeeds
+        },
+        () => {
+            socket?.close();
+            socket = null;
+        },
+    );
 }
 
 async function setLanguage(code: string): Promise<void> {
@@ -141,6 +265,21 @@ function storedToken(): string | null {
         return localStorage.getItem('nlw.token');
     } catch {
         return null;
+    }
+}
+
+/** The visitor's OWN message earns its ✓✓ from the cursor page (AC-01) — the socket carries no echo of it, so
+ *  after a send the page is re-read with a short backoff until the row is there (bounded; then the next wake-up). */
+async function confirmSend(clientId: string): Promise<void> {
+    for (const wait of [600, 1200, 2000, 3000, 5000]) {
+        await new Promise((r) => window.setTimeout(r, wait));
+        await sync(api);
+        if (
+            messages.value.some(
+                (m) => m.external_message_id === clientId && m.local === 'delivered',
+            )
+        )
+            return;
     }
 }
 
@@ -191,7 +330,26 @@ async function send(text: string): Promise<void> {
     );
     announce(t('a11y.new_customer', { text }));
     post('event', { name: 'message' });
-    if (ok) window.setTimeout(() => void sync(api), 600);
+    if (ok) void confirmSend(clientId);
+    if (!firstSendDone) {
+        firstSendDone = true;
+        // I01/BR-03: the widget's OWN question, only now — after the first sent message; never on load.
+        if (notificationsSupported() && permissionState() === 'default' && !wasAsked())
+            notifyPromptOpen.value = true;
+    }
+}
+
+effect(() => {
+    const list = messages.value;
+    const cfg = config.value;
+    const v = visitorId.value;
+    if (!cfg || !v || list.length === 0 || !cfg.settings.cache_content) return;
+    void writeCache(v, list);
+});
+
+export async function answerNotifyPrompt(yes: boolean): Promise<void> {
+    notifyPromptOpen.value = false;
+    if (yes) await requestPermission();
 }
 
 function onShortcut(s: Shortcut): void {
@@ -247,12 +405,22 @@ function onLoaderMessage(ev: MessageEvent): void {
         document.documentElement.lang = d.language;
         return;
     }
+    if (data.type === 'attended') {
+        // The host tab regained focus: the title counter clears (the unread badge stays until the panel opens).
+        post('title', 0);
+        return;
+    }
     if (data.type === 'viewport') {
         hostViewport.value = data.data as { width: number; height: number };
         return;
     }
     if (data.type === 'host') {
         host.value = data.data as HostFacts;
+        if (Object.keys(strings.value).length === 0 && host.value.strings) {
+            // The last-resort card can render before any session exists: the shim's minimal copy, by the browser's language.
+            const lang = (navigator.language || 'en').slice(0, 2);
+            strings.value = host.value.strings[lang] ?? host.value.strings.en ?? {};
+        }
         if (host.value.viewport) hostViewport.value = host.value.viewport;
         if (!visitorId.value) void bootSequence();
         return;
@@ -310,9 +478,19 @@ function PanelFrame(): preact.JSX.Element {
             onShortcut={onShortcut}
             onLanguage={(code) => void setLanguage(code)}
             onRetry={() => post('session', { token: storedToken() })}
+            onNotify={(yes) => void answerNotifyPrompt(yes)}
         />
     );
 }
+
+// Test hooks (AC-08's drill, the transport assertions): read-only state + a socket drop — never a data door.
+(window as unknown as { __nlwPanel?: unknown }).__nlwPanel = {
+    socketUp: () => socket?.isUp() ?? false,
+    isLeader: () => leader?.isLeader() ?? false,
+    dropSocket: () => socket?.drop(),
+    polling: () => isPolling(),
+    boot: () => boot.value,
+};
 
 const root = document.getElementById('nlw-root');
 if (root) {

@@ -1,0 +1,37 @@
+### 8b — queue spec with queue-clear — 2026-09-04T18:58:32Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card (14.4s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: "1"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        14 × locator resolved to <section aria-live="off" data-position="" class="nlw-queue" data-role="queue">…</section>
+           - unexpected value ""
+
+
+      34 |     // the server now says 2 (the push + the next sync carry it) — the card never rises
+      35 |     await expect.poll(() => positions.includes('2'), { timeout: 20000 }).toBe(true);
+    > 36 |     await expect(card).toHaveAttribute('data-position', '1');
+         |                        ^
+      37 |     await expect(card).not.toContainText('#2');
+      38 |     harness('agent-join');
+      39 |     await expect(card).toHaveCount(0, { timeout: 15000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:36:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-cae4f-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:9:1 › D10–D13 + EC-06: #1 in line after the handoff; an urgent jump never shows a higher number; the agent joining clears the card 
+exit=1

@@ -16,16 +16,36 @@ test('D18 → D02: empty state, then a sent message earns ✓✓ only when the s
     const panel = page.frameLocator('iframe#nlw-panel');
     await panel.locator('#nlw-tab-messages').click();
     await expect(panel.locator('[data-role=empty] strong')).toHaveText('No messages yet');
+    // AC-01's TRUTH TEST (sabotage (h) lands here): hold every cursor page back for 3 s after the send —
+    // while the server's row is unseen the glyph must be a SINGLE check; ✓✓ may appear only once the
+    // page carries the row.
+    let hold = true;
+    await page.route('**/api/widget/v1/messages*', async (route) => {
+        if (hold && route.request().method() === 'GET')
+            await new Promise((r) => setTimeout(r, 3000));
+        await route.continue();
+    });
     const box = panel.locator('textarea');
-    await box.fill('ገንዘቤ አልደረሰኝም — where is my withdrawal?');
+    await box.fill('[FIXTURE] ገንዘቤ አልደረሰኝም — where is my withdrawal?');
     await box.press('Enter');
     const own = panel.locator('[data-message][data-author=customer]');
     await expect(own).toHaveCount(1);
-    // AC-01: the double check appears ONLY after the cursor page carries the row (data-delivery flips to delivered).
-    await expect(own).toHaveAttribute('data-delivery', 'delivered', { timeout: 15000 });
+    await expect(own).toHaveAttribute('data-delivery', 'sent', { timeout: 3000 });
+    await page.waitForTimeout(1500);
+    await expect(own).toHaveAttribute('data-delivery', 'sent'); // still one check: no page has carried the row yet
+    await expect(own.locator('[data-role=delivery]')).toHaveText('✓');
+    hold = false;
+    await expect(own).toHaveAttribute('data-delivery', 'delivered', { timeout: 20000 });
     await expect(own.locator('[data-role=delivery]')).toHaveText('✓✓');
     await expect(panel.locator('.nlw-day').first()).toHaveText('Today');
-    await expect(panel.locator('[data-role=log]')).toContainText('You wrote: ገንዘቤ አልደረሰኝም');
+    await expect(panel.locator('[data-role=log]')).toContainText(
+        'You wrote: [FIXTURE] ገንዘቤ አልደረሰኝም',
+    );
+    // D02–D07 on the real pipeline: the mock AI answers non-JSON → Doc 09 hands off → the AI's handoff message
+    // renders with the violet accent AND the words "AI assistant" (the label is what discloses, §8/N-08).
+    const ai = panel.locator('[data-message][data-author=ai]').first();
+    await expect(ai).toBeVisible({ timeout: 30000 });
+    await expect(ai.locator('.nlw-label')).toContainText('AI assistant');
     // A reload restores the same conversation (FR-08 continuity): the bubble is back from the server.
     await page.reload();
     await page.evaluate(() =>

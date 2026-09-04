@@ -66,6 +66,10 @@ export function startPolling(api: WidgetApi, seconds: number): void {
     void tick();
 }
 
+export function isPolling(): boolean {
+    return timer !== null;
+}
+
 export function stopPolling(): void {
     if (timer !== null) window.clearTimeout(timer);
     timer = null;

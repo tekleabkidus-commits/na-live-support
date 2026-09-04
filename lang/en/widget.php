@@ -99,6 +99,12 @@ return [
         'star' => ':n of 5',
         'thanks' => 'Thank you.',
     ],
+    'notify' => [
+        'title' => 'Get a heads-up when we reply?',
+        'body' => 'We can play a sound and show a notification while you are on another tab.',
+        'yes' => 'Yes, notify me',
+        'no' => 'Not now',
+    ],
     'retry' => [
         'title' => 'Chat is not loading',
         'body' => 'Something on our side is down. Nothing you typed has been lost.',

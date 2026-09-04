@@ -1,0 +1,37 @@
+### 8b — queue spec (server-number law) — 2026-09-04T19:00:29Z
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (14.2s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected: "2"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+        14 × locator resolved to <section aria-live="off" data-position="" class="nlw-queue" data-role="queue">…</section>
+           - unexpected value ""
+
+
+      37 |     harness('queue-jump'); // an URGENT ticket ahead: the server's position rises by one
+      38 |     await expect.poll(() => serverPositions.some((p) => p > shown), { timeout: 20000 }).toBe(true);
+    > 39 |     await expect(card).toHaveAttribute('data-position', String(shown)); // EC-06: the card never counts upward
+         |                        ^
+      40 |     await expect(card).not.toContainText(`#${shown + 1}`);
+      41 |
+      42 |     harness('agent-join');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:39:24
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-09800-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+exit=1

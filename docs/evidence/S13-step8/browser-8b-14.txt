@@ -1,0 +1,16 @@
+### 8b — footprint/thread/transport reruns on widget — 2026-09-04T19:17:14Z
+SyntaxError: /home/kidus/projects/na-live-support/tests/Browser/support/panel.ts: Unexpected token, expected "," (81:28)
+
+  79 |                     window as unknown as { __nlwPanel: { dropSocket(): void } }
+  80 |                 ).__nlwPanel.dropSocket(),
+> 81 |         polling: () => frame()!.evaluate(() => (window as unknown as { __nlwPanel: { polling(): boolean } }).__nlwPanel.polling()),
+     |                             ^
+  82 |             ),
+  83 |     };
+  84 | }
+
+   at widget-transport.spec.ts:81
+
+
+
+exit=1

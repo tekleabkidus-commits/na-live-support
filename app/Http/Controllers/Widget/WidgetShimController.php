@@ -70,6 +70,10 @@ final class WidgetShimController
             'position' => $appearance['position'] ?? 'bottom_right',
             'offset' => ['side' => (int) ($appearance['offset']['side'] ?? 16), 'bottom' => (int) ($appearance['offset']['bottom'] ?? 20)],
             'proactive' => $behavior['proactive'] ?? [],
+
+            // The copy the panel needs BEFORE any session exists (K03's last-resort card + its header), both languages.
+
+            'strings' => ['en' => self::minimalStrings('en'), 'am' => self::minimalStrings('am')],
         ];
         $body = ';(function(){var __NLW_CFG='.json_encode($cfg, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP).";\n".$loader."\n})();\n";
 
@@ -105,6 +109,20 @@ final class WidgetShimController
             'Cache-Control' => 'no-store',
             'X-Widget-Bundle' => $bundle['version'],
         ]);
+    }
+
+    /** @return array<string, mixed> */
+    private static function minimalStrings(string $language): array
+    {
+        $out = [];
+        foreach (['retry', 'header', 'a11y'] as $branch) {
+            $v = trans('widget.'.$branch, [], $language);
+            if (is_array($v)) {
+                $out[$branch] = $v;
+            }
+        }
+
+        return $out;
     }
 
     private function widget(Request $request): ?Widget
