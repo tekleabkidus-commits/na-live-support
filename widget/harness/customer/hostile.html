@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Doc 13 SS-03 / T-09 — THE HOSTILE HOST PAGE: `* { all: unset !important }`, an
+  aggressive CSP (scripts only from the platform origin, no inline, no eval),
+  and prototype tampering — the widget must render perfectly and touch nothing.
+  The CSP meta is declared BEFORE any script so it binds the whole document;
+  the tampering script itself is allowed by its nonce-less host-src (the
+  platform origin is the only script source the page permits — the tampering
+  is loaded from a file on this origin? No: the page permits 'self' too, so
+  its own tampering file loads; the widget's frames are the platform origin).
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://platform.harness.localhost:8443; frame-src https://platform.harness.localhost:8443; connect-src https://platform.harness.localhost:8443; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'none'; object-src 'none'">
+<title>HARNESS — hostile host page</title>
+<style>* { all: unset !important } html, body { display: block !important }</style>
+<script src="hostile-tamper.js"></script>
+</head>
+<body>
+<h1>Hostile host</h1>
+<p>Every element is unset; prototypes are tampered; the CSP is tight. The widget's two iframes must still render at their own size, and nothing on this page may change but the two iframes.</p>
+<input id="host-input" value="FIXTURE hostile host value">
+<script src="hostile-boot.js"></script>
+</body>
+</html>

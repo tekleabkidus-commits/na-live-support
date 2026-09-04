@@ -171,6 +171,15 @@ declare const __NLW_CFG: ShimConfig | undefined;
         switch (type) {
             case 'ready':
                 ready = true;
+                // The host facts the panel's /session needs (Doc 02 FR-21/EC-08's server layer reads the
+                // declared ancestor chain; the loader is the only party that can see it): origin, the
+                // ancestor origins, the page URL — never the page's content.
+                post('host', {
+                    origin,
+                    ancestors,
+                    url: location.href,
+                    referrer: document.referrer,
+                });
                 for (const q of queue.splice(0)) post('api', { method: q.method, args: q.args });
                 break;
             case 'size':

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HARNESS — clean host page (fixture operator site)</title>
+<!--
+  Doc 13 step 7: the CLEAN host page. The loader snippet is installed exactly as an
+  operator would paste it — one <script src="…/w/<widget key>.js"> — with the key taken
+  from ?key= so the static page never carries a credential. Fixtures only.
+-->
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:2rem;color:#222}</style>
+</head>
+<body>
+<h1>Fixture operator site — clean host</h1>
+<p>The widget loader is installed below. This page reads nothing from the widget and the widget reads nothing from this page.</p>
+<form><label>A page input the widget must never read: <input id="host-input" value="FIXTURE host value"></label></form>
+<script>
+  // The footprint audit (AC-02) records every listener the loader adds by wrapping addEventListener
+  // BEFORE the loader runs — the host page's own instrumentation, not the widget's.
+  window.__harnessListeners = [];
+  const origAdd = window.addEventListener.bind(window);
+  window.addEventListener = function (type, fn, opts) { window.__harnessListeners.push(type); return origAdd(type, fn, opts); };
+  window.__harnessBaselineGlobals = Object.getOwnPropertyNames(window);
+  window.__harnessPush = history.pushState; window.__harnessReplace = history.replaceState;
+  const key = new URLSearchParams(location.search).get('key');
+  const platform = new URLSearchParams(location.search).get('platform') || 'https://platform.harness.localhost:8443';
+  if (key) {
+    const s = document.createElement('script');
+    s.src = platform + '/w/' + encodeURIComponent(key) + '.js';
+    s.dataset.harness = 'snippet';
+    if (new URLSearchParams(location.search).get('twice') === '1') {
+      const s2 = document.createElement('script'); s2.src = s.src; s2.dataset.harness = 'snippet-2';
+      document.head.appendChild(s); document.head.appendChild(s2);
+    } else {
+      document.head.appendChild(s);
+    }
+  }
+</script>
+</body>
+</html>
