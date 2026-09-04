@@ -1,0 +1,58 @@
+### P-FRAME-ANCESTORS — the packet's own suites on the applied diff (token-based sweep) — 2026-09-04T17:02:01Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\FrameAncestorsTest
+  ⨯ it static sweep: the frame-ancestors directive is written in exact… 10.34s  
+  ✓ it source mapping: exact https origins verbatim, *.brand wildcards…  0.06s  
+  ✓ it surfaces on real requests: the panel document frames ONLY its wi… 0.22s  
+
+   PASS  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG…  0.12s  
+  ✓ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.12s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 0.20s  
+
+   PASS  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.04s  
+  ✓ it carries the full T-07 header set on an authenticated staff API r… 0.27s  
+  ✓ it carries the full T-07 header set on an error response             0.05s  
+  ✓ it rotates the CSP nonce on every request                            0.04s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.09s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.09s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.08s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.05s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.10s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.05s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.14s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\FrameAncestorsTest > it static sweep: the frame-an…   
+  the sweep is blind to a planted second writer
+Failed asserting that two arrays are identical.
+   Array &0 [
+       0 => 'Http/Middleware/SecurityHeaders.php',
+  -    1 => 'Planted.php',
+   ]
+  
+
+  at tests/Security/FrameAncestorsTest.php:52
+     48▕     mkdir($dir.'/Http/Middleware', 0777, true);
+     49▕     copy(app_path('Http/Middleware/SecurityHeaders.php'), $dir.'/Http/Middleware/SecurityHeaders.php');
+     50▕     file_put_contents($dir.'/Planted.php', "<?php // a second writer: header('Content-Security-Policy: frame-ancestors *');");
+     51▕     try {
+  ➜  52▕         expect(frameAncestorsSweep($dir))->toBe(['Http/Middleware/SecurityHeaders.php', 'Planted.php'], 'the sweep is blind to a planted second writer');
+     53▕     } finally {
+     54▕         array_map('unlink', glob($dir.'/Http/Middleware/*') ?: []);
+     55▕         @unlink($dir.'/Planted.php');
+     56▕         @rmdir($dir.'/Http/Middleware');
+
+  1   tests/Security/FrameAncestorsTest.php:52
+
+
+  Tests:    1 failed, 17 passed (831 assertions)
+  Duration: 12.19s
+
+exit=1
+--- phpstan ---
+Note: Using configuration file /app/phpstan.neon.

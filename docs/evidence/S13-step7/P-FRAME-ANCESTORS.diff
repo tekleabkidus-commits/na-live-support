@@ -1,0 +1,264 @@
+diff --git a/app/Http/Controllers/Widget/WidgetShimController.php b/app/Http/Controllers/Widget/WidgetShimController.php
+index 4416344..6dd5723 100644
+--- a/app/Http/Controllers/Widget/WidgetShimController.php
++++ b/app/Http/Controllers/Widget/WidgetShimController.php
+@@ -25,9 +25,8 @@
+  *                                the appearance/proactive dials — never a secret beyond the
+  *                                widget key the page already holds.
+  *   GET /w/panel/{widget_key}    the PANEL DOCUMENT — a nonce'd module script (SecurityHeaders
+- *                                owns the CSP; the widget's frame-ancestors arm is P-FRAME-
+- *                                ANCESTORS at step 7 — until then the document is served under
+- *                                the default surface and is NOT frameable, stated).
++ *                                owns the CSP; the panel's ancestor allowlist arrives through
++ *                                WidgetFrameSurface — P-FRAME-ANCESTORS).
+  *
+  * C3 (countersign): a soft-deleted widget is dead to the wire — both doors 404
+  * (an empty 404 to a <script>/<iframe> is silence, never a broken host page).
+diff --git a/app/Http/Middleware/SecurityHeaders.php b/app/Http/Middleware/SecurityHeaders.php
+index 0468f72..df3cfe8 100644
+--- a/app/Http/Middleware/SecurityHeaders.php
++++ b/app/Http/Middleware/SecurityHeaders.php
+@@ -32,6 +32,17 @@ final class SecurityHeaders
+ {
+     public const REQUEST_NONCE_ATTRIBUTE = 'csp_nonce';
+ 
++    /**
++     * Doc 13 (P-FRAME-ANCESTORS): the widget FRAME surface's ancestor sources,
++     * placed on the REQUEST by the panel route's own middleware (the resolved
++     * widget's allowlist — Doc 02 FR-21/EC-08's structural half). Read here
++     * AFTER `$next` returns, so the group-appended instance sees it; the
++     * attribute names sources, this class alone names the directive.
++     *
++     * @var string
++     */
++    public const REQUEST_ANCESTOR_SOURCES_ATTRIBUTE = 'csp_ancestor_sources';
++
+     /**
+      * @param  Closure(Request): Response  $next
+      */
+@@ -42,7 +53,7 @@ public function handle(Request $request, Closure $next, string $surface = 'staff
+ 
+         $response = $next($request);
+ 
+-        $response->headers->set('Content-Security-Policy', $this->contentSecurityPolicy($nonce, $surface));
++        $response->headers->set('Content-Security-Policy', $this->contentSecurityPolicy($request, $nonce, $surface));
+         $response->headers->set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+         $response->headers->set('X-Content-Type-Options', 'nosniff');
+         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+@@ -55,7 +66,7 @@ public function handle(Request $request, Closure $next, string $surface = 'staff
+         return $response;
+     }
+ 
+-    private function contentSecurityPolicy(string $nonce, string $surface): string
++    private function contentSecurityPolicy(Request $request, string $nonce, string $surface): string
+     {
+         $connect = ["'self'", ...$this->configuredOrigins('security.csp.connect_src')];
+         $script = ["'self'", "'nonce-{$nonce}'"];
+@@ -71,10 +82,12 @@ private function contentSecurityPolicy(string $nonce, string $surface): string
+             $connect = [...$connect, ...$dev];
+         }
+ 
+-        $frameAncestors = match ($surface) {
+-            // The widget step (FR-21/EC-08) replaces this with the widget's
+-            // per-tenant ancestor allowlist, resolved per request.
+-            'staff' => "'none'",
++        $sources = $request->attributes->get(self::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE);
++        $frameAncestors = match (true) {
++            // The widget FRAME surface (Doc 13 P-FRAME-ANCESTORS; Doc 02 FR-21/EC-08's
++            // structural half): the resolved widget's allowlist, per request; an empty
++            // allowlist frames nowhere. Every other surface forbids framing entirely.
++            is_array($sources) => $sources === [] ? "'none'" : implode(' ', array_values(array_filter($sources, 'is_string'))),
+             default => "'none'",
+         };
+ 
+diff --git a/app/Http/Middleware/WidgetFrameSurface.php b/app/Http/Middleware/WidgetFrameSurface.php
+new file mode 100644
+index 0000000..9113f79
+--- /dev/null
++++ b/app/Http/Middleware/WidgetFrameSurface.php
+@@ -0,0 +1,62 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Http\Middleware;
++
++use App\Domain\Auth\Widget\OriginAllowlist;
++use App\Models\Widget;
++use Closure;
++use Illuminate\Http\Request;
++use Symfony\Component\HttpFoundation\Response;
++
++/**
++ * Doc 13 P-FRAME-ANCESTORS (countersigned; Doc 02 FR-21/EC-08's structural
++ * half; Doc 02 T-07's widget-frame clause): the panel DOCUMENT may be framed
++ * ONLY by the resolved widget's allowed origins. This middleware runs INSIDE
++ * the one resolver (`tenant:widget_key`), reads the widget the key names, and
++ * places its allowlist on the request as CSP source expressions — an exact
++ * origin verbatim, a `*.brand.example` wildcard as `https://*.brand.example`
++ * (the CSP host-source form; the dot-boundary rule EC-12 pins lives in
++ * OriginAllowlist and is the same boundary CSP applies). SecurityHeaders alone
++ * turns the sources into the directive (the static sweep asserts that word
++ * appears in exactly one place). A soft-deleted or unknown widget places an
++ * EMPTY list: the document (already a 404) frames nowhere.
++ */
++final class WidgetFrameSurface
++{
++    /** @param  Closure(Request): Response  $next */
++    public function handle(Request $request, Closure $next): Response
++    {
++        $keyId = $request->attributes->get(ResolveTenant::KEY_ID_ATTRIBUTE);
++        $widget = is_string($keyId) ? Widget::query()->where('key_id', $keyId)->first() : null;
++        $origins = $widget instanceof Widget && $widget->deleted_at === null ? $widget->allowed_origins : [];
++
++        $request->attributes->set(SecurityHeaders::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE, self::sources($origins));
++
++        return $next($request);
++    }
++
++    /**
++     * @param  list<string>  $origins
++     * @return list<string>
++     */
++    public static function sources(array $origins): array
++    {
++        $sources = [];
++        foreach ($origins as $origin) {
++            $origin = trim($origin);
++            if ($origin === '') {
++                continue;
++            }
++            if (str_starts_with($origin, '*.')) {
++                $sources[] = 'https://'.$origin;
++            } elseif (preg_match('~^https://[A-Za-z0-9.-]+(?::\d+)?$~', $origin) === 1) {
++                $sources[] = $origin;
++            }
++            // anything else (http, a path, a malformed entry) admits nothing — a stricter policy, never a broken header
++        }
++
++        return array_values(array_unique($sources));
++    }
++}
+diff --git a/routes/web.php b/routes/web.php
+index acc94e9..acca7d1 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -21,6 +21,7 @@
+         Route::get('{widget_key}.js', [App\Http\Controllers\Widget\WidgetShimController::class, 'script'])
+             ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.shim');
+         Route::get('panel/{widget_key}', [App\Http\Controllers\Widget\WidgetShimController::class, 'panel'])
++            ->middleware(App\Http\Middleware\WidgetFrameSurface::class) // P-FRAME-ANCESTORS: the widget's allowlist becomes frame-ancestors
+             ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.panel');
+     });
+ 
+diff --git a/tests/Feature/Widget/WidgetShimTest.php b/tests/Feature/Widget/WidgetShimTest.php
+index 9f08632..e655f6f 100644
+--- a/tests/Feature/Widget/WidgetShimTest.php
++++ b/tests/Feature/Widget/WidgetShimTest.php
+@@ -38,7 +38,7 @@
+         ->and($response->headers->get('X-Widget-Bundle'))->toBe(WidgetBundleResolver::hashOf($manifest['panel']));
+ });
+ 
+-it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP (the frame-ancestors arm is step 7\'s packet — \'none\' until then, stated); no-store', function (): void {
++it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP whose frame-ancestors IS the widget\'s allowlist (P-FRAME-ANCESTORS); no-store', function (): void {
+     [, $widget, $key] = widgetFixture();
+ 
+     $response = $this->get('/w/panel/'.$key.'?frame=launcher');
+@@ -49,7 +49,7 @@
+     expect($m[1] ?? '')->not->toBe('')
+         ->and($html)->toContain('<script type="module" nonce="'.$m[1].'" src="/w/panel.')
+         ->and($html)->toContain('<div id="nlw-root" data-widget="'.(string) $widget->getKey().'"></div>')
+-        ->and($csp)->toContain("frame-ancestors 'none'")   // the interim, replaced by P-FRAME-ANCESTORS at step 7
++        ->and($csp)->toContain('frame-ancestors https://help.fixture-operator.example')   // P-FRAME-ANCESTORS: the widget's allowlist, nothing else
+         ->and($csp)->not->toContain('unsafe-inline')->not->toContain('unsafe-eval');
+ });
+ 
+diff --git a/tests/Security/FrameAncestorsTest.php b/tests/Security/FrameAncestorsTest.php
+new file mode 100644
+index 0000000..1cf613b
+--- /dev/null
++++ b/tests/Security/FrameAncestorsTest.php
+@@ -0,0 +1,83 @@
++<?php
++
++declare(strict_types=1);
++
++use App\Http\Middleware\WidgetFrameSurface;
++
++/*
++|--------------------------------------------------------------------------
++| Doc 13 P-FRAME-ANCESTORS (countersign condition): the directive is set in
++| EXACTLY ONE place — a static sweep over app/ finds the literal in
++| SecurityHeaders and nowhere else — with a NEGATIVE CONTROL proving the
++| sweep can see a second occurrence. Plus the source mapping (EC-12's
++| boundary in CSP form) and the two surfaces' headers on real requests.
++|--------------------------------------------------------------------------
++*/
++
++/** @return list<string> files under $dir whose CODE (never a comment) carries the directive literal */
++function frameAncestorsSweep(string $dir): array
++{
++    $hits = [];
++    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS));
++    foreach ($it as $file) {
++        if ($file->getExtension() !== 'php') {
++            continue;
++        }
++        // CODE only — a comment that mentions the directive is not a writer (Doc 02's session
++        // controller and the shim controller both discuss it in their docblocks).
++        foreach (token_get_all((string) file_get_contents($file->getPathname())) as $token) {
++            if (is_array($token) && in_array($token[0], [T_COMMENT, T_DOC_COMMENT], true)) {
++                continue;
++            }
++            $text = is_array($token) ? $token[1] : $token;
++            if (str_contains($text, 'frame-ancestors')) {
++                $hits[] = str_replace($dir.'/', '', $file->getPathname());
++                break;
++            }
++        }
++    }
++    sort($hits);
++
++    return $hits;
++}
++
++it('static sweep: the frame-ancestors directive is written in exactly ONE place (SecurityHeaders); the negative control plants a second file and the same sweep finds it', function (): void {
++    expect(frameAncestorsSweep(app_path()))->toBe(['Http/Middleware/SecurityHeaders.php']);
++
++    $dir = sys_get_temp_dir().'/fa-sweep-'.bin2hex(random_bytes(6));
++    mkdir($dir.'/Http/Middleware', 0777, true);
++    copy(app_path('Http/Middleware/SecurityHeaders.php'), $dir.'/Http/Middleware/SecurityHeaders.php');
++    file_put_contents($dir.'/Planted.php', "<?php header('Content-Security-Policy: frame-ancestors *'); // a second WRITER (code, not a comment)");
++    try {
++        expect(frameAncestorsSweep($dir))->toBe(['Http/Middleware/SecurityHeaders.php', 'Planted.php'], 'the sweep is blind to a planted second writer');
++    } finally {
++        array_map('unlink', glob($dir.'/Http/Middleware/*') ?: []);
++        @unlink($dir.'/Planted.php');
++        @rmdir($dir.'/Http/Middleware');
++        @rmdir($dir.'/Http');
++        @rmdir($dir);
++    }
++});
++
++it('source mapping: exact https origins verbatim, *.brand wildcards as https host-sources, everything else admits nothing; an empty allowlist frames nowhere', function (): void {
++    expect(WidgetFrameSurface::sources(['https://help.fixture-operator.example', '*.fixture-brand.example', 'http://insecure.example', 'https://x.example/path', ' ', 'https://help.fixture-operator.example']))
++        ->toBe(['https://help.fixture-operator.example', 'https://*.fixture-brand.example'])
++        ->and(WidgetFrameSurface::sources([]))->toBe([]);
++});
++
++it('surfaces on real requests: the panel document frames ONLY its widget\'s allowlist (wildcard included); the staff root and a soft-deleted widget\'s 404 frame nowhere', function (): void {
++    [$tenant, $widget, $key] = widgetFixture(['https://help.fixture-operator.example', '*.fixture-brand.example']);
++    $csp = (string) $this->get('/w/panel/'.$key)->assertStatus(200)->headers->get('Content-Security-Policy');
++    expect($csp)->toContain('frame-ancestors https://help.fixture-operator.example https://*.fixture-brand.example')
++        ->and($csp)->not->toContain("frame-ancestors 'none'");
++
++    expect((string) $this->get('/')->headers->get('Content-Security-Policy'))->toContain("frame-ancestors 'none'");
++
++    bindTenant($tenant);
++    Illuminate\Support\Facades\DB::table('widgets')->where('id', $widget->getKey())->update(['deleted_at' => Illuminate\Support\Facades\DB::raw('clock_timestamp()')]);
++    app(App\Support\Tenancy\TenantContext::class)->clear();
++    app(App\Support\Tenancy\RlsSession::class)->clear();
++    $dead = $this->get('/w/panel/'.$key);
++    $dead->assertStatus(404);
++    expect((string) $dead->headers->get('Content-Security-Policy'))->toContain("frame-ancestors 'none'");
++});
