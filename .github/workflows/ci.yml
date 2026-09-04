@@ -190,10 +190,17 @@ jobs:
       - run: |
           cp .env.example .env
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
-      - run: docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+      # Doc 13 (S13; advisor ruling on run 33890670455): THE HARNESS is part of the
+      # ephemeral stack — the platform / media / customer origins over TLS from the
+      # image-baked dev CA (docker/compose.harness.yaml, the SAME overlay the local
+      # run uses). Every widget browser spec runs from the customer origin; the
+      # names are private to the job (never a public origin; the [OA] rows stay [OA]).
+      - name: Harness hostnames resolve to the job's loopback
+        run: echo "127.0.0.1 platform.harness.localhost media.harness.localhost customer.harness.localhost harness.localhost" | sudo tee -a /etc/hosts
+      - run: docker compose -f docker/compose.yaml -f docker/compose.harness.yaml up -d --build --wait --wait-timeout 600
       - name: Dump service logs when the bring-up failed
         if: failure()
-        run: docker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres
+        run: docker compose -f docker/compose.yaml -f docker/compose.harness.yaml ps; docker compose -f docker/compose.yaml -f docker/compose.harness.yaml logs --tail=100 relay postgres harness
       # The browser stage brings up a FRESH stack, so its database is empty. The
       # session suite (Doc 02 step 6) logs in for real — it needs schema and an
       # account, and it cannot create one through a UI that does not exist yet.
@@ -204,11 +211,15 @@ jobs:
       - name: Relay liveness probe (S07 step-14 ruling — the stack must RELAY before it serves a browser)
         run: docker compose -f docker/compose.yaml exec -T app php artisan outbox:liveness-probe
       - run: npx playwright install --with-deps chromium
+      - name: Harness origins answer before the browser runs
+        run: curl -fsS --insecure https://customer.harness.localhost:8443/harness-alive && curl -fsS --insecure -o /dev/null -w "shim door %{http_code}\n" https://platform.harness.localhost:8443/w/fixture.nosuchkey.js || true
       - run: npx playwright test
         env:
           BASE_URL: https://localhost
+          # The widget specs seed their fixture through `docker compose … exec app`; CI's stack has no dev overlay.
+          NLW_COMPOSE_FILES: "-f docker/compose.yaml -f docker/compose.harness.yaml"
       - if: always()
-        run: docker compose -f docker/compose.yaml down -v
+        run: docker compose -f docker/compose.yaml -f docker/compose.harness.yaml down -v
 
   performance:
     name: "Stage 5: performance budgets (placeholder until Doc 19 L1 profile)"

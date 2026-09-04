@@ -1,0 +1,17 @@
+### CI RED FIX — widget-reverb-auth.spec.ts on the LOCAL harness, both widget projects (charging) — the spec unchanged in its assertions; only the compose invocation is parametrized (NLW_COMPOSE_FILES) — 2026-09-04T18:02:55Z
+
+Running 2 tests using 1 worker
+
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06d96-905e-704a-b17c-f0a8ca0fff66","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06d96-905e-704a-b17c-f0a8ca0fff66.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  1 [widget] › tests/Browser/widget-reverb-auth.spec.ts:67:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (329ms)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06d96-9c32-70c7-8bb9-b059692def9e","authStatus":200,"subscribed":"private-tenant.01a06cac-3f7b-7353-9891-c1668353363f.visitor.01a06d96-9c32-70c7-8bb9-b059692def9e.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  2 [widget-375] › tests/Browser/widget-reverb-auth.spec.ts:67:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (228ms)
+
+  2 passed (6.1s)
+exit=0

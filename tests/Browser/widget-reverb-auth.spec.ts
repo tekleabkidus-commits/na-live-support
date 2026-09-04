@@ -17,6 +17,7 @@
 // seeder's artisan output (the spec's own fixture, 0l: dedicated rows).
 import { expect, test } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
+import { composeFiles } from './support/harness';
 
 const PLATFORM = 'https://platform.harness.localhost:8443';
 const CUSTOMER = 'https://customer.harness.localhost:8443';
@@ -26,12 +27,7 @@ function artisan(...args: string[]): string {
         'docker',
         [
             'compose',
-            '--profile',
-            'embeddings',
-            '-f',
-            'docker/compose.yaml',
-            '-f',
-            'docker/compose.dev.yaml',
+            ...composeFiles(), // the local dev pair, or CI's base + harness (NLW_COMPOSE_FILES)
             'exec',
             '-T',
             'app',

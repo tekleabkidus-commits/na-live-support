@@ -33,6 +33,18 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI RED ON 5f371fc FIXED FIRST (advisor ruling 2026-09-04, rule 15; commit = this section's SHA; its CI run is the Batch A checkpoint's VERDICT OF RECORD)
+
+**Power line (R-D13-6):** charging, 61% — the browser proof below ran on the charger.
+
+**The red (owner-read from the run page, run 33890670455):** Stage 4 exit 1 — `tests/Browser/widget-reverb-auth.spec.ts:67` failed on all three attempts (Doc 13's own spec); `inbox-ticket-panel.spec.ts:334` twice = Doc 07's recorded flaky class, retry-green, not chased; no billing annotation; Stage 1 warnings = Node 20 action deprecations, a Doc 18 window item.
+
+**Cause — CONFIRMED at the source, exactly the ruling's expectation:** CI's Stage 4 brought the stack up with `docker compose -f docker/compose.yaml` ALONE — no `compose.harness.yaml`, hence no `platform.` / `media.` / `customer.harness.localhost:8443` origins over TLS — so the spec's first navigation to the customer origin could not resolve (`.github/workflows/ci.yml` Stage 4 as it stood; the local run always used the overlay). Nothing else: the spec passes unchanged on the local harness on both widget projects (`S13-ci/reverb-auth-local-01.txt` 2 passed).
+
+**The fix (the HARNESS becomes part of the CI ephemeral stack; nothing gated, nothing weakened):** Stage 4 now (1) writes the four harness hostnames to the job's `/etc/hosts` (loopback), (2) brings the stack up with `-f docker/compose.yaml -f docker/compose.harness.yaml` — the SAME overlay the local run uses (validated: `docker compose … config -q` OK; the harness image is the base file's `na-live-support/app:dev`, built in the same `up --build`; the certificate is minted at start from the image-baked dev CA; Playwright's `ignoreHTTPSErrors` already trusts it, as locally), (3) probes both origins before the browser runs, (4) tears down with the same files, and (5) sets `NLW_COMPOSE_FILES="-f docker/compose.yaml -f docker/compose.harness.yaml"` for the specs' fixture seeding — the ONE code change on the spec side: `tests/Browser/support/harness.ts` gains `composeFiles()` (the local dev pair by default, the env var in CI) and `widget-reverb-auth.spec.ts` uses it instead of its hard-wired dev-overlay list. **Assertions byte-untouched:** `git diff` shows 0 `expect(` lines changed. **Proven locally under BOTH shapes** (`reverb-auth-local-02.txt`): default 2 passed; `NLW_COMPOSE_FILES` set to CI's pair — reverb-auth + the frame-ancestors control, 4 passed. The harness in CI is NOT a public origin; the [OA] rows stay [OA]. Every widget browser spec at af0f96d and after (frame-ancestors, loader, footprint, hostile-host) needs this and now has it in CI.
+
+**Verdict of record:** the CI run on THIS commit (one look after the owner's push). The 0l/warm-DB classes are unaffected (Stage 4 is fresh-DB).
+
 ## SESSION-13 (Doc 13) — STEP 7 CLOSED: LOADER + ISOLATION PROVEN IN THE BROWSER (AC-02, AC-03's CSP layer, SS-03, T-07, EC-01, NFR-05, NFR-06; sabotage (c); commit = this section's SHA)
 
 **Power line (R-D13-6):** charging (BatteryStatus 2) from 29% — the owner plugged in; every browser leg below ran on the charger. No timing leg (dev-scale figures are step 12's, wall power stated).
