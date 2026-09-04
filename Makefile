@@ -105,8 +105,9 @@ gates:
 lint:
 	./vendor/bin/pint --test
 	./vendor/bin/phpstan analyse --memory-limit=1G
-	npx eslint resources/js tests/Browser
+	npx eslint resources/js tests/Browser widget/src
 	npx vue-tsc --noEmit
+	npx tsc --noEmit -p widget/tsconfig.json
 
 ## Playwright browser suite (stack must be up)
 browser:

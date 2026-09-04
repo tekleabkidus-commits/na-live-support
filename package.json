@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "build:widget": "cd widget && npm run build",
+        "lint:widget": "eslint widget/src && tsc --noEmit -p widget/tsconfig.json"
     },
     "devDependencies": {
         "@axe-core/playwright": "^4.12.1",

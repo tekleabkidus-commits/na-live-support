@@ -11,6 +11,19 @@ Route::get('/', function () {
     ]);
 });
 
+// ── Doc 13 T-01 / FR-01 / FR-04 — the widget's two key-addressed documents
+// (S13 step 6). The key rides the PATH; WidgetKeyFromPath hands it to the ONE
+// resolver. `tenant.state:outbound`: a suspended operator must not appear to be
+// operating — the shim is refused, the host page stays untouched. The `web`
+// group appends SecurityHeaders (the panel's CSP + nonce).
+Route::middleware([App\Http\Middleware\WidgetKeyFromPath::class, 'tenant:widget_key', 'tenant.state:outbound'])
+    ->prefix('w')->group(function (): void {
+        Route::get('{widget_key}.js', [App\Http\Controllers\Widget\WidgetShimController::class, 'script'])
+            ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.shim');
+        Route::get('panel/{widget_key}', [App\Http\Controllers\Widget\WidgetShimController::class, 'panel'])
+            ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.panel');
+    });
+
 // The explicit auth surface (Doc 02). See that file's header for the rule it
 // enforces; Fortify never auto-registers routes in this application.
 require __DIR__.'/auth.php';

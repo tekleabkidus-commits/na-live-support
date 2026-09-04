@@ -144,3 +144,21 @@ gates:
     owner: platform-engineering
     added_date: "2026-08-14"
     blocking: true
+
+  - gate_id: widget-bundle-budget
+    name: Widget loader <= 5 KB gz, core panel <= 50 KB gz, Help/forms are dynamic imports — from the widget build's own Vite manifest (R-05)
+    command: bash ci/widget-bundle-budget.sh
+    owning_doc: Doc13
+    owning_ac: NFR-01
+    owner: platform-engineering
+    added_date: "2026-09-04"
+    blocking: true
+
+  - gate_id: widget-vocabulary
+    name: No failure vocabulary in any customer-facing widget.* string, en + am (denylist with a positive control; R-D13-5.1)
+    command: php ci/widget-vocabulary.php
+    owning_doc: Doc13
+    owning_ac: AC-08
+    owner: platform-engineering
+    added_date: "2026-09-04"
+    blocking: true

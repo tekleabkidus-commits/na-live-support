@@ -51,6 +51,21 @@ export default defineConfig({
         {
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] },
+            testIgnore: /widget-.*\.spec\.ts/,
+        },
+        // Doc 13 (ADR 0020 item 4): the widget suites run from the HARNESS customer origin —
+        // desktop chromium and the 375 viewport (iPhone 13 profile). Firefox/WebKit are not
+        // installed on the dev box or CI's Stage 4 (chromium only) — NFR-05's other rows are
+        // stated [D19]/[OA], never claimed.
+        {
+            name: 'widget',
+            use: { ...devices['Desktop Chrome'], baseURL: process.env.WIDGET_BASE_URL ?? 'https://customer.harness.localhost:8443' },
+            testMatch: /widget-.*\.spec\.ts/,
+        },
+        {
+            name: 'widget-375',
+            use: { ...devices['iPhone 13'], baseURL: process.env.WIDGET_BASE_URL ?? 'https://customer.harness.localhost:8443' },
+            testMatch: /widget-.*\.spec\.ts/,
         },
     ],
 });

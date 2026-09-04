@@ -1,0 +1,17 @@
+### widget-bundle-budget gate — first live run + CONTROL — 2026-09-04T16:32:52Z
+  loader    2133 B gz (budget 5120)
+  core      3826 B gz (budget 51200)
+  'help' is statically bundled into the core
+  lazy    help     4577 B gz
+  lazy    forms      66 B gz
+widget-bundle-budget: FAIL (Doc 13 NFR-01)
+exit=1
+--- control (core budget shrunk to 1 KB; must FAIL) ---
+  loader    2133 B gz (budget 5120)
+  core      3826 B gz (budget 1024)
+  core over budget
+  'help' is statically bundled into the core
+  lazy    help     4577 B gz
+  lazy    forms      66 B gz
+widget-bundle-budget: FAIL (Doc 13 NFR-01)
+control exit=1

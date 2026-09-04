@@ -1,0 +1,69 @@
+### S13 step 6 — shim/panel/pointer suites (rerun: Widget::getKey) — 2026-09-04T16:45:58Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG…  9.94s  
+  ⨯ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.12s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 0.21s  
+
+   FAIL  Tests\Feature\Widget\WidgetBundlePointerTest
+  ⨯ it FR-04: the pointer is the NEWEST live row of the widget's channe… 0.16s  
+  ✓ it C4: the pointer commands run on the platform connection in local… 0.09s  
+
+   PASS  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.08s  
+  ✓ it carries the full T-07 header set on an authenticated staff API r… 0.30s  
+  ✓ it carries the full T-07 header set on an error response             0.05s  
+  ✓ it rotates the CSP nonce on every request                            0.08s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.11s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.12s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.12s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.05s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.08s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.04s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.14s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\WidgetShimTest > it GET /w/panel/{key}: the…    
+  Header [Cache-Control] was found, but value [no-store, private] does not match [no-store].
+Failed asserting that two strings are equal.
+  -'no-store'
+  +'no-store, private'
+  
+
+  at tests/Feature/Widget/WidgetShimTest.php:45
+     41▕ it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP (the frame-ancestors arm is step 7\'s packet — \'none\' until then, stated); no-store', function (): void {
+     42▕     [, $widget, $key] = widgetFixture();
+     43▕ 
+     44▕     $response = $this->get('/w/panel/'.$key.'?frame=launcher');
+  ➜  45▕     $response->assertStatus(200)->assertHeader('Cache-Control', 'no-store');
+     46▕     $html = (string) $response->getContent();
+     47▕     $csp = (string) $response->headers->get('Content-Security-Policy');
+     48▕     preg_match("/'nonce-([^']+)'/", $csp, $m);
+     49▕     expect($m[1] ?? '')->not->toBe('')
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Widget\WidgetBundlePointerTest > it FR-04: t…  Error   
+  Object of class stdClass could not be converted to string
+
+  at app/Domain/Webchat/Bundle/WidgetBundleResolver.php:53
+     49▕         $newest = $live[0];
+     50▕         $bucket = crc32((string) $widget->getKey()) % 100;
+     51▕         $chosen = ((int) $newest->rollout_pct >= 100 || $bucket < (int) $newest->rollout_pct || ! isset($live[1])) ? $newest : $live[1];
+     52▕ 
+  ➜  53▕         foreach (array_unique([$chosen, $newest]) as $row) {
+     54▕             $panel = 'panel.'.$row->bundle_hash.'.js';
+     55▕             $loader = 'loader.'.$row->loader_hash.'.js';
+     56▕             if (is_file(public_path('w/'.$panel)) && is_file(public_path('w/'.$loader))) {
+     57▕                 return ['panel' => $panel, 'loader' => $loader, 'version' => $row->bundle_hash, 'source' => 'pointer:'.$row->id];
+
+  1   app/Domain/Webchat/Bundle/WidgetBundleResolver.php:53
+  2   tests/Feature/Widget/WidgetBundlePointerTest.php:50
+
+
+  Tests:    2 failed, 15 passed (828 assertions)
+  Duration: 11.85s
+
+exit=2

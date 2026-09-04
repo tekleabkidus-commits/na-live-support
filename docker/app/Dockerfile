@@ -9,6 +9,11 @@ RUN npm ci --ignore-scripts
 COPY vite.config.ts tsconfig.json ./
 COPY resources ./resources
 RUN npm run build
+# Doc 13 (ADR 0020): the widget's OWN build — its own package, exact pins — lands under public/w.
+COPY widget/package.json widget/package-lock.json ./widget/
+RUN cd widget && npm ci --ignore-scripts
+COPY widget ./widget
+RUN cd widget && npm run build
 
 # --- Stage 2: PHP runtime ----------------------------------------------------
 FROM dunglas/frankenphp:1-php8.4
@@ -43,6 +48,7 @@ RUN composer install --no-scripts --no-autoloader --prefer-dist --no-interaction
 
 COPY . .
 COPY --from=assets /build/public/build ./public/build
+COPY --from=assets /build/public/w ./public/w
 RUN composer dump-autoload --optimize --no-scripts \
     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \

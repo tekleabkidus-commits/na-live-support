@@ -137,5 +137,7 @@ return [
     'widget.context' => 'Visitor surface (Doc 13 FR-24): page context for the visitor\'s OWN conversation, allowlist-filtered server-side.',
     'widget.beacon' => 'Loader/panel beacons (Doc 13 T-08): widget-key-authenticated, BEFORE any visitor session exists (a blocked origin has no visitor); answers 204 to everything (NFR-06).',
     'widget.identify' => 'Visitor surface (Doc 13 FR-07/SEC-03): the host page\'s HMAC-signed assertion for THIS visitor; verified constant-time against the per-widget secret; an invalid signature is a 204 + a Health counter, never an error; no staff principal exists.',
+    'widget.shim' => 'The per-key loader SHIM (Doc 13 T-01/FR-01): widget-key-authenticated by the path key through the one resolver; fetched by a <script src> on the operator\'s page — no visitor exists yet, no staff principal exists; 60 s public cache; a dead widget answers an empty 404 (C3).',
+    'widget.panel' => 'The panel DOCUMENT (Doc 13 T-01): widget-key-authenticated by the path key; a nonce\'d module-script mount point under SecurityHeaders\' CSP; no principal, no data — every string arrives through the config envelope.',
     'widget.forms.steps' => 'Visitor surface (Doc 13 T-03/FR-06/FR-15): a form STEP validated against Doc 12\'s immutable version (the visitor holds the state; FR-05 — validation mints nothing); the OFFLINE mode lands the offline-tagged ticket through Doc 06 FR-14\'s door; no staff principal exists.',
 ];

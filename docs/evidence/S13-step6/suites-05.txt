@@ -1,0 +1,32 @@
+### step 6 — final targeted run (shim, pointer, security headers, middleware order) — 2026-09-04T16:53:32Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG… 10.65s  
+  ✓ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.05s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 1.00s  
+
+   PASS  Tests\Feature\Widget\WidgetBundlePointerTest
+  ✓ it FR-04: the pointer is the NEWEST live row of the widget's channe… 0.24s  
+  ✓ it C4: the pointer commands run on the platform connection in local… 0.14s  
+
+   PASS  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.07s  
+  ✓ it carries the full T-07 header set on an authenticated staff API r… 0.29s  
+  ✓ it carries the full T-07 header set on an error response             0.04s  
+  ✓ it rotates the CSP nonce on every request                            0.06s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.11s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.08s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.09s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.06s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.14s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.04s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.10s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.03s  
+
+  Tests:    17 passed (846 assertions)
+  Duration: 13.28s
+
+exit=0

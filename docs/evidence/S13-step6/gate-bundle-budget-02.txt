@@ -1,0 +1,15 @@
+### widget-bundle-budget gate — live run + CONTROL (manifest-read lazy check) — 2026-09-04T16:38:55Z
+  loader    2133 B gz (budget 5120)
+  core      8837 B gz (budget 51200)
+  lazy    help      149 B gz (dynamic import of the core)
+  lazy    forms     161 B gz (dynamic import of the core)
+widget-bundle-budget: PASS (loader 2133 B, core 8837 B gz; help/forms lazy)
+exit=0
+--- control (core budget shrunk to 1 KB; must FAIL) ---
+  loader    2133 B gz (budget 5120)
+  core      8837 B gz (budget 1024)
+  core over budget
+  lazy    help      149 B gz (dynamic import of the core)
+  lazy    forms     161 B gz (dynamic import of the core)
+widget-bundle-budget: FAIL (Doc 13 NFR-01)
+control exit=1

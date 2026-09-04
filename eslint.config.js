@@ -18,6 +18,13 @@ export default defineConfigWithVueTs(
     vueTsConfigs.recommended,
     prettierConfig,
     {
+        // The widget is Preact (ADR 0020): JSX in .tsx, no Vue rules apply.
+        files: ['widget/src/**/*.{ts,tsx}'],
+        rules: {
+            'vue/multi-word-component-names': 'off',
+        },
+    },
+    {
         // Inertia page components are addressed by file path (Pages/Welcome),
         // so single-word filenames are the framework convention, not a smell.
         files: ['resources/js/Pages/**/*.vue'],
