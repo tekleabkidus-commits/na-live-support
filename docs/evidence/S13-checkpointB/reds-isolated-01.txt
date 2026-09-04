@@ -1,0 +1,74 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      reds-isolated
+# set:        S13-checkpointB
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Hours/CalendarTest.php tests/Contract/RoutingEventConsumerContractsTest.php
+# started:    2026-09-04T21:31:48Z
+# git:        e62a0e1 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Hours\CalendarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: creates, validates through the clock parser, and refuses[39m[90m… [39m [90m7.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12 physics: one tenant default, split shifts stored intact, h[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05/BR-03: a calendar edit is prospective — an armed instance[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: a timezone change clears schedule_next_run_at on schedule[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-A53 PRE control: a calendar-less tenant answers the seam shape[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit P-A53 REAL source: a painted calendar drives windowFor/isOpen/ne[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\RoutingEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe routing family is exactly EIGHTEEN events (FR-19; grown only by[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mcompleteness: every routing-family event has a contract entry in EV[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry names a real catalog relationship, re[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDoc 11's own durable consumers are contracted: the availability con[39m[90m…[39m [90m0.02s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Hours\CalendarTest[22m [90m>[39m it P-A53 REAL source: a painte…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'08:00'[39m[39;1m
+  [39;22m[32m+'00:00'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Hours/CalendarTest.php[39m:[32m167[39m
+    163▕     $writer->addHoliday($calendarId, '2026-09-11', 'Enkutatash', true, $actor);
+    164▕     $hours = app(HoursContract::class);
+    165▕ 
+    166▕     $window = $hours->windowFor(null);
+  ➜ 167▕     expect($window['open'])->toBe('08:00')
+    168▕         ->and($window['close'])->toBe('17:00');
+    169▕ 
+    170▕     // Wed 2026-09-02: 10:00 Addis = 07:00Z open; 18:00 Addis = 15:00Z closed.
+    171▕     expect($hours->isOpen(null, new DateTimeImmutable('2026-09-02T07:00:00Z')))->toBeTrue()
+
+  [33m1   [39m[39;1mtests/Feature/Hours/CalendarTest.php[39;22m:[39;1m167[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\RoutingEventConsumerContractsTest[22m [90m>[39m completeness:…    
+[39;1m  uncontracted consumers: ticket.waiting → Doc13/QueuePositionPush
+Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'ticket.waiting → Doc13/QueuePositionPush',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Contract/RoutingEventConsumerContractsTest.php[39m:[32m64[39m
+     60▕                 $missing[] = "{$event} → {$consumer}";
+     61▕             }
+     62▕         }
+     63▕     }
+  ➜  64▕     expect($missing)->toBe([], 'uncontracted consumers: '.implode(', ', $missing));
+     65▕ });
+     66▕ 
+     67▕ test('fidelity: every fixture entry names a real catalog relationship, reads only keys the payload carries, and pins the CURRENT schema_version', function () {
+     68▕     $events = routingEvents();
+
+  [33m1   [39m[39;1mtests/Contract/RoutingEventConsumerContractsTest.php[39;22m:[39;1m64[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (27 assertions)[39m
+  [90mDuration:[39m [39m7.37s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T21:31:56Z
+# duration:   8s
+# EXIT:       1

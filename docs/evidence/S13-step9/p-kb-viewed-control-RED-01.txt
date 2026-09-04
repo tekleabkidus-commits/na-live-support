@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-kb-viewed-control-RED
+# set:        S13-step9
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Kb/WidgetHelpContractTest.php tests/Feature/Kb/WidgetHelpLiveTest.php
+# started:    2026-09-04T21:20:43Z
+# git:        e62a0e1 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feed[39m[90m…[39m [90m11.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m0.85s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Kb\WidgetHelpLiveTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit P-KB-VIEWED control: the article door begins its own transaction[39m[90m…[39m [90m0.82s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Kb\WidgetHelpLiveTest[22m [90m>[39m it P-KB-VIEWED control: the…   
+[39;1m  the viewed event must ride a transaction the door opens (Doc 01 T-03) — on the live stack the guard answers 500 otherwise
+Failed asserting that 0 is equal to 1 or is greater than 1.[39;22m
+
+  at [32mtests/Feature/Kb/WidgetHelpLiveTest.php[39m:[32m33[39m
+     29▕         $begun++;
+     30▕     });
+     31▕     kbWidget($key, $token, $cookie, 'GET', 'kb/articles/'.$pub['article_id'])->assertOk();
+     32▕ 
+  ➜  33▕     expect($begun)->toBeGreaterThanOrEqual(1, 'the viewed event must ride a transaction the door opens (Doc 01 T-03) — on the live stack the guard answers 500 otherwise');
+     34▕ });
+     35▕
+
+  [33m1   [39m[39;1mtests/Feature/Kb/WidgetHelpLiveTest.php[39;22m:[39;1m33[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (61 assertions)[39m
+  [90mDuration:[39m [39m13.61s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T21:20:57Z
+# duration:   14s
+# EXIT:       1
