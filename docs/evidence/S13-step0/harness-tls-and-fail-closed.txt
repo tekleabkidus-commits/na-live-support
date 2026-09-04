@@ -1,0 +1,40 @@
+### HARNESS step-0 evidence — 2026-09-04T04:46:21Z — tree 927184f + uncommitted harness files
+### CA = the image-baked DEV CA (public by construction), copied from the harness container
+
+=== TLS: https://platform.harness.localhost:8443/ (curl --cacert dev-ca, -v handshake lines) ===
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / X25519 / RSASSA-PSS
+*  subject: CN=harness.localhost
+*  subjectAltName: host "platform.harness.localhost" matched cert's "platform.harness.localhost"
+*  issuer: CN=Na Live Support DEV CA — NOT FOR PRODUCTION
+HTTP 200  ssl_verify=0  remote=::1:8443
+
+=== TLS: https://media.harness.localhost:8443/ (curl --cacert dev-ca, -v handshake lines) ===
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / X25519 / RSASSA-PSS
+*  subject: CN=harness.localhost
+*  subjectAltName: host "media.harness.localhost" matched cert's "media.harness.localhost"
+*  issuer: CN=Na Live Support DEV CA — NOT FOR PRODUCTION
+HTTP 200  ssl_verify=0  remote=::1:8443
+
+=== TLS: https://customer.harness.localhost:8443/ (curl --cacert dev-ca, -v handshake lines) ===
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / X25519 / RSASSA-PSS
+*  subject: CN=harness.localhost
+*  subjectAltName: host "customer.harness.localhost" matched cert's "customer.harness.localhost"
+*  issuer: CN=Na Live Support DEV CA — NOT FOR PRODUCTION
+HTTP 200  ssl_verify=0  remote=::1:8443
+
+=== customer origin body ===
+HARNESS customer origin alive
+
+=== platform origin: /up (app health through the harness) ===
+HTTP 200
+
+=== platform origin: response headers of GET /api/widget/v1/config with Origin: customer (no allowlist entry exists; route not yet mounted) ===
+HTTP/2 405 
+vary: Accept-Encoding
+
+=== platform origin: POST /api/widget/v1/session with Origin: customer and NO widget key (fail-closed at the binder) ===
+HTTP/2 404 
+{
+
+=== media origin is a distinct host: /up ===
+HTTP 200

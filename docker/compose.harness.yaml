@@ -1,0 +1,57 @@
+# THE HARNESS — Doc 13's local two-origin fixture (R-D13-1.1). NEVER the origin.
+#
+# Ruling of record: no public staging subdomain with TLS exists (R-D13-1,
+# docs/ADVISOR-RULINGS-D13.md). Everything a browser enforces LOCALLY — CORS
+# preflight, frame-ancestors, ancestor-chain validation, the cookie-less media
+# origin as its own host, Reverb channel-auth from a foreign origin — is proven
+# against this overlay. Rows only a real public origin can prove ride the [OA]
+# bucket; a harness result is NEVER written as proof of an [OA] row (R-D13-1.3).
+#
+# Three hostnames, one Caddy, one port. `*.localhost` resolves to loopback on
+# the dev box by glibc (verified: `getent hosts platform.harness.localhost`
+# → ::1) and in every browser Playwright drives (RFC 6761), so no /etc/hosts
+# edit is needed — WSL regenerates that file at boot anyway.
+#
+#   https://platform.harness.localhost:8443  → the app (API, widget/v1/*, the
+#                                              loader/bundle shims) and, on
+#                                              /app/* + /apps/*, Reverb
+#   https://media.harness.localhost:8443     → the app again, AS A SEPARATE
+#                                              HOST — the cookie-less media
+#                                              origin of Doc 04 (no session
+#                                              cookie is ever scoped to it)
+#   https://customer.harness.localhost:8443  → a static "operator site":
+#                                              widget/harness/customer/ (the
+#                                              host page + the hostile-host
+#                                              fixture, SS-03)
+#
+# Runs on the app image (no new image, no new dependency): the image already
+# carries Caddy (FrankenPHP) and the image-baked DEV CA, so the harness cert is
+# signed by that CA at container start and every in-container client validates
+# it; the CA is public by construction (docker/app/generate-dev-certs.sh).
+#
+# Usage (dev only — CI's raw compose never names this file):
+#   docker compose --profile embeddings -f docker/compose.yaml \
+#     -f docker/compose.dev.yaml -f docker/compose.harness.yaml up -d harness
+
+name: na-live-support
+
+services:
+  harness:
+    image: na-live-support/app:dev
+    entrypoint: ["/bin/sh", "/harness/entrypoint.sh"]
+    volumes:
+      - ./harness:/harness:ro
+      - ../widget/harness/customer:/srv/customer:ro
+    ports:
+      - "8443:8443"
+    networks: [na-net]
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      # Validates the chain against the image's trust store (the dev CA).
+      test: ["CMD", "curl", "-fsS", "--resolve", "customer.harness.localhost:8443:127.0.0.1", "https://customer.harness.localhost:8443/harness-alive"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s

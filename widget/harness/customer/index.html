@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HARNESS — customer origin (fixture operator site)</title>
+<!--
+  THE HARNESS customer origin (R-D13-1.1). A synthetic "operator site" —
+  never a real one, never real data (fixtures only, Doc 05 incident precedent).
+  Doc 13's loader snippet is installed on this page from its first build on;
+  until then the page carries the fail-closed control only (below).
+-->
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:2rem;color:#222}pre{background:#f4f4f4;padding:1rem;overflow:auto}</style>
+</head>
+<body>
+<h1>Fixture operator site (HARNESS customer origin)</h1>
+<p>This page is served from <code>https://customer.harness.localhost:8443</code>.
+The platform origin is <code>https://platform.harness.localhost:8443</code>.
+The two are different origins; the browser enforces that boundary itself.</p>
+<h2>Fail-closed control (step 0)</h2>
+<p>A cross-origin <code>fetch()</code> from this page to the platform origin must be
+REFUSED by the browser until a per-widget allowlist entry admits this origin.</p>
+<pre id="control-result">running…</pre>
+<script>
+  // The step-0 fail-closed control: no allowlist entry exists yet, so this
+  // fetch must fail with a CORS TypeError. Playwright reads #control-result.
+  (async () => {
+    const out = document.getElementById('control-result');
+    try {
+      const r = await fetch('https://platform.harness.localhost:8443/widget/v1/config', { mode: 'cors' });
+      out.textContent = 'UNEXPECTED: cross-origin fetch succeeded with status ' + r.status;
+      out.dataset.outcome = 'allowed';
+    } catch (e) {
+      out.textContent = 'REFUSED by the browser (expected before any allowlist entry): ' + (e && e.name) + ': ' + (e && e.message);
+      out.dataset.outcome = 'refused';
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+# THE HARNESS Caddyfile (R-D13-1.1). Three local origins on one listener.
+# This is a FIXTURE proxy, never the origin: see docker/compose.harness.yaml.
+{
+	auto_https off
+	admin off
+}
+
+# The "platform" origin: the app, plus Reverb on the paths Reverb owns.
+# `/app/*` is Reverb's websocket door and `/apps/*` its HTTP API; the Laravel
+# application uses neither prefix (verified: routes/ carries no such prefix).
+https://platform.harness.localhost:8443 {
+	tls /tmp/harness-certs/server.crt /tmp/harness-certs/server.key
+	encode zstd br gzip
+
+	@reverb path /app/* /apps/*
+	reverse_proxy @reverb https://reverb:8080 {
+		transport http {
+			tls_server_name reverb
+		}
+	}
+
+	reverse_proxy https://app:443 {
+		transport http {
+			tls_server_name app
+		}
+		header_up Host {host}
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Proto https
+	}
+}
+
+# The cookie-less media origin AS ITS OWN HOST (Doc 04's physics). Same app,
+# different origin: a browser never sends platform-origin cookies here.
+https://media.harness.localhost:8443 {
+	tls /tmp/harness-certs/server.crt /tmp/harness-certs/server.key
+	reverse_proxy https://app:443 {
+		transport http {
+			tls_server_name app
+		}
+		header_up Host {host}
+		header_up X-Forwarded-Host {host}
+		header_up X-Forwarded-Proto https
+	}
+}
+
+# The "customer" origin: a static operator site. The host page and the
+# hostile-host fixture (SS-03) live in widget/harness/customer/.
+https://customer.harness.localhost:8443 {
+	tls /tmp/harness-certs/server.crt /tmp/harness-certs/server.key
+	root * /srv/customer
+	respond /harness-alive "HARNESS customer origin alive" 200
+	file_server
+}
