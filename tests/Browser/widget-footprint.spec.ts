@@ -5,7 +5,7 @@
 import { expect, test } from '@playwright/test';
 import { CUSTOMER, harnessWidgetKey } from './support/harness';
 
-test('AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read', async ({
+test('AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read', async ({
     page,
 }) => {
     const key = harnessWidgetKey();
@@ -42,7 +42,7 @@ test('AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popsta
         };
     });
     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
-    expect(audit.listeners).toEqual(['message', 'popstate']);
+    expect(audit.listeners).toEqual(['message', 'popstate', 'resize']); // resize: the host viewport for the sheet decision (B10), declared in the inventory
     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
     expect(audit.declared.globals.sort()).toEqual(audit.added);
     expect(audit.declared.nodes.sort()).toEqual(['nlw-launcher', 'nlw-panel']);

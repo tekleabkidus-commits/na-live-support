@@ -1,0 +1,216 @@
+import type { FunctionComponent } from 'preact';
+import { useEffect, useRef } from 'preact/hooks';
+import { t } from '../i18n';
+import { config, envelope, language, messages } from '../state';
+import type { Message } from '../types';
+
+function dayLabel(iso: string): string {
+    const d = new Date(iso);
+    const now = new Date();
+    const same = (a: Date, b: Date): boolean => a.toDateString() === b.toDateString();
+    if (same(d, now)) return t('messages.today');
+    const y = new Date(now);
+    y.setDate(now.getDate() - 1);
+    if (same(d, y)) return t('messages.yesterday');
+    try {
+        return new Intl.DateTimeFormat(language.value, { day: 'numeric', month: 'long' }).format(d);
+    } catch {
+        return iso.slice(0, 10);
+    }
+}
+
+function clock(iso: string): string {
+    try {
+        return new Intl.DateTimeFormat(language.value, {
+            hour: '2-digit',
+            minute: '2-digit',
+        }).format(new Date(iso));
+    } catch {
+        return '';
+    }
+}
+
+/** AC-01: the double-check is DATA — a customer row shows ✓✓ only once the server's page carries it; ✓ on the 202; nothing before. */
+function glyph(m: Message): { text: string; label: string } | null {
+    if (m.author !== 'customer') return null;
+    const state = m.local ?? 'delivered';
+    if (state === 'delivered') return { text: '✓✓', label: t('messages.delivered') };
+    if (state === 'sent') return { text: '✓', label: t('messages.sent') };
+    return { text: '…', label: t('messages.sending') };
+}
+
+const Bubble: FunctionComponent<{ m: Message }> = ({ m }) => {
+    const g = glyph(m);
+    const agentIdentity = config.value?.settings.agent_identity;
+    const name =
+        m.author === 'ai'
+            ? t('messages.ai_label')
+            : m.author === 'staff'
+              ? agentIdentity === 'team'
+                  ? t('header.team')
+                  : t('header.team')
+              : '';
+    if (m.author === 'system') {
+        return (
+            <p class="nlw-system" data-message={m.id} data-author="system">
+                {m.body}
+            </p>
+        );
+    }
+    return (
+        <div
+            class="nlw-msg"
+            data-message={m.id}
+            data-author={m.author}
+            data-delivery={m.local ?? (m.author === 'customer' ? 'delivered' : '')}
+        >
+            {m.author !== 'customer' ? (
+                <span class="nlw-label" data-ai={m.author === 'ai' ? '' : undefined}>
+                    {m.author === 'ai' ? <span aria-hidden="true">✦</span> : null}
+                    {name}
+                </span>
+            ) : null}
+            <div class="nlw-bubble">
+                {m.body}
+                {m.media.map((a, i) => (
+                    <div key={i} class="nlw-meta">
+                        {t('a11y.attachment')} · {a.kind ?? ''}
+                    </div>
+                ))}
+            </div>
+            <span class="nlw-meta">
+                <span>{clock(m.created_at)}</span>
+                {g ? (
+                    <span data-role="delivery" aria-label={g.label} title={g.label}>
+                        {g.text}
+                    </span>
+                ) : null}
+            </span>
+        </div>
+    );
+};
+
+/** D10–D13 + EC-06: the queue card in the thread; the number NEVER counts upward — a regressed position drops to the band and holds until it improves. */
+let bestPosition: number | null = null;
+export function queueView(): { position: number | null; band: string } | null {
+    const q = envelope.value.queue;
+    if (!q) {
+        bestPosition = null;
+        return null;
+    }
+    if (q.position !== null && (bestPosition === null || q.position < bestPosition))
+        bestPosition = q.position;
+    const shown =
+        q.position !== null && bestPosition !== null && q.position <= bestPosition
+            ? q.position
+            : null;
+    return { position: shown, band: q.band };
+}
+
+const QueueCard: FunctionComponent = () => {
+    const q = queueView();
+    if (!q) return null;
+    const bandKey = q.band === 'off_hours' ? 'queue.band_long' : `queue.band_${q.band}`;
+    return (
+        <section
+            class="nlw-queue"
+            data-role="queue"
+            data-position={q.position ?? ''}
+            aria-live="off"
+        >
+            {q.position !== null ? (
+                <strong>{t('queue.position', { n: q.position })}</strong>
+            ) : (
+                <strong>{t('queue.waiting')}</strong>
+            )}
+            <span>
+                {q.position !== null ? t(bandKey) : t('queue.usually', { band: t(bandKey) })}
+            </span>
+            <span>{t('queue.hold')}</span>
+        </section>
+    );
+};
+
+export const Thread: FunctionComponent<{
+    onStar: (token: string, score: number) => void;
+    onShortcut: (label: string) => void;
+}> = ({ onStar, onShortcut }) => {
+    const list = messages.value;
+    const endRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ block: 'end' });
+    }, [list.length]);
+    if (list.length === 0) {
+        const shortcuts =
+            config.value?.config.content.shortcuts.filter((s) => s.kind === 'chat') ?? [];
+        return (
+            <div class="nlw-empty" data-role="empty">
+                <span aria-hidden="true">✻</span>
+                <strong>{t('messages.empty_title')}</strong>
+                <span>{t('messages.empty_body')}</span>
+                <div class="nlw-list">
+                    {shortcuts.map((s, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            class="nlw-btn"
+                            onClick={() => onShortcut(s.label[language.value] ?? s.target)}
+                        >
+                            {s.label[language.value] ?? s.target}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+    let lastDay = '';
+    const survey = list.filter((m) => m.survey).pop()?.survey ?? null;
+    return (
+        <div class="nlw-thread" data-role="thread">
+            {list.map((m) => {
+                const day = dayLabel(m.created_at);
+                const sep = day !== lastDay;
+                lastDay = day;
+                return (
+                    <>
+                        {sep ? (
+                            <span class="nlw-day" key={'d' + m.id}>
+                                {day}
+                            </span>
+                        ) : null}
+                        <Bubble key={m.id} m={m} />
+                    </>
+                );
+            })}
+            <QueueCard />
+            {survey ? <StarRow token={survey.token} onStar={onStar} /> : null}
+            <div ref={endRef} />
+        </div>
+    );
+};
+
+/** D16/D17: the CSAT star row inline — a radiogroup; the thread simply carries on after it (BR-04). */
+export const StarRow: FunctionComponent<{
+    token: string;
+    onStar: (token: string, score: number) => void;
+}> = ({ token, onStar }) => (
+    <section class="nlw-queue" data-role="csat">
+        <strong>{t('csat.question')}</strong>
+        <div class="nlw-stars" role="radiogroup" aria-label={t('csat.question')}>
+            {[1, 2, 3, 4, 5].map((n) => (
+                <button
+                    key={n}
+                    type="button"
+                    role="radio"
+                    aria-checked="false"
+                    aria-label={t('csat.star', { n })}
+                    class="nlw-star"
+                    onClick={() => onStar(token, n)}
+                >
+                    ★
+                </button>
+            ))}
+        </div>
+        <span>{t('csat.optional')}</span>
+    </section>
+);

@@ -90,8 +90,13 @@ final class WidgetShimController
         $nonce = $request->attributes->get(SecurityHeaders::REQUEST_NONCE_ATTRIBUTE);
         $nonce = is_string($nonce) ? $nonce : '';
         $src = '/w/'.$bundle['panel'];
+        $links = '';
+        foreach ($bundle['css'] as $css) {
+            $links .= '<link rel="stylesheet" href="'.htmlspecialchars('/w/'.$css, ENT_QUOTES).'">';
+        }
         // No literal copy: the document is a mount point; every visible string arrives through the config envelope (N-03).
-        $html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex">'
+        $html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="color-scheme" content="light dark">'
+            .$links
             .'<script type="module" nonce="'.htmlspecialchars($nonce, ENT_QUOTES).'" src="'.htmlspecialchars($src, ENT_QUOTES).'"></script>'
             .'</head><body><div id="nlw-root" data-widget="'.htmlspecialchars(WidgetBundleResolver::id($widget), ENT_QUOTES).'"></div></body></html>';
 

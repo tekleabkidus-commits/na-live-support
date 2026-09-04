@@ -118,6 +118,71 @@ declare const __NLW_CFG: ShimConfig | undefined;
     const origPush = history.pushState;
     const origReplace = history.replaceState;
 
+    /** Doc 02 FR-21/EC-08: the session is minted FROM THE HOST PAGE — the request's Origin header is the
+     *  origin of record (the server refuses a declared origin that differs), and only this page can
+     *  present the operator's origin. The visitor token travels ONLY to the panel frame, targeted
+     *  at the frame origin; nothing of it is exposed on window.PlatformChat. */
+    let session: Promise<unknown> | null = null;
+    // No JSON.stringify here: a hostile host (SS-03) tampers it; the body is two strings and a list.
+    const jsonString = (v: string): string =>
+        '"' +
+        v.replace(
+            /[\\"\u0000-\u001f]/g,
+            (c) => '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4),
+        ) +
+        '"';
+    // FR-08 continuity: the panel keeps the visitor token in ITS OWN origin's storage (never the host's)
+    // and hands it over on `ready`; presented with its cookie the door answers the SAME visitor (FR-22).
+    const mintSession = (token?: string | null): Promise<unknown> => {
+        try {
+            let list = '';
+            for (const a of ancestors) list += (list ? ',' : '') + jsonString(a);
+            session = fetch(`${cfg!.platform_origin}/api/widget/v1/session`, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Tenant-Key': cfg!.widget_key,
+                    ...(token ? { 'X-Visitor-Token': token } : {}),
+                    Accept: 'application/json',
+                },
+                body: '{"origin":' + jsonString(origin) + ',"ancestors":[' + list + ']}',
+            })
+                .then((r) => (r.status === 200 || r.status === 201 ? r.json() : null))
+                .catch(() => null);
+        } catch {
+            session = Promise.resolve(null);
+        }
+        return session;
+    };
+    const viewport = (): { width: number; height: number } => ({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+    const handHost = (token?: string | null): void => {
+        void mintSession(token).then((s) => {
+            try {
+                panel?.contentWindow?.postMessage(
+                    {
+                        nlw: 1,
+                        type: 'host',
+                        data: {
+                            origin,
+                            ancestors,
+                            url: location.href,
+                            referrer: document.referrer,
+                            viewport: viewport(),
+                            session: s,
+                        },
+                    },
+                    cfg!.frame_origin,
+                );
+            } catch {
+                /* silent */
+            }
+        });
+    };
     const post = (type: string, data?: unknown): void => {
         try {
             panel?.contentWindow?.postMessage({ nlw: 1, type, data }, cfg!.frame_origin);
@@ -163,6 +228,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
         return r;
     };
     window.addEventListener('popstate', onRoute);
+    window.addEventListener('resize', () => post('viewport', viewport()));
 
     // The panel's messages: ready, size, events for the host hooks (names only, FR-02), EC-05 focus probe.
     function onMessage(ev: MessageEvent): void {
@@ -171,16 +237,30 @@ declare const __NLW_CFG: ShimConfig | undefined;
         switch (type) {
             case 'ready':
                 ready = true;
-                // The host facts the panel's /session needs (Doc 02 FR-21/EC-08's server layer reads the
-                // declared ancestor chain; the loader is the only party that can see it): origin, the
-                // ancestor origins, the page URL — never the page's content.
-                post('host', {
-                    origin,
-                    ancestors,
-                    url: location.href,
-                    referrer: document.referrer,
-                });
+                // The host facts + the minted session go to the PANEL frame only (targeted origin):
+                // origin, the ancestor chain, the page URL — never the page's content.
+                // ONLY the panel frame's ready mints the session: the launcher frame boots the same file and
+                // says ready too — a second mint would rotate the FR-22 cookie and orphan the panel's token.
+                if (ev.source === panel?.contentWindow)
+                    handHost((data as { token?: string | null } | undefined)?.token ?? null);
                 for (const q of queue.splice(0)) post('api', { method: q.method, args: q.args });
+                break;
+            case 'launcher':
+                // The panel hands the launcher frame its strings, unread count and open state (one config
+                // fetch per page, not two); relayed frame-to-frame through this bus, targeted.
+                try {
+                    launcher?.contentWindow?.postMessage(
+                        { nlw: 1, type: 'launcher', data },
+                        cfg!.frame_origin,
+                    );
+                } catch {
+                    /* silent */
+                }
+                break;
+            case 'session':
+                // The panel asks for a fresh mint (a refused token, the retry card): re-POST and hand it over again.
+
+                handHost((data as { token?: string | null } | undefined)?.token ?? null);
                 break;
             case 'size':
                 sizePanel(data as { open: boolean; sheet: boolean });
@@ -219,6 +299,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
         panel = frame('nlw-panel', cfg, { width: '0px', height: '0px' }); // opens on demand; 380×640 or the full sheet
         document.body.appendChild(launcher);
         document.body.appendChild(panel);
+
         beacon(cfg, 'load');
     } catch {
         // EC-02: a host CSP that blocks the frame — silent, beaconed with the copy-paste fix's reason.
@@ -302,7 +383,13 @@ declare const __NLW_CFG: ShimConfig | undefined;
         return {
             globals: ['PlatformChat', '__nlwLoaded'],
             nodes: [launcher?.id ?? '', panel?.id ?? ''].filter(Boolean),
-            listeners: ['message', 'popstate', 'history.pushState', 'history.replaceState'],
+            listeners: [
+                'message',
+                'popstate',
+                'resize',
+                'history.pushState',
+                'history.replaceState',
+            ],
         };
     }
 })();

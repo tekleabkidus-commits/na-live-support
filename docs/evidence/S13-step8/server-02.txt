@@ -1,0 +1,95 @@
+### 8a server suites — 2026-09-04T18:23:41Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Feature\Widget\MetricExclusionTestModeTest
+  ✓ it N-14 second half (P-N14): a ticket whose conversation opened und… 6.56s  
+  ✓ it positive control: a LIVE widget's ticket stays INCLUDED by both…  0.06s  
+
+   PASS  Tests\Feature\Widget\NoGhostProfileTest
+  ✓ it FR-05: a session + a config read + a cursor read mint NO custome… 0.15s  
+
+[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member
+
+   PASS  Tests\Feature\Widget\QueuePositionTest
+  ✓ it P-QPOS: forWaitingTicket answers band + the ticket's own positio… 0.20s  
+  ✓ it Doc13/QueuePositionPush: ONE ordered read + ONE membership query… 0.28s  
+
+   PASS  Tests\Feature\Widget\SecretRotationTest
+  ✓ it rotates with an overlap window: old + new verify inside it, only… 0.08s  
+
+   PASS  Tests\Feature\Widget\WidgetBeaconTest
+  ✓ it T-08: load/open/blocked-origin/mount-fail beacons increment the…  0.11s  
+  ✓ it T-08: a panel error beacon with a stack is SCRUBBED before sampl… 0.07s  
+
+   PASS  Tests\Feature\Widget\WidgetBundlePointerTest
+  ✓ it FR-04: the pointer is the NEWEST live row of the widget's channe… 0.11s  
+  ✓ it C4: the pointer commands run on the platform connection in local… 0.06s  
+
+   PASS  Tests\Feature\Widget\WidgetContextAllowlistTest
+  ✓ it FR-24: only allowlisted custom keys survive; the row is one per…  0.12s  
+
+   PASS  Tests\Feature\Widget\WidgetFormStepsTest
+  ✓ it validates a pre-chat step against the published schema: required… 0.17s  
+
+   PASS  Tests\Feature\Widget\WidgetFormsSeedTest
+  ✓ it seeds the pre-chat and offline forms once, byte-equal to the Doc… 0.07s  
+
+   PASS  Tests\Feature\Widget\WidgetMediaOriginTest
+  ✓ it P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed… 0.11s  
+  ✓ it SEC-04 stands: an unscanned key has no download path even on the… 0.04s  
+
+   PASS  Tests\Feature\Widget\WidgetMessagesTest
+  ✓ it POST messages ACKs 202 and enqueues NormalizeInbound on webchat-… 0.07s  
+  ✓ it idempotency: the same client_message_id POSTed twice lands ONE r… 0.09s  
+  ✓ it GET messages is the visitor-curated cursor page: notes and quara… 0.11s  
+  ✓ it POST receipts: the FIRST delivered producer — an outbound row mo… 0.12s  
+  ✓ it POST typing records the customer signal with its TTL (EC-12) and… 0.10s  
+  ✓ it GET config: the live config over the neutral defaults, the adapt… 0.07s  
+
+   PASS  Tests\Feature\Widget\WidgetModelTest
+  ✓ it P-WIDGET: the Designer's columns are mass-assignable on the Widg… 0.04s  
+
+   PASS  Tests\Feature\Widget\WidgetOfflineFormTest
+  ✓ it FR-15: the offline form lands a REAL offline-tagged ticket (sour… 0.18s  
+  ✓ it FR-15 refusals are inline and neutral: a missing required answer… 0.12s  
+
+   PASS  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG…  0.05s  
+  ✓ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.06s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 0.10s  
+
+   PASS  Tests\Feature\Webchat\ChannelHealthConsumerTest
+  ✓ it writes the widget Health channel indicator from channel.health.c… 0.06s  
+
+   PASS  Tests\Feature\Webchat\PreChatConsumerTest
+  ✓ it lands the pre-chat answers: staff-collected fields on the first…  0.21s  
+  ✓ it STOP-5A (a): a pre-chat phone that ALREADY sits on another custo… 0.16s  
+
+   PASS  Tests\Security\WidgetOriginLayersTest
+  ✓ it SERVER layer alone: with the CORS stamp removed, a session from…  0.07s  
+  ✓ it CORS layer alone: a valid visitor token used from a hostile orig… 0.09s  
+  ✓ it the three layers are INDEPENDENT code paths: loader (client), CO… 0.02s  
+
+   PASS  Tests\Security\WidgetVisitorScopeTest
+  ✓ it AC-04: a visitor reads and receipts ONLY its own thread; another… 0.16s  
+  ✓ it AC-04: the survey and context doors are the visitor's own — a fo… 0.10s  
+
+   PASS  Tests\Security\FrameAncestorsTest
+  ✓ it static sweep: the frame-ancestors directive is written in exactl… 0.14s  
+  ✓ it countersign condition 1 — the ESCAPE HATCH is the attribute: REQ… 0.19s  
+  ✓ it source mapping: exact https origins verbatim, *.brand wildcards…  0.02s  
+  ✓ it surfaces on real requests: the panel document frames ONLY its wi… 0.08s  
+
+   PASS  Tests\Security\NoVerifiedAffordanceTest
+  ✓ it has no verified-shaped column on any customer table (schema swee… 0.03s  
+  ✓ it has no verified-named component anywhere in the client tree (BR-… 0.03s  
+  ✓ it keeps the customer UI namespaces and customers.* lang files free… 0.02s  
+  ✓ it keeps the Customers server namespaces free of any verified API f… 0.02s  
+
+   PASS  Tests\Contract\WebchatEventConsumerContractsTest
+  ✓ A-45: every consumer the catalog declares for Doc 13 is registered…  0.03s  
+
+  Tests:    44 passed (363 assertions)
+  Duration: 10.81s
+
+exit=0

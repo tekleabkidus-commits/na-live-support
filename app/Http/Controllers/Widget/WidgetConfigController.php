@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Widget;
 
+use App\Domain\Auth\Widget\WidgetVisitor;
 use App\Domain\Conversations\Adapters\AdapterRegistry;
+use App\Domain\Routing\Estimator\Estimator;
 use App\Domain\Routing\Hours\HoursContract;
+use App\Domain\Routing\Intake\TenantDefaultDepartment;
 use App\Domain\Webchat\Config\WidgetConfigReader;
+use App\Domain\Webchat\Realtime\WebchatPusher;
 use App\Domain\Webchat\Visitor\VisitorConversation;
 use App\Domain\Webchat\WebchatAdapter;
 use App\Http\Middleware\ResolveTenant;
 use App\Models\Widget;
 use App\Support\Flags\FeatureRegistry;
 use App\Support\Settings\SettingsRepository;
+use App\Support\Tenancy\TenantContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -36,6 +42,9 @@ final class WidgetConfigController
         private readonly AdapterRegistry $adapters,
         private readonly HoursContract $hours,
         private readonly SettingsRepository $settings,
+        private readonly Estimator $estimator,
+        private readonly TenantDefaultDepartment $defaultDepartment,
+        private readonly TenantContext $context,
         private readonly FeatureRegistry $features,
     ) {}
 
@@ -50,6 +59,10 @@ final class WidgetConfigController
         $department = $this->departmentFrom($config);
         $language = $this->resolveLanguage($request, $config);
         $open = $this->hours->isOpen($department, $now);
+        $visitor = $request->user('widget');
+        if (! $visitor instanceof WidgetVisitor) {
+            throw new NotFoundHttpException;
+        }
 
         $payload = [
             'v' => 1,
@@ -65,6 +78,12 @@ final class WidgetConfigController
                 'voice' => $this->features->active('widget.voice_recording') && ($behavior['file_upload'] ?? true) === true,
             ],
             'transport' => [
+                // The visitor's OWN two channels, named by the server (the tenant id never travels to the client
+                // as a fact of its own — the names are opaque strings the broadcasting-auth door checks).
+                'channels' => [
+                    'thread' => sprintf('tenant.%s.visitor.%s.%s', $this->context->tenantId(), $visitor->visitorId, WebchatPusher::SUFFIX_THREAD),
+                    'queue' => sprintf('tenant.%s.visitor.%s.%s', $this->context->tenantId(), $visitor->visitorId, WebchatPusher::SUFFIX_QUEUE),
+                ],
                 'polling_interval_seconds' => self::int($this->settings->get('widget.polling.interval_seconds'), 5),
                 'config_poll_seconds' => self::int($this->settings->get('widget.config.poll_seconds'), 300),
                 'reverb' => [
@@ -74,6 +93,9 @@ final class WidgetConfigController
                     'scheme' => self::str(config('reverb.apps.apps.0.options.scheme'), 'https'),
                 ],
             ],
+            // Home's wait band (FR-09; BR-02 honest presence): Doc 11's estimate for the widget's department
+            // queue — band only, never a count (SEC-05); off-hours carries opens_at below.
+            'home' => ['band' => $this->homeBand($open, $department, $now)],
             'hours' => [
                 'open' => $open,
                 'opens_at' => $open ? null : $this->hours->nextOpen($department, $now)->format(DATE_ATOM),
@@ -103,6 +125,23 @@ final class WidgetConfigController
         }
 
         return $widget;
+    }
+
+    /**
+     * FR-09's wait band for Home: the widget's department queue when `hours_source`
+     * names one, else the tenant default department's default queue (A-55). Off hours
+     * is its own band; with no queue at all the band is null and Home shows none.
+     */
+    private function homeBand(bool $open, ?string $department, \DateTimeImmutable $now): ?string
+    {
+        if (! $open) {
+            return 'off_hours';
+        }
+        $queue = $department !== null
+            ? DB::table('departments')->where('id', $department)->value('default_queue_id')
+            : ($this->defaultDepartment->resolve()['queue_id'] ?? null);
+
+        return is_string($queue) ? $this->estimator->forQueue($queue, $now)['band'] : null;
     }
 
     /** @param array<string, mixed> $config */
@@ -166,9 +205,15 @@ final class WidgetConfigController
         if (! is_array($strings)) {
             return [];
         }
-        /** @var array<string, mixed> $strings */
+        // Customer-facing branches ONLY: the staff notes (`identity.*`, `prechat.*`), the Backoffice
+        // label (`feature.*`) and the Designer (`designer.*`) never ride to the visitor.
+        foreach (['feature', 'identity', 'prechat', 'designer'] as $staff) {
+            unset($strings[$staff]);
+        }
+        /** @var array<string, mixed> $customer */
+        $customer = array_filter($strings, static fn ($k): bool => is_string($k), ARRAY_FILTER_USE_KEY);
 
-        return $strings;
+        return $customer;
     }
 
     private static function int(mixed $value, int $default): int

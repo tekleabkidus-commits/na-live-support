@@ -33,11 +33,11 @@ final class WidgetBundleResolver
 {
     public const MANIFEST = 'w/.vite/manifest.json';
 
-    /** @return array{panel: string, loader: string, version: string, source: string} file names under public/w */
+    /** @return array{panel: string, loader: string, css: list<string>, version: string, source: string} file names under public/w */
     public function forWidget(Widget $widget): array
     {
         $manifest = $this->manifest();
-        $current = ['panel' => $manifest['panel'], 'loader' => $manifest['loader'], 'version' => self::hashOf($manifest['panel']), 'source' => 'build'];
+        $current = ['panel' => $manifest['panel'], 'loader' => $manifest['loader'], 'css' => $manifest['css'], 'version' => self::hashOf($manifest['panel']), 'source' => 'build'];
 
         $channel = $widget->getAttribute('bundle_channel');
         $channel = is_string($channel) && $channel !== '' ? $channel : 'stable';   // a model created without the column reads the DB default
@@ -56,7 +56,9 @@ final class WidgetBundleResolver
             $panel = 'panel.'.$row->bundle_hash.'.js';
             $loader = 'loader.'.$row->loader_hash.'.js';
             if (is_file(public_path('w/'.$panel)) && is_file(public_path('w/'.$loader))) {
-                return ['panel' => $panel, 'loader' => $loader, 'version' => $row->bundle_hash, 'source' => 'pointer:'.$row->id];
+                $css = is_file(public_path('w/panel.'.$row->bundle_hash.'.css')) ? ['panel.'.$row->bundle_hash.'.css'] : [];
+
+                return ['panel' => $panel, 'loader' => $loader, 'css' => $css, 'version' => $row->bundle_hash, 'source' => 'pointer:'.$row->id];
             }
             Log::warning('widget bundle pointer names a file that is not on disk — skipped', ['bundle_hash' => $row->bundle_hash, 'channel' => $channel]);
         }
@@ -64,7 +66,7 @@ final class WidgetBundleResolver
         return $current;
     }
 
-    /** @return array{panel: string, loader: string} the current build's entry files (the manifest is the only source) */
+    /** @return array{panel: string, loader: string, css: list<string>} the current build's entry files (the manifest is the only source) */
     public function manifest(): array
     {
         $path = public_path(self::MANIFEST);
@@ -72,12 +74,14 @@ final class WidgetBundleResolver
         if ($raw === false) {
             throw new \RuntimeException('the widget build is missing (public/w/.vite/manifest.json) — run `npm run build:widget`');
         }
-        /** @var array<string, array{file: string, name?: string, isEntry?: bool}> $entries */
+        /** @var array<string, array{file: string, name?: string, isEntry?: bool, css?: list<string>}> $entries */
         $entries = json_decode($raw, true, 8, JSON_THROW_ON_ERROR);
         $panel = $loader = null;
+        $css = [];
         foreach ($entries as $entry) {
             if (($entry['isEntry'] ?? false) && ($entry['name'] ?? '') === 'panel') {
                 $panel = $entry['file'];
+                $css = array_values(array_filter($entry['css'] ?? [], 'is_string'));
             }
             if (($entry['isEntry'] ?? false) && ($entry['name'] ?? '') === 'loader') {
                 $loader = $entry['file'];
@@ -87,7 +91,7 @@ final class WidgetBundleResolver
             throw new \RuntimeException('the widget manifest has no panel/loader entry');
         }
 
-        return ['panel' => $panel, 'loader' => $loader];
+        return ['panel' => $panel, 'loader' => $loader, 'css' => $css];
     }
 
     /** The model's key, narrowed (Eloquent types it mixed). */

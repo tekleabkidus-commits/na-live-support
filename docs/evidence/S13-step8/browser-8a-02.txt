@@ -1,0 +1,44 @@
+### 8a — the three failing legs rerun on widget after the fixes — 2026-09-04T18:19:36Z
+
+Running 7 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (649ms)
+  ✓  2 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (800ms)
+  ✓  3 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (728ms)
+  ✓  4 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (809ms)
+  ✓  5 [widget] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (669ms)
+  ✘  6 [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (10.9s)
+  ✓  7 [widget] › tests/Browser/widget-thread.spec.ts:40:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (828ms)
+
+
+  1) [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      35 |     await expect(
+      36 |         page.frameLocator('iframe#nlw-panel').locator('[data-message][data-author=customer]'),
+    > 37 |     ).toHaveCount(1);
+         |       ^
+      38 | });
+      39 |
+      40 | test('G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled)', async ({
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:37:7
+
+    Error Context: test-results/widget-thread-D18-→-D02-em-645f3-n-announces-Today-separates-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates 
+  6 passed (16.6s)
+exit=1

@@ -1,0 +1,91 @@
+### 8a — full browser set (panel/home/thread + the step-7 four), projects widget + widget-375 — after: loader-minted session, host viewport, tampered-JSON hardening, panel-only ready, FR-08 token continuity — 2026-09-04T18:22:33Z
+
+Running 32 tests using 1 worker
+
+  ✘   1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (767ms)
+  ✓   2 [widget] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.3s)
+  ✓   3 [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (723ms)
+  ✓   4 [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (684ms)
+  ✓   5 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (717ms)
+  ✓   6 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (743ms)
+  ✓   7 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (619ms)
+  ✓   8 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (633ms)
+  ✓   9 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  10 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (907ms)
+  ✓  11 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (831ms)
+  ✓  12 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (743ms)
+  ✓  13 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (822ms)
+  ✓  14 [widget] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (659ms)
+  ✓  15 [widget] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (6.5s)
+  ✓  16 [widget] › tests/Browser/widget-thread.spec.ts:40:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (821ms)
+  ✘  17 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read (676ms)
+  ✓  18 [widget-375] › tests/Browser/widget-frame-ancestors.spec.ts:9:1 › the panel frames inside the allowed customer origin and is refused from the platform origin (2.2s)
+  ✓  19 [widget-375] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site (763ms)
+  ✓  20 [widget-375] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents (643ms)
+  ✓  21 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (615ms)
+  ✓  22 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (642ms)
+  ✓  23 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (563ms)
+  ✓  24 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (533ms)
+  ✓  25 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  26 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (962ms)
+  ✓  27 [widget-375] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (842ms)
+  ✓  28 [widget-375] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (746ms)
+  ✓  29 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (806ms)
+  ✓  30 [widget-375] › tests/Browser/widget-panel.spec.ts:80:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (597ms)
+  ✓  31 [widget-375] › tests/Browser/widget-thread.spec.ts:8:1 › D18 → D02: empty state, then a sent message earns ✓✓ only when the server has it; the log region announces; Today separates (6.5s)
+  ✓  32 [widget-375] › tests/Browser/widget-thread.spec.ts:40:1 › G01: Shift+Enter is a newline, Enter sends; the composer never sends an empty message (the send button is disabled) (739ms)
+
+
+  1) [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+        "message",
+        "popstate",
+    +   "resize",
+      ]
+
+      43 |     });
+      44 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+    > 45 |     expect(audit.listeners).toEqual(['message', 'popstate']);
+         |                             ^
+      46 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      47 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+      48 |     expect(audit.declared.nodes.sort()).toEqual(['nlw-launcher', 'nlw-panel']);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:45:29
+
+    Error Context: test-results/widget-footprint-AC-02-glo-9490b-he-page-input-is-never-read-widget/error-context.md
+
+  2) [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+        "message",
+        "popstate",
+    +   "resize",
+      ]
+
+      43 |     });
+      44 |     expect(audit.added).toEqual(['PlatformChat', '__nlwLoaded']);
+    > 45 |     expect(audit.listeners).toEqual(['message', 'popstate']);
+         |                             ^
+      46 |     expect(audit.nodes).toEqual(['iframe#nlw-launcher', 'iframe#nlw-panel']);
+      47 |     expect(audit.declared.globals.sort()).toEqual(audit.added);
+      48 |     expect(audit.declared.nodes.sort()).toEqual(['nlw-launcher', 'nlw-panel']);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-footprint.spec.ts:45:29
+
+    Error Context: test-results/widget-footprint-AC-02-glo-9490b-he-page-input-is-never-read-widget-375/error-context.md
+
+  2 failed
+    [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+    [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {message, popstate}; nodes = the two iframes — nothing else; the page input is never read 
+  30 passed (41.8s)
+exit=1
