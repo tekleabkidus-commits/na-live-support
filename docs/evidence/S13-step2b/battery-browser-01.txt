@@ -1,0 +1,470 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      battery-browser
+# set:        S13-step2b
+# command:    make browser
+# started:    2026-09-04T08:27:15Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+npx playwright test
+
+Running 303 tests using 1 worker
+
+  ✓    1 [chromium] › tests/Browser/admin-tag-manager.spec.ts:82:1 › R-22 THE RENAME THEN THE MERGE: consequence before save, the verb on the primary, the typed gate only on the irreversible merge, the count on the result strip, the DB converged (2.4s)
+  ✓    2 [chromium] › tests/Browser/admin-tag-manager.spec.ts:125:1 › R-22 J19: under 1024 the surface is read-only — the notice shows and no rename affordance renders (904ms)
+  ✓    3 [chromium] › tests/Browser/ai-backoffice.spec.ts:51:1 › AC-08 bannered + FR-18 grid: no banner while on; flip chatbot/telegram OFF behind the confirmation → the toggle is red with "OFF since … by …" and the workspace shows the banner; flip back → banner gone (1.7s)
+  ✓    4 [chromium] › tests/Browser/ai-backoffice.spec.ts:90:1 › FR-11/BR-07 UI: publish stays disabled until a simulation of these exact values ran; the simulation renders as a text table with deltas (1.1s)
+  ✓    5 [chromium] › tests/Browser/ai-copilot.spec.ts:68:1 › FR-14: the Copilot tab renders chips (text, ✦ accent), the summary region, KB/similar/macro regions; Suggest → a card with confidence AS TEXT → Insert puts the draft in the composer, focus returns to the textarea, and the send carries the artifact id (FR-16) (4.6s)
+  ✓    6 [chromium] › tests/Browser/ai-copilot.spec.ts:111:1 › FR-15: the composer AI actions render in the slot (placeholder gone); Improve on tagged staff text → a card → Insert replaces the composer text; a second card is Discarded (5.9s)
+  ✓    7 [chromium] › tests/Browser/ai-copilot.spec.ts:138:1 › COUNTERSIGNED OBLIGATIONS: the NO-SLOT fallback — a Read Only user sees the placeholder ai-slot span and the Copilot slot text exactly as before; and no kill-switch banner renders while every switch is on (1.3s)
+  ✓    8 [chromium] › tests/Browser/ai-honesty.spec.ts:64:1 › AC-05 DOM: the AI message carries data-role=ai-marker with NON-EMPTY text and the AI accent; a customer message carries none; the translated agent message carries ai-translation with the original, the AI message does not (1.3s)
+  ✓    9 [chromium] › tests/Browser/ai-honesty.spec.ts:97:1 › AC-05 DOM: the Copilot card and chips carry the ✦ accent label (text) (1.2s)
+  ✓   10 [chromium] › tests/Browser/ai-honesty.spec.ts:104:1 › Doc 08 EC-03 chip (packet 1): chip-inactive renders for the deleted-account fixture and ONLY there (1.6s)
+
+  ✓   11 [chromium] › tests/Browser/auth-screens.spec.ts:182:1 › §13: keyboard-only sign-in at 360 px; errors are role="alert" and aria-associated; axe-clean in idle and error states (2.0s)
+  ✓   12 [chromium] › tests/Browser/auth-screens.spec.ts:216:1 › §14: the language switcher re-renders the card in Amharic via the guest cookie, and back (609ms)
+  ✓   13 [chromium] › tests/Browser/auth-screens.spec.ts:232:1 › §8 wizard: focus lands on each step heading, the code field is structurally ONE input that auto-submits, and the codes step gates on checkbox OR download; the devices table is axe-clean in the single-current-session state (5.6s)
+  ✓   14 [chromium] › tests/Browser/auth-screens.spec.ts:316:1 › §8 challenge step: heading takes focus, a wrong code alerts generically and clears, the right one auto-submits in; forgot-password stays visible (3.1s)
+  ✓   15 [chromium] › tests/Browser/auth-screens.spec.ts:343:1 › FR-07 recovery path: consumes one code, shows the remaining count before moving on (2.3s)
+  ✓   16 [chromium] › tests/Browser/auth-screens.spec.ts:368:1 › EC-02: a session revoked elsewhere raises the re-login modal OVER untouched page state; re-login (password + code) replays the action (4.5s)
+  ✓   17 [chromium] › tests/Browser/auth-screens.spec.ts:407:1 › §8 timeout toast: fires at T-2 min on the SERVER's deadline, and "stay signed in" defers it (1.0s)
+  ✓   18 [chromium] › tests/Browser/auth-screens.spec.ts:436:1 › §8/§9 invitation: dead link screen, resend, profile completion (name + language), text strength meter, visibility toggle (6.1s)
+  ✓   19 [chromium] › tests/Browser/customers-directory.spec.ts:55:1 › G01/EC-08: the table — scope count in the header, the collision pair told apart by short id, the blocked badge, identities with @username and the NATIONAL phone, the bulk bar limited to tags and export (1.7s)
+  ✓   20 [chromium] › tests/Browser/customers-directory.spec.ts:121:1 › G03: the viewer WITHOUT customers.rg_flag.view gets FIVE filters — no RG control, no gap, no dot anywhere — and the SAME header count (2.4s)
+  ✓   21 [chromium] › tests/Browser/customers-directory.spec.ts:168:1 › G04: searching an old username finds the customer AND says which name matched — 'now' naming the current one (1.3s)
+  ✓   22 [chromium] › tests/Browser/customers-directory.spec.ts:183:1 › G05: Amharic search matches on its own terms — the first part of a name finds its holder (1.7s)
+  ✓   23 [chromium] › tests/Browser/customers-directory.spec.ts:192:1 › G06 (UI half): a degraded answer renders the reduced-mode banner naming what is missing, and hits say how they matched — the SERVER half is the pest dead-port drill (1.3s)
+  ✓   24 [chromium] › tests/Browser/customers-directory.spec.ts:228:1 › G09: nobody matches — the empty state says WHAT was searched and across how many, and the clear button restores the table (1.5s)
+  ✓   25 [chromium] › tests/Browser/customers-directory.spec.ts:243:1 › G02 (375): the table becomes cards — who, how to reach them, open count, how long ago — and a phone typed AS DIALLED finds its holder (1.3s)
+  ✓   26 [chromium] › tests/Browser/customers-honesty.spec.ts:79:1 › H02/H04: the betting card wears "Staff-collected" beside its heading — never a verified affordance anywhere on the page — and the retired loyalty-tier fact stays, read-only and labeled (1.3s)
+  ✓   27 [chromium] › tests/Browser/customers-honesty.spec.ts:104:1 › H03: a staff-set language is sticky — the detected difference arrives as a one-line OFFER chip, not an overwrite (969ms)
+  ✓   28 [chromium] › tests/Browser/customers-honesty.spec.ts:116:1 › H07: the rollups card admits it is behind — ◷ plus the WORD when the beat is old WITH pending work; the chip leaves when the beat is fresh (stored value driven, never a sleep) (1.9s)
+  ✓   29 [chromium] › tests/Browser/customers-honesty.spec.ts:155:1 › H05: export — the ask states the contents and the watermark, the start answers building-with-carry-on, and ready hands a dying link (the request door real; the signing poll intercepted — the job law is pest-proven) (5.6s)
+  ✓   30 [chromium] › tests/Browser/customers-honesty.spec.ts:195:1 › H06 (+375): erasure — "This does not delete anything" is the FIRST sentence at every size, the reason is required, and after sending the profile REPORTS the pending request with its reference (1.0s)
+  ✓   31 [chromium] › tests/Browser/customers-panel.spec.ts:90:1 › A01–A11 (1440): the enriched panel — name, sourced chips, tags, pinned note, identities with provenance, betting card with the A06 hint, History, recent tickets — AC-08's order and lazy sections (1.7s)
+  ✓   32 [chromium] › tests/Browser/customers-panel.spec.ts:136:1 › A03: the username-history popover is keyboard-reachable and lists both earlier names with the search note (1.2s)
+  ✓   33 [chromium] › tests/Browser/customers-panel.spec.ts:153:1 › A04: copy-on-click is a BUTTON and the confirmation is SPOKEN — the live region receives it, not only the chip (1.2s)
+  ✓   34 [chromium] › tests/Browser/customers-panel.spec.ts:208:1 › AC-B4-03 (1440): the five announce moments, spoken once each, in order, without re-reading the card (1.2s)
+  ✓   35 [chromium] › tests/Browser/customers-panel.spec.ts:217:1 › AC-B4-03 (375): the SAME cycle in the sheet — B14's identical controls, the same contract spoken (1.2s)
+  ✓   36 [chromium] › tests/Browser/customers-panel.spec.ts:234:1 › B4-S05 E01/E03: the RG banner + tab dot for the PERMITTED viewer; ABSENCE — no dot, no banner, no rg key — for the viewer without the verdict (2.1s)
+  ✓   37 [chromium] › tests/Browser/customers-panel.spec.ts:259:1 › §8: the BLOCKED banner is drawn (red family) and the tab dot stays dark — blocked is not a dot state (the part-2 ruling, recorded) (1.1s)
+  ✓   38 [chromium] › tests/Browser/customers-panel.spec.ts:272:1 › A13/A14: a shell is a real customer — short-id head, guidance not apology; empty notes/files state their emptiness (1.2s)
+  ✓   39 [chromium] › tests/Browser/customers-panel.spec.ts:290:1 › A15: one section fails, the rest survive — the tickets section shows its own error + retry while identities stay alive (1.3s)
+  ✓   40 [chromium] › tests/Browser/customers-panel.spec.ts:310:1 › A16: two agents, one field — the later write LANDS and the loser is told by name, with both edits in the audit trail (1.2s)
+  ✓   41 [chromium] › tests/Browser/customers-profile.spec.ts:69:1 › B4-S04 + BR-05 + AC-03's UI ARC: merge B into A (radios with both values, checklist WITH counts, the MERGE token beside its input, reason required) → B's URL resolves as the TOMBSTONE → undo → B is a profile again (1.7s)
+  ✓   42 [chromium] › tests/Browser/customers-profile.spec.ts:115:1 › B4-S05 E04–E07: RG set with reason → history shows BOTH acts after clear — the record never deletes (1.2s)
+  ✓   43 [chromium] › tests/Browser/customers-profile.spec.ts:140:1 › B4-S05 F01/F04: block with mandatory reason (red family), then unblock as its own reasoned act (A-39) (1.2s)
+  ✓   44 [chromium] › tests/Browser/customers-profile.spec.ts:155:1 › B4-S03 C02: linking a phone already on ANOTHER profile refuses with the merge-instead offer — an id, never a name (1.0s)
+  ✓   45 [chromium] › tests/Browser/customers-profile.spec.ts:172:1 › B4-S03 C03/C04 + AC-04: the unlink dialog's content COMES FROM THE MOVE SET — counts rendered, the UNLINK token beside its input, the button repeating the count (1.2s)
+  ✓   46 [chromium] › tests/Browser/customers-profile.spec.ts:204:1 › [D17]: the Audit tab renders its seam for an audit.view holder — absent for this viewer without the key (976ms)
+
+  ✓   47 [chromium] › tests/Browser/dead-letters.spec.ts:62:5 › FS-05 — parked list + re-drive › operator sees the parked item with its full payload and re-drives it through the confirmation (2.0s)
+
+  ✓   48 [chromium] › tests/Browser/dead-letters.spec.ts:103:5 › FS-05 — parked list + re-drive › Read Only sees the list but NO re-drive control (A-6 split, DOM half) (1.4s)
+
+  ✓   49 [chromium] › tests/Browser/dead-letters.spec.ts:115:5 › FS-05 — parked list + re-drive › dark theme is axe-clean too (1.8s)
+
+  ✓   50 [chromium] › tests/Browser/f1-b12.spec.ts:121:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (2.3s)
+  ✓   51 [chromium] › tests/Browser/f1-b12.spec.ts:139:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark (2.8s)
+  ✓   52 [chromium] › tests/Browser/f1-b12.spec.ts:174:5 › B9-S05 — the rules list › §E E02: the activate dialog names the position, the trigger, the capability floor, the dry-run habit and the audit; Cancel changes nothing; the deactivate dialog is the red primary with stops · keeps · untouched · audited (1.3s)
+  ✓   53 [chromium] › tests/Browser/f1-b12.spec.ts:193:5 › B9-S05 — the rules list › §E E07 (absence of the door): the pause banner renders only from the R-04 flag; with the flag off no banner, no paused chip, no per-row "Paused" (1.1s)
+  ✓   54 [chromium] › tests/Browser/f1-b12.spec.ts:204:5 › B9-S05 — the rules list › §E E09 375: the read notice, cards, no switch, no overflow; axe-clean both themes (2.5s)
+  ✓   55 [chromium] › tests/Browser/f1-b12.spec.ts:226:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark (3.4s)
+  ✓   56 [chromium] › tests/Browser/f1-b12.spec.ts:255:5 › B9-S06 — the rule editor › §F F03: the condition tree is a tree (aria-level) whose add / group verbs are BUTTONS; the facts + operators sentence stands under the panel head (1.2s)
+  ✓   57 [chromium] › tests/Browser/f1-b12.spec.ts:276:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline (2.8s)
+  ✓   58 [chromium] › tests/Browser/f1-b12.spec.ts:315:5 › B9-S06 — the rule editor › §F F07 + F08: the dry-run drawer (event picker, truth badges with the evaluated value, per-action would-run, guards, zero side effects); save-as-draft keeps the active revision and shows the banner; the activate dialog names the atomic swap and the dry-run nudge; Cancel changes nothing (1.7s)
+  ✓   59 [chromium] › tests/Browser/f1-b12.spec.ts:358:5 › B9-S06 — the rule editor › §F F09: the execution log inline with its five columns and the SEC-03 note for the privileged viewer; F10 retry is absent (no door) (1.2s)
+  ✓   60 [chromium] › tests/Browser/f1-b12.spec.ts:374:5 › B9-S06 — the rule editor › §F F01 375 + F11 am: the read posture (sentences, no builder) with the notice, no overflow; the Amharic locale renders the header, panels and chips without overflow (3.4s)
+  ✓   61 [chromium] › tests/Browser/f1-b12.spec.ts:427:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark (3.0s)
+  ✓   62 [chromium] › tests/Browser/f1-b12.spec.ts:469:5 › B9-S07 — SLA policies › §G G03: the live example in en + am from the clock library — reachable on the calendar, wall-clock on 24 × 7; G05: the EC-03 diagram draws keep vs rescale from the targets and follows the chosen mode; G07: the FR-11 chip strip in the fixed tokens (1.6s)
+  ✓   63 [chromium] › tests/Browser/f1-b12.spec.ts:517:5 › B9-S07 — SLA policies › §G G03 unreachable: a calendar with no weekly interval yields the honesty line in both languages — never a fabricated date (2.4s)
+  ✓   64 [chromium] › tests/Browser/f1-b12.spec.ts:557:5 › B9-S07 — SLA policies › §G G01 empty (absence): the empty state is drawn only when no policy exists — with policies on the list it is absent; G08 375: the read notice, the list cards, policy 1 live example in en + am, no editor, no overflow; axe-clean both themes (2.3s)
+  ✓   65 [chromium] › tests/Browser/f1-b12.spec.ts:599:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark (5.2s)
+  ✓   66 [chromium] › tests/Browser/f1-b12.spec.ts:682:5 › B9-S08 — business hours › §H H04: a department override — the card states the diff, the editor draws the side-by-side day table with the changed row worded; departments without an override read "Same as the workspace default"; Remove override → use the default keeps the calendar on record, inactive (1.4s)
+  ✓   67 [chromium] › tests/Browser/f1-b12.spec.ts:743:5 › B9-S08 — business hours › §H H06 (absence) + H07 375: the empty state is absent while calendars exist; the phone reads the hours per day, the holidays and the override diff under the notice — no editor, no overflow; axe-clean both themes (3.4s)
+  ✓   68 [chromium] › tests/Browser/f1-b12.spec.ts:792:5 › B9-S09 — macros manager › §I I01 + I02 + I04: the manager grouped by scope (personal before shared, the permission key on the group head, kind tag, bundled chips, usage); the pill body — brace-free pills, delete-as-unit by Backspace and by ✕, the announced state list; bundled actions with the EC-09 notice quoted; axe-clean light + dark (2.7s)
+  ✓   69 [chromium] › tests/Browser/f1-b12.spec.ts:838:5 › B9-S09 — macros manager › §I I03: the preview against a sample ticket through the one resolver — resolved values highlighted, a missing variable as the amber placeholder with the "cannot be sent as-is" line and the pill turning amber with its announced state (1.3s)
+  ✓   70 [chromium] › tests/Browser/f1-b12.spec.ts:871:5 › B9-S09 — macros manager › §I I05 (absence) + I07 375: no per-language variant control exists (one body per macro — F1 follow-on); the phone reads the grouped list with scopes, kinds, chips and usage under the notice — no editor, no overflow; axe-clean both themes (2.2s)
+  ✓   71 [chromium] › tests/Browser/f1-b12.spec.ts:927:5 › B9-S10 — fields manager › §J J01 + J02 + J06: entity tabs with counts; the row anatomy (↑↓, both labels, the immutable key, the 🔒 type badge, flags, used-in counts); the editor — key derived at birth, the 13-type picker on a new field, NO type control on a saved one (the lock law in words), options with stable values, validation per type, the N-06 line, where-used live; the Doc 08 seam on the customer tab; axe-clean light + dark (2.9s)
+  ✓   72 [chromium] › tests/Browser/f1-b12.spec.ts:982:5 › B9-S10 — fields manager › §J J03: removing an option opens the EC-08 dialog (label kept on past answers · rules reading the field · forms offering it); Keep it changes nothing; Remove keeps the row as a snapshot marked removed (1.1s)
+  ✓   73 [chromium] › tests/Browser/f1-b12.spec.ts:1017:5 › B9-S10 — fields manager › §J J04 + J05: the deactivate dialog carries the complete where-used panel with EC-14’s consequence per entry, the Kept and Audited rows; the retired section shows the read-only line; a new field with the retired key is refused in place with "Reactivate the retired field"; reactivation restores it (3.2s)
+  ✓   74 [chromium] › tests/Browser/f1-b12.spec.ts:1050:5 › B9-S10 — fields manager › §J J07 375: the read posture — tabs, order, both labels, keys, locked types, the retired line; no editor, no overflow; axe-clean both themes (2.3s)
+  ✓   75 [chromium] › tests/Browser/f1-b12.spec.ts:1114:5 › B9-S11 — form builder › §K K01 + K02 + K03: the B5-S07 chrome — the 13 types and the refs on the palette, step tabs with dots, the field cards (both labels, key, ref/inline tag, type), the placement menu with Alt-arrows, the inspector with labels/help per language, required-when-visible, the conditional that never offers a later field and its plain sentence, the branch glyph on the card; axe-clean light + dark (3.2s)
+  ✓   76 [chromium] › tests/Browser/f1-b12.spec.ts:1186:5 › B9-S11 — form builder › §K K04 + K08: the dual live preview — the widget pre-chat render, Telegram direct with inline buttons, Telegram business with numbered text — and the Amharic variant of all three (1.8s)
+  ✓   77 [chromium] › tests/Browser/f1-b12.spec.ts:1227:5 › B9-S11 — form builder › §K K05 + K06: the publish dialog lists the SchemaValidator’s blocks with the EC-07 auto-fix, then the publishable state with the atomic-version facts, the usage banner and EC-06; publishing mints an immutable version; the history shows the diff and never an edit affordance (1.8s)
+  ✓   78 [chromium] › tests/Browser/f1-b12.spec.ts:1278:5 › B9-S11 — form builder › §K K07: the forms list — the seeded forms carry "seeded · editable" (content, not config), each row its shape, version and bindings; K01 375: the builder is READ posture with the notice, steps and fields; no overflow; axe-clean both themes (2.4s)
+  ✓   79 [chromium] › tests/Browser/f1-b12.spec.ts:1309:5 › B9-S12 — CSAT › §L L01 + L04: the three registered keys as settings rows (label · key · description · control · provenance · reset) with the consequence BEFORE save and the live change count on the verb; what a survey is, the Doc 15 events, the designed absence; the shipped labels per language; axe-clean light + dark (2.6s)
+  ✓   80 [chromium] › tests/Browser/f1-b12.spec.ts:1350:5 › B9-S12 — CSAT › §L L02 + L03: the Telegram 1-tap render (five inline stars, the polite window-closed line at hour :window+1, the thanks) in both modes, and the widget star row as a radiogroup of five 44 px targets with the expired row dashed and unclickable; en + am (1.2s)
+  ✓   81 [chromium] › tests/Browser/f1-b12.spec.ts:1381:5 › B9-S12 — CSAT › §L L05 375: phone-readable — the rows stacked with provenance and the designed absence under the notice; no save verb; no overflow; axe-clean both themes (2.2s)
+  ✓   82 [chromium] › tests/Browser/f1-b12.spec.ts:1401:5 › B9-S13 — degraded, error and cross-cutting › §M M01: the hub — seven cards with live sub-lines, the chrome legend (Organization real, People / Channels drawn, Knowledge base, the seven rows), the palette row; axe-clean light + dark (1.9s)
+  ✓   83 [chromium] › tests/Browser/f1-b12.spec.ts:1428:5 › B9-S13 — degraded, error and cross-cutting › §M M02: the execution detail page — event, ticket, rule, guards, the condition results with evaluated values and the elided twin beside them, the action outcomes in order; reached from the editor’s log (2.2s)
+  ✓   84 [chromium] › tests/Browser/f1-b12.spec.ts:1509:5 › B9-S13 — degraded, error and cross-cutting › §M M04 + M05: the refusal inline (role=alert, the door’s own detail, in place, the list unchanged); the AI-off tag is absent while AI is on; the auto-disabled destination note is honest to the data (1.9s)
+  ✓   85 [chromium] › tests/Browser/f1-b12.spec.ts:1547:5 › B9-S13 — degraded, error and cross-cutting › §M M06 + L04: reduced motion (no running animations on the rules list and the SLA chips), visible focus rings, 44 px verbs; the Amharic sweep across every Workflow page at 1440 and 375 with the shared chrome and no overflow (4.5s)
+
+  ✓   86 [chromium] › tests/Browser/f1-b8.spec.ts:93:5 › B8-S01 — the Copilot panel › §A/§C/§D: six labelled regions in reading order with stamps; the draft card carries the meter as TEXT; Discard rests the region; axe-clean light + dark (5.8s)
+  ✓   87 [chromium] › tests/Browser/f1-b8.spec.ts:166:5 › B8-S01 — the Copilot panel › §G at 375: the sheet carries the same panel; every control row clears 44 px; axe-clean in both themes (5.8s)
+  ✓   88 [chromium] › tests/Browser/f1-b8.spec.ts:208:5 › B8-S02 — composer AI actions › §A/§B/§D: four labelled verbs; Improve → the "meaning kept" card with digits verified and "Insert — replaces your text"; Summarize → the note card whose Insert lands in NOTE mode; axe light + dark (8.5s)
+  ✓   89 [chromium] › tests/Browser/f1-b8.spec.ts:279:5 › B8-S02 — composer AI actions › §C (the door shapes pinned by ComposerActionsTest, rendered): the translate PAIR with digits verified and "Insert the Amharic"; the validator rejection NAMES the digits and offers no insert; no card sends (2.2s)
+  ✓   90 [chromium] › tests/Browser/f1-b8.spec.ts:371:5 › B8-S02 — composer AI actions › §A AI-off (LIVE kill switch): copilot OFF → the cluster is GONE and one line says what still works; back ON → the verbs return (1.7s)
+  ✓   91 [chromium] › tests/Browser/f1-b8.spec.ts:409:5 › B8-S02 — composer AI actions › §F at 375: all four verbs stay visible and wrap; every target clears 44 px; axe-clean both themes (2.0s)
+  ✓   92 [chromium] › tests/Browser/f1-b8.spec.ts:439:5 › B8-S04 — the persona editor › §A/§B/§C: the Settings › AI shell; tone as a WORD value; the disclosure lock; the preview select over the five canned conversations; Publish locked with its reason until the preview ran, then unlocked with the three-fact confirm; versions listed; axe light + dark (6.0s)
+  ✓   93 [chromium] › tests/Browser/f1-b8.spec.ts:518:5 › B8-S04 — the persona editor › §F at 375: the editor stacks above the preview; every control clears 44 px; axe-clean both themes (2.0s)
+  ✓   94 [chromium] › tests/Browser/f1-b8.spec.ts:550:5 › B8-S05 — thresholds & simulation › §A–§F: four sliders with consequence + value line; the RG precision readout; Publish locked with its reason; a slider touch → pending; simulate → FRESH gate + bar pairs + worded deltas + the text table + the flips drill-down; another touch → STALE gate re-locks; the confirm repeats the headline; axe light + dark (3.0s)
+  ✓   95 [chromium] › tests/Browser/f1-b8.spec.ts:660:5 › B8-S05 — thresholds & simulation › §H at 375: the simulation stacks under the sliders; publish and simulate clear 44 px; axe-clean both themes (2.0s)
+  ✓   96 [chromium] › tests/Browser/f1-b8.spec.ts:688:5 › B8-S06 — guardrails › §A–§E: the seeded floor wears the lock and offers NO delete; a custom topic deletes behind the consequence confirm; the disclosure lock; the RG template tabs carry COMPLETE and the slate preview; every limit states its consequence; the PII toggle carries its word; axe light + dark (2.4s)
+  ✓   97 [chromium] › tests/Browser/f1-b8.spec.ts:755:5 › B8-S06 — guardrails › §G at 375: rows stack; every button clears 44 px; axe-clean both themes (2.0s)
+  ✓   98 [chromium] › tests/Browser/f1-b8.spec.ts:780:5 › B8-S07 — scope & kill switches › §A–§F: the quiet grid (every cell a role=switch with its word); Scope with the endpoints and the web-widget absence; the audit strip; OFF → the blast-radius confirm with the scoped red verb → the red cell "OFF since … by …", the page banner and the chip; back ON through the banner; axe light + dark (3.0s)
+  ✓   99 [chromium] › tests/Browser/f1-b8.spec.ts:847:5 › B8-S07 — scope & kill switches › §G at 375: the grid stacks by surface; switches stay 64×32 (≥ 44 px targets); axe-clean both themes (2.1s)
+  ✓  100 [chromium] › tests/Browser/f1-b8.spec.ts:870:5 › B8-S08 — providers & status › §A–§E: its own screen (no channel-health link); one chain per tier with the breaker state in WORDS; credentials as vault references only; the ladder as live status; the model map with Change; config versions with the honesty layer as a hash; the quota meter with the 80% mark and the reserve; axe light + dark (2.1s)
+  ✓  101 [chromium] › tests/Browser/f1-b8.spec.ts:910:5 › B8-S08 — providers & status › §G at 375: the chains stack vertically; axe-clean both themes (2.0s)
+  ✓  102 [chromium] › tests/Browser/f1-b8.spec.ts:933:5 › B8-S09 — decision log & quality loop › §A–§E: the enriched table under "AI · Decisions" with the today chip; filter chips compose and the empty state names them; the row record view (no payload door); exactly TWO quality tabs and NO RG vocabulary; the calibration table + finding; axe light + dark (3.2s)
+  ✓  103 [chromium] › tests/Browser/f1-b8.spec.ts:976:5 › B8-S09 — decision log & quality loop › §G at 375: rows become cards; the two tabs persist; axe-clean both themes (3.1s)
+  ✓  104 [chromium] › tests/Browser/f1-b8.spec.ts:1000:5 › B8-S10 — supervisor outputs & the RG review queue › §A–§E: the feed, the digest, the QA pre-score labelled advisory, and the RG queue present for the RG key (this agent holds it) with the month figure and the calm slate; axe light + dark (1.8s)
+  ✓  105 [chromium] › tests/Browser/f1-b8.spec.ts:1026:5 › B8-S10 — supervisor outputs & the RG review queue › J06 — the same page for a viewer WITHOUT the RG key carries no RG row, no count, no vocabulary (931ms)
+  ✓  106 [chromium] › tests/Browser/f1-b8.spec.ts:1041:5 › B8-S10 — supervisor outputs & the RG review queue › §G at 375: the feed reads on a phone; RG actions stack full-width; axe-clean both themes (1.8s)
+  ✓  107 [chromium] › tests/Browser/f1-b8.spec.ts:1071:5 › B8-S12 — the cross-cutting proof sheet › L04 — the Amharic sweep: every AI page renders in the am locale at 1440 and 375, light and dark, with no horizontal overflow (real Ethiopic breaks lines, never the layout) (6.6s)
+  ✓  108 [chromium] › tests/Browser/f1-b8.spec.ts:1145:5 › B8-S12 — the cross-cutting proof sheet › L05 — reduced motion: with the preference on, nothing animates or transitions on the Copilot card, the thresholds panel and the kill-switch grid (3.5s)
+  ✓  109 [chromium] › tests/Browser/f1-b8.spec.ts:1189:5 › B8-S12 — the cross-cutting proof sheet › L07 — the five hard absences, probed where they would appear: no send on any AI card (X1); no generated-RG control (X2); no disclosure disable (X3); publish never enabled without a fresh simulation (X5); the decision log carries no RG material (Q2) (1.4s)
+  ✓  110 [chromium] › tests/Browser/f1-b8.spec.ts:1226:5 › P-F1 packets — BUBBLE · BANNER · TOPBAR (countersigned, landed) › P-F1-BUBBLE: the AI bubble wears the B1-DS anatomy (ai-bg · 1 px ai-border · 3 px ai-edge inline-start · body in text-primary · the ✦ marker in ai-fg); the transcript-less voice fixture shows the FS-03 degrade line (1.2s)
+  ✓  111 [chromium] › tests/Browser/f1-b8.spec.ts:1251:5 › P-F1 packets — BUBBLE · BANNER · TOPBAR (countersigned, landed) › P-F1-BANNER: the inbox kill-switch mirror carries the link to the grid ("Details in Settings → AI → Kill switches") while a switch is off; gone with the flip back (1.6s)
+  ✓  112 [chromium] › tests/Browser/f1-b8.spec.ts:1290:5 › P-F1 packets — BUBBLE · BANNER · TOPBAR (countersigned, landed) › P-F1-TOPBAR: at 375 in the am locale the inbox list no longer overflows; the status WORD hides under 640 px while the dot and the aria-label keep it (B8-D37 closed) (1.9s)
+
+  ✓  113 [chromium] › tests/Browser/f1-b9.spec.ts:112:5 › B9-S01 — the KB manager › §A: the Backoffice chrome with its one KB row; the category TREE with counts; article rows with pill · dots · usage; the detail pane facts; the legend; axe-clean light + dark (2.2s)
+  ✓  114 [chromium] › tests/Browser/f1-b9.spec.ts:157:5 › B9-S01 — the KB manager › §A filters + search: chips go bold, the header counts the match, Clear is one link; a no-result query is echoed with "Create an article from this query"; the loading skeleton shows while the search door answers (2.1s)
+  ✓  115 [chromium] › tests/Browser/f1-b9.spec.ts:182:5 › B9-S01 — the KB manager › §A A07 (absence): a viewer WITHOUT kb.view_internal sees no internal row, no Internal tag, no visibility filter option — absence, not redaction (1.1s)
+  ✓  116 [chromium] › tests/Browser/f1-b9.spec.ts:198:5 › B9-S01 — the KB manager › §A 375 read posture: the notice, the pane tabs, stacked panes, 44 px rows; no overflow; axe-clean both themes (2.1s)
+  ✓  117 [chromium] › tests/Browser/f1-b9.spec.ts:220:5 › B9-S02 — the article editor › §B: chrome + breadcrumb; the language tablist with dots and the SOURCE tag; the stamp says what autosave is; the FR-02 toolbar (7 types) and block headers with ↑↓ ⋯; the rail facts; the review card names the permission; axe-clean light + dark (2.3s)
+  ✓  118 [chromium] › tests/Browser/f1-b9.spec.ts:253:5 › B9-S02 — the article editor › §B B12 keyboard: Alt+↓ on a focused block moves it and announces the move; the toolbar inserts a heading block; the block menu offers remove (1.1s)
+  ✓  119 [chromium] › tests/Browser/f1-b9.spec.ts:274:5 › B9-S02 — the article editor › §B B07 inline sanitizer + B09 publish blocked: the flagged sentence wears the underline; its popover names the pattern and the two choices; the rail sums the flags; Publish → the door's own refusal lists the block; "Back to the editor" is the one verb (3.4s)
+  ✓  120 [chromium] › tests/Browser/f1-b9.spec.ts:305:5 › B9-S02 — the article editor › §B B05 the INTERNAL article: the amber role=note banner under the header; the rail states Copilot-only and the audited audience change; B06 the AI drawer lists five tools, says drafts-only, and carries NO publish control (1.8s)
+  ✓  121 [chromium] › tests/Browser/f1-b9.spec.ts:332:5 › B9-S02 — the article editor › §B B14 the Amharic variant: the transliteration helper offers a Latin slug and "Use" applies it (not saved — the page is left dirty-free by reload) (1.1s)
+  ✓  122 [chromium] › tests/Browser/f1-b9.spec.ts:346:5 › B9-S02 — the article editor › §B B13 375 read-only: the notice, readonly fields, no toolbar, no move buttons, 44 px tabs; no overflow; axe-clean both themes (2.1s)
+  ✓  123 [chromium] › tests/Browser/f1-b9.spec.ts:367:5 › B9-S03 — version history + the citation landing › §C C01: two panes; the version row carries number · author · chips, View / Compare, and NO Restore on the current version; the diff pane names its summary and legend; the versions law is stated; axe-clean light + dark (1.9s)
+  ✓  124 [chromium] › tests/Browser/f1-b9.spec.ts:394:5 › B9-S03 — version history + the citation landing › §C C04 the archive dialog: consequences in nouns (leaves · keeps · undo · audited), the red verb names the count; Cancel leaves everything as it was (1.1s)
+  ✓  125 [chromium] › tests/Browser/f1-b9.spec.ts:412:5 › B9-S03 — version history + the citation landing › §C C03 the staff citation landing: CURRENT opens the article; RETIRED shows the label, the version-pinned snapshot, the resolver-states rail and the no-404 law — no failure vocabulary anywhere (1.9s)
+  ✓  126 [chromium] › tests/Browser/f1-b9.spec.ts:437:5 › B9-S03 — version history + the citation landing › §C 375 read posture: versions and the diff stack; restore and archive are absent (stated as needing a larger screen); no overflow (1.5s)
+  ✓  127 [chromium] › tests/Browser/f1-b9.spec.ts:455:5 › B9-S04 — categories mode + the shell's one KB entry › §D D01 D02 D03: the categories MODE of the manager — tree with counts and ↑↓ on the selected row, the editor with three facts and every FR-01 field, the inherit rail, the AI-usable-off consequence dialog (Keep it on), delete refused with the reassign picker and the impact sentence; axe-clean light + dark (2.8s)
+  ✓  128 [chromium] › tests/Browser/f1-b9.spec.ts:508:5 › B9-S04 — categories mode + the shell's one KB entry › §D the depth-3 wall (D01): a depth-3 node offers NO "+ Add subcategory" and the wall card says why; built on fixture subcategories through the real doors, then removed (1.9s)
+  ✓  129 [chromium] › tests/Browser/f1-b9.spec.ts:553:5 › B9-S04 — categories mode + the shell's one KB entry › §D D04 the shell's one KB entry: the palette row opens the manager and the Backoffice nav shows ONE Knowledge base row, no sub-navigation (949ms)
+  ✓  130 [chromium] › tests/Browser/f1-b9.spec.ts:563:5 › B9-S04 — categories mode + the shell's one KB entry › §D 375 read posture: the tree browses with counts at 44 px; the form verbs are absent; the notice says why (1.6s)
+  ✓  131 [chromium] › tests/Browser/f1-b9.spec.ts:581:5 › B9 cross-cutting — the Amharic sweep, reduced motion, the absences › L04 — every KB page in the am locale at 1440 + 375, light + dark, zero overflow on the shell; the strings are Ethiopic (4.2s)
+  ✓  132 [chromium] › tests/Browser/f1-b9.spec.ts:628:5 › B9 cross-cutting — the Amharic sweep, reduced motion, the absences › L05 — reduced motion: nothing animates or transitions on the manager or the editor (1.0s)
+  ✓  133 [chromium] › tests/Browser/f1-b9.spec.ts:653:5 › B9 cross-cutting — the Amharic sweep, reduced motion, the absences › the designed absences: no "verified" anywhere; no per-article AI-usable switch; no edit control on a version; no delete on the archived record; no publish in the AI drawer (1.2s)
+  ✘  134 [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE (1.2s)
+  ✓  135 [chromium] › tests/Browser/inbox-bell.spec.ts:103:1 › FR-26: mark-all-read stamps read_at server-side — the badge clears and STAYS cleared across a reload (1.4s)
+  ✓  136 [chromium] › tests/Browser/inbox-bell.spec.ts:117:1 › FR-26 quick mute silences REAL emissions: mute 1 h → a scripted my-open event emits NOTHING; unmute → it emits again (1.3s)
+  ✓  137 [chromium] › tests/Browser/inbox-bulk.spec.ts:221:1 › C15 all-ok: the bar's Priority arms the HOUSE palette for the whole selection — the id door runs the real batch on the automation queue, the drawer polls to "3 of 3 done · ✓ 3 changed" and announces, and the database agrees (4.3s)
+  ✓  138 [chromium] › tests/Browser/inbox-bulk.spec.ts:255:1 › C15 failures + retry, then C16 over the 50 line: close refuses per item with the reason NAMED on the row by ticket number; Retry re-batches exactly the failed; "select all" mints the server count and the wide close is TYPED, not clicked; the drawer is the 375 sheet (10.1s)
+  ✓  139 [chromium] › tests/Browser/inbox-composer.spec.ts:83:1 › AC-05, THE 50-SEQUENCE HEURISTIC: every scripted reply-intent flip into note mode lands the FULL differentiation — surface color DELTA, dashed border, the banner, and the send label flips to "Add note" (6.8s)
+  ✓  140 [chromium] › tests/Browser/inbox-composer.spec.ts:113:1 › FR-17/FR-21: a NOTE sends through the note door (bubble renders as a note); a reply through Send & Pending flips the ticket; the ILLEGAL then-edge reports the rollback strip with the one-tap retry (1.5s)
+  ✓  141 [chromium] › tests/Browser/inbox-composer.spec.ts:140:1 › FR-20: the CLOSING strip renders on the seeded closing-window thread; FR-22: typing raises the draft chip and persists the draft server-side (1.2s)
+  ✓  142 [chromium] › tests/Browser/inbox-composer.spec.ts:167:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props (1.2s)
+  ✓  143 [chromium] › tests/Browser/inbox-composer.spec.ts:186:1 › FR-16 (sabotage #8's proof): the collision strip renders on a colleague-typing signal — their draft NEVER shows — and a colleague reply raises the NON-BLOCKING send-race confirm; "send anyway" sends (1.3s)
+  ✓  144 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:63:1 › FR-24: the High-priority chip composes WITHIN Unassigned — normal rows leave, the total tells the filtered truth, clear-all restores (1.3s)
+  ✓  145 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:87:1 › FR-24: on My Open the same chip KEEPS the matching rows — the urgent R1 and the high Yonas stay, the normal FR-20 fixtures leave (1.1s)
+  ✓  146 [chromium] › tests/Browser/inbox-keyboard-shift.spec.ts:72:1 › SS-01 THE SIXTY-TICKET SHIFT, KEYBOARD ONLY: claim → answer → resolve on every seeded shift ticket, zero pointer interactions in the core loop (29.0s)
+  ✓  147 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (light); landmarks name R1–R4; health dot shows the seeded degraded state (2.1s)
+  ✓  148 [chromium] › tests/Browser/inbox-layout.spec.ts:79:5 › FR-01/FR-03: four regions + top bar render at 1440 (dark); landmarks name R1–R4; health dot shows the seeded degraded state (2.0s)
+  ✓  149 [chromium] › tests/Browser/inbox-layout.spec.ts:136:1 › B12-A01 AC-02: first tab press on a cold load reveals the skip link, and it jumps PAST the rail into the list (1.1s)
+  ✓  150 [chromium] › tests/Browser/inbox-layout.spec.ts:155:1 › §9: the three context tabs keep fixed order; the Doc 08/09 seam fixtures drive the badge dots with §13 labels (1.2s)
+  ✓  151 [chromium] › tests/Browser/inbox-layout.spec.ts:195:1 › AC-01: rail collapse, list width (keyboard resize — §13) and density persist, and RESTORE ACROSS SESSIONS (2.0s)
+  ✓  152 [chromium] › tests/Browser/inbox-layout.spec.ts:266:1 › THE COUNTERSIGNED PREFS RIDER: Read Only degrades to session-local prefs — silent refusal, ZERO error toasts, nothing server-persisted (1.8s)
+  ✘  153 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (6.1s)
+  ✘  154 [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning (6.3s)
+  ✓  155 [chromium] › tests/Browser/inbox-list.spec.ts:126:1 › FR-10: the sort override reorders (priority serves urgent first) and PERSISTS per view across a fresh session (prefs.sort_overrides) (2.1s)
+  ✓  156 [chromium] › tests/Browser/inbox-live-list.spec.ts:76:1 › AC-03 + B12-A01 AC-04: a rescore delta patches IN PLACE at once, but with the pointer inside the list the ORDER holds past the 5 s batch — the affordance offers, the click resorts (6.9s)
+  ✓  157 [chromium] › tests/Browser/inbox-live-list.spec.ts:124:1 › FR-11: an entering row waits for the batch (pointer OUTSIDE → applies on its own), lands IN POSITION with the entering highlight; a leaving row fades and is gone after the batch (6.3s)
+  ✓  158 [chromium] › tests/Browser/inbox-live-list.spec.ts:170:1 › reduced motion: the enter/leave keyframes are suppressed (§13/B12-A01) — the DATA state still flows, nothing animates (1.2s)
+  ✓  159 [chromium] › tests/Browser/inbox-live-list.spec.ts:190:1 › EC-09: the active queue view is removed mid-shift → toast (role=status, never an error), then the pane falls back to My Open (4.1s)
+  ✓  160 [chromium] › tests/Browser/inbox-merge.spec.ts:95:1 › THE MERGE JOURNEY + EC-12 + D12: a draft typed in the source survives the merge; the dialog renders the machinery-computed preview; the sources close with a permanent banner that opens the FINAL survivor (3.6s)
+  ✓  161 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:106:1 › B2-S01 SWIPE-RIGHT CLAIM, three drawn states: the zone reveals mid-drag, commit claims through the REAL door, the undo strip returns it to the queue (1.7s)
+  ✓  162 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:159:1 › B2-S01 SWIPE-LEFT ACTIONS SHEET: the drawn rows on real doors — Resolve removes the ticket from the open family (1.5s)
+  ✓  163 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:186:1 › B2-S01 PULL-TO-REFRESH: pulling past the threshold shows the release strip; RELEASE refreshes — nothing resorts under the thumb (1.3s)
+  ✓  164 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:208:1 › B2-S01 SELECTION MODE: long-press enters it, Select all stops at the 25 cap with the drawn amber strip, ✕ exits clean (2.1s)
+  ✓  165 [chromium] › tests/Browser/inbox-mobile-interactions.spec.ts:234:1 › EC-03 DUAL-TAB DRAFTS: the later writer wins across tabs with the "another device" toast, and a user's own typing NEVER self-triggers the collision strip (3.9s)
+  ✓  166 [chromium] › tests/Browser/inbox-mobile.spec.ts:71:1 › FR-02 @ 1024–1279: R4 is an overlay drawer, not a fixed panel (1.0s)
+  ✓  167 [chromium] › tests/Browser/inbox-mobile.spec.ts:86:1 › FR-02 @ 768–1023: the rail is icons PERMANENTLY — the collapse control cannot expand it (1.0s)
+  ✓  168 [chromium] › tests/Browser/inbox-mobile.spec.ts:103:5 › FR-02 @ 375 (light): two-level navigation — List ↔ Thread, Views modal sheet, R4 bottom sheet with the same three tabs (1.6s)
+  ✓  169 [chromium] › tests/Browser/inbox-mobile.spec.ts:103:5 › FR-02 @ 375 (dark): two-level navigation — List ↔ Thread, Views modal sheet, R4 bottom sheet with the same three tabs (1.8s)
+  ✓  170 [chromium] › tests/Browser/inbox-notify.spec.ts:90:1 › FR-04 THE DEDUP PROOF (sabotage #5 red here): two tabs, the same event scripted to BOTH — exactly ONE tab emits; the leader survives and the follower stays silent (2.7s)
+  ✓  171 [chromium] › tests/Browser/inbox-notify.spec.ts:143:1 › SEC-04 (sabotage #19 red here): the notification content is NAME + NUMBER only — the event's snippet NEVER appears; reduced mode drops even the name (1.0s)
+  ✓  172 [chromium] › tests/Browser/inbox-offline.spec.ts:107:1 › AC-07 THE OFFLINE GOLDEN: a network cut during composition — banner ≤2 s, sends queue as visible chips, reconnect flushes IN ORDER with idempotency keys (zero dupes), the draft in progress survives, stores converge (1.8s)
+  ✓  173 [chromium] › tests/Browser/inbox-offline.spec.ts:174:1 › FR-29: a SOCKET drop with live network shows the amber reconnecting pill within 2 s and recovers by itself through the sync path (1.2s)
+  ✓  174 [chromium] › tests/Browser/inbox-offline.spec.ts:188:1 › EC-08: 429-on-connect is HONORED — the client backs off instead of hammering, and lands when the server stops shedding (8.0s)
+  ✓  175 [chromium] › tests/Browser/inbox-offline.spec.ts:225:1 › FR-30: a build-id mismatch on sync shows the PASSIVE refresh banner — composition is never interrupted, nothing reloads on its own (1.3s)
+  ✓  176 [chromium] › tests/Browser/inbox-offline.spec.ts:259:1 › EC-07: relative times anchor to the SERVER clock — a sync answering 2 minutes ahead moves the client offset, not the client clock (1.2s)
+  ✓  177 [chromium] › tests/Browser/inbox-offline.spec.ts:289:1 › BR-01: a queued send the server REFUSES on flush is reported visibly and never blocks the sends behind it — rolled back in the open, not silently dropped (1.4s)
+  ✓  178 [chromium] › tests/Browser/inbox-palette.spec.ts:69:1 › FR-23/24: ⌘K opens the palette; the Views section fuzzy-filters and selecting one switches the active view; NO scope toggle exists (BR-03) (1.3s)
+  ✓  179 [chromium] › tests/Browser/inbox-palette.spec.ts:90:1 › FR-25: the Search section queries the proxy (query string ALONE — SEC-02) and a ticket hit opens its thread (1.4s)
+  ✓  180 [chromium] › tests/Browser/inbox-palette.spec.ts:111:1 › Doc 05 US-04 (the closing row): the Rescue system view lists the channel_unreachable ticket (1.1s)
+  ✓  181 [chromium] › tests/Browser/inbox-palette.spec.ts:120:1 › P-NAV (S12, countersigned): the palette carries the shell's one Workflow nav row, beside the KB row (the P8 shape) (1.0s)
+  ✓  182 [chromium] › tests/Browser/inbox-palette.spec.ts:129:1 › FR-25: a MESSAGE hit opens its thread ANCHORED at that message with the row highlighted (the Doc 04 EC-08 window underneath) (1.6s)
+  ✓  183 [chromium] › tests/Browser/inbox-palette.spec.ts:147:1 › FR-23: ↑↓ move the roving selection and ↵ opens it — keyboard-only from ⌘K to a switched view (US-01 posture) (1.2s)
+  ✓  184 [chromium] › tests/Browser/inbox-palette.spec.ts:161:1 › FR-23: recent searches persist per user — the footer offers the last query on the next open (1.4s)
+  ✓  185 [chromium] › tests/Browser/inbox-scroll-restore.spec.ts:59:1 › FR-12: the list position survives back-navigation — scroll deep, leave, return, land where you were (1.3s)
+  ✓  186 [chromium] › tests/Browser/inbox-selection.spec.ts:72:1 › FR-13: checkbox toggle + shift-range select; the count is honest; selection SURVIVES a live resort (by id, by construction) (1.3s)
+  ✓  187 [chromium] › tests/Browser/inbox-selection.spec.ts:99:1 › FR-13/T-05: "select all in view" mints the SERVER token — the shown count is the mint's count, not a client tally (1.3s)
+  ✓  188 [chromium] › tests/Browser/inbox-selection.spec.ts:121:1 › EC-02: a selected row that LEAVES the view stays selected in the "no longer in view" tray until deselected there (1.2s)
+  ✓  189 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:109:1 › AC-08 OVERLAY PARITY: ? opens the overlay, its rows cover EXACTLY the FR-31 enumeration, Esc closes and focus returns (1.1s)
+  ✓  190 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:132:1 › J/K move the active row (arrows mirror them from a focused option), Enter/O open the thread, X selects, Shift+X range-selects, Esc deselects (1.2s)
+  ✓  191 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:185:1 › G U / G M / G A chords and M switch views; O opens like Enter (1.5s)
+  ✓  192 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:217:1 › I claims the active row through the REAL door (the unassigned row leaves the view); A opens the assign palette on the directory (1.7s)
+  ✘  193 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:269:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door (29.3s)
+  ✓  194 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:355:1 › R focuses the reply box, N flips to (announced) note mode, ⌘Enter sends, E resolves the open thread — the composer half of the map (1.6s)
+  ✓  195 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:410:1 › THE INPUT GUARD + FOCUS POLICY: letters typed into the composer never fire actions, and a live-list delta never steals focus (§13) (1.2s)
+  ✓  196 [chromium] › tests/Browser/inbox-shortcuts.spec.ts:440:1 › §8 FIRST-RUN: the four coach marks show once, walk views→list→modes→⌘K, dismiss FOREVER across a reload, and re-open from the ? overlay (3.1s)
+  ✓  197 [chromium] › tests/Browser/inbox-state-banners.spec.ts:83:1 › C8→C11→C10: resolve raises the banner with Reopen now (the no-reason edge); escalate shows the ▲ record and KEEPS the composer; spam replaces it until "Not spam" with a written reason restores (3.1s)
+  ✓  198 [chromium] › tests/Browser/inbox-state-banners.spec.ts:165:1 › C9: the CLOSED ticket's banner replaces the composer with the reopen posture; D14: a blocked thread route shows the error state and Try again recovers it (2.4s)
+  ✓  199 [chromium] › tests/Browser/inbox-state-banners.spec.ts:206:1 › D13: a failed list fetch is SAID — the error strip with the cached-truth note, and Try again recovers; My Open emptied through the REAL doors shows the claim-next shape whose affordance lands on the waiting queue (the D7 handler, first row lit) (1.8s)
+  ✓  200 [chromium] › tests/Browser/inbox-state-banners.spec.ts:262:1 › B1-S04 DIALOGS: Escalate (named path demands a target, ≥10-char reason gates the verb) and Mark-as-spam (block is a separate unticked decision) drive the REAL doors from the panel — the banners confirm (2.6s)
+  ✓  201 [chromium] › tests/Browser/inbox-state-banners.spec.ts:312:1 › B1-S04 SPLIT + C7 UNMERGE: the selection strip counts picked bubbles, the split door mints the linked ticket, the FOURTH attempt renders the D11 cap card listing all three; the merged banner's Undo-merge shows C7's available state and the door reverses (4.9s)
+  ✓  202 [chromium] › tests/Browser/inbox-status.spec.ts:75:1 › FR-28: the menu sets Away then Online through the real door — the label round-trips server truth (1.3s)
+  ✓  203 [chromium] › tests/Browser/inbox-status.spec.ts:89:1 › BR-06: the away countdown toast is CANCELABLE — it counts down, cancel keeps the agent online and the toast leaves (3.3s)
+  ✓  204 [chromium] › tests/Browser/inbox-status.spec.ts:115:1 › FR-28: a supervisor FORCE renders with attribution — "set by …" appears on the control (1.7s)
+  ✓  205 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:103:1 › FS-05: an unparseable session store on load AUTO-RECOVERS — the schema guard resets, the workspace comes up working, and the agent is told it rebuilt (1.2s)
+  ✓  206 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:131:1 › FS-05 COMPOSER TEXT ABOVE ALL (sabotage #17's target): recovery remounts the thread, and the typed text + the queued sends come through it alive (1.4s)
+  ✓  207 [chromium] › tests/Browser/inbox-store-recovery.spec.ts:170:1 › B12-A01 AC-07 (reload case): a queued send survives a full RELOAD and flushes on the next online boot — the queue is storage, not memory (2.1s)
+  ✓  208 [chromium] › tests/Browser/inbox-thread.spec.ts:83:1 › DOC 05 AC-07 — THE CLOSING PROOF, FIRST: the fixture thread holds a delivery_state=delivered telegram message, and the DOM renders NO delivered glyph across ALL states (sabotage #7 red here) (1.2s)
+  ✓  209 [chromium] › tests/Browser/inbox-thread.spec.ts:98:1 › FR-14: ticket boundary ("#4800 closed · #4801 opened"), the AC-08 handoff card (collapsible, AI-accented, "customer already saw"), bulk-collapsed system events, the note bubble, axe-clean (2.4s)
+  ✓  210 [chromium] › tests/Browser/inbox-thread.spec.ts:131:1 › US-03 (Doc 05 closing row): the owner-phone reply renders MARKED, with the snapshotted display name (1.2s)
+  ✓  211 [chromium] › tests/Browser/inbox-thread.spec.ts:142:1 › EC-10: the 45-line message clamps at 40 with "show more"; expanding reveals the tail (1.2s)
+  ✓  212 [chromium] › tests/Browser/inbox-thread.spec.ts:153:1 › B12-S01: the lightbox — clean photo opens WITH description + download; the INFECTED attachment gets the block notice, NO download, NO description (SEC-04 absence) (1.2s)
+  ✓  213 [chromium] › tests/Browser/inbox-thread.spec.ts:173:1 › B12-S02: the edited marker opens preserved history for the capability holder (Super Admin fixture); revisions render oldest truth (1.3s)
+  ✓  214 [chromium] › tests/Browser/inbox-thread.spec.ts:184:1 › FR-15: deep links /inbox/t/{ticket} open the thread; a FOREIGN id and a REAL out-of-scope id land the SAME 404-pattern page with "search instead" (EC-01, sabotage #15 red here) (1.7s)
+  ✓  215 [chromium] › tests/Browser/inbox-thread.spec.ts:229:1 › §9 print (SEC-05): the print page carries the watermark (user + timestamp) and the PUBLIC transcript — the internal note NEVER prints (sabotage #20 red here) (1.2s)
+  ✓  216 [chromium] › tests/Browser/inbox-thread.spec.ts:249:1 › THE R-26 FOURTH-SIBLING CONSEQUENCE (countersign verify): Read Only opens a thread — the markRead 403 is SILENT (zero alerts), unread stays session-local (1.3s)
+  ✓  217 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:93:1 › B9: the panel renders the live ticket, and SET PENDING carries the reason through the door — one tap for awaiting-customer, the second level for awaiting-internal, leaving pending clears the reason (panel truth AND database truth) (7.3s)
+  ✓  218 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:195:1 › B9 render gate: without tickets.status.change the status control does not exist — the panel stays read-only truth (N-19: flags and grants hide, they never lie) (1.2s)
+  ✓  219 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:223:1 › B14 @ 375: the mobile property sheet carries the SAME controls, nothing dropped — the panel renders in the bottom sheet and SET PENDING works from it (identical controls, not a reduced set) (2.7s)
+  ✓  220 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:263:1 › D5/D6/D1: the drawn empties offer the act (Assign to me claims through the real door), the timeline fails ALONE with Try again recovering, and a switching panel shows a SKELETON, never a stale ticket (3.6s)
+  ✓  221 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:334:1 › D7–D10: the race and system surfaces — a lost claim swaps the avatar in place and offers the next one; two agents agreeing is NOT a conflict; deactivation hand-back and escalation fallback explain themselves (21.0s)
+  ✓  222 [chromium] › tests/Browser/inbox-ticket-panel.spec.ts:425:1 › THE PROPERTY ROWS + B2-S06: priority through its door, tag chips add/remove through the split doors, SLA and window chips from the projection, and an assign refusal rendered INLINE in the panel — never a toast (3.1s)
+  ✓  223 [chromium] › tests/Browser/inbox-views.spec.ts:64:1 › FR-08: Alt↓ moves My Open below Unassigned; the order PERSISTS across a reload (prefs, per user) (1.2s)
+  ✓  224 [chromium] › tests/Browser/inbox-views.spec.ts:102:1 › FR-06: the editor creates a saved view through the real door; selecting it renders ONLY the filtered rows (1.3s)
+  ✓  225 [chromium] › tests/Browser/inbox-views.spec.ts:133:1 › FR-06: a SHARED view is read-only — duplicate-to-edit mints an owned copy and opens the editor on it (1.0s)
+  ✓  226 [chromium] › tests/Browser/inbox-views.spec.ts:150:1 › Doc 07 FR-05 REAL (S11 step 11a, STOP-H — the seam and its door are DELETED): the Queues section renders the agent's effective-member queue with the waiting depth; clicking it serves the waiting list in the dispatcher's order (1.2s)
+  ✓  227 [chromium] › tests/Browser/kb-a11y.spec.ts:59:1 › §13: manager, editor and tombstone are axe-clean in light; the manager is axe-clean in dark too (3.0s)
+  ✓  228 [chromium] › tests/Browser/kb-a11y.spec.ts:83:1 › §14: real Ethiopic strings at 375 — the am editor and the manager render with NO horizontal overflow (long Amharic breaks lines, never the layout) (1.1s)
+  ✓  229 [chromium] › tests/Browser/kb-manager.spec.ts:63:1 › manager three-pane at 1440 and stacked at 375: category → articles with status·translation badges and the INTERNAL chip → detail pane links to the editor (1.1s)
+  ✓  230 [chromium] › tests/Browser/kb-manager.spec.ts:87:1 › editor: the INTERNAL banner on an internal article; the sanitizer flags panel pre-publish; the publish dialog surfaces the missing-alt refusal from the door itself; the seeded review comment renders (2.0s)
+  ✓  231 [chromium] › tests/Browser/kb-manager.spec.ts:109:1 › P8 (countersigned): the shell reaches the KB — ⌘K, type "knowledge", the one nav action navigates to /admin/kb (1.3s)
+  ✓  232 [chromium] › tests/Browser/kb-manager.spec.ts:125:1 › history lists the immutable version; the tombstone page answers Current for a live citation and Retired for a retired one — never a 404 (1.1s)
+
+  ✓  233 [chromium] › tests/Browser/password.spec.ts:209:5 › password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02) › FR-16: the emailed reset link works end to end and kills the live session (6.8s)
+  ✓  234 [chromium] › tests/Browser/password.spec.ts:266:5 › password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02) › FR-17/EC-04: the invited fixture activates through a resent emailed link, then returns to the invited state (5.0s)
+  ✓  235 [chromium] › tests/Browser/password.spec.ts:328:5 › password lifecycle (Doc 02 FR-16, FR-17, FR-14, FS-02) › FR-14: an authenticated change keeps the changing session and kills the sibling (2.8s)
+  ✓  236 [chromium] › tests/Browser/placeholder.spec.ts:5:1 › placeholder page renders via Inertia and reports the app booted (101ms)
+  ✓  237 [chromium] › tests/Browser/placeholder.spec.ts:11:1 › placeholder page has no axe-core violations (WCAG 2.2 AA baseline) (419ms)
+
+  ✓  238 [chromium] › tests/Browser/rbac.spec.ts:84:5 › AC-08 — UI parity with verdicts › Super Admin sees the mutating controls; Read Only sees NONE of them, on the same screens (1.6s)
+
+  ✓  239 [chromium] › tests/Browser/rbac.spec.ts:125:5 › AC-04 — propagation into an open session › a role change reflects in an OPEN session within 10 s, no re-login (SS-03, FR-07) (1.8s)
+
+  ✓  240 [chromium] › tests/Browser/rbac.spec.ts:209:9 › §13 — accessibility, both themes, both languages › the four screens are axe-clean (light) (3.5s)
+
+  ✓  241 [chromium] › tests/Browser/rbac.spec.ts:209:9 › §13 — accessibility, both themes, both languages › the four screens are axe-clean (dark) (3.5s)
+
+  ✓  242 [chromium] › tests/Browser/rbac.spec.ts:240:5 › §13 — accessibility, both themes, both languages › the matrix keyboard map works and the tri-state exposes aria-checked (§9, §13) (1.1s)
+
+  ✓  243 [chromium] › tests/Browser/rbac.spec.ts:278:5 › §13 — accessibility, both themes, both languages › ≤1024 the matrix is an accordion with aria-expanded; at 375 the screens are read-only with the explicit notice (§9) (1.7s)
+
+  ✓  244 [chromium] › tests/Browser/rbac.spec.ts:302:5 › §13 — accessibility, both themes, both languages › the screens render in Amharic through the i18n chain (§14) and stay axe-clean (2.0s)
+ Container na-live-support-relay-1 Stopping 
+ Container na-live-support-relay-1 Stopped 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-relay-1 Starting 
+ Container na-live-support-relay-1 Started 
+ Container na-live-support-redis-volatile-1 Waiting 
+ Container na-live-support-redis-durable-1 Waiting 
+ Container na-live-support-postgres-1 Waiting 
+ Container na-live-support-redis-durable-1 Healthy 
+ Container na-live-support-redis-volatile-1 Healthy 
+ Container na-live-support-postgres-1 Healthy 
+  ✓  245 [chromium] › tests/Browser/relay-outage-drill.spec.ts:69:1 › FS-01 v REAL RELAY: kill the service → truth moves, the list freezes correct-as-of, the staleness banner rises past 30 s; restart → backlog drains, the client converges, the banner goes (1.5m)
+  ✓  246 [chromium] › tests/Browser/restructure-wizard.spec.ts:68:1 › J17: the queue detail offers Deactivate FIRST (ink border) with the delete-wizard entry beneath it (danger border) (1.2s)
+  ✓  247 [chromium] › tests/Browser/restructure-wizard.spec.ts:90:1 › J19: a failed reference check renders the red row with Retry; Next unlocks only through the deliberate partial-list acknowledgement (1.1s)
+  ✓  248 [chromium] › tests/Browser/restructure-wizard.spec.ts:116:1 › J18: when the department holds the RG queue, the locked red card demands a replacement and Next stays disabled WITH the reason (1.0s)
+  ✓  249 [chromium] › tests/Browser/restructure-wizard.spec.ts:149:1 › J16 four REAL steps: inventory → choices → the typed server phrase (mismatch shown, then accepted) → progress to done; axe-clean light AND dark; 375 steps 1+3 executable (5.4s)
+  ✓  250 [chromium] › tests/Browser/routing-i18n.spec.ts:86:1 › §14: the wizard speaks Amharic at 375 — the drawn step line, real Ethiopic rows, NO horizontal overflow; axe-clean light (1.5s)
+  ✓  251 [chromium] › tests/Browser/routing-i18n.spec.ts:99:1 › §14/§13: the Organization queues tab in Amharic, DARK theme, axe-clean — the locked starvation caption included (1.6s)
+  ✓  252 [chromium] › tests/Browser/routing-i18n.spec.ts:116:1 › §14: the record card speaks the ICU sentence in Amharic — the explicit-queue step reads in Ethiopic, not the stored English prose (1.2s)
+  ✓  253 [chromium] › tests/Browser/routing-record.spec.ts:48:1 › C09: the routed timeline row expands into the record card — title, numbered steps with plain sentences and monospace facts, Copy as text (1.2s)
+  ✓  254 [chromium] › tests/Browser/routing-record.spec.ts:66:1 › C11 + §13: the elided card for a viewer without individual-metrics rights (the READ ONLY fixture — every non-high .view key, so tickets.view without reports.agents.individual) shows the lock chip and the note, with NO raw uuid in the card body; light and dark are both axe-clean (2.9s)
+
+  ✓  255 [chromium] › tests/Browser/session.spec.ts:173:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › POSITIVE CONTROL: a session established by login survives to the next request (753ms)
+  ✓  256 [chromium] › tests/Browser/session.spec.ts:196:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › SEC-04: the pre-login session id is DESTROYED and replaced at the password boundary (2.9s)
+  ✓  257 [chromium] › tests/Browser/session.spec.ts:251:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a VALIDLY SIGNED hint for a DIFFERENT tenant is refused (VerifyTenantHint itself) (1.5s)
+  ✓  258 [chromium] › tests/Browser/session.spec.ts:305:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › Q7: a hint whose signature does not verify yields no session (770ms)
+  ✓  259 [chromium] › tests/Browser/session.spec.ts:341:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-10: the 6th concurrent login evicts the OLDEST session, not the newest (6.0s)
+  ✓  260 [chromium] › tests/Browser/session.spec.ts:421:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the devices API sees both browsers, refuses to revoke the current one, and revoke-others kills the sibling (1.9s)
+  ✓  261 [chromium] › tests/Browser/session.spec.ts:505:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-12: the /security page is served to a signed-in agent and gated from guests (672ms)
+  ✓  262 [chromium] › tests/Browser/session.spec.ts:540:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › FR-06/FR-07: the full 2FA journey — enrol, challenge, SEC-04 second boundary, recovery code (4.9s)
+  ✓  263 [chromium] › tests/Browser/session.spec.ts:642:5 › session lifecycle (Doc 02 SEC-04, T-04, Q7) › logout ends the session for subsequent requests (724ms)
+  ✓  264 [chromium] › tests/Browser/structure-admin.spec.ts:59:1 › J01/J02/J03: three tabs; departments reorderable by move buttons with default badges; the detail shows the hours-override REF as drawn; §13 keyboard reorder works and PERSISTS (1.8s)
+  ✓  265 [chromium] › tests/Browser/structure-admin.spec.ts:83:1 › P-NAV (S12, countersigned): the drawn Backoffice nav links SLA policies, Automation and Business hours to Doc 12's own screens; People and Channels stay drawn (955ms)
+  ✓  266 [chromium] › tests/Browser/structure-admin.spec.ts:98:1 › J04/J06: the team warning names the SPECIFIC member and department, and "Give access" clears it through the one-act grant (1.8s)
+  ✓  267 [chromium] › tests/Browser/structure-admin.spec.ts:117:1 › J07–J15 on the Queues tab: strategy badges icon+text, the REAL rotation preview, the dashed temporary chip with countdown, the locked starvation row (no controls, caption associated), vip source warning, tags, the skill panel with the live hold, the J15 bands; light AND dark axe-clean; §C/§D: identical controls at 375 (3.3s)
+  ✓  268 [chromium] › tests/Browser/telegram-screens.spec.ts:92:9 › S01 bots screen renders in light-1440, tokens + a11y clean (1.4s)
+  ✓  269 [chromium] › tests/Browser/telegram-screens.spec.ts:107:9 › S02 connections screen renders the checklist + confirm gate in light-1440 (1.3s)
+  ✓  270 [chromium] › tests/Browser/telegram-screens.spec.ts:124:9 › S03 window settings: editable at 1440 / read-only at 375, in light-1440 (1.2s)
+  ✓  271 [chromium] › tests/Browser/telegram-screens.spec.ts:138:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in light-1440 (1.4s)
+  ✓  272 [chromium] › tests/Browser/telegram-screens.spec.ts:164:9 › S05 templates: list + shipped wording + commands + /language gate, in light-1440 (1.5s)
+  ✓  273 [chromium] › tests/Browser/telegram-screens.spec.ts:184:9 › S06 health: down banner, masked viewer, tools, in light-1440 (1.5s)
+  ✓  274 [chromium] › tests/Browser/telegram-screens.spec.ts:92:9 › S01 bots screen renders in light-375, tokens + a11y clean (1.3s)
+  ✓  275 [chromium] › tests/Browser/telegram-screens.spec.ts:107:9 › S02 connections screen renders the checklist + confirm gate in light-375 (1.3s)
+  ✓  276 [chromium] › tests/Browser/telegram-screens.spec.ts:124:9 › S03 window settings: editable at 1440 / read-only at 375, in light-375 (1.3s)
+  ✓  277 [chromium] › tests/Browser/telegram-screens.spec.ts:138:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in light-375 (1.4s)
+  ✓  278 [chromium] › tests/Browser/telegram-screens.spec.ts:164:9 › S05 templates: list + shipped wording + commands + /language gate, in light-375 (1.4s)
+  ✓  279 [chromium] › tests/Browser/telegram-screens.spec.ts:184:9 › S06 health: down banner, masked viewer, tools, in light-375 (1.5s)
+  ✓  280 [chromium] › tests/Browser/telegram-screens.spec.ts:92:9 › S01 bots screen renders in dark-1440, tokens + a11y clean (1.4s)
+  ✓  281 [chromium] › tests/Browser/telegram-screens.spec.ts:107:9 › S02 connections screen renders the checklist + confirm gate in dark-1440 (1.3s)
+  ✓  282 [chromium] › tests/Browser/telegram-screens.spec.ts:124:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-1440 (1.3s)
+  ✓  283 [chromium] › tests/Browser/telegram-screens.spec.ts:138:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in dark-1440 (1.4s)
+  ✓  284 [chromium] › tests/Browser/telegram-screens.spec.ts:164:9 › S05 templates: list + shipped wording + commands + /language gate, in dark-1440 (1.4s)
+  ✓  285 [chromium] › tests/Browser/telegram-screens.spec.ts:184:9 › S06 health: down banner, masked viewer, tools, in dark-1440 (1.5s)
+  ✓  286 [chromium] › tests/Browser/telegram-screens.spec.ts:92:9 › S01 bots screen renders in dark-375, tokens + a11y clean (1.4s)
+  ✓  287 [chromium] › tests/Browser/telegram-screens.spec.ts:107:9 › S02 connections screen renders the checklist + confirm gate in dark-375 (1.3s)
+  ✓  288 [chromium] › tests/Browser/telegram-screens.spec.ts:124:9 › S03 window settings: editable at 1440 / read-only at 375, in dark-375 (1.3s)
+  ✓  289 [chromium] › tests/Browser/telegram-screens.spec.ts:138:9 › S04 menu designer: builder + dual preview at 1440, read-only notice at 375, in dark-375 (1.4s)
+  ✓  290 [chromium] › tests/Browser/telegram-screens.spec.ts:164:9 › S05 templates: list + shipped wording + commands + /language gate, in dark-375 (1.4s)
+  ✓  291 [chromium] › tests/Browser/telegram-screens.spec.ts:184:9 › S06 health: down banner, masked viewer, tools, in dark-375 (1.5s)
+  ✓  292 [chromium] › tests/Browser/telegram-screens.spec.ts:208:1 › S04 §K: the menu reorders end to end with no pointer, position announced (951ms)
+  ✓  293 [chromium] › tests/Browser/telegram-screens.spec.ts:224:1 › S06 §K: the update viewer traverses by keyboard; masking holds on every entry (965ms)
+  ✓  294 [chromium] › tests/Browser/telegram-screens.spec.ts:243:1 › S06: simulate-window-expiry is enabled on staging at 1440 and labelled staging-only (978ms)
+  ✓  295 [chromium] › tests/Browser/telegram-screens.spec.ts:254:1 › §14: the screens render in Amharic (server-localized copy, no raw keys) (1.1s)
+  ✓  296 [chromium] › tests/Browser/transport.spec.ts:10:1 › a cleartext address redirects to https and the page is served over TLS (98ms)
+  ✓  297 [chromium] › tests/Browser/transport.spec.ts:27:1 › responses carry HSTS and the nonce-based CSP (T-07) (92ms)
+  ✓  298 [chromium] › tests/Browser/transport.spec.ts:44:1 › the CSP is enforced by the browser, not merely present (81ms)
+REVERB VISITOR-PRINCIPAL PROOF: {"sessionStatus":201,"visitorId":"01a06b99-3a15-7308-b586-b3fd342c85b8","authStatus":200,"subscribed":"private-tenant.01a0598c-b639-7328-9465-78be166c45e8.visitor.01a06b99-3a15-7308-b586-b3fd342c85b8.thread","foreignStatus":403}
+[error] Access to fetch at 'https://platform.harness.localhost:8443/widget/v1/config' from origin 'https://customer.harness.localhost:8443' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+[error] Failed to load resource: net::ERR_FAILED
+[error] Failed to load resource: the server responded with a status of 403 ()
+  ✓  299 [chromium] › tests/Browser/widget-reverb-auth.spec.ts:67:1 › a visitor principal from the CUSTOMER origin authenticates onto exactly its own Reverb channel; a foreign visitor channel is REFUSED with 403, never 500 (Doc 13 T-04 / Doc 02 FR-21; STOP-E) (267ms)
+  ✓  300 [chromium] › tests/Browser/workflow-screens.spec.ts:57:1 › J1 + J2: the hub links every group; a rule is created, edited in the three panels, dry-run with truth badges, and activated (2.1s)
+  ✓  301 [chromium] › tests/Browser/workflow-screens.spec.ts:96:1 › J3 + J4: the SLA example sentence answers from the clock library; the hours interval-list editor saves a calendar with a holiday (2.3s)
+  ✓  302 [chromium] › tests/Browser/workflow-screens.spec.ts:118:1 › J5 + J6 + J7 + J8: a field with where-used, a form published v1 from the builder with the dual preview, a macro previewed, the CSAT settings row saved (4.2s)
+  -  303 [chromium] › tests/Browser/inbox-soak.spec.ts:67:1 › NFR-05 structure: the JS heap holds steady across repeated inbox work cycles (dev duration; the 8 h / 300 MB / 5k-event profile is Doc 19 L2)
+
+
+  1) [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]')
+    Expected substring: "#4801 was assigned to you"
+    Error: strict mode violation: getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]') resolved to 6 elements:
+        1) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990002 was assigned to you 1' }).first()
+        2) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).first()
+        3) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990003 was assigned to you 1' })
+        4) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990002 was assigned to you 1' }).nth(1)
+        5) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#990001 was assigned to you 1' }).nth(1)
+        6) <button type="button" data-bell-row="notify.inbox.assignment" class="block w-full border-b px-3.5 py-2.5 text-start">…</button> aka getByRole('button', { name: '#4801 was assigned to you 8/31/' })
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('bell-dropdown').locator('[data-bell-row="notify.inbox.assignment"]')
+
+
+      85 |     await expect(dropdown).toBeVisible();
+      86 |
+    > 87 |     await expect(dropdown.locator('[data-bell-row="notify.inbox.assignment"]')).toContainText(
+         |                                                                                 ^
+      88 |         '#4801 was assigned to you',
+      89 |     );
+      90 |     await expect(dropdown.locator('[data-bell-row="notify.inbox.sla_warning"]')).toContainText(
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-bell.spec.ts:87:81
+
+    Error Context: test-results/inbox-bell-FR-26-the-badge-b418f-inks-to-its-thread-IN-PLACE-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="unread-count"]')
+    Expected: "2"
+    Received: "3"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'አበበ ታደሰ' }).locator('[data-role="unread-count"]')
+        14 × locator resolved to <span role="img" data-v-3577dc5a="" aria-label="3 unread" data-role="unread-count" class="rounded-full px-1.5 text-[10px] font-bold tabular-nums">3</span>
+           - unexpected value "3"
+
+
+      77 |     await expect(row).toBeVisible();
+      78 |     await expect(row.locator('[data-role="sla-pill"]')).toContainText('SLA breached');
+    > 79 |     await expect(row.locator('[data-role="unread-count"]')).toHaveText('2');
+         |                                                             ^
+      80 |     await expect(row.locator('[data-role="language-chip"]')).toHaveText('AM');
+      81 |     await expect(row.locator('[data-role="sentiment-dot"]')).toHaveAttribute(
+      82 |         'aria-label',
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:79:61
+
+    Error Context: test-results/inbox-list-FR-09-line-1-2--d4371-ag-overflow-assignee-avatar-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-ticket]').filter({ hasText: 'Kidist Haile' }).locator('[data-role="snippet"]')
+    Expected: "📷 Photo"
+    Received: "How did we do? Tap a star — 1 (poor) to 5 (great)."
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('[data-ticket]').filter({ hasText: 'Kidist Haile' }).locator('[data-role="snippet"]')
+        14 × locator resolved to <span data-v-3577dc5a="" data-role="snippet" class="min-w-0 flex-1 truncate text-xs font-semibold">How did we do? Tap a star — 1 (poor) to 5 (great).</span>
+           - unexpected value "How did we do? Tap a star — 1 (poor) to 5 (great)."
+
+
+      106 |     const kidist = page.locator('[data-ticket]', { hasText: 'Kidist Haile' });
+      107 |     await expect(kidist).toBeVisible();
+    > 108 |     await expect(kidist.locator('[data-role="snippet"]')).toHaveText('📷 Photo');
+          |                                                           ^
+      109 |     await expect(kidist.getByText(/^Window \d/).first()).toBeVisible(); // the SHARED WindowChip, closing
+      110 |     await expect(kidist.locator('[data-role="draft-pencil"]')).toBeVisible();
+      111 |     await expect(kidist.locator('[data-role="unassigned-ring"]')).toBeVisible();
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-list.spec.ts:108:59
+
+    Error Context: test-results/inbox-list-FR-09-Unassigne-f9180--ONE-older-activity-warning-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/inbox-shortcuts.spec.ts:269:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "sc-tag-mtmp9u3t"
+    Received array: ["telebirr"]
+
+    Call Log:
+    - Test timeout of 30000ms exceeded
+
+      316 |             { timeout: 30_000 },
+      317 |         )
+    > 318 |         .toContain(fixtureTag);
+          |          ^
+      319 |     await page.keyboard.press('t');
+      320 |     await page
+      321 |         .locator('[data-testid="palette-current-tag"]', { hasText: fixtureTag })
+        at /home/kidus/projects/na-live-support/tests/Browser/inbox-shortcuts.spec.ts:318:10
+
+    Error Context: test-results/inbox-shortcuts-P-sets-pri-ad437--—-each-palette-a-real-door-chromium/error-context.md
+
+  4 failed
+    [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE 
+    [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar 
+    [chromium] › tests/Browser/inbox-list.spec.ts:97:1 › FR-09 Unassigned: EC-11 photo placeholder (localized, never a storage key), WindowChip consumed, draft pencil, unassigned ring — and the Doc 05 EC-04 pair: two badges, ONE older-activity warning 
+    [chromium] › tests/Browser/inbox-shortcuts.spec.ts:269:1 › P sets priority through the door with the OPTIMISTIC patch (T-06); T adds and removes tags; S snoozes to pending — each palette a real door 
+  1 skipped
+  298 passed (16.5m)
+make: *** [Makefile:113: browser] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T08:46:49Z
+# duration:   1174s
+# EXIT:       2

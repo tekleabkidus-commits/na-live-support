@@ -1746,4 +1746,98 @@ return [
         'required_fields' => ['customer_id', 'kind'],
         'owning_doc' => 'Doc12',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 13 — Web Chat Widget (SESSION-13 step 2b): every Widget Designer mutation.
+    |--------------------------------------------------------------------------
+    */
+    [
+        // Doc 13 FR-19 (J09): a widget is created in the Designer.
+        'action_key' => 'widget.created',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'name'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-19: name / bundle channel / soft-delete edits (changed = the field list).
+        'action_key' => 'widget.updated',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'changed'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-20: a config publish (HIGH-VISIBILITY class, [D17]).
+        'action_key' => 'widget.config.published',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'version_id', 'version'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-20/EC-11: a rollback = a NEW version + the pointer flip (HIGH-VISIBILITY class, [D17]).
+        'action_key' => 'widget.config.rolled_back',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'from_version', 'to_version', 'new_version_id'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-19 Install / SEC-02: the domain allowlist edited (origins listed).
+        'action_key' => 'widget.allowlist.changed',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'added', 'removed'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 SEC-03: the signed-identity secret minted (shown once; the ENTRY never carries a value or a ref).
+        'action_key' => 'widget.secret.created',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 SEC-03: rotation with the overlap window (HIGH-VISIBILITY class, [D17]; never a ref value).
+        'action_key' => 'widget.secret.rotated',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'overlap_until'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 BR-07 / P-N14: the test-traffic carrier flipped.
+        'action_key' => 'widget.test_mode.changed',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'test_mode'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-04: the tenant stable|early pin.
+        'action_key' => 'widget.bundle_channel.changed',
+        'entity' => 'widget',
+        'actor_types' => ['staff'],
+        'required_fields' => ['widget_id', 'old', 'new'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 FR-04/FS-03: the platform pointer moved (C4: actor logged; local console or the release pipeline [D18]).
+        'action_key' => 'widget.bundle.pointer_changed',
+        'entity' => 'ref_widget_bundle',
+        'actor_types' => ['platform_admin'],
+        'required_fields' => ['channel', 'bundle_hash', 'rollout_pct', 'killed'],
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Doc 13 EC-04 / A-61: a site identity switch mid-conversation — staff-visible, never a re-link.
+        'action_key' => 'widget.identity.switched',
+        'entity' => 'conversation',
+        'actor_types' => ['system'],
+        'required_fields' => ['conversation_id', 'previous_identity_id', 'asserted_identity_id'],
+        'owning_doc' => 'Doc13',
+    ],
 ];

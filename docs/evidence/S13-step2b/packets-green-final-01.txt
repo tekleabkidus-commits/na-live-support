@@ -1,0 +1,139 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      packets-green-final
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Forms/FormPublishTest.php tests/Contract/Forms/FormPreChatContractTest.php tests/Feature/Conversations/MediaPipelineTest.php tests/Feature/Kb/ArticleMediaTest.php tests/Feature/Customers/RollupConsumerTest.php tests/Feature/Tickets/MetricTimestampsTest.php tests/Feature/Tickets/SpamDispositionTest.php tests/Feature/Auth/WidgetSessionTest.php tests/Feature/Auth/WidgetTokenTheftTest.php tests/Security/WidgetPartitionTest.php tests/Contract/AdapterConformance/WebchatAdapterConformanceTest.php tests/Isolation/WidgetGrantPhysicsTest.php tests/Feature/Widget
+# started:    2026-09-04T08:13:03Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the po[39m[90m…[39m [90m7.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\MediaPipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-05 EICAR: infected — event with signature, bytes never stored, a[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: clamd down → held in scanning; the third unavailable attempt[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-11: the 15-minute hold cap quarantines even before three attempt[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-05: a clean voice note emits media.needs_transcript with its stor[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleMediaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02/FR-05: a clean upload scans then stores (signed editing U[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: the widget media door serves ONLY public+published articl[39m[90m…[39m [90m0.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Customers\RollupConsumerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit recomputes every rollup from truth, with N-14 riding the ONE Met[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SABOTAGE-16 CONTROL #1 (inverted R-19): last_contact_at is a BYT[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C-09: the consumer is idempotent on event_id — a redelivery reco[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves the ticket.* family's customer from the TICKET ROW (tru[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-05: drift() names a manufactured non-decay drift, recompute[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit RULING A: window decay (stored > recomputed) heals QUIETLY, but[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\MetricTimestampsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-09: the golden lifecycle fixtures produce exactly the FR-24 valu[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: first_response_at IS the signal message's own database times[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: agent_first_response_at counts the first public HUMAN reply,[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24 + C-09: a redelivered reply cannot move an existing stamp (fi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES an internal note as a first-response sig[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: the trigger REFUSES a pre-ticket message and a message from[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-24: a customer message is not a response at all[39m[90m                  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2: last_status_changed_at is born from clock_ti[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mR-19b strengthening 2 (behavioural): a fresh ticket's status clock[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\SpamDispositionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-09: marking spam takes the machine edge, stamps the actor, exclu[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the separately-confirmed conversation block rides Doc 04's o[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: unmark within 7 days restores the PRIOR status from event hi[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09: unmark on day 8 is refused with the terminality explanation,[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mEC-09/A-17: a customer message after TERMINAL spam opens a FRESH ti[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mA-17: while the spam is still UNMARKABLE, a customer message takes[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-09: the machine edge refuses a mark without tickets.spam.mark, a[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetTokenTheftTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates the cookie on every /session refresh, keeping visitor an[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a bare token act as its visitor — API requests get 40[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit silently issues a FRESH identity to a token without its cookie o[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives a visitor who cleared cookies a fresh identity with no pat[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers NO store operation that accepts a caller-chosen visitor i[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a token minted under one widget when presented under a s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to plant a staff User behind the widget guard even delib[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries a WidgetVisitor principal that fails loudly if treated a[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetPartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a valid visitor session on the staff and bearer surfaces[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses staff credentials on the widget surface (BR-06, staff →[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the widget guard no user provider to misconfigure (BR-06 s[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a visitor onto exactly their own Reverb channel and n[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the widget broadcasting door to anyone who is not a visi[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\WidgetGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per widget table and privileg[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every widget tenant table is FORCED RLS with tenant_isolat[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20 / Doc 02 physics: a config-version UPDATE and a widgets ke[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened und[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormsSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the pre-chat and offline forms once, byte-equal to the Doc[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m0.04s[39m  
+
+  [90mTests:[39m    [32;1m90 passed[39;22m[90m (562 assertions)[39m
+  [90mDuration:[39m [39m14.46s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T08:13:17Z
+# duration:   14s
+# EXIT:       0

@@ -1,0 +1,39 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      control-red-MetricExclusionTestModeTest
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/MetricExclusionTestModeTest.php
+# started:    2026-09-04T07:53:00Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened und[39m[90m…[39m [90m7.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\MetricExclusionTestModeTest[22m [90m>[39m it N-14 second…   
+[39;1m  excluded() included a test-mode conversation — N-14's second half is missing
+Failed asserting that true is false.[39;22m
+
+  at [32mtests/Feature/Widget/MetricExclusionTestModeTest.php[39m:[32m61[39m
+     57▕     [$ticket] = webchatTicketUnderWidget(testMode: true);
+     58▕ 
+     59▕     [$rowIncluded, $sqlIncluded] = includedByBothForms($ticket);
+     60▕ 
+  ➜  61▕     expect($rowIncluded)->toBeFalse('excluded() included a test-mode conversation — N-14\'s second half is missing')
+     62▕         ->and($sqlIncluded)->toBeFalse('includedSql() included a test-mode conversation');
+     63▕ });
+     64▕ 
+     65▕ it('positive control: a LIVE widget\'s ticket stays INCLUDED by both forms, and a non-webchat ticket is untouched', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Widget/MetricExclusionTestModeTest.php[39;22m:[39;1m61[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (7 assertions)[39m
+  [90mDuration:[39m [39m7.40s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T07:53:08Z
+# duration:   8s
+# EXIT:       1

@@ -1,0 +1,173 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      media-after-override
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Conversations/MediaPipelineTest.php tests/Feature/Widget/WidgetMediaOriginTest.php tests/Feature/Kb/ArticleMediaTest.php
+# started:    2026-09-04T08:09:15Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Conversations\MediaPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr[39m[90m…[39m [90m7.61s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 EICAR: infected — event with signature, bytes never stored, a[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: clamd down → held in scanning; the third unavailable attempt[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: the 15-minute hold cap quarantines even before three attempt[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-05: a clean voice note emits media.needs_transcript with its stor[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mSEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\ArticleMediaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-02/FR-05: a clean upload scans then stores (signed editing U[39m[90m…[39m [90m1.83s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: the widget media door serves ONLY public+published articl[39m[90m…[39m [90m1.66s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m AC-05 clean photo…   
+[39;1m  Failed asserting that two variables reference the same object.
+  [39;22m[31m-App\Domain\Conversations\Media\MediaOutcome Enum #3878 (Done)[39m[39;1m
+  [39;22m[32m+App\Domain\Conversations\Media\MediaOutcome Enum #3852 (Held)[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m139[39m
+    135▕     $message = mediaMessage($conversation, MessageKind::Photo, 'image/jpeg', mediaFixtureUrl('photo.jpg', $fixture));
+    136▕ 
+    137▕     $outcome = app(MediaPipeline::class)->process($message, 0, CarbonImmutable::now('UTC'));
+    138▕ 
+  ➜ 139▕     expect($outcome)->toBe(MediaOutcome::Done);
+    140▕ 
+    141▕     $item = $message->refresh()->media[0];
+    142▕     expect($item['scan_status'])->toBe('clean')
+    143▕         ->and($item['storage_key'])->toStartWith('t/'.$conversation->getAttribute('tenant_id').'/')
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m139[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m AC-05 EICAR: infe…   
+[39;1m  Failed asserting that two variables reference the same object.
+  [39;22m[31m-App\Domain\Conversations\Media\MediaOutcome Enum #3878 (Done)[39m[39;1m
+  [39;22m[32m+App\Domain\Conversations\Media\MediaOutcome Enum #3852 (Held)[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m175[39m
+    171▕     $outcome = app(MediaPipeline::class)->process($message, 0, CarbonImmutable::now('UTC'));
+    172▕ 
+    173▕     $item = $message->refresh()->media[0];
+    174▕ 
+  ➜ 175▕     expect($outcome)->toBe(MediaOutcome::Done)
+    176▕         ->and($item['scan_status'])->toBe('infected')
+    177▕         ->and($item['storage_key'] ?? null)->toBeNull() // never stored
+    178▕         ->and(DB::table('outbox')->where('name', 'media.infected')->value('payload'))->toContain('Eicar');
+    179▕
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m175[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m AC-05 oversized (…   
+[39;1m  Failed asserting that two variables reference the same object.
+  [39;22m[31m-App\Domain\Conversations\Media\MediaOutcome Enum #3878 (Done)[39m[39;1m
+  [39;22m[32m+App\Domain\Conversations\Media\MediaOutcome Enum #3852 (Held)[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m201[39m
+    197▕     bindTenant($tenantId); // the customer-notice compose ran its lane job inline
+    198▕ 
+    199▕     $item = $message->refresh()->media[0];
+    200▕ 
+  ➜ 201▕     expect($outcome)->toBe(MediaOutcome::Done)
+    202▕         ->and($item['scan_status'])->toBe('rejected')
+    203▕         // EC-02's staff half: a system marker in the thread, code not copy (N-03).
+    204▕         ->and(Message::query()->where('kind', 'system')->count())->toBe(1)
+    205▕         ->and(Message::query()->where('kind', 'system')->sole()->channel_meta['system_code'])->toBe('media_rejected')
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m201[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m EC-11: clamd down…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'quarantined_pending'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m242[39m
+    238▕     // Attempt 3: quarantined_pending, staff marker, still NOTHING stored.
+    239▕     expect($pipeline->process($message, 0, $now->addMinutes(2)))->toBe(MediaOutcome::Done);
+    240▕ 
+    241▕     $item = $message->refresh()->media[0];
+  ➜ 242▕     expect($item['scan_status'])->toBe('quarantined_pending')
+    243▕         ->and($item['storage_key'] ?? null)->toBeNull()
+    244▕         ->and(Message::query()->where('kind', 'system')->sole()->channel_meta['system_code'])->toBe('media_quarantined_pending');
+    245▕ });
+    246▕
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m242[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m EC-11: the 15-min…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'quarantined_pending'[39m[39;1m
+  [39;22m[32m+'failed'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m259[39m
+    255▕ 
+    256▕     // The SECOND attempt arrives 16 minutes later: the hold clock, not the
+    257▕     // attempt counter, fires (EC-11's "up to 15 min").
+    258▕     expect($pipeline->process($message, 0, $now->addMinutes(16)))->toBe(MediaOutcome::Done)
+  ➜ 259▕         ->and($message->refresh()->media[0]['scan_status'])->toBe('quarantined_pending');
+    260▕ });
+    261▕ 
+    262▕ // ── T-05: voice hook ─────────────────────────────────────────────────────────
+    263▕
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m259[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m T-05: a clean voi…   
+[39;1m  Failed asserting that two strings are identical.
+  [39;22m[31m-'clean'[39m[39;1m
+  [39;22m[32m+'scanning'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Conversations/MediaPipelineTest.php[39m:[32m271[39m
+    267▕     $message = mediaMessage($conversation, MessageKind::Voice, 'audio/ogg', mediaFixtureUrl('note.ogg', random_bytes(2048)));
+    268▕ 
+    269▕     app(MediaPipeline::class)->process($message, 0, CarbonImmutable::now('UTC'));
+    270▕ 
+  ➜ 271▕     expect($message->refresh()->media[0]['scan_status'])->toBe('clean')
+    272▕         ->and(DB::table('outbox')->where('name', 'media.needs_transcript')->count())->toBe(1)
+    273▕         ->and(DB::table('outbox')->where('name', 'media.needs_ocr')->count())->toBe(0);
+    274▕ });
+    275▕
+
+  [33m1   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m271[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m… [41;1m RuntimeException [49;22m  
+[39;1m  media fetch refused or failed (SEC-03 posture): Connection refused for URI https://media.harness.localhost:8443/na-live-support/fixtures/6a9a7cb42600e/ok.bin?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio_local%2F20260904%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260904T080924Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Signature=7009b5f82083d335527325489b5432e740eda889635824123d69d56d518580be[39;22m
+
+  at [32mvendor/guzzlehttp/guzzle/src/Handler/StreamHandler.php[39m:[32m513[39m
+    509▕ 
+    510▕                 $this->lastHeaders = $http_response_header ?? [];
+    511▕ 
+    512▕                 if (false === $resource) {
+  ➜ 513▕                     throw new ConnectException(sprintf('Connection refused for URI %s', Psr7\Utils::redactUserInfo($uri)), $request, null, $context);
+    514▕                 }
+    515▕ 
+    516▕                 if (isset($options['read_timeout'])) {
+    517▕                     $readTimeout = $options['read_timeout'];
+
+      [2m+13 vendor frames [22m
+  [33m14  [39m[39;1mapp/Domain/Conversations/Media/MediaFetcher.php[39;22m:[39;1m46[39;22m
+  [33m15  [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m283[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m4 passed[39;22m[90m (50 assertions)[39m
+  [90mDuration:[39m [39m11.71s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T08:09:27Z
+# duration:   12s
+# EXIT:       2

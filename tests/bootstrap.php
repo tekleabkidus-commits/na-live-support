@@ -2,6 +2,20 @@
 
 declare(strict_types=1);
 
+// P-MEDIA-URL (Doc 13 step 2b, countersigned): the public media base
+// (`AWS_TEMPORARY_URL`) is BROWSER-facing — every Doc 04 signed-URL consumer
+// is a redirect or a link, never an in-container fetch — but
+// MediaPipelineTest's fixture fetches its OWN presigned URL from inside the
+// container, where the public host does not resolve. The test process
+// therefore never sees a public base; the rebase itself is proven by
+// WidgetMediaOriginTest (the config wiring, env-driven) and by the HARNESS
+// HTTP legs (docs/evidence/S13-step2b/media-origin-legs.txt). $_SERVER first:
+// the container's env_file publishes the value there and Laravel reads it
+// before $_ENV (see phpunit.xml's note).
+$_SERVER['AWS_TEMPORARY_URL'] = '';
+$_ENV['AWS_TEMPORARY_URL'] = '';
+putenv('AWS_TEMPORARY_URL=');
+
 /*
 |------------------------------------------------------------------------------
 | Test bootstrap — environment overrides that must WIN (owner ruling D-4).

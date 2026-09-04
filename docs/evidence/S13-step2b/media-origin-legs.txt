@@ -1,0 +1,14 @@
+### P-MEDIA-URL HTTP legs through THE HARNESS — 2026-09-04T08:09:28Z
+presigned URL host: https://media.harness.localhost:8443
+
+=== leg 1: GET the presigned URL on the MEDIA host (expect 200, NO Set-Cookie) ===
+HTTP/2 200 
+server: MinIO
+content-length: 38
+set-cookie headers present: 0
+body: HARNESS media-origin probe (synthetic)
+
+=== leg 2: TAMPERED signature (last hex flipped) → expect 403 from the store ===
+HTTP 403
+
+=== leg 3: the platform-origin session cookie is scoped Path=/api/widget on platform.harness.localhost — the media host is a different origin; a browser never sends it there (origin physics, asserted in the browser leg at step 9) ===

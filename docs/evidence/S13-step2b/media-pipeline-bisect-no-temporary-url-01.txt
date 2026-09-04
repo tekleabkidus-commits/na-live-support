@@ -1,0 +1,159 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      media-pipeline-bisect-no-temporary-url
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T -e AWS_TEMPORARY_URL= app ./vendor/bin/pest tests/Feature/Conversations/MediaPipelineTest.php
+# started:    2026-09-04T08:02:55Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Conversations\MediaPipelineTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 clean photo: scanned, EXIF-stripped (BR-06), stored tenant-pr[39m[90m…[39m [90m7.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 EICAR: infected — event with signature, bytes never stored, a[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mAC-05 oversized (EC-02): the stream aborts MID-DOWNLOAD, item rejec[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: clamd down → held in scanning; the third unavailable attempt[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mEC-11: the 15-minute hold cap quarantines even before three attempt[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mT-05: a clean voice note emits media.needs_transcript with its stor[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mSEC-03: a non-allowlisted host is refused BY THE PROXY; the allowli[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m A… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m135[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m A… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m169[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m A… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m194[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m E… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m232[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m E… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m252[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m T… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m267[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Conversations\MediaPipelineTest[22m [90m>[39m S… [41;1m ErrorException [49;22m  
+[39;1m  Undefined array key "scheme"[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Filesystem/FilesystemAdapter.php[39m:[32m915[39m
+    911▕     {
+    912▕         $parsed = parse_url($url);
+    913▕ 
+    914▕         return $uri
+  ➜ 915▕             ->withScheme($parsed['scheme'])
+    916▕             ->withHost($parsed['host'])
+    917▕             ->withPort($parsed['port'] ?? null);
+    918▕     }
+    919▕
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m76[39;22m
+  [33m3   [39m[39;1mtests/Feature/Conversations/MediaPipelineTest.php[39;22m:[39;1m283[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m (2 assertions)[39m
+  [90mDuration:[39m [39m7.38s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T08:03:03Z
+# duration:   8s
+# EXIT:       2

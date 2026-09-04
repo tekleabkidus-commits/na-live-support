@@ -964,4 +964,157 @@ return [
         'tenant_editable' => true,
         'owning_doc' => 'Doc12',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Doc 13 — Web Chat Widget (SESSION-13 step 2b; SCHEMA AMENDMENT 7 countersigned).
+    | Every `widget.*` name Doc 13 uses is a SETTING here — never a permission
+    | key (R-D13-4). Tenant dials are the Widget Designer Behavior tab's; the
+    | rest are platform dials.
+    |--------------------------------------------------------------------------
+    */
+    [
+        // FR-12: the staff identity a visitor sees once a person joins (first_name | alias | team_name).
+        'key' => 'widget.agent_identity',
+        'type' => 'string',
+        'default' => 'first_name',
+        'validation' => 'required|in:first_name,alias,team_name',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-14 / BR-06 / T-06: ONE proactive per visitor per window, across EVERY rule (a ceiling, not per rule).
+        'key' => 'widget.proactive.cooldown_hours',
+        'type' => 'int',
+        'default' => 24,
+        'validation' => 'required|integer|min:1|max:168',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // SEC-05: off = history is server-fetch only (kiosk/shared devices); the IndexedDB cache holds nothing.
+        'key' => 'widget.cache.content',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // T-03 / Doc 02 FR-25 family: per-visitor-token message limit (ThrottleVisitorToken).
+        'key' => 'widget.rate.messages_per_minute',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:5|max:120',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // T-03 / Doc 02 FR-25 family: per-visitor-token request limit across the surface.
+        'key' => 'widget.rate.requests_per_minute',
+        'type' => 'int',
+        'default' => 120,
+        'validation' => 'required|integer|min:30|max:600',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-20 / NFR-04: open widgets poll config every N seconds (300 = the document 5 min); pushed on the socket too.
+        'key' => 'widget.config.poll_seconds',
+        'type' => 'int',
+        'default' => 300,
+        'validation' => 'required|integer|min:60|max:900',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-21 / FS-01: the polling fallback interval (5 s); never used while the socket is healthy (NFR-03).
+        'key' => 'widget.polling.interval_seconds',
+        'type' => 'int',
+        'default' => 5,
+        'validation' => 'required|integer|min:2|max:30',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-04: the staged-rollout stages of the early channel pointer (5 -> 50 -> 100).
+        'key' => 'widget.bundle.rollout_stages',
+        'type' => 'json',
+        'default' => [5, 50, 100],
+        'validation' => 'required|array|min:1',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-01 / FR-19 Install: the origin the snippet renders (the HARNESS platform origin in dev; Doc 18 CDN in production).
+        'key' => 'widget.cdn_origin',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|max:255',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-03 / SEC-07: the origin the panel document is served from (the frame-src the Install tab prints).
+        'key' => 'widget.frame_origin',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|max:255',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-17: the in-page reply sound default (config: on).
+        'key' => 'widget.sound.default',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // Section 8 overflow menu / SEC-06: transcript by download or by email.
+        'key' => 'widget.transcript.mode',
+        'type' => 'string',
+        'default' => 'download',
+        'validation' => 'required|in:download,email',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // SEC-06: transcript exports per visitor per hour.
+        'key' => 'widget.transcript.rate_per_hour',
+        'type' => 'int',
+        'default' => 3,
+        'validation' => 'required|integer|min:1|max:20',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // T-08: the fraction of panel errors whose SCRUBBED stack is sampled (counters are ALWAYS incremented). Rides type string + numeric validation because the registry has no float type (countersign note).
+        'key' => 'widget.beacon.sample_rate',
+        'type' => 'string',
+        'default' => '0.05',
+        'validation' => 'required|numeric|min:0|max:1',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // SEC-03: the overlap window after a signed-identity secret rotation (Doc 02 FR-19 pattern).
+        'key' => 'widget.identity.rotation_overlap_hours',
+        'type' => 'int',
+        'default' => 24,
+        'validation' => 'required|integer|min:1|max:168',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
+    [
+        // FR-24: how many operator-declared capture() keys a widget allowlist may hold.
+        'key' => 'widget.context.max_custom_keys',
+        'type' => 'int',
+        'default' => 20,
+        'validation' => 'required|integer|min:0|max:50',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc13',
+    ],
 ];

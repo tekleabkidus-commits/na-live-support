@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      control-red-WidgetModelTest
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetModelTest.php
+# started:    2026-09-04T07:52:52Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m7.41s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetModelTest[22m [90m>[39m it P-WIDGET: the Designer'…   
+[39;1m  name was silently discarded — the fillable list lacks the amendment-7 columns
+Failed asserting that two strings are identical.
+  [39;22m[31m-'Support subdomain widget'[39m[39;1m
+  [39;22m[32m+''[39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Widget/WidgetModelTest.php[39m:[32m21[39m
+     17▕ 
+     18▕     $widget->update(['name' => 'Support subdomain widget', 'bundle_channel' => 'early', 'test_mode' => true]);
+     19▕     $fresh = Widget::query()->findOrFail($widget->getKey());
+     20▕ 
+  ➜  21▕     expect($fresh->name)->toBe('Support subdomain widget', 'name was silently discarded — the fillable list lacks the amendment-7 columns')
+     22▕         ->and($fresh->bundle_channel)->toBe('early')
+     23▕         ->and($fresh->test_mode)->toBeTrue();
+     24▕     // Doc 02's half untouched: allowed_origins still round-trips as an array.
+     25▕     expect($fresh->allowed_origins)->toBe([WIDGET_ORIGIN]);
+
+  [33m1   [39m[39;1mtests/Feature/Widget/WidgetModelTest.php[39;22m:[39;1m21[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (1 assertions)[39m
+  [90mDuration:[39m [39m7.45s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T07:53:00Z
+# duration:   8s
+# EXIT:       1

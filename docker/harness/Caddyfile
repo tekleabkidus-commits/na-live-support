@@ -29,17 +29,16 @@ https://platform.harness.localhost:8443 {
 	}
 }
 
-# The cookie-less media origin AS ITS OWN HOST (Doc 04's physics). Same app,
-# different origin: a browser never sends platform-origin cookies here.
+# The cookie-less media origin AS ITS OWN HOST (Doc 04's physics): the object
+# store (MinIO in dev, Doc 18's media domain in production) reached through a
+# host no session cookie is ever scoped to. P-MEDIA-URL (countersigned): the
+# app mints presigned URLs rebased onto this host (`AWS_TEMPORARY_URL`); SigV4
+# signed the Host the STORE sees, so the proxy restores `Host: minio:9000`
+# upstream — a tampered signature still dies at the store (403).
 https://media.harness.localhost:8443 {
 	tls /tmp/harness-certs/server.crt /tmp/harness-certs/server.key
-	reverse_proxy https://app:443 {
-		transport http {
-			tls_server_name app
-		}
-		header_up Host {host}
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Proto https
+	reverse_proxy http://minio:9000 {
+		header_up Host minio:9000
 	}
 }
 

@@ -25,6 +25,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'key_id',
     'allowed_origins',
+    // SCHEMA AMENDMENT 7 item 1 (P-WIDGET, countersigned 2026-09-04): Doc 13's
+    // config columns, expand-contract — the growth this docblock reserved.
+    // identity_secret_rotated_at is deliberately ABSENT: the DB trigger stamps
+    // it from the database clock (C1, C-11) — the app never writes it.
+    'name',
+    'live_version_id',
+    'bundle_channel',
+    'test_mode',
+    'identity_secret_ref',
+    'identity_secret_previous_ref',
+    'deleted_at',
 ])]
 final class Widget extends Model implements TenantScoped
 {
@@ -37,6 +48,9 @@ final class Widget extends Model implements TenantScoped
     {
         return [
             'allowed_origins' => 'array',
+            'test_mode' => 'bool',
+            'identity_secret_rotated_at' => 'immutable_datetime',
+            'deleted_at' => 'immutable_datetime',
         ];
     }
 

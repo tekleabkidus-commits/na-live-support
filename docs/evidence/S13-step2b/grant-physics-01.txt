@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      grant-physics
+# set:        S13-step2b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Isolation/WidgetGrantPhysicsTest.php
+# started:    2026-09-04T07:48:28Z
+# git:        f4f4041 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\WidgetGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per widget table and privileg[39m[90m…[39m [90m7.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01: every widget tenant table is FORCED RLS with tenant_isolat[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20 / Doc 02 physics: a config-version UPDATE and a widgets ke[39m[90m…[39m [90m0.10s[39m  
+
+  [90mTests:[39m    [32;1m3 passed[39;22m[90m (56 assertions)[39m
+  [90mDuration:[39m [39m8.03s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T07:48:36Z
+# duration:   8s
+# EXIT:       0

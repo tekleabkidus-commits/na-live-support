@@ -75,6 +75,15 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', true),
+            // P-MEDIA-URL (Doc 13 step 2b, countersigned 2026-09-04): the cookie-less
+            // media origin as its OWN HOST. Presigned URLs are rebased onto this
+            // public base (the HARNESS media host in dev; Doc 18's media domain in
+            // production); empty = unchanged. The proxy in front of the store restores
+            // the store's own Host so SigV4 still validates — a tampered signature dies
+            // at the store. Never a session cookie's origin.
+            // `?: null`: the adapter treats an EMPTY string as set and rebases onto
+            // nothing ("Undefined array key scheme") — only a real base may be set.
+            'temporary_url' => env('AWS_TEMPORARY_URL') ?: null,
             'throw' => true,
             'report' => false,
         ],

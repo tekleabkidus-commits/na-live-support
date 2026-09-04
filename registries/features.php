@@ -59,4 +59,16 @@ return [
         'tenant_toggleable' => true,
         'owning_doc' => 'Doc12',
     ],
+    [
+        // Doc 13 FR-16: "voice recording behind the platform flag (default off per the
+        // series stance)". PLATFORM-scoped (tenant_toggleable false — the
+        // emergency_read_only idiom): the webchat adapter's media list and the
+        // composer's attach row read it; N-19 — hides, never destroys. Doc 07's
+        // inbox.voice_recording is the STAFF composer's own flag and stays.
+        'key' => 'widget.voice_recording',
+        'label_i18n_key' => 'widget.feature.voice_recording',
+        'default' => false,
+        'tenant_toggleable' => false,
+        'owning_doc' => 'Doc13',
+    ],
 ];

@@ -81,11 +81,16 @@ final class WebchatAdapter implements ChannelAdapter, SupportsTyping
     ];
 
     /**
+     * @param  Capabilities|Closure(): Capabilities  $capabilities  a fixed envelope (the
+     *                                                              conformance subclass) or a resolver read at
+     *                                                              capability time (the provider: the voice kind
+     *                                                              joins only while the platform flag is on for
+     *                                                              the BOUND tenant — N-19, hides never destroys)
      * @param  Closure(string, string, string, array<string, mixed>): void  $push  (visitorId, suffix, event, payload)
      * @param  Closure(): AdapterHealth  $health
      */
     public function __construct(
-        private readonly Capabilities $capabilities,
+        private readonly Capabilities|Closure $capabilities,
         private readonly Closure $push,
         private readonly Closure $health,
     ) {}
@@ -184,7 +189,7 @@ final class WebchatAdapter implements ChannelAdapter, SupportsTyping
 
     public function sendTyping(string $externalChatId): void
     {
-        if (! $this->capabilities->supportsTyping) {
+        if (! $this->capabilities()->supportsTyping) {
             throw new DomainException('typing is not a declared capability of this webchat profile (FR-18).');
         }
 
@@ -197,7 +202,7 @@ final class WebchatAdapter implements ChannelAdapter, SupportsTyping
 
     public function capabilities(): Capabilities
     {
-        return $this->capabilities;
+        return $this->capabilities instanceof Capabilities ? $this->capabilities : ($this->capabilities)();
     }
 
     public function health(): AdapterHealth
@@ -240,11 +245,12 @@ final class WebchatAdapter implements ChannelAdapter, SupportsTyping
     private function capabilityRefusal(OutboundMessage $message): ?SendResult
     {
         $body = $message->payload->body;
-        if ($body !== null && mb_strlen($body) > $this->capabilities->maxText) {
+        $capabilities = $this->capabilities();
+        if ($body !== null && mb_strlen($body) > $capabilities->maxText) {
             return SendResult::failed(new AdapterError(DeliveryFailureReason::InvalidContent));
         }
 
-        if ($message->payload->kind !== DeliverableKind::Text && ! $this->capabilities->allowsMediaKind($message->payload->kind)) {
+        if ($message->payload->kind !== DeliverableKind::Text && ! $capabilities->allowsMediaKind($message->payload->kind)) {
             return SendResult::failed(new AdapterError(DeliveryFailureReason::InvalidContent));
         }
 

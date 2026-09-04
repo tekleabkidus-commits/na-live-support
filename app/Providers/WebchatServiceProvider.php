@@ -10,6 +10,8 @@ use App\Domain\Conversations\Adapters\Capabilities;
 use App\Domain\Conversations\Adapters\ReplyWindow;
 use App\Domain\Webchat\Realtime\WebchatPusher;
 use App\Domain\Webchat\WebchatAdapter;
+use App\Support\Flags\FeatureRegistry;
+use App\Support\Tenancy\TenantContext;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -21,8 +23,8 @@ use Illuminate\Support\ServiceProvider;
  *
  * T-02's envelope, verbatim. The voice kind joins the media list ONLY while
  * the platform flag `widget.voice_recording` (registries/features.php,
- * platform-scoped, default off — step 2) is on; until the flag is registered
- * the list is the three always-on kinds.
+ * platform-scoped, default off) is on for the BOUND tenant — resolved at
+ * capability time, never at boot.
  */
 final class WebchatServiceProvider extends ServiceProvider
 {
@@ -30,18 +32,30 @@ final class WebchatServiceProvider extends ServiceProvider
     {
         $pusher = fn (): WebchatPusher => $this->app->make(WebchatPusher::class);
 
+        // T-02 verbatim; the voice kind joins ONLY while the platform flag
+        // `widget.voice_recording` is on for the bound tenant (resolved at
+        // capability time — a boot-time read would have no tenant to ask).
+        $capabilities = function (): Capabilities {
+            $voice = false;
+            if ($this->app->make(TenantContext::class)->tenantIdOrNull() !== null) {
+                $voice = $this->app->make(FeatureRegistry::class)->active('widget.voice_recording');
+            }
+
+            return new Capabilities(
+                maxText: 4000,
+                mediaTypes: $voice ? ['photo', 'video', 'document', 'voice'] : ['photo', 'video', 'document'],
+                supportsTyping: true,
+                supportsEdit: false,
+                supportsDelete: false,
+                supportsButtons: true,
+                replyWindow: ReplyWindow::none(),
+            );
+        };
+
         $this->app->make(AdapterRegistry::class)->register(
             WebchatAdapter::CHANNEL,
             new WebchatAdapter(
-                capabilities: new Capabilities(
-                    maxText: 4000,
-                    mediaTypes: ['photo', 'video', 'document'],
-                    supportsTyping: true,
-                    supportsEdit: false,
-                    supportsDelete: false,
-                    supportsButtons: true,
-                    replyWindow: ReplyWindow::none(),
-                ),
+                capabilities: $capabilities,
                 push: static function (string $visitorId, string $suffix, string $event, array $payload) use ($pusher): void {
                     $pusher()->toVisitor($visitorId, $suffix, $event, $payload);
                 },
