@@ -38,7 +38,7 @@ it('GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG (allowlist, 
         ->and($response->headers->get('X-Widget-Bundle'))->toBe(WidgetBundleResolver::hashOf($manifest['panel']));
 });
 
-it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP (the frame-ancestors arm is step 7\'s packet — \'none\' until then, stated); no-store', function (): void {
+it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP whose frame-ancestors IS the widget\'s allowlist (P-FRAME-ANCESTORS); no-store', function (): void {
     [, $widget, $key] = widgetFixture();
 
     $response = $this->get('/w/panel/'.$key.'?frame=launcher');
@@ -49,7 +49,7 @@ it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount poi
     expect($m[1] ?? '')->not->toBe('')
         ->and($html)->toContain('<script type="module" nonce="'.$m[1].'" src="/w/panel.')
         ->and($html)->toContain('<div id="nlw-root" data-widget="'.(string) $widget->getKey().'"></div>')
-        ->and($csp)->toContain("frame-ancestors 'none'")   // the interim, replaced by P-FRAME-ANCESTORS at step 7
+        ->and($csp)->toContain('frame-ancestors https://help.fixture-operator.example')   // P-FRAME-ANCESTORS: the widget's allowlist, nothing else
         ->and($csp)->not->toContain('unsafe-inline')->not->toContain('unsafe-eval');
 });
 

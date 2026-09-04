@@ -33,6 +33,17 @@ final class SecurityHeaders
     public const REQUEST_NONCE_ATTRIBUTE = 'csp_nonce';
 
     /**
+     * Doc 13 (P-FRAME-ANCESTORS): the widget FRAME surface's ancestor sources,
+     * placed on the REQUEST by the panel route's own middleware (the resolved
+     * widget's allowlist — Doc 02 FR-21/EC-08's structural half). Read here
+     * AFTER `$next` returns, so the group-appended instance sees it; the
+     * attribute names sources, this class alone names the directive.
+     *
+     * @var string
+     */
+    public const REQUEST_ANCESTOR_SOURCES_ATTRIBUTE = 'csp_ancestor_sources';
+
+    /**
      * @param  Closure(Request): Response  $next
      */
     public function handle(Request $request, Closure $next, string $surface = 'staff'): Response
@@ -42,20 +53,24 @@ final class SecurityHeaders
 
         $response = $next($request);
 
-        $response->headers->set('Content-Security-Policy', $this->contentSecurityPolicy($nonce, $surface));
+        $response->headers->set('Content-Security-Policy', $this->contentSecurityPolicy($request, $nonce, $surface));
         $response->headers->set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-        if ($surface === 'staff') {
-            // Belt for pre-CSP user agents; frame-ancestors is the braces.
+        // Belt for pre-CSP user agents; frame-ancestors is the braces. The ONE exception
+        // (P-FRAME-ANCESTORS, condition 2): a widget panel with a NON-EMPTY ancestor list —
+        // X-Frame-Options cannot express a list, so the belt would contradict the braces;
+        // the CSP alone speaks. An empty list, a 404, every other surface: DENY.
+        $ancestors = $request->attributes->get(self::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE);
+        if (! (is_array($ancestors) && $ancestors !== [])) {
             $response->headers->set('X-Frame-Options', 'DENY');
         }
 
         return $response;
     }
 
-    private function contentSecurityPolicy(string $nonce, string $surface): string
+    private function contentSecurityPolicy(Request $request, string $nonce, string $surface): string
     {
         $connect = ["'self'", ...$this->configuredOrigins('security.csp.connect_src')];
         $script = ["'self'", "'nonce-{$nonce}'"];
@@ -71,10 +86,12 @@ final class SecurityHeaders
             $connect = [...$connect, ...$dev];
         }
 
-        $frameAncestors = match ($surface) {
-            // The widget step (FR-21/EC-08) replaces this with the widget's
-            // per-tenant ancestor allowlist, resolved per request.
-            'staff' => "'none'",
+        $sources = $request->attributes->get(self::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE);
+        $frameAncestors = match (true) {
+            // The widget FRAME surface (Doc 13 P-FRAME-ANCESTORS; Doc 02 FR-21/EC-08's
+            // structural half): the resolved widget's allowlist, per request; an empty
+            // allowlist frames nowhere. Every other surface forbids framing entirely.
+            is_array($sources) => $sources === [] ? "'none'" : implode(' ', array_values(array_filter($sources, 'is_string'))),
             default => "'none'",
         };
 

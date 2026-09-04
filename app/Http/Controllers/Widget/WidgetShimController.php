@@ -25,9 +25,8 @@ use Illuminate\Http\Response;
  *                                the appearance/proactive dials — never a secret beyond the
  *                                widget key the page already holds.
  *   GET /w/panel/{widget_key}    the PANEL DOCUMENT — a nonce'd module script (SecurityHeaders
- *                                owns the CSP; the widget's frame-ancestors arm is P-FRAME-
- *                                ANCESTORS at step 7 — until then the document is served under
- *                                the default surface and is NOT frameable, stated).
+ *                                owns the CSP; the panel's ancestor allowlist arrives through
+ *                                WidgetFrameSurface — P-FRAME-ANCESTORS).
  *
  * C3 (countersign): a soft-deleted widget is dead to the wire — both doors 404
  * (an empty 404 to a <script>/<iframe> is silence, never a broken host page).

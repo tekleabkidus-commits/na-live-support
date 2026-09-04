@@ -21,6 +21,7 @@ Route::middleware([App\Http\Middleware\WidgetKeyFromPath::class, 'tenant:widget_
         Route::get('{widget_key}.js', [App\Http\Controllers\Widget\WidgetShimController::class, 'script'])
             ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.shim');
         Route::get('panel/{widget_key}', [App\Http\Controllers\Widget\WidgetShimController::class, 'panel'])
+            ->middleware(App\Http\Middleware\WidgetFrameSurface::class) // P-FRAME-ANCESTORS: the widget's allowlist becomes frame-ancestors
             ->where('widget_key', '[A-Za-z0-9._-]+')->name('widget.panel');
     });
 

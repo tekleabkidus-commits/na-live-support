@@ -1,0 +1,53 @@
+### P-FRAME-ANCESTORS LANDING — PHP legs (both countersign conditions; rerun after a regex escape) — 2026-09-04T17:10:31Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Security\FrameAncestorsTest
+  ✓ it static sweep: the frame-ancestors directive is written in exact… 10.68s  
+  ✓ it countersign condition 1 — the ESCAPE HATCH is the attribute: REQ… 0.32s  
+  ✓ it source mapping: exact https origins verbatim, *.brand wildcards…  0.04s  
+  ✓ it surfaces on real requests: the panel document frames ONLY its wi… 0.25s  
+
+   PASS  Tests\Feature\Widget\WidgetShimTest
+  ✓ it GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG…  0.13s  
+  ✓ it GET /w/panel/{key}: the panel document is a nonce'd module-scrip… 0.12s  
+  ✓ it C3: a soft-deleted widget is dead to the wire — shim and panel b… 0.17s  
+
+   PASS  Tests\Security\SecurityHeadersTest
+  ✓ it carries the full T-07 header set on the root web page             0.04s  
+  ✓ it carries the full T-07 header set on an authenticated staff API r… 0.31s  
+  ✓ it carries the full T-07 header set on an error response             0.05s  
+  ✓ it rotates the CSP nonce on every request                            0.05s  
+
+   PASS  Tests\Security\MiddlewareOrderTest
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.09s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.14s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.08s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.03s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.06s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.02s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.14s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.03s  
+
+   PASS  Tests\Feature\Auth\WidgetSessionTest
+  ✓ it issues a working visitor session to an allowed origin (FR-21 — t… 0.13s  
+  ✓ it slides the 30-day TTL on every authenticated touch (FR-21 "slidi… 0.14s  
+  ✓ it refuses a disallowed origin at the server layer, issuing NOTHING… 0.13s  
+  ✓ it refuses at the server layer with the CORS layer REMOVED — AC-06…  0.10s  
+  ✓ it withholds the CORS grant even when the server layer waves everyt… 0.08s  
+  ✓ it refuses an allowed origin wrapped by a disallowed ancestor (EC-0… 0.12s  
+  ✓ it treats a top-level page (no ancestors) as allowed (EC-08)         0.10s  
+  ✓ it refuses when the Origin header and the declared origin disagree   0.08s  
+  ✓ it judges a non-browser caller by its declared origin — no Origin h… 0.11s  
+  ✓ it pins the wildcard dot boundary: *.brand.com never admits evil-br… 0.11s  
+  ✓ it compares ports exactly and refuses http origins outright (ruling… 0.12s  
+  ✓ it refuses a widget key with no widget record — fail-closed, same s… 0.09s  
+  ✓ it resolves nothing for an unknown widget key — 404, never 403 (C-1… 0.08s  
+  ✓ it answers a genuine preflight permissively and a bare OPTIONS with… 0.06s  
+  ✓ it keeps two tenants' widgets invisible to each other (N-01, the st… 0.11s  
+
+  Tests:    34 passed (909 assertions)
+  Duration: 14.44s
+
+exit=0
+--- phpstan ---
+Note: Using configuration file /app/phpstan.neon.
