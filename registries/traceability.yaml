@@ -2615,7 +2615,7 @@ entries:
     justification: >-
       PLANNED (justified manual until the suite lands — the registry gate requires an existing path): flips at step 7 — tests/Browser/widget-footprint.spec.ts + the hostile-host suite (tests/Browser/widget-hostile-host.spec.ts, SS-03) green + the loader footprint audit asserting globals/listeners/DOM EXACTLY.
   - ac_ref: "Doc13 AC-03"
-    suite_path: tests/Feature/Auth/WidgetSessionTest.php
+    suite_path: tests/Security/WidgetOriginLayersTest.php
     type: automated
     tier: security
     cadence: every-push
@@ -2623,17 +2623,17 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED AT S13 STEP 1 (the server layer is REAL today in WidgetSessionTest — AC-06 of Doc 02 by removal): flips at step 3 with tests/Security/WidgetOriginLayersTest.php — each of SEC-02's three layers blocks alone (disable two, the third holds; loader/CORS/server) on THE HARNESS; EC-12's wildcard boundary re-pinned. Doc 02's server layer is already proven (WidgetSessionTest).
+      S13 STEP 3: the SERVER and CORS layers each block ALONE on the visitor doors (WidgetOriginLayersTest — the CORS stamp removed by the AC-06 precedent and the server still refuses 403 origin_not_allowed; a hostile origin gets no stamp; the layers are independent code paths); EC-12's wildcard boundary re-pinned on the doors (evil-brand 403, www under the wildcard 201, bare domain 403); sabotage (d)/(e) red+restored. REMAINING: the LOADER (client) layer + frame-ancestors on THE HARNESS browser leg at step 7 (tests/Browser/widget-origin-layers.spec.ts).
   - ac_ref: "Doc13 AC-04"
-    suite_path: tests/Security/WidgetPartitionTest.php
+    suite_path: tests/Security/WidgetVisitorScopeTest.php
     type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED AT S13 STEP 1 (the Reverb-channel half is REAL today in WidgetPartitionTest): flips at step 3 with tests/Security/WidgetVisitorScopeTest.php — the visitor-scope matrix (a token reaches exactly its own conversation/survey/context; cross-visitor 404). The Reverb-channel half is proven NOW from the customer origin (tests/Browser/widget-reverb-auth.spec.ts: own channel subscribed, foreign channel 403 never 500).
+      FLIPPED AT S13 STEP 3: WidgetVisitorScopeTest — a visitor token reaches EXACTLY its own thread/receipts/context (the channel key webchat+widget+visitor, A-61); a foreign message id is ABSENT (404) on receipts and context; a token minted on another tenant's widget 401; a staff session 401; a bare token 401; the CSAT door 404 on a foreign token; sabotage (b) red+restored. The Reverb-channel half: WidgetPartitionTest + tests/Browser/widget-reverb-auth.spec.ts (own channel subscribed from the customer origin, a foreign visitor's channel 403 never 500).
   - ac_ref: "Doc13 AC-05"
     suite_path: manual
     type: manual

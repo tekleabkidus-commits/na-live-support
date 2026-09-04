@@ -1,0 +1,371 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      safety-red-absent-doors
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/NoGhostProfileTest.php tests/Security/WidgetVisitorScopeTest.php tests/Security/WidgetOriginLayersTest.php tests/Feature/Widget/WidgetMessagesTest.php tests/Feature/Widget/WidgetContextAllowlistTest.php tests/Feature/Widget/WidgetBeaconTest.php
+# started:    2026-09-04T09:06:59Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m7.23s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m… [39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.05s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\NoGhostProfileTest[22m [90m>[39m it FR-05: a session + a…   
+[39;1m  Expected response status code [200] but received 405.
+Failed asserting that 405 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Widget/NoGhostProfileTest.php[39m:[32m24[39m
+     20▕     $session = widgetSession($key);
+     21▕     $token = $session->json('token');
+     22▕     $cookie = visitorCookieFrom($session);
+     23▕ 
+  ➜  24▕     widgetClient($key, $token, $cookie)->getJson('/api/widget/v1/config')->assertOk();
+     25▕     widgetClient($key, $token, $cookie)->getJson('/api/widget/v1/messages')->assertOk();
+     26▕ 
+     27▕     $afterLoad = (int) DB::connection('pgsql_platform')->table('customers')->where('tenant_id', $tenant->identifier())->count();
+     28▕     expect($afterLoad)->toBe($before, 'a bounce left a ghost customer behind (FR-05)');
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: a visitor reads…   
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Security/WidgetVisitorScopeTest.php[39m:[32m23[39m
+     19▕     $cookie = visitorCookieFrom($session);
+     20▕     $visitorId = $session->json('visitor_id');
+     21▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', [
+     22▕         'client_message_id' => 'cm_'.bin2hex(random_bytes(6)), 'kind' => 'text', 'body' => $body,
+  ➜  23▕     ])->assertStatus(202);
+     24▕     drainWebchatInbound();
+     25▕ 
+     26▕     return [$token, $cookie, $visitorId];
+     27▕ }
+
+  [33m1   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m31[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: the survey and…    
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Security/WidgetVisitorScopeTest.php[39m:[32m23[39m
+     19▕     $cookie = visitorCookieFrom($session);
+     20▕     $visitorId = $session->json('visitor_id');
+     21▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', [
+     22▕         'client_message_id' => 'cm_'.bin2hex(random_bytes(6)), 'kind' => 'text', 'body' => $body,
+  ➜  23▕     ])->assertStatus(202);
+     24▕     drainWebchatInbound();
+     25▕ 
+     26▕     return [$token, $cookie, $visitorId];
+     27▕ }
+
+  [33m1   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m61[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it SERVER layer alone: wi…   
+[39;1m  Expected response status code [201] but received 403.
+Failed asserting that 403 is identical to 201.
+
+The following exception occurred during the last request:
+
+App\Domain\Auth\Widget\WidgetSessionRefused: Widget session refused: origin_not_allowed in /app/app/Domain/Auth/Widget/WidgetSessionRefused.php:44
+Stack trace:
+#0 /app/app/Http/Controllers/Widget/WidgetSessionController.php(79): App\Domain\Auth\Widget\WidgetSessionRefused::originNotAllowed('https://www.bra...')
+#1 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Widget\WidgetSessionController->store(Object(Illuminate\Http\Request))
+#2 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Widget\WidgetSessionController), 'store')
+#3 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#4 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#5 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#6 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#7 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'inbound')
+#8 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#9 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'widget_key')
+#10 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#11 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#12 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#13 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#15 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#17 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#18 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#19 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#20 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#21 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#23 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#25 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#28 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#29 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#32 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#33 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#34 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#35 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#36 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#38 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#39 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#40 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#41 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#42 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#43 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#44 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#45 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#46 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#47 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#48 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#49 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', '/api/widget/v1/...', Array, Array, Array, Array, '[]')
+#50 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', '/api/widget/v1/...', Array, Array, 0)
+#51 /app/tests/Security/WidgetOriginLayersTest.php(36): Illuminate\Foundation\Testing\TestCase->postJson('/api/widget/v1/...', Array)
+#52 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Security\WidgetOriginLayersTest->{closure:/app/tests/Security/WidgetOriginLayersTest.php:23}()
+#53 [internal function]: P\Tests\Security\WidgetOriginLayersTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#54 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#55 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Security\WidgetOriginLayersTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#56 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#57 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Security\WidgetOriginLayersTest->__callClosure(Object(Closure), Array)
+#58 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(17): P\Tests\Security\WidgetOriginLayersTest->__runTest(Object(Closure))
+#59 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Security\WidgetOriginLayersTest->__pest_evaluable_it_SERVER_layer_alone__with_the_CORS_stamp_removed__a_session_from_a_hostile_origin_is_still_refused_403_origin__not__allowed_and_nothing_is_issued()
+#60 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#61 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#62 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#63 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Security\WidgetOriginLayersTest))
+#64 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#65 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+#66 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#67 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#68 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#69 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#70 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#71 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#72 {main}
+
+----------------------------------------------------------------------------------
+
+Widget session refused: origin_not_allowed[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m36[39m
+     32▕     expect($refused->headers->get('Access-Control-Allow-Origin'))->toBeNull();
+     33▕ 
+     34▕     // EC-12 on the same door: the dot boundary — evil-brand.example is not *.brand.example; www needs the wildcard or its own entry.
+     35▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://evil-brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+  ➜  36▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://www.brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(201);
+     37▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+     38▕ });
+     39▕ 
+     40▕ it('CORS layer alone: a valid visitor token used from a hostile origin gets NO Access-Control-Allow-Origin on the visitor doors — the browser cannot read the body, whatever the server answered', function (): void {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it CORS layer alone: a va…   
+[39;1m  Expected response status code [200] but received 405.
+Failed asserting that 405 is identical to 200.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m48[39m
+     44▕     $token = $session->json('token');
+     45▕     $cookie = visitorCookieFrom($session);
+     46▕ 
+     47▕     $allowed = widgetClient($key, $token, $cookie)->getJson('/api/widget/v1/config');
+  ➜  48▕     $allowed->assertOk();
+     49▕     expect($allowed->headers->get('Access-Control-Allow-Origin'))->toBe(WIDGET_ORIGIN)
+     50▕         ->and($allowed->headers->get('Vary'))->toContain('Origin');
+     51▕ 
+     52▕     resetWidgetClient();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it the three layers are I…   
+[39;1m  Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m65[39m
+     61▕ 
+     62▕ it('the three layers are INDEPENDENT code paths: loader (client), CORS (WidgetCors), server (WidgetSessionController) — none delegates to another', function (): void {
+     63▕     $cors = (string) file_get_contents(app_path('Http/Middleware/WidgetCors.php'));
+     64▕     $server = (string) file_get_contents(app_path('Http/Controllers/Widget/WidgetSessionController.php'));
+  ➜  65▕     expect(str_contains($cors, 'WidgetSessionController'))->toBeFalse()
+     66▕         ->and(str_contains($server, 'WidgetCors'))->toBeFalse();
+     67▕     // The loader's check is CLIENT code; it must not be the only place the allowlist is read.
+     68▕     expect(file_exists(app_path('Domain/Auth/Widget/OriginAllowlist.php')))->toBeTrue();
+     69▕ });
+
+  [33m1   [39m[39;1mtests/Security/WidgetOriginLayersTest.php[39;22m:[39;1m65[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it POST messages ACKs 2…   
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m39[39m
+     35▕     Queue::fake();
+     36▕ 
+     37▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', [
+     38▕         'client_message_id' => 'cm_first', 'kind' => 'text', 'body' => 'Selam',
+  ➜  39▕     ])->assertStatus(202)->assertJson(['accepted' => true, 'client_message_id' => 'cm_first']);
+     40▕ 
+     41▕     Queue::assertPushed(NormalizeInbound::class, 1);
+     42▕     Queue::assertPushed(fn (NormalizeInbound $job): bool => $job->queue === 'webchat-in'
+     43▕         && $job->channel === WebchatAdapter::CHANNEL
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it idempotency: the sam…   
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m55[39m
+     51▕     [$tenant, $widget, $key, $token, $cookie] = visitorScene();
+     52▕     Queue::fake();
+     53▕ 
+     54▕     foreach ([1, 2] as $attempt) {
+  ➜  55▕         widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', ['client_message_id' => 'cm_retry', 'kind' => 'text', 'body' => 'retry #'.$attempt])->assertStatus(202);
+     56▕     }
+     57▕     expect(drainWebchatInbound())->toBe(2);
+     58▕ 
+     59▕     bindTenant($tenant);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it GET messages is the…    
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m68[39m
+     64▕ 
+     65▕ it('GET messages is the visitor-curated cursor page: notes and quarantined rows ABSENT with a positive control; no author ids, no channel meta; C-05 cursoring', function (): void {
+     66▕     [$tenant, $widget, $key, $token, $cookie] = visitorScene();
+     67▕     Queue::fake();
+  ➜  68▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', ['client_message_id' => 'cm_1', 'kind' => 'text', 'body' => 'visible one'])->assertStatus(202);
+     69▕     drainWebchatInbound();
+     70▕ 
+     71▕     bindTenant($tenant);
+     72▕     $conversation = Conversation::query()->where('channel', 'webchat')->sole();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it POST receipts: the F…   
+[39;1m  Expected response status code [202] but received 405.
+Failed asserting that 405 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m99[39m
+     95▕ 
+     96▕ it('POST receipts: the FIRST delivered producer — an outbound row moves sent → delivered exactly once, a queued row does not, a foreign id is 404', function (): void {
+     97▕     [$tenant, $widget, $key, $token, $cookie] = visitorScene();
+     98▕     Queue::fake();
+  ➜  99▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', ['client_message_id' => 'cm_1', 'kind' => 'text', 'body' => 'hello'])->assertStatus(202);
+    100▕     drainWebchatInbound();
+    101▕ 
+    102▕     bindTenant($tenant);
+    103▕     $conversation = Conversation::query()->where('channel', 'webchat')->sole();
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it POST typing records…    
+[39;1m  Expected response status code [204] but received 405.
+Failed asserting that 405 is identical to 204.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m125[39m
+    121▕ });
+    122▕ 
+    123▕ it('POST typing records the customer signal with its TTL (EC-12) and 204s; a visitor with no conversation yet 204s too', function (): void {
+    124▕     [$tenant, , $key, $token, $cookie] = visitorScene();
+  ➜ 125▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/typing')->assertStatus(204);
+    126▕     Queue::fake();
+    127▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/messages', ['client_message_id' => 'cm_1', 'kind' => 'text', 'body' => 'x'])->assertStatus(202);
+    128▕     drainWebchatInbound();
+    129▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/typing')->assertStatus(204);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it GET config: the live…   
+[39;1m  Expected response status code [200] but received 405.
+Failed asserting that 405 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetMessagesTest.php[39m:[32m137[39m
+    133▕ });
+    134▕ 
+    135▕ it('GET config: the live config over the neutral defaults, the adapter\'s capability envelope, hours from the real calendar, the language chain, Cache-Control 60 s; a soft-deleted widget is DEAD to the wire (C3)', function (): void {
+    136▕     [$tenant, $widget, $key, $token, $cookie] = visitorScene();
+  ➜ 137▕     $config = widgetClient($key, $token, $cookie)->getJson('/api/widget/v1/config?language=am')->assertOk();
+    138▕     $config->assertJsonPath('capabilities.max_text', 4000)->assertJsonPath('capabilities.typing', true)->assertJsonPath('language', 'am')->assertJsonPath('version', null);
+    139▕     expect($config->json('capabilities.media'))->toBe(['photo', 'video', 'document'])
+    140▕         ->and($config->headers->get('Cache-Control'))->toContain('max-age=60')
+    141▕         ->and($config->json('hours'))->toHaveKeys(['open', 'opens_at', 'timezone'])
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetContextAllowlistTest[22m [90m>[39m it FR-24: only…    
+[39;1m  Expected response status code [204] but received 405.
+Failed asserting that 405 is identical to 204.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetContextAllowlistTest.php[39m:[32m24[39m
+     20▕     $token = $session->json('token');
+     21▕     $cookie = visitorCookieFrom($session);
+     22▕ 
+     23▕     // Before any message: 204 and NO row.
+  ➜  24▕     widgetClient($key, $token, $cookie)->postJson('/api/widget/v1/context', ['url' => 'https://customer.harness.localhost:8443/'])->assertStatus(204);
+     25▕     bindTenant($tenant);
+     26▕     expect(DB::table('widget_visitor_contexts')->count())->toBe(0);
+     27▕ 
+     28▕     // Declare an allowlist on a live config version, then send the first message.
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetBeaconTest[22m [90m>[39m it T-08: load/open/blocke…   
+[39;1m  Expected response status code [204] but received 405.
+Failed asserting that 405 is identical to 204.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetBeaconTest.php[39m:[32m20[39m
+     16▕     [$tenant, $widget, $key] = widgetFixture();
+     17▕     resetWidgetClient();
+     18▕     $post = fn (array $body) => test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => WIDGET_ORIGIN])->postJson('/api/widget/v1/beacon', $body);
+     19▕ 
+  ➜  20▕     $post(['kind' => 'load'])->assertStatus(204);
+     21▕     $post(['kind' => 'load'])->assertStatus(204);
+     22▕     $post(['kind' => 'open'])->assertStatus(204);
+     23▕     $post(['kind' => 'mount_fail', 'reason' => 'csp'])->assertStatus(204);
+     24▕     $post(['kind' => 'double_install'])->assertStatus(204);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetBeaconTest[22m [90m>[39m it T-08: a panel error be…   
+[39;1m  Expected response status code [204] but received 405.
+Failed asserting that 405 is identical to 204.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetBeaconTest.php[39m:[32m50[39m
+     46▕ 
+     47▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => WIDGET_ORIGIN])->postJson('/api/widget/v1/beacon', [
+     48▕         'kind' => 'panel_error', 'reason' => 'render', 'bundle_hash' => 'abc123',
+     49▕         'sample' => 'TypeError at Thread.tsx:41 — visitor said call me on +251900001234 or mail fixture@fixture.example',
+  ➜  50▕     ])->assertStatus(204);
+     51▕ 
+     52▕     bindTenant($tenant);
+     53▕     expect((int) DB::table('widget_health_counters')->where('widget_id', $widget->getKey())->value('errors'))->toBe(1);
+     54▕     $sample = DB::table('widget_beacon_samples')->where('widget_id', $widget->getKey())->value('sample');
+
+
+  [90mTests:[39m    [31;1m15 failed[39;22m[90m (19 assertions)[39m
+  [90mDuration:[39m [39m7.92s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:07:07Z
+# duration:   8s
+# EXIT:       1

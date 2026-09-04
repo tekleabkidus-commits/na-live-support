@@ -145,4 +145,11 @@ return [
     'workflow.sla.example' => 'Doc 12 §8: the live example sentence is the clock library\'s arithmetic over a calendar snapshot — a read; the POST carries the draft policy\'s target and calendar.',
     'workflow.macros.preview' => 'Doc 12 FR-16/T-06: PaletteReader::preview resolves variables against a sample ticket — a read (T-06 parity: preview == send resolution); nothing is inserted or sent.',
     'workflow.forms.preview' => 'Doc 12 FR-22: FormPublisher::preview runs the publish validations over a draft schema and returns the blocks + usage — a read; publish is the audited door.',
+    'widget.config' => 'Read-only: the live config version + capabilities; mutates nothing.',
+    'widget.messages.index' => 'Read-only cursor page of the visitor\'s own thread; mutates nothing (the thread rows are the record).',
+    'widget.messages.store' => 'Doc 13 T-03 / Doc 04 FR-10: the inbound door enqueues; the message row + message.received EVENT are the durable record (the telegram webhook precedent) — an audit row per visitor message would be a second ledger.',
+    'widget.typing' => 'A TTL-bound presence signal in redis-volatile (EC-12); nothing durable is mutated.',
+    'widget.receipts' => 'Doc 13 T-02: the delivery transition is DeliveryStateMachine\'s and publishes message.delivered — the event IS the record (Doc 04 FR-13).',
+    'widget.context' => 'Doc 13 FR-24: the widget_visitor_contexts row (latest wins) IS the record; visitor-device facts, no staff actor.',
+    'widget.beacon' => 'Doc 13 T-08: health COUNTERS (monotone increments) and sampled scrubbed stacks are the record; anonymous, high-volume, no actor.',
 ];

@@ -1,0 +1,370 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      doors-green
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/NoGhostProfileTest.php tests/Security/WidgetVisitorScopeTest.php tests/Security/WidgetOriginLayersTest.php tests/Feature/Widget/WidgetMessagesTest.php tests/Feature/Widget/WidgetContextAllowlistTest.php tests/Feature/Widget/WidgetBeaconTest.php tests/Security/MiddlewareOrderTest.php tests/Security/WidgetPartitionTest.php tests/Feature/Auth/WidgetSessionTest.php tests/Feature/Auth/WidgetTokenTheftTest.php tests/Feature/Kb/WidgetHelpContractTest.php
+# started:    2026-09-04T09:15:15Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m8.47s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\MiddlewareOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit orders tenant-resolve before tenant-state before permission on t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never enforces tenant state on a route that has not resolved a t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED bearer stack binder-first — the sorter, not[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the bearer surface stateless — no session, no cookies, no[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED widget stack binder → CORS → guard → state ([39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the widget surface sessionless — no session, no cookie enc[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED webhook stacks binder → throttle → secret →[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the permission alias to the RequirePermission middlewa[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetPartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a valid visitor session on the staff and bearer surfaces[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses staff credentials on the widget surface (BR-06, staff →[39m[90m… [39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the widget guard no user provider to misconfigure (BR-06 s[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a visitor onto exactly their own Reverb channel and n[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the widget broadcasting door to anyone who is not a visi[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetTokenTheftTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates the cookie on every /session refresh, keeping visitor an[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a bare token act as its visitor — API requests get 40[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit silently issues a FRESH identity to a token without its cookie o[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives a visitor who cleared cookies a fresh identity with no pat[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers NO store operation that accepts a caller-chosen visitor i[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a token minted under one widget when presented under a s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to plant a staff User behind the widget guard even delib[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries a WidgetVisitor principal that fails loudly if treated a[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feedb[39m[90m…[39m [90m4.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m2.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\NoGhostProfileTest[22m [90m>[39m it FR-05: a sess… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Illuminate\Queue\SyncQueue::pushed()[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Queue/QueueManager.php[39m:[32m425[39m
+    421▕      * @return mixed
+    422▕      */
+    423▕     public function __call($method, $parameters)
+    424▕     {
+  ➜ 425▕         return $this->connection()->$method(...$parameters);
+    426▕     }
+    427▕ }
+    428▕
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Pest.php[39;22m:[39;1m1962[39;22m
+  [33m4   [39m[39;1mtests/Feature/Widget/NoGhostProfileTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: a visito… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Illuminate\Queue\SyncQueue::pushed()[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Queue/QueueManager.php[39m:[32m425[39m
+    421▕      * @return mixed
+    422▕      */
+    423▕     public function __call($method, $parameters)
+    424▕     {
+  ➜ 425▕         return $this->connection()->$method(...$parameters);
+    426▕     }
+    427▕ }
+    428▕
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Pest.php[39;22m:[39;1m1962[39;22m
+  [33m4   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m24[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: the surv… [41;1m Error [49;22m  
+[39;1m  Call to undefined method Illuminate\Queue\SyncQueue::pushed()[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Queue/QueueManager.php[39m:[32m425[39m
+    421▕      * @return mixed
+    422▕      */
+    423▕     public function __call($method, $parameters)
+    424▕     {
+  ➜ 425▕         return $this->connection()->$method(...$parameters);
+    426▕     }
+    427▕ }
+    428▕
+
+      [2m+2 vendor frames [22m
+  [33m3   [39m[39;1mtests/Pest.php[39;22m:[39;1m1962[39;22m
+  [33m4   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m24[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it SERVER layer alone: wi…   
+[39;1m  Expected response status code [201] but received 403.
+Failed asserting that 403 is identical to 201.
+
+The following exception occurred during the last request:
+
+App\Domain\Auth\Widget\WidgetSessionRefused: Widget session refused: origin_not_allowed in /app/app/Domain/Auth/Widget/WidgetSessionRefused.php:44
+Stack trace:
+#0 /app/app/Http/Controllers/Widget/WidgetSessionController.php(79): App\Domain\Auth\Widget\WidgetSessionRefused::originNotAllowed('https://www.bra...')
+#1 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Widget\WidgetSessionController->store(Object(Illuminate\Http\Request))
+#2 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Widget\WidgetSessionController), 'store')
+#3 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#4 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#5 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#6 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#7 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'inbound')
+#8 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#9 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'widget_key')
+#10 /app/app/Http/Middleware/SecurityHeaders.php(43): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#11 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#12 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#13 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#15 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#17 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#18 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#19 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#20 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#21 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#23 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#25 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#28 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#29 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#32 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#33 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#34 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#35 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#36 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#38 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#39 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#40 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#41 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#42 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#43 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#44 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#45 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#46 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#47 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#48 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#49 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('POST', '/api/widget/v1/...', Array, Array, Array, Array, '[]')
+#50 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(411): Illuminate\Foundation\Testing\TestCase->json('POST', '/api/widget/v1/...', Array, Array, 0)
+#51 /app/tests/Security/WidgetOriginLayersTest.php(36): Illuminate\Foundation\Testing\TestCase->postJson('/api/widget/v1/...', Array)
+#52 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Security\WidgetOriginLayersTest->{closure:/app/tests/Security/WidgetOriginLayersTest.php:23}()
+#53 [internal function]: P\Tests\Security\WidgetOriginLayersTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#54 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#55 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Security\WidgetOriginLayersTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#56 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#57 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Security\WidgetOriginLayersTest->__callClosure(Object(Closure), Array)
+#58 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(17): P\Tests\Security\WidgetOriginLayersTest->__runTest(Object(Closure))
+#59 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Security\WidgetOriginLayersTest->__pest_evaluable_it_SERVER_layer_alone__with_the_CORS_stamp_removed__a_session_from_a_hostile_origin_is_still_refused_403_origin__not__allowed_and_nothing_is_issued()
+#60 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#61 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#62 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#63 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Security\WidgetOriginLayersTest))
+#64 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#65 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+#66 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#67 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#68 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#69 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#70 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#71 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#72 {main}
+
+----------------------------------------------------------------------------------
+
+Widget session refused: origin_not_allowed[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m36[39m
+     32▕     expect($refused->headers->get('Access-Control-Allow-Origin'))->toBeNull();
+     33▕ 
+     34▕     // EC-12 on the same door: the dot boundary — evil-brand.example is not *.brand.example; www needs the wildcard or its own entry.
+     35▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://evil-brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+  ➜  36▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://www.brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(201);
+     37▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+     38▕ });
+     39▕ 
+     40▕ it('CORS layer alone: a valid visitor token used from a hostile origin gets NO Access-Control-Allow-Origin on the visitor doors — the browser cannot read the body, whatever the server answered', function (): void {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it the three layers are I…   
+[39;1m  Failed asserting that true is false.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m65[39m
+     61▕ 
+     62▕ it('the three layers are INDEPENDENT code paths: loader (client), CORS (WidgetCors), server (WidgetSessionController) — none delegates to another', function (): void {
+     63▕     $cors = (string) file_get_contents(app_path('Http/Middleware/WidgetCors.php'));
+     64▕     $server = (string) file_get_contents(app_path('Http/Controllers/Widget/WidgetSessionController.php'));
+  ➜  65▕     expect(str_contains($cors, 'WidgetSessionController'))->toBeFalse()
+     66▕         ->and(str_contains($server, 'WidgetCors'))->toBeFalse();
+     67▕     // The loader's check is CLIENT code; it must not be the only place the allowlist is read.
+     68▕     expect(file_exists(app_path('Domain/Auth/Widget/OriginAllowlist.php')))->toBeTrue();
+     69▕ });
+
+  [33m1   [39m[39;1mtests/Security/WidgetOriginLayersTest.php[39;22m:[39;1m65[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m it POST… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type uuid: "" (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: select count(*) as "aggregate" from "messages")[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m440[39m
+    436▕             );
+    437▕ 
+    438▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    439▕ 
+  ➜ 440▕             $statement->execute();
+    441▕ 
+    442▕             return $statement->fetchAll(...$fetchUsing);
+    443▕         });
+    444▕     }
+
+      [2m+8 vendor frames [22m
+  [33m9   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m60[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m72[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m103[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m131[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetContextAllow[22m… [41;1m RecordsNotFoundException [49;22m  
+[39;1m  [39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Concerns/BuildsQueries.php[39m:[32m403[39m
+    399▕ 
+    400▕         $count = $result->count();
+    401▕ 
+    402▕         if ($count === 0) {
+  ➜ 403▕             throw new RecordsNotFoundException;
+    404▕         }
+    405▕ 
+    406▕         if ($count > 1) {
+    407▕             throw new MultipleRecordsFoundException($count);
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetContextAllowlistTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m11 failed[39;22m[90m,[39m[39m [39m[32;1m43 passed[39;22m[90m (1002 assertions)[39m
+  [90mDuration:[39m [39m17.39s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:15:33Z
+# duration:   18s
+# EXIT:       2

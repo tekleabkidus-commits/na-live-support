@@ -1,0 +1,191 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      doors-green
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/NoGhostProfileTest.php tests/Security/WidgetVisitorScopeTest.php tests/Security/WidgetOriginLayersTest.php tests/Feature/Widget/WidgetMessagesTest.php tests/Feature/Widget/WidgetContextAllowlistTest.php tests/Feature/Widget/WidgetBeaconTest.php
+# started:    2026-09-04T09:22:21Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m8.49s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.02s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.07s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\NoGhostProfileTest[22m [90m>[39m it FR-05: a session + a…   
+[39;1m  the first message must mint exactly one shell customer
+Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Widget/NoGhostProfileTest.php[39m:[32m45[39m
+     41▕     ])->assertStatus(202);
+     42▕     drainWebchatInbound();
+     43▕ 
+     44▕     $afterMessage = $count();
+  ➜  45▕     expect($afterMessage)->toBe($before + 1, 'the first message must mint exactly one shell customer');
+     46▕ 
+     47▕     bindTenant($tenant);
+     48▕     $customer = Customer::query()->latest('created_at')->firstOrFail();
+     49▕     expect($customer->is_shell)->toBeTrue()->and($customer->created_source)->toBe('webchat');
+
+  [33m1   [39m[39;1mtests/Feature/Widget/NoGhostProfileTest.php[39;22m:[39;1m45[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: a visitor reads…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'A: first message',[39m[39;1m
+  [39;22m[31m-][39m[39;1m
+  [39;22m[32m+Array &0 [][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/WidgetVisitorScopeTest.php[39m:[32m38[39m
+     34▕ 
+     35▕     $threadA = widgetClient($key, $tokenA, $cookieA)->getJson('/api/widget/v1/messages')->assertOk()->json();
+     36▕     $threadB = widgetClient($key, $tokenB, $cookieB)->getJson('/api/widget/v1/messages')->assertOk()->json();
+     37▕ 
+  ➜  38▕     expect(array_column($threadA['data'], 'body'))->toBe(['A: first message'])
+     39▕         ->and(array_column($threadB['data'], 'body'))->toBe(['B: first message']);
+     40▕ 
+     41▕     // A cannot receipt, reply-to or read B's message by id — absence, not refusal (C-10).
+     42▕     $bId = $threadB['data'][0]['id'];
+
+  [33m1   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: the survey and…    
+[39;1m  Failed asserting that actual size 0 matches expected size 1.[39;22m
+
+  at [32mtests/Security/WidgetVisitorScopeTest.php[39m:[32m70[39m
+     66▕     ])->assertStatus(204);
+     67▕ 
+     68▕     bindTenant($tenant);
+     69▕     $rows = Illuminate\Support\Facades\DB::table('widget_visitor_contexts')->get();
+  ➜  70▕     expect($rows)->toHaveCount(1)->and($rows[0]->url)->toBe('https://customer.harness.localhost:8443/deposit');
+     71▕ 
+     72▕     // The CSAT door is Doc 12's (token in the body): an unknown survey token is 404 there too.
+     73▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => WIDGET_ORIGIN])
+     74▕         ->postJson('/api/widget/v1/csat', ['token' => 'not-a-survey-token', 'score' => 5])->assertStatus(404);
+
+  [33m1   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m70[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m61[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m104[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetMessagesTest[22m [90m>[39m… [41;1m ModelNotFoundException [49;22m  
+[39;1m  No query results for model [App\Models\Conversation].[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php[39m:[32m827[39m
+    823▕     {
+    824▕         try {
+    825▕             return $this->baseSole($columns);
+    826▕         } catch (RecordsNotFoundException) {
+  ➜ 827▕             throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    828▕         }
+    829▕     }
+    830▕ 
+    831▕     /**
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetMessagesTest.php[39;22m:[39;1m132[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetContextAllow[22m… [41;1m RecordsNotFoundException [49;22m  
+[39;1m  [39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Concerns/BuildsQueries.php[39m:[32m403[39m
+    399▕ 
+    400▕         $count = $result->count();
+    401▕ 
+    402▕         if ($count === 0) {
+  ➜ 403▕             throw new RecordsNotFoundException;
+    404▕         }
+    405▕ 
+    406▕         if ($count > 1) {
+    407▕             throw new MultipleRecordsFoundException($count);
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetContextAllowlistTest.php[39;22m:[39;1m45[39;22m
+
+
+  [90mTests:[39m    [31;1m8 failed[39;22m[90m,[39m[39m [39m[32;1m7 passed[39;22m[90m (78 assertions)[39m
+  [90mDuration:[39m [39m9.35s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:22:30Z
+# duration:   9s
+# EXIT:       2

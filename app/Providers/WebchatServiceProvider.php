@@ -10,6 +10,7 @@ use App\Domain\Conversations\Adapters\Capabilities;
 use App\Domain\Conversations\Adapters\ReplyWindow;
 use App\Domain\Webchat\Realtime\WebchatPusher;
 use App\Domain\Webchat\WebchatAdapter;
+use App\Support\Cache\TenantCache;
 use App\Support\Flags\FeatureRegistry;
 use App\Support\Tenancy\TenantContext;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +32,7 @@ final class WebchatServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $pusher = fn (): WebchatPusher => $this->app->make(WebchatPusher::class);
+        $cache = fn (): TenantCache => $this->app->make(TenantCache::class);
 
         // T-02 verbatim; the voice kind joins ONLY while the platform flag
         // `widget.voice_recording` is on for the bound tenant (resolved at
@@ -56,8 +58,14 @@ final class WebchatServiceProvider extends ServiceProvider
             WebchatAdapter::CHANNEL,
             new WebchatAdapter(
                 capabilities: $capabilities,
-                push: static function (string $visitorId, string $suffix, string $event, array $payload) use ($pusher): void {
+                push: static function (string $visitorId, string $suffix, string $event, array $payload) use ($pusher, $cache): void {
                     $pusher()->toVisitor($visitorId, $suffix, $event, $payload);
+                    // T-04 polling parity ("feature-identical minus typing granularity"):
+                    // a staff typing frame also leaves a 6 s mark the cursor endpoint's
+                    // envelope reads, so a visitor on polling sees typing at 5 s grain.
+                    if ($event === WebchatAdapter::EVENT_TYPING) {
+                        $cache()->put('webchat-staff-typing:'.$visitorId, '1', 6, 'TTL expiry (the window IS the invalidation)');
+                    }
                 },
                 health: static fn (): AdapterHealth => AdapterHealth::ok(),
             ),

@@ -1,0 +1,111 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      doors-green
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/NoGhostProfileTest.php tests/Security/WidgetVisitorScopeTest.php tests/Security/WidgetOriginLayersTest.php tests/Feature/Widget/WidgetMessagesTest.php tests/Feature/Widget/WidgetContextAllowlistTest.php tests/Feature/Widget/WidgetBeaconTest.php tests/Security/MiddlewareOrderTest.php tests/Security/WidgetPartitionTest.php tests/Feature/Auth/WidgetSessionTest.php tests/Feature/Auth/WidgetTokenTheftTest.php tests/Feature/Kb/WidgetHelpContractTest.php tests/Feature/Csat/CaptureTest.php tests/Contract/AdapterConformance/WebchatAdapterConformanceTest.php
+# started:    2026-09-04T09:40:34Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custom[39m[90m…[39m [90m10.72s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; another[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\MiddlewareOrderTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit orders tenant-resolve before tenant-state before permission on t[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never enforces tenant state on a route that has not resolved a t[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED bearer stack binder-first — the sorter, not[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the bearer surface stateless — no session, no cookies, no[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED widget stack binder → CORS → guard → state ([39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the widget surface sessionless — no session, no cookie enc[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit orders the EXECUTED webhook stacks binder → throttle → secret →[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit registers the permission alias to the RequirePermission middlewa[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetPartitionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a valid visitor session on the staff and bearer surfaces[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses staff credentials on the widget surface (BR-06, staff →[39m[90m… [39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives the widget guard no user provider to misconfigure (BR-06 s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit authorizes a visitor onto exactly their own Reverb channel and n[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses the widget broadcasting door to anyone who is not a visi[39m[90m…[39m [90m0.29s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Auth\WidgetTokenTheftTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates the cookie on every /session refresh, keeping visitor an[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a bare token act as its visitor — API requests get 40[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit silently issues a FRESH identity to a token without its cookie o[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit gives a visitor who cleared cookies a fresh identity with no pat[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit offers NO store operation that accepts a caller-chosen visitor i[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a token minted under one widget when presented under a s[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to plant a staff User behind the widget guard even delib[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries a WidgetVisitor principal that fails loudly if treated a[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feed[39m[90m…[39m [90m11.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m1.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Csat\CaptureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-25: the 1-tap score lands, prompts for a comment, and an in-w[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: an hour-73 tap records NOTHING, answers the polite window[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closing rows 2/4: an AI-resolver score lands csat_scored on the[39m[90m… [39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.06s[39m  
+
+  [90mTests:[39m    [32;1m68 passed[39;22m[90m (1125 assertions)[39m
+  [90mDuration:[39m [39m31.63s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:41:06Z
+# duration:   32s
+# EXIT:       0

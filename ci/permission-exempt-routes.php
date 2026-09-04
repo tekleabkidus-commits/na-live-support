@@ -126,4 +126,14 @@ return [
     'kb.widget.media' => 'Visitor surface (FR-05): serves only files of public articles with a published variant; signing rotates behind the stable path.',
     // Doc 12 FR-25/SEC-05 (S12 step 12): the CSAT door — the exemptions' shape inherited exactly.
     'csat.widget.submit' => 'Visitor surface (SEC-05): the unguessable survey token IS the credential (hash-compared in the domain door); no staff principal exists; throttled at the route and per-token in the door; single-response enforced by row physics.',
+    // Doc 13 T-03 (S13 step 3): the visitor's conversation doors — the exemptions' shape
+    // inherited from kb.widget.*: the widget key resolves the tenant, the visitor token+cookie
+    // pair is the principal, no staff permission model applies (BR-06).
+    'widget.config' => 'Visitor surface (Doc 13 T-03/FR-20): the live config + capability envelope for the resolved widget; visitor-authenticated, no staff principal exists on this stack.',
+    'widget.messages.index' => 'Visitor surface (Doc 13 T-03/FR-10): the visitor\'s OWN cursor page by the channel key (AC-04) — visitor-authenticated.',
+    'widget.messages.store' => 'Visitor surface (Doc 13 T-03/FR-12): the ONE inbound door — quota + enqueue + 202; the visitor principal is the author (customer), no staff permission applies.',
+    'widget.typing' => 'Visitor surface (Doc 13 FR-10/T-03): the customer typing signal, TTL-bound (EC-12).',
+    'widget.receipts' => 'Visitor surface (Doc 13 T-02): the visitor client\'s delivery ack on its OWN outbound rows (AC-04); the guard is the principal.',
+    'widget.context' => 'Visitor surface (Doc 13 FR-24): page context for the visitor\'s OWN conversation, allowlist-filtered server-side.',
+    'widget.beacon' => 'Loader/panel beacons (Doc 13 T-08): widget-key-authenticated, BEFORE any visitor session exists (a blocked origin has no visitor); answers 204 to everything (NFR-06).',
 ];

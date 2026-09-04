@@ -1,0 +1,56 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-d-server-layer-weakened-red
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/WidgetOriginLayersTest.php
+# started:    2026-09-04T09:42:15Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m…[39m [90m10.70s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it SERVER layer alone: wi…   
+[39;1m  Expected response status code [403] but received 201.
+Failed asserting that 201 is identical to 403.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m31[39m
+     27▕     // Remove the CORS layer for this request path (by removal, the AC-06 precedent).
+     28▕     app('router')->getRoutes()->getByName('auth.widget.session')?->withoutMiddleware(WidgetCors::class);
+     29▕ 
+     30▕     $refused = test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => HOSTILE_ORIGIN])->postJson('/api/widget/v1/session', ['ancestors' => [HOSTILE_ORIGIN]]);
+  ➜  31▕     $refused->assertStatus(403)->assertJsonPath('code', 'origin_not_allowed');
+     32▕     expect($refused->headers->get('Access-Control-Allow-Origin'))->toBeNull();
+     33▕ 
+     34▕     // EC-12 on the same door: the dot boundary — evil-brand.example is not *.brand.example; www needs the wildcard or its own entry.
+     35▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://evil-brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it CORS layer alone: a va…   
+[39;1m  the per-widget CORS stamp leaked to a hostile origin
+Failed asserting that 'https://evil-brand.example' is null.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m54[39m
+     50▕         ->and($allowed->headers->get('Vary'))->toContain('Origin');
+     51▕ 
+     52▕     resetWidgetClient();
+     53▕     $hostile = widgetClient($key, $token, $cookie, HOSTILE_ORIGIN)->getJson('/api/widget/v1/config');
+  ➜  54▕     expect($hostile->headers->get('Access-Control-Allow-Origin'))->toBeNull('the per-widget CORS stamp leaked to a hostile origin')
+     55▕         ->and($hostile->headers->get('Access-Control-Allow-Credentials'))->toBeNull();
+     56▕ 
+     57▕     // The preflight for a hostile origin grants nothing usable either: no credentials stamp for it on the real doors.
+     58▕     $preflight = test()->withHeaders(['Origin' => HOSTILE_ORIGIN, 'Access-Control-Request-Method' => 'POST'])->options('/api/widget/v1/messages');
+
+  [33m1   [39m[39;1mtests/Security/WidgetOriginLayersTest.php[39;22m:[39;1m54[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (8 assertions)[39m
+  [90mDuration:[39m [39m11.01s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:42:26Z
+# duration:   11s
+# EXIT:       1

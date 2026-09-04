@@ -502,6 +502,15 @@ Route::group([], function (): void {
             ->post('csat', [App\Http\Controllers\Widget\CsatController::class, 'store'])
             ->name('csat.widget.submit');
 
+        // Doc 13 T-08 (S13 step 3): the loader's beacons arrive BEFORE any session
+        // exists (a blocked origin has no visitor), so this door sits OUTSIDE the
+        // visitor guard — widget key + CORS + tenant state only, the /session
+        // shape — and answers 204 to everything (NFR-06: a beacon never errors a
+        // visitor). The widget key's own quota bounds it.
+        Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, 'tenant.state:inbound', 'throttle:120,1'])
+            ->post('beacon', [App\Http\Controllers\Widget\WidgetBeaconController::class, 'store'])
+            ->name('widget.beacon');
+
         Route::middleware(['tenant:widget_key', App\Http\Middleware\WidgetCors::class, App\Http\Middleware\AuthenticateWidgetVisitor::class, 'tenant.state:inbound'])
             ->group(function (): void {
                 Route::get('context', [IngressProbeController::class, 'show'])
@@ -531,6 +540,33 @@ Route::group([], function (): void {
                 // token any more than this one accepts a staff session.
                 Route::post('broadcasting/auth', [Illuminate\Broadcasting\BroadcastController::class, 'authenticate'])
                     ->name('auth.widget.broadcast');
+
+                /*
+                 | ── Doc 13 T-03 (S13 step 3): the visitor's conversation doors — the REAL
+                 | endpoints this stack was probe-only without (the Doc 02 step-10
+                 | docblock's promise). Every door is scoped to the VISITOR principal's
+                 | OWN conversation by the channel key (AC-04, A-61); the per-visitor
+                 | throttle (ThrottleVisitorToken, the FR-25 shape) is declared AFTER
+                 | the guard, `:messages` on the message door. Permission-exempt +
+                 | audit-exempt with reasons (ci/*-exempt-routes.php): visitors hold no
+                 | staff permission; the message row / the delivery transition / the
+                 | context row ARE the durable record.
+                 */
+                Route::middleware([App\Http\Middleware\ThrottleVisitorToken::class])->group(function (): void {
+                    Route::get('config', [App\Http\Controllers\Widget\WidgetConfigController::class, 'show'])
+                        ->name('widget.config');
+                    Route::get('messages', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'index'])
+                        ->name('widget.messages.index');
+                    Route::post('messages', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'store'])
+                        ->middleware(App\Http\Middleware\ThrottleVisitorToken::class.':messages')
+                        ->name('widget.messages.store');
+                    Route::post('typing', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'typing'])
+                        ->name('widget.typing');
+                    Route::post('receipts', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'receipts'])
+                        ->name('widget.receipts');
+                    Route::post('context', [App\Http\Controllers\Widget\WidgetContextController::class, 'store'])
+                        ->name('widget.context');
+                });
             });
     });
 

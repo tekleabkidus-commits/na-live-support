@@ -21,6 +21,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property string $key_id
  * @property list<string> $allowed_origins
+ * @property string $name
+ * @property string|null $live_version_id
+ * @property string $bundle_channel
+ * @property bool $test_mode
+ * @property string|null $identity_secret_ref
+ * @property string|null $identity_secret_previous_ref
+ * @property \Carbon\CarbonImmutable|null $identity_secret_rotated_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  */
 #[Fillable([
     'key_id',

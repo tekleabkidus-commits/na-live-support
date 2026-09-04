@@ -1,0 +1,45 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-k-undeclared-key-persisted-red
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetContextAllowlistTest.php
+# started:    2026-09-04T09:43:26Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m…[39m [90m10.84s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetContextAllowlistTest[22m [90m>[39m it FR-24: only…    
+[39;1m  an undeclared key was persisted (FR-24)
+Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     'plan' => 'vip',[39m[39;1m
+  [39;22m[32m+    'password' => 'hunter2',[39m[39;1m
+  [39;22m[32m     'deposit_method' => 'telebirr',[39m[39;1m
+  [39;22m[32m+    'session_cookie' => 'STOLEN',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Feature/Widget/WidgetContextAllowlistTest.php[39m:[32m47[39m
+     43▕ 
+     44▕     bindTenant($tenant);
+     45▕     $row = DB::table('widget_visitor_contexts')->sole();
+     46▕     $custom = json_decode((string) $row->custom, true);
+  ➜  47▕     expect($custom)->toBe(['plan' => 'vip', 'deposit_method' => 'telebirr'], 'an undeclared key was persisted (FR-24)')
+     48▕         ->and($row->url)->toBe('https://customer.harness.localhost:8443/deposit')->and($row->viewport_w)->toBe(375)->and($row->tz_offset_minutes)->toBe(180);
+     49▕     // Nothing undeclared reaches the row in ANY column.
+     50▕     expect(json_encode($row))->not->toContain('STOLEN')->not->toContain('hunter2');
+     51▕
+
+  [33m1   [39m[39;1mtests/Feature/Widget/WidgetContextAllowlistTest.php[39;22m:[39;1m47[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m (5 assertions)[39m
+  [90mDuration:[39m [39m10.96s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:43:37Z
+# duration:   11s
+# EXIT:       1

@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b-restored
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/WidgetVisitorScopeTest.php
+# started:    2026-09-04T09:42:03Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; anothe[39m[90m…[39m [90m10.71s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.23s[39m  
+
+  [90mTests:[39m    [32;1m2 passed[39;22m[90m (16 assertions)[39m
+  [90mDuration:[39m [39m11.03s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:42:15Z
+# duration:   12s
+# EXIT:       0

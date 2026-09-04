@@ -1,0 +1,37 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      gates
+# set:        S13-step3
+# command:    make gates
+# started:    2026-09-04T09:44:20Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 14 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      FAIL
+      ticket-status-writer: status write outside the transition path: app/Domain/Webchat/Visitor/VisitorConversation.php
+      ticket-status-writer: FAIL (1 file(s) writing ticket status outside app/Domain/Tickets/Storage/TicketRepository.php). Doc 06 T-01/NFR-03: TicketTransitionService is the sole status writer and reaches the column only through that repository.
+  bundle-budget             PASS
+-----------------------------------------------------------------
+Gate summary: 13 passed, 1 failed, 0 skipped.
+FAILED: ticket-status-writer
+make: *** [Makefile:97: gates] Error 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:46:04Z
+# duration:   104s
+# EXIT:       2

@@ -1,0 +1,20 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-k-restored
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetContextAllowlistTest.php
+# started:    2026-09-04T09:43:37Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m…[39m [90m10.80s[39m  
+
+  [90mTests:[39m    [32;1m1 passed[39;22m[90m (14 assertions)[39m
+  [90mDuration:[39m [39m10.90s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:43:48Z
+# duration:   11s
+# EXIT:       0

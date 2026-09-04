@@ -1936,3 +1936,70 @@ function doc12DeniedSet(string $table, string $privilege): array
 
     return $denied;
 }
+
+/*
+|------------------------------------------------------------------------------
+| Doc 13 (S13 step 3) — visitor-surface helpers. `widgetClient()` is the exact
+| shape the real widget client must use (X-Tenant-Key + Origin + the visitor
+| token header + the raw FR-22 cookie with credentials); `drainWebchatInbound()`
+| runs the pushed NormalizeInbound jobs synchronously (the house pattern:
+| Queue::fake at the door, Bus::dispatchSync for the pipeline) so a test can
+| assert what the FIRST MESSAGE minted (FR-05, A-61).
+|------------------------------------------------------------------------------
+*/
+
+/** @return Illuminate\Testing\TestCase|TestCase */
+function widgetClient(string $key, string $token, string $cookie, string $origin = WIDGET_ORIGIN): mixed
+{
+    // A COLD START per request (widgetFixture's own law): the guard instance caches its
+    // principal per process, and a drained job or a prior request may have left the tenant
+    // context/RLS bound — a second visitor or a second tenant must never inherit either.
+    app('auth')->forgetGuards();
+    app(TenantContext::class)->clear();
+    app(RlsSession::class)->clear();
+
+    // Authorization is set EXPLICITLY: the binder reads `Bearer` before X-Tenant-Key, and the
+    // test client keeps default headers between requests — a stale bearer from an earlier
+    // session call would silently re-bind the previous tenant (found by AC-04's cross-tenant cell).
+    return test()->withHeaders(['Authorization' => 'Bearer '.$key, 'X-Tenant-Key' => $key, 'Origin' => $origin, 'X-Visitor-Token' => $token])
+        ->withUnencryptedCookie(App\Domain\Auth\Widget\WidgetGuard::COOKIE_NAME, $cookie)->withCredentials();
+}
+
+/**
+ * Run every NormalizeInbound the faked queue holds, in order — the way a worker
+ * would: the job's OWN tenant bound (BindTenantContextToJob's contract), handle()
+ * resolved through the container, the caller's context restored after (A-35).
+ * Bus::dispatchSync is deliberately NOT used: with Queue::fake() active it is a
+ * silent no-op for this job class (found by the S13 step-3 diagnostic), which
+ * would let a test pass while proving nothing.
+ */
+function drainWebchatInbound(): int
+{
+    if (! Illuminate\Support\Facades\Queue::getFacadeRoot() instanceof Illuminate\Support\Testing\Fakes\QueueFake) {
+        throw new LogicException('drainWebchatInbound() needs Queue::fake() BEFORE the POST — the sync driver defers afterCommit dispatches past the test transaction, so nothing would ever run.');
+    }
+    $context = app(TenantContext::class);
+    $rls = app(RlsSession::class);
+    $previous = $context->tenantIdOrNull();
+    $ran = 0;
+    foreach (Illuminate\Support\Facades\Queue::pushed(App\Jobs\Conversations\NormalizeInbound::class) as $job) {
+        $tenantId = $job->tenantId ?? null;
+        if (! is_string($tenantId)) {
+            throw new LogicException('a pushed NormalizeInbound carries no tenant id — the dispatcher is the bug (Doc 01 FR-03f).');
+        }
+        $context->clear();
+        $context->bind($tenantId, ResolutionSource::QueuedJob);
+        $rls->set($tenantId);
+        app()->call([$job, 'handle']);
+        $ran++;
+    }
+    $context->clear();
+    if ($previous !== null) {
+        $context->bind($previous, ResolutionSource::Console);
+        $rls->set($previous);
+    } else {
+        $rls->clear();
+    }
+
+    return $ran;
+}

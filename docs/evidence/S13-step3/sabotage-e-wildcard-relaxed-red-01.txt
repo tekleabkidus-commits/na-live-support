@@ -1,0 +1,71 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-e-wildcard-relaxed-red
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/WidgetOriginLayersTest.php tests/Feature/Auth/WidgetSessionTest.php
+# started:    2026-09-04T09:42:38Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetOriginLayersTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SERVER layer alone: with the CORS stamp removed, a session from[39m[90m…[39m [90m10.61s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit CORS layer alone: a valid visitor token used from a hostile orig[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the three layers are INDEPENDENT code paths: loader (client), CO[39m[90m…[39m [90m0.05s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Auth\WidgetSessionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit issues a working visitor session to an allowed origin (FR-21 — t[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit slides the 30-day TTL on every authenticated touch (FR-21 "slidi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a disallowed origin at the server layer, issuing NOTHING[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses at the server layer with the CORS layer REMOVED — AC-06[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit withholds the CORS grant even when the server layer waves everyt[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses an allowed origin wrapped by a disallowed ancestor (EC-0[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats a top-level page (no ancestors) as allowed (EC-08)[39m[90m        [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses when the Origin header and the declared origin disagree[39m[90m  [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit judges a non-browser caller by its declared origin — no Origin h[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit pins the wildcard dot boundary: *.brand.com never admits evil-br[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit compares ports exactly and refuses http origins outright (ruling[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a widget key with no widget record — fail-closed, same s[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves nothing for an unknown widget key — 404, never 403 (C-1[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit answers a genuine preflight permissively and a bare OPTIONS with[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps two tenants' widgets invisible to each other (N-01, the st[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetOriginLayersTest[22m [90m>[39m it SERVER layer alone: wi…   
+[39;1m  Expected response status code [403] but received 201.
+Failed asserting that 201 is identical to 403.[39;22m
+
+  at [32mtests/Security/WidgetOriginLayersTest.php[39m:[32m31[39m
+     27▕     // Remove the CORS layer for this request path (by removal, the AC-06 precedent).
+     28▕     app('router')->getRoutes()->getByName('auth.widget.session')?->withoutMiddleware(WidgetCors::class);
+     29▕ 
+     30▕     $refused = test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => HOSTILE_ORIGIN])->postJson('/api/widget/v1/session', ['ancestors' => [HOSTILE_ORIGIN]]);
+  ➜  31▕     $refused->assertStatus(403)->assertJsonPath('code', 'origin_not_allowed');
+     32▕     expect($refused->headers->get('Access-Control-Allow-Origin'))->toBeNull();
+     33▕ 
+     34▕     // EC-12 on the same door: the dot boundary — evil-brand.example is not *.brand.example; www needs the wildcard or its own entry.
+     35▕     test()->withHeaders(['X-Tenant-Key' => $key, 'Origin' => 'https://evil-brand.example'])->postJson('/api/widget/v1/session', [])->assertStatus(403);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Auth\WidgetSessionTest[22m [90m>[39m it pins the wildcard dot b…   
+[39;1m  Expected response status code [403] but received 201.
+Failed asserting that 201 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Auth/WidgetSessionTest.php[39m:[32m214[39m
+    210▕     widgetSession($key, headers: ['Origin' => 'https://help.fixture-brand.example'])->assertCreated();
+    211▕     widgetSession($key, headers: ['Origin' => 'https://a.b.fixture-brand.example'])->assertCreated();
+    212▕ 
+    213▕     // The hostile fixture, mandatory by ruling: suffix-without-dot must lose.
+  ➜ 214▕     widgetSession($key, headers: ['Origin' => 'https://evil-fixture-brand.example'])->assertForbidden();
+    215▕ 
+    216▕     // The bare apex is NOT under the wildcard either.
+    217▕     widgetSession($key, headers: ['Origin' => 'https://fixture-brand.example'])->assertForbidden();
+    218▕ });
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m16 passed[39;22m[90m (78 assertions)[39m
+  [90mDuration:[39m [39m12.34s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:42:51Z
+# duration:   13s
+# EXIT:       1

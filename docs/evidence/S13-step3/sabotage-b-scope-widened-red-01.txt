@@ -1,0 +1,43 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      sabotage-b-scope-widened-red
+# set:        S13-step3
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Security/WidgetVisitorScopeTest.php
+# started:    2026-09-04T09:41:52Z
+# git:        8c19625 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\WidgetVisitorScopeTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit AC-04: a visitor reads and receipts ONLY its own thread; anothe[39m[90m…[39m [90m10.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-04: the survey and context doors are the visitor's own — a fo[39m[90m…[39m [90m0.18s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\WidgetVisitorScopeTest[22m [90m>[39m it AC-04: a visitor reads…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[31m-    0 => 'B: first message',[39m[39;1m
+  [39;22m[32m+    0 => 'A: first message',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/WidgetVisitorScopeTest.php[39m:[32m39[39m
+     35▕     $threadA = widgetClient($key, $tokenA, $cookieA)->getJson('/api/widget/v1/messages')->assertOk()->json();
+     36▕     $threadB = widgetClient($key, $tokenB, $cookieB)->getJson('/api/widget/v1/messages')->assertOk()->json();
+     37▕ 
+     38▕     expect(array_column($threadA['data'], 'body'))->toBe(['A: first message'])
+  ➜  39▕         ->and(array_column($threadB['data'], 'body'))->toBe(['B: first message']);
+     40▕ 
+     41▕     // A cannot receipt, reply-to or read B's message by id — absence, not refusal (C-10).
+     42▕     $bId = $threadB['data'][0]['id'];
+     43▕     widgetClient($key, $tokenA, $cookieA)->postJson('/api/widget/v1/receipts', ['message_ids' => [$bId]])->assertStatus(404);
+
+  [33m1   [39m[39;1mtests/Security/WidgetVisitorScopeTest.php[39;22m:[39;1m39[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (11 assertions)[39m
+  [90mDuration:[39m [39m10.74s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T09:42:03Z
+# duration:   11s
+# EXIT:       1
