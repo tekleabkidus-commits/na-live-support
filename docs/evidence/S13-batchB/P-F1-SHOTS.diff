@@ -1,0 +1,118 @@
+diff --git a/tests/Browser/f1-b12.spec.ts b/tests/Browser/f1-b12.spec.ts
+index 668e8a7..4a89ca0 100644
+--- a/tests/Browser/f1-b12.spec.ts
++++ b/tests/Browser/f1-b12.spec.ts
+@@ -1,14 +1,15 @@
+ // SESSION-F1 [B12-batch] — the visibility proofs for Doc 12's Workflow surfaces against the
+ // frozen Batch 9 record (design/frozen/B9-S05…S13, 67dc4e4). The existing Workflow specs
+ // (workflow-screens, structure-admin, inbox-palette) stay byte-untouched and run beside this
+-// file; this file proves what the frames DRAW. Build shots land under docs/evidence/F1-B12/shots/.
++// file; this file proves what the frames DRAW. Build shots land under test-results/f1-shots/F1-B12/shots/ (untracked; the committed docs/evidence/F1-B12/shots/ set is the accepted record).
+ import { execFileSync } from 'node:child_process';
+ import AxeBuilder from '@axe-core/playwright';
+ import { expect, test, type Page } from '@playwright/test';
++import { shotsDir } from './support/shots';
+ 
+ const V1440 = { width: 1440, height: 900 };
+ const V375 = { width: 375, height: 812 };
+-const SHOTS = 'docs/evidence/F1-B12/shots';
++const SHOTS = shotsDir('F1-B12'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
+ 
+ function artisan(...args: string[]): string {
+     return execFileSync(
+@@ -52,7 +53,6 @@ ${code}`,
+ }
+ 
+ test.beforeAll(() => {
+-    execFileSync('mkdir', ['-p', SHOTS]);
+     artisan('auth:session-inspect', 'clear-throttle');
+     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
+ });
+diff --git a/tests/Browser/f1-b8.spec.ts b/tests/Browser/f1-b8.spec.ts
+index de7441a..a2b0716 100644
+--- a/tests/Browser/f1-b8.spec.ts
++++ b/tests/Browser/f1-b8.spec.ts
+@@ -1,6 +1,7 @@
+ import { execFileSync } from 'node:child_process';
+ import AxeBuilder from '@axe-core/playwright';
+ import { expect, Page, test } from '@playwright/test';
++import { shotsDir } from './support/shots';
+ import { dismissCoachMarks } from './support/coach';
+ 
+ /*
+@@ -9,13 +10,13 @@ import { dismissCoachMarks } from './support/coach';
+  * adds the frame-level proofs the mandate asks for: the drawn states are
+  * VISIBLE (not merely present), axe-clean in BOTH themes, 44 px targets at 375,
+  * and the build side of every frame-vs-build screenshot pair is written under
+- * docs/evidence/F1-B8/shots/ so the owner can compare it with the frame.
++ * test-results/f1-shots/F1-B8/shots/ (untracked; the committed docs/evidence/F1-B8/shots/ set is the accepted record) so the owner can compare it with the frame.
+  */
+ const PASSWORD = 'browser-fixture-password';
+ const AGENT_EMAIL = 'agent@fixture.example';
+ const V1440 = { width: 1440, height: 900 };
+ const V375 = { width: 375, height: 812 };
+-const SHOTS = 'docs/evidence/F1-B8/shots';
++const SHOTS = shotsDir('F1-B8'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
+ 
+ // The staff user's stored locale always wins over the login cookie (ApplyUserLocale), so the
+ // Amharic sweep flips the fixture agent's users.locale under the tenant's own RLS context and
+@@ -52,7 +53,6 @@ function artisan(...args: string[]): void {
+     );
+ }
+ test.beforeAll(() => {
+-    execFileSync('mkdir', ['-p', SHOTS]);
+     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
+     artisan('db:seed', '--class=Database\\Seeders\\InboxBrowserSeeder', '--force');
+     artisan('db:seed', '--class=Database\\Seeders\\AiBrowserSeeder', '--force');
+diff --git a/tests/Browser/f1-b9.spec.ts b/tests/Browser/f1-b9.spec.ts
+index fed08ab..e369410 100644
+--- a/tests/Browser/f1-b9.spec.ts
++++ b/tests/Browser/f1-b9.spec.ts
+@@ -3,14 +3,15 @@
+ // (kb-manager, kb-a11y, inbox-palette) stays byte-untouched and runs beside this file; this
+ // file proves what the frames DRAW: the chrome, the anatomy, the states, the absences, the
+ // 44 px targets at 375, axe in both themes, the Amharic sweep, reduced motion. Build shots
+-// land under docs/evidence/F1-B9/shots/ beside the frame shots.
++// land under test-results/f1-shots/F1-B9/shots/ (untracked; the committed docs/evidence/F1-B9/shots/ set is the accepted record) beside the frame shots.
+ import { execFileSync } from 'node:child_process';
+ import AxeBuilder from '@axe-core/playwright';
+ import { expect, test, type Page } from '@playwright/test';
++import { shotsDir } from './support/shots';
+ 
+ const V1440 = { width: 1440, height: 900 };
+ const V375 = { width: 375, height: 812 };
+-const SHOTS = 'docs/evidence/F1-B9/shots';
++const SHOTS = shotsDir('F1-B9'); // P-F1-SHOTS: untracked (test-results/), never the committed evidence
+ const A1 = '018f6b2e-0000-7000-8000-00000000ed11';
+ const A2 = '018f6b2e-0000-7000-8000-00000000ed12';
+ const A4 = '018f6b2e-0000-7000-8000-00000000ed14';
+@@ -52,7 +53,6 @@ DB::table('users')->where('email','agent@fixture.example')->update(['locale' =>
+ }
+ 
+ test.beforeAll(() => {
+-    execFileSync('mkdir', ['-p', SHOTS]);
+     artisan('auth:session-inspect', 'clear-throttle');
+     artisan('db:seed', '--class=Database\\Seeders\\BrowserFixtureSeeder', '--force');
+     artisan('db:seed', '--class=Database\\Seeders\\KbBrowserSeeder', '--force');
+diff --git a/tests/Browser/support/shots.ts b/tests/Browser/support/shots.ts
+new file mode 100644
+index 0000000..d7a75e6
+--- /dev/null
++++ b/tests/Browser/support/shots.ts
+@@ -0,0 +1,16 @@
++import { execFileSync } from 'node:child_process';
++
++/**
++ * P-F1-SHOTS (S13, advisor-ordered after F1-FO-9): the BUILD side of every
++ * frame-vs-build screenshot pair lands under an UNTRACKED path — `test-results/`
++ * is gitignored — so a battery never rewrites the committed F1 evidence
++ * (142 files per run before this). The committed comparison sets under
++ * docs/evidence/F1-<batch>/shots/ are the record the owner accepted; a fresh set
++ * for a deliberate comparison is written by setting F1_SHOTS_ROOT.
++ * Assertions are untouched: only the directory the shots are written to moved.
++ */
++export function shotsDir(batch: 'F1-B8' | 'F1-B9' | 'F1-B12'): string {
++    const dir = `${process.env.F1_SHOTS_ROOT ?? 'test-results/f1-shots'}/${batch}/shots`;
++    execFileSync('mkdir', ['-p', dir]);
++    return dir;
++}

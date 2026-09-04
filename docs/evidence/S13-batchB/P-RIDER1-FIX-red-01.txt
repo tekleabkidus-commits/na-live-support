@@ -1,0 +1,27 @@
+### P-RIDER1-FIX fail-first — the control on the CURRENT scrubber (expected RED: the RIDER text's claim 'ScrubSecrets already redacts the vault:// and ciphertext shapes' under test) — 2026-09-04T16:10:28Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Security\VaultRefScrubberPatternsTest
+  ⨯ it RIDER 1 control: a vault:// ref and an encrypter ciphertext are… 10.35s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Security\VaultRefScrubberPatternsTest > it RIDER 1 control:…   
+  Expecting '[2026-09-04 16:10:38] testing…a9"}' not to contain 'vault://widget/018f6b2e-0000-…131/v1'.
+
+  at tests/Security/VaultRefScrubberPatternsTest.php:46
+     42▕     Log::info('rotated to '.$ref, ['detail' => $ref, 'blob' => $ciphertext]);
+     43▕ 
+     44▕     $sink = (string) file_get_contents($path);
+     45▕     expect($sink)->toContain($nearMiss);                       // plant → detect: the write path and the scanner both work
+  ➜  46▕     expect($sink)->not->toContain($ref)                        // remove: the ref never lands — under `detail` or in the message
+     47▕         ->and($sink)->not->toContain('vault://')
+     48▕         ->and($sink)->not->toContain($ciphertext)
+     49▕         ->and($sink)->not->toContain('eyJpdiI6')
+     50▕         ->and(substr_count($sink, ScrubSecrets::REDACTED))->toBeGreaterThanOrEqual(3);
+
+  1   tests/Security/VaultRefScrubberPatternsTest.php:46
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 10.41s
+
+exit=1

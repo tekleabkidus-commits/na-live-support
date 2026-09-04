@@ -1,0 +1,75 @@
+diff --git a/app/Support/Logging/ScrubSecrets.php b/app/Support/Logging/ScrubSecrets.php
+index 929ed14..5aeb6bd 100644
+--- a/app/Support/Logging/ScrubSecrets.php
++++ b/app/Support/Logging/ScrubSecrets.php
+@@ -107,6 +107,12 @@ final class ScrubSecrets implements ProcessorInterface
+         // Local Ethiopian format: 09/07 + 8 digits, separator-tolerant
+         // (R-D09-1 names both formats; 07 covers the 7-series mobiles).
+         '/(?<!\d)0[79](?:[\s-]?\d){8}(?!\d)/',
++        // RIDER 1 (SCHEMA AMENDMENT 7, the C-13 interim; P-RIDER1-FIX): a
++        // `vault://` REF names a secret's address and a Laravel-encrypter
++        // CIPHERTEXT (base64 of the {"iv":…} envelope) is the secret at rest —
++        // neither may reach a sink under an innocent key or inside the message.
++        '~vault://[A-Za-z0-9_-]+/\S+~',
++        '/eyJpdiI6[A-Za-z0-9+\/]{40,}={0,2}/',
+     ];
+ 
+     /**
+diff --git a/tests/Security/VaultRefScrubberPatternsTest.php b/tests/Security/VaultRefScrubberPatternsTest.php
+new file mode 100644
+index 0000000..5ae639f
+--- /dev/null
++++ b/tests/Security/VaultRefScrubberPatternsTest.php
+@@ -0,0 +1,52 @@
++<?php
++
++declare(strict_types=1);
++
++use App\Support\Logging\ScrubSecrets;
++use Illuminate\Support\Facades\Log;
++
++/**
++ * RIDER 1 (vault_secrets, the C-13 interim) — the confirmation clause "the
++ * plaintext never leaves the process; scrubber coverage proven by a
++ * plant→detect→remove control". Two VALUE shapes must never reach a sink
++ * under ANY key or inside the message string: a `vault://` REF (it names a
++ * secret's address) and a Laravel-encrypter CIPHERTEXT (base64 of the
++ * {"iv":…} envelope — "eyJpdiI6…"). Key-shape scrubbing catches
++ * `identity_secret_ref`; it cannot catch the same ref under `detail`.
++ *
++ * THE COUNTING BAR (S19 #7): the scanner is proven on a planted NEAR-MISS
++ * first (a `vault:` value with one slash — not a ref) which must SURVIVE;
++ * only then are the real shapes asserted absent. All values synthetic.
++ */
++function vaultScrubSink(): string
++{
++    $path = sys_get_temp_dir().'/scrub-sink-'.bin2hex(random_bytes(8)).'.log';
++    config([
++        'logging.default' => 'stack',
++        'logging.channels.stack.channels' => ['single'],
++        'logging.channels.single.path' => $path,
++    ]);
++    Log::forgetChannel('stack');
++    Log::forgetChannel('single');
++
++    return $path;
++}
++
++it('RIDER 1 control: a vault:// ref and an encrypter ciphertext are scrubbed under an innocent key AND inside the message; the near-miss survives (the scanner is proven first)', function (): void {
++    $path = vaultScrubSink();
++    $ref = 'vault://widget/018f6b2e-0000-7000-8000-00000000d131/v1';
++    $ciphertext = 'eyJpdiI6IkZBS0VDUkVEZmFrZWl2ZmFrZWl2ZmFrZSIsInZhbHVlIjoiRkFLRUNSRURmYWtldmFsdWVmYWtldmFsdWVmYWtldmFsdWUiLCJtYWMiOiJmYWtlbWFjZmFrZW1hY2Zha2VtYWNmYWtlbWFjIiwidGFnIjoiIn0=';
++    $nearMiss = 'vault:/notaref';
++
++    Log::info('near-miss '.$nearMiss, ['detail' => $nearMiss]);
++    Log::info('rotated to '.$ref, ['detail' => $ref, 'blob' => $ciphertext]);
++
++    $sink = (string) file_get_contents($path);
++    expect($sink)->toContain($nearMiss);                       // plant → detect: the write path and the scanner both work
++    expect($sink)->not->toContain($ref)                        // remove: the ref never lands — under `detail` or in the message
++        ->and($sink)->not->toContain('vault://')
++        ->and($sink)->not->toContain($ciphertext)
++        ->and($sink)->not->toContain('eyJpdiI6')
++        ->and(substr_count($sink, ScrubSecrets::REDACTED))->toBeGreaterThanOrEqual(3);
++    @unlink($path);
++});

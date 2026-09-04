@@ -1,0 +1,33 @@
+### P-RIDER1-FIX — the control GREEN with the two value patterns; the three existing scrubber suites unmodified green — 2026-09-04T16:11:10Z
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   PASS  Tests\Security\VaultRefScrubberPatternsTest
+  ✓ it RIDER 1 control: a vault:// ref and an encrypter ciphertext are… 10.81s  
+
+   PASS  Tests\Security\LogScrubberTest
+  ✓ it SEC-08: every configured channel carries SecurityLogTap — null a… 0.03s  
+  ✓ it scrubs secret-shaped keys on the rendered sink and passes benign… 0.03s  
+  ✓ it scrubs the webhook auth headers in nested access-log shapes (ste… 0.05s  
+  ✓ it never scrubs identifier suffixes — token_id and key_id stay trac… 0.06s  
+  ✓ it SEC-08/C-14: every rendered record carries trace_id and tenant_i… 0.11s  
+  ✓ it a real refused request logs WITH a trace_id and WITHOUT the pres… 0.17s  
+  ✓ it AC-08: seeded credentials from every real flow are absent from t… 5.09s  
+
+   PASS  Tests\Security\TelegramScrubberPatternsTest
+  ✓ it NFR-06: a bot-token-shaped VALUE under an innocent key never rea… 0.07s  
+  ✓ it NFR-06: a token inside the MESSAGE string is scrubbed — free tex… 0.04s  
+  ✓ it T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or… 0.05s  
+
+   PASS  Tests\Security\PhoneEmailScrubberPatternsTest
+  ✓ it SEC-03: near-miss controls survive to the sink — the scanner and… 0.06s  
+  ✓ it SEC-03: phone and email VALUES under innocent keys never reach t… 0.06s  
+  ✓ it SEC-03: phone and email VALUES inside the message string itself…  0.07s  
+  ✓ it SEC-03: benign context survives — UUIDs, timezone offsets, _id k… 0.04s  
+  ✓ it SEC-03: the four DB sinks — per-sink plant→detect→rollback contr… 0.11s  
+
+  Tests:    16 passed (190 assertions)
+  Duration: 16.96s
+
+exit=0
+ [OK] No errors                                                                 
+
