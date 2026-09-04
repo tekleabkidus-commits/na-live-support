@@ -1,0 +1,267 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      green
+# set:        S13-step5
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget tests/Feature/Webchat tests/Contract/WebchatEventConsumerContractsTest.php tests/Feature/Tickets/ReopenConsumerDrillTest.php tests/Contract/TicketEventConsumerContractsTest.php tests/Contract/InboxEventConsumerContractsTest.php tests/Contract/RoutingEventConsumerContractsTest.php tests/Contract/Forms tests/Feature/Forms tests/Feature/Tickets/CreationPathsTest.php tests/Contract/AdapterConformance/WebchatAdapterConformanceTest.php
+# started:    2026-09-04T12:43:27Z
+# git:        72d823d (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened un[39m[90m…[39m [90m10.69s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.32s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetFormStepsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit validates a pre-chat step against the published schema: required[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormsSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the pre-chat and offline forms once, byte-equal to the Doc[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m0.08s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetOfflineFormTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15: the offline form lands a REAL offline-tagged ticket (sour[39m[90m…[39m [90m0.19s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 refusals are inline and neutral: a missing required answer[39m[90m…[39m [90m0.19s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Webchat\ChannelHealthConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit writes the widget Health channel indicator from channel.health.c[39m[90m…[39m [90m0.10s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Webchat\PreChatConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit lands the pre-chat answers: staff-collected fields on the first[39m[90m… [39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\WebchatEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mA-45: every consumer the catalog declares for Doc 13 is registered[39m[90m… [39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ReopenConsumerDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: the dispatch map is a registry, and message.received maps[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mADR 0011: relaying a mapped event queues the consumer once — event[39m[90m… [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 drill: kill the consumer between persist and reopen; re-drive[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02 end-to-end: relay dispatch → worker-style execution → the clo[39m[90m…[39m [90m0.43s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\InboxEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 07 durable con[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe health consumer is registered for channel.health.changed — the[39m[90m… [39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\RoutingEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe routing family is exactly EIGHTEEN events (FR-19; grown only by[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every routing-family event has a contract entry in EV[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry names a real catalog relationship, re[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDoc 11's own durable consumers are contracted: the availability con[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\DualRenderConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit one schema, three renders, ONE submission shape: widget-path, di[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 language resolution is ONE chain for both renderers: custome[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.31s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the po[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.32s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\SubmissionSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: a submission names its exact version forever — a later pu[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 server truth: a COMPLETE submission missing a required-and-[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\TelegramFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit US-04 end-to-end (direct mode): one field per message, buttons f[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 retries: three friendly failures then the human offer; /hu[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06: a version published MID-FLOW never moves the running flow[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04 DRILL: Redis state killed mid-flow → the next message resu[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: one live flow per conversation — a second start supersedes[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\CreationPathsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12/13/14: every door produces a [39m[37mnew[39m[90m ticket that records its sour[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-14: the offline form is tagged [39m[37moffline[39m[90m by the path itself, not b[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-12: an open-family ticket blocks a second create and hands back[39m[90m… [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-13: an idempotency key makes a replayed create return the SAME t[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mAC-02 (concurrent half): concurrent creates on one conversation yie[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: a split target takes NO open slot — the one sanctioned multi[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-03: a subject given at creation is marked staff-authored; an abs[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetFormStepsTest[22m [90m>[39m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetFormStepsTest.php[39;22m:[39;1m26[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetOfflineFormTest[22m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetOfflineFormTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetOfflineFormTest[22m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetOfflineFormTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Webchat\ChannelHealthCons[22m… [41;1m RecordsNotFoundException [49;22m  
+[39;1m  [39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Concerns/BuildsQueries.php[39m:[32m403[39m
+    399▕ 
+    400▕         $count = $result->count();
+    401▕ 
+    402▕         if ($count === 0) {
+  ➜ 403▕             throw new RecordsNotFoundException;
+    404▕         }
+    405▕ 
+    406▕         if ($count > 1) {
+    407▕             throw new MultipleRecordsFoundException($count);
+
+      [2m+1 vendor frames [22m
+  [33m2   [39m[39;1mtests/Feature/Webchat/ChannelHealthConsumerTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Webchat\PreChatConsumerTest[22m [90m>[39m… [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Webchat/PreChatConsumerTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\TicketEventConsumerContractsTest[22m [90m>[39m NFR-06 fidelity…   
+[39;1m  Doc13: message.received — the event is not in the catalog; a fixture for a ghost event contracts nothing
+Failed asserting that false is true.[39;22m
+
+  at [32mtests/Contract/TicketEventConsumerContractsTest.php[39m:[32m95[39m
+     91▕     foreach (consumerContractFixtures() as $doc => $fixture) {
+     92▕         foreach ($fixture['entries'] as $entry) {
+     93▕             $label = "{$fixture['doc']}: {$entry['event']}";
+     94▕ 
+  ➜  95▕             expect(array_key_exists($entry['event'], $events))->toBeTrue("{$label} — the event is not in the catalog; a fixture for a ghost event contracts nothing");
+     96▕ 
+     97▕             $definition = $events[$entry['event']];
+     98▕ 
+     99▕             expect($entry['consumer'])->toBeIn($definition['consumers'], "{$label} — the catalog no longer names {$entry['consumer']} as a consumer; the fixture is stale");
+
+  [33m1   [39m[39;1mtests/Contract/TicketEventConsumerContractsTest.php[39;22m:[39;1m95[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Forms\FormPublishTest[22m [90m>[39m it FR-22: publish mints seq…   
+[39;1m  Failed asserting that 20 is identical to 2.[39;22m
+
+  at [32mtests/Feature/Forms/FormPublishTest.php[39m:[32m30[39m
+     26▕     $first = $publisher->publish($formId, minimalFormSchema(), $agent->identifier());
+     27▕     $second = $publisher->publish($formId, minimalFormSchema(), $agent->identifier());
+     28▕     expect($first['version'])->toBe(1)->and($second['version'])->toBe(2);
+     29▕     expect(DB::table('forms')->where('id', $formId)->value('current_version_id'))->toBe($second['version_id']);
+  ➜  30▕     expect(AuditLogger::recordedCount('form.published'))->toBe(2);
+     31▕     expect((int) DB::table('outbox')->where('name', 'form.changed')->whereRaw("payload->>'kind' = 'published'")->count())->toBe(2);
+     32▕ });
+     33▕ 
+     34▕ it('FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required-hidden WITH the auto-suggest, language completeness, R-03 forward wall — each refuses the publish', function (): void {
+
+  [33m1   [39m[39;1mtests/Feature/Forms/FormPublishTest.php[39;22m:[39;1m30[39;22m
+
+
+  [90mTests:[39m    [31;1m7 failed[39;22m[90m,[39m[39m [39m[32;1m68 passed[39;22m[90m (856 assertions)[39m
+  [90mDuration:[39m [39m22.02s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T12:43:50Z
+# duration:   23s
+# EXIT:       2

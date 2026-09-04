@@ -66,6 +66,9 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // Doc 12 (S12 step 6): the SLA lifecycle consumer — EC-02's re-arm rides
         // customer messages; the pin moves WITH the registry change, again.
         App\Jobs\Sla\SlaLifecycleConsumer::class,
+        // Doc 13 (S13 step 5): PreChat lands form answers that rode the message's envelope
+        // (fixture doc13.json) — the pin moves WITH the registry change, the routine line.
+        App\Jobs\Webchat\PreChatConsumer::class,
     ])
         // S07/S08: ticket.created carries the projector + the Doc 08 rollup
         // maintainer — the "no silent growth" posture continues, new baseline pinned.
@@ -76,7 +79,7 @@ test('ADR 0011: the dispatch map is a registry, and message.received maps to exa
         // S09 step 11: GenerateTicketSubject joined ticket.created (Doc 06 FR-03's generation half) — the pin moves WITH the registry, same commit.
         // S11 step 5: TicketCreatedRouter joined ticket.created DELIBERATELY (Doc 11 FR-07's created trigger,
         // durable per ADR 0011; contract fixture doc11.json) — the pin moves WITH the registry change, again.
-        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class, App\Jobs\Routing\TicketCreatedRouter::class, App\Jobs\Automation\AutomationEventConsumer::class, App\Jobs\Sla\SlaLifecycleConsumer::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator + the Doc 11 created router + the Doc 12 automation and SLA consumers (S07 step 2 / S08 steps 3 and 8 / S09 step 11 / S11 step 5 / S12 steps 4+6)')
+        ->and(ConsumerRegistry::consumersFor('ticket.created'))->toBe([App\Jobs\Inbox\ListProjectorConsumer::class, App\Jobs\Customers\RollupConsumer::class, App\Jobs\Customers\CustomerSearchIndexer::class, App\Jobs\Ai\GenerateTicketSubject::class, App\Jobs\Routing\TicketCreatedRouter::class, App\Jobs\Automation\AutomationEventConsumer::class, App\Jobs\Sla\SlaLifecycleConsumer::class, App\Jobs\Webchat\PreChatConsumer::class], 'ticket.created must map to exactly the projector + rollups + search indexer + the Doc 09 subject generator + the Doc 11 created router + the Doc 12 automation and SLA consumers + the Doc 13 PreChat snapshot (S07 step 2 / S08 steps 3 and 8 / S09 step 11 / S11 step 5 / S12 steps 4+6 / S13 step 5)')
         ->and(ConsumerRegistry::consumersFor('tenant.provisioned'))->toBe([App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, App\Jobs\Fields\CustomerFieldSeederConsumer::class], 'S12 batch D (P-FIELDS): the customer-field trio seeder joined DELIBERATELY; S10 step 8: the catalog\'s DECLARED Doc10/KnowledgeBaseSeeder consumer, implemented (A-45 as ruled) — nothing else grows silently');
 });
 

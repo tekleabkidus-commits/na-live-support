@@ -1,0 +1,138 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      red-absent
+# set:        S13-step5
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetOfflineFormTest.php tests/Feature/Widget/WidgetFormStepsTest.php tests/Feature/Webchat tests/Contract/WebchatEventConsumerContractsTest.php
+# started:    2026-09-04T12:35:22Z
+# git:        72d823d (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetOfflineFormTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15: the offline form lands a REAL offline-tagged ticket (sou[39m[90m…[39m [90m10.99s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-15 refusals are inline and neutral: a missing required answer[39m[90m…[39m [90m0.20s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetFormStepsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit validates a pre-chat step against the published schema: required[39m[90m…[39m [90m0.20s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Webchat\ChannelHealthConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit writes the widget Health channel indicator from channel.health.c[39m[90m…[39m [90m0.11s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Webchat\PreChatConsumerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit lands the pre-chat answers: staff-collected fields on the first[39m[90m… [39m [90m0.19s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Contract\WebchatEventConsumerContractsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mA-45: every consumer the catalog declares for Doc 13 is registered[39m[90m… [39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetOfflineFormTest[22m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetOfflineFormTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetOfflineFormTest[22m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetOfflineFormTest.php[39;22m:[39;1m28[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetFormStepsTest[22m [90m>[39m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetFormStepsTest.php[39;22m:[39;1m26[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Webchat\ChannelHealthConsumerTest[22m [90m>[39m it write… [41;1m Error [49;22m  
+[39;1m  Class "App\Jobs\Webchat\ChannelHealthConsumer" not found[39;22m
+
+  at [32mtests/Feature/Webchat/ChannelHealthConsumerTest.php[39m:[32m24[39m
+     20▕     bindTenant($tenant);
+     21▕     $eventId = DB::transaction(fn (): string => app(EventPublisher::class)->publish('channel.health.changed', [
+     22▕         'tenant_id' => $tenant->identifier(), 'channel' => 'webchat', 'channel_ref_id' => (string) $widget->getKey(), 'status' => 'degraded',
+     23▕     ]));
+  ➜  24▕     app()->call([new ChannelHealthConsumer($eventId), 'handle']);
+     25▕     app()->call([new ChannelHealthConsumer($eventId), 'handle']);
+     26▕ 
+     27▕     bindTenant($tenant);
+     28▕     $row = DB::table('widget_health_counters')->where('widget_id', $widget->getKey())->sole();
+
+  [33m1   [39m[39;1mtests/Feature/Webchat/ChannelHealthConsumerTest.php[39;22m:[39;1m24[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Webchat\PreChatConsumerTest[22m [90m>[39m… [41;1m AssertionFailedError [49;22m  
+[39;1m  No nlw_visitor cookie on the response.[39;22m
+
+  at [32mtests/Pest.php[39m:[32m452[39m
+    448▕             return (string) $cookie->getValue();
+    449▕         }
+    450▕     }
+    451▕ 
+  ➜ 452▕     test()->fail('No nlw_visitor cookie on the response.');
+    453▕ }
+    454▕ 
+    455▕ /*
+    456▕ |--------------------------------------------------------------------------
+
+  [33m1   [39m[39;1mtests/Pest.php[39;22m:[39;1m452[39;22m
+  [33m2   [39m[39;1mtests/Feature/Webchat/PreChatConsumerTest.php[39;22m:[39;1m32[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Contract\WebchatEventConsumerContractsTest[22m [90m>[39m A-45: every co…   
+[39;1m  Expecting [] not to be empty 'channel.health.changed: contr…stered'.[39;22m
+
+  at [32mtests/Contract/WebchatEventConsumerContractsTest.php[39m:[32m53[39m
+     49▕         $definition = EventCatalog::definition($entry['event']);
+     50▕         expect($entry['schema_version'])->toBe($definition['schema_version'], "{$entry['event']}: schema_version drifted")
+     51▕             ->and(array_diff($entry['reads'], $definition['payload']))->toBe([], "{$entry['event']}: reads a key the payload does not carry");
+     52▕         $jobs = array_filter(ConsumerRegistry::consumersFor($entry['event']), static fn (string $class): bool => str_starts_with($class, 'App\\Jobs\\Webchat\\'));
+  ➜  53▕         expect($jobs)->not->toBeEmpty("{$entry['event']}: contracted for Doc 13 but no Doc 13 job is registered");
+     54▕     }
+     55▕ });
+     56▕
+
+  [33m1   [39m[39;1mtests/Contract/WebchatEventConsumerContractsTest.php[39;22m:[39;1m53[39;22m
+
+
+  [90mTests:[39m    [31;1m6 failed[39;22m[90m (8 assertions)[39m
+  [90mDuration:[39m [39m11.85s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-04T12:35:35Z
+# duration:   13s
+# EXIT:       2

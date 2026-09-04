@@ -147,7 +147,12 @@ final class WebchatAdapter implements ChannelAdapter, SupportsTyping
             body: isset($raw['body']) && is_string($raw['body']) ? $raw['body'] : null,
             media: $media,
             replyToExternalMessageId: isset($raw['reply_to']) && is_string($raw['reply_to']) ? $raw['reply_to'] : null,
-            channelMeta: ['widget_id' => $widgetId, 'page_url' => isset($raw['page_url']) && is_string($raw['page_url']) ? $raw['page_url'] : null],
+            channelMeta: array_filter([
+                'widget_id' => $widgetId,
+                'page_url' => isset($raw['page_url']) && is_string($raw['page_url']) ? $raw['page_url'] : null,
+                // FR-06/FR-15: form answers ride the message (STOP-5C); Doc13/PreChat lands them.
+                'form' => isset($raw['form']) && is_array($raw['form']) ? $raw['form'] : null,
+            ], static fn ($v): bool => $v !== null),
             occurredAt: CarbonImmutable::parse(self::str($raw['occurred_at'], 'occurred_at'))->utc(),
             dedupeKey: sprintf('webchat:%s:%s:%s', $widgetId, $visitorId, $messageId),
         );

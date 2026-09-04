@@ -137,4 +137,5 @@ return [
     'widget.context' => 'Visitor surface (Doc 13 FR-24): page context for the visitor\'s OWN conversation, allowlist-filtered server-side.',
     'widget.beacon' => 'Loader/panel beacons (Doc 13 T-08): widget-key-authenticated, BEFORE any visitor session exists (a blocked origin has no visitor); answers 204 to everything (NFR-06).',
     'widget.identify' => 'Visitor surface (Doc 13 FR-07/SEC-03): the host page\'s HMAC-signed assertion for THIS visitor; verified constant-time against the per-widget secret; an invalid signature is a 204 + a Health counter, never an error; no staff principal exists.',
+    'widget.forms.steps' => 'Visitor surface (Doc 13 T-03/FR-06/FR-15): a form STEP validated against Doc 12\'s immutable version (the visitor holds the state; FR-05 — validation mints nothing); the OFFLINE mode lands the offline-tagged ticket through Doc 06 FR-14\'s door; no staff principal exists.',
 ];

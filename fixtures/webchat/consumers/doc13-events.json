@@ -1,0 +1,29 @@
+{
+  "doc": "Doc13",
+  "spec": "Doc 13 — consumer contracts for the NON-ticket events Doc 13 consumes (S13 step 5; ADR 0011 / Doc 06 NFR-06 shape). The ticket.* slices live in fixtures/tickets/consumers/doc13.json.",
+  "note": "The keys Doc 13's consumers DEPEND ON, per event. channel.health.changed → the Health tab's channel indicator (A-45: the catalog's declared Doc13/ChannelSurfaces, implemented). A producer removing or renaming any `reads` key breaks this document; a schema_version bump must be reconciled deliberately (WebchatEventConsumerContractsTest enforces both).",
+  "entries": [
+    {
+      "event": "channel.health.changed",
+      "consumer": "Doc13/ChannelSurfaces",
+      "schema_version": 2,
+      "reads": [
+        "tenant_id",
+        "channel",
+        "channel_ref_id",
+        "status"
+      ]
+    },
+    {
+      "event": "message.received",
+      "consumer": "Doc13/PreChat",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "message_id",
+        "conversation_id",
+        "customer_id"
+      ]
+    }
+  ]
+}

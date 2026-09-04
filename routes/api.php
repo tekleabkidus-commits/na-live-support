@@ -568,6 +568,8 @@ Route::group([], function (): void {
                         ->name('widget.context');
                     Route::post('identify', [App\Http\Controllers\Widget\WidgetIdentifyController::class, 'store'])
                         ->name('widget.identify');
+                    Route::post('forms/{versionId}/steps', [App\Http\Controllers\Widget\WidgetFormStepsController::class, 'store'])
+                        ->name('widget.forms.steps');
                 });
             });
     });

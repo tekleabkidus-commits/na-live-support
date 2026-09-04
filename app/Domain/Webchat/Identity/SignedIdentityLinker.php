@@ -6,6 +6,7 @@ namespace App\Domain\Webchat\Identity;
 
 use App\Domain\Auth\Widget\WidgetVisitor;
 use App\Domain\Conversations\Notes\NotesWriter;
+use App\Domain\Fields\Seeding\CustomerFieldSeeder;
 use App\Domain\Fields\ValueWriter;
 use App\Domain\Webchat\Visitor\VisitorConversation;
 use App\Models\Customer;
@@ -185,7 +186,8 @@ final class SignedIdentityLinker
                 continue;
             }
             try {
-                $this->fields->setCustomerField($customerId, $key, trim($value), self::SOURCE);
+                // The SYSTEM actor uuid (the seeders' precedent): the site asserted, the platform recorded.
+                $this->fields->setCustomerField($customerId, $key, trim($value), CustomerFieldSeeder::SYSTEM_ACTOR);
             } catch (\InvalidArgumentException) {
                 // No such customer field defined (or the value fails its definition): the
                 // assertion is recorded on the identity's metadata for staff, not dropped.

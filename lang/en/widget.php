@@ -19,4 +19,18 @@ return [
         // EC-04: the STAFF-visible internal note on a site identity switch (never rendered to the visitor).
         'switched_note' => 'Site identity changed: the site now asserts :asserted (was :previous). Nothing was re-linked — review and merge by hand if these are one person.',
     ],
+    // FR-06/FR-15 inline refusals (R-D13-5.1: calm, no failure vocabulary).
+    'form' => [
+        'required' => 'This one is needed to continue.',
+        'invalid_phone' => 'Please enter a phone number we can reach, like +251 9xx xxx xxx.',
+        'invalid_email' => 'Please check the email address.',
+        'invalid_number' => 'Please enter a number.',
+        'invalid_choice' => 'Please pick one of the options.',
+        'invalid_file' => 'Please attach the file again.',
+        'invalid_text' => 'Please enter some text.',
+        'too_long' => 'That is a bit long — please shorten it.',
+        'invalid_format' => 'Please check the format.',
+        'unknown_step' => 'This step is no longer part of the form.',
+        'refused' => 'A few answers need attention.',
+    ],
 ];

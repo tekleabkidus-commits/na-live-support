@@ -63,7 +63,7 @@ final class WidgetMessagesController
         $visitor = $this->visitor($request);
         $widget = $this->conversations->widgetFor($request);
 
-        /** @var array{client_message_id: string, kind: string, body?: string|null, media?: list<array{reference: string}>, reply_to?: string|null, occurred_at?: string|null, page_url?: string|null} $input */
+        /** @var array{client_message_id: string, kind: string, body?: string|null, media?: list<array{reference: string}>, reply_to?: string|null, occurred_at?: string|null, page_url?: string|null, form?: array{version_id: string, answers: array<string, mixed>}} $input */
         $input = $request->validate([
             'client_message_id' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9_.:-]+$/'],
             'kind' => ['required', 'string', 'in:text,photo,video,document,voice,audio'],
@@ -73,6 +73,9 @@ final class WidgetMessagesController
             'reply_to' => ['nullable', 'string', 'max:64'],
             'occurred_at' => ['nullable', 'date'],
             'page_url' => ['nullable', 'string', 'max:2048'],
+            'form' => ['sometimes', 'array'],
+            'form.version_id' => ['required_with:form', 'string', 'max:64'],
+            'form.answers' => ['required_with:form', 'array'],
         ]);
 
         $this->quota->allow(Quota::MessagesPerMinute);
@@ -87,6 +90,7 @@ final class WidgetMessagesController
             'reply_to' => $input['reply_to'] ?? null,
             'occurred_at' => $input['occurred_at'] ?? now('UTC')->toIso8601String(),
             'page_url' => $input['page_url'] ?? null,
+            'form' => $input['form'] ?? null,
             'display' => null, // the asserted name (A-61) is looked up by the pipeline's identity seam, never trusted from the client
         ];
 

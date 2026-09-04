@@ -46,7 +46,7 @@ final class ConsumerRegistry
         //    (Doc 04's fan-out contract; batch-tail debounced; idempotent on
         //    the message's existing classify decision). The ReopenConsumerDrillTest
         //    pin moves in THIS commit (the routine line).
-        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
+        'message.received' => [TicketReopenConsumer::class, \App\Jobs\Telegram\WindowReopenConsumer::class, ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Ai\ClassifyInboundMessage::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class, \App\Jobs\Webchat\PreChatConsumer::class],
 
         // Doc 09 FR-05 (S09 step 6): the T-05 media hooks' subscribers —
         //    transcript/OCR write-back through the Doc 04 repository door;
@@ -79,7 +79,7 @@ final class ConsumerRegistry
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class, \App\Jobs\Webchat\PreChatConsumer::class],
         // Doc 11 (S11 step 5): the five FR-07 trigger routers (TicketCreated/Transferred/Unassigned,
         // AssigneeDeactivated, TicketReopened) join DELIBERATELY — durable, idempotent on event_id.
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
@@ -193,7 +193,7 @@ final class ConsumerRegistry
         // Doc 07 FR-03 (S07 step 3): channel.health.changed v2's FIRST
         // consumer — the header indicator's feed (inherited row 5; A-22's
         // transition-only semantics consumed, never re-derived).
-        'channel.health.changed' => [\App\Jobs\Inbox\HealthIndicatorConsumer::class],
+        'channel.health.changed' => [\App\Jobs\Inbox\HealthIndicatorConsumer::class, \App\Jobs\Webchat\ChannelHealthConsumer::class],
     ];
 
     /** @return list<class-string<OutboxConsumer>> */

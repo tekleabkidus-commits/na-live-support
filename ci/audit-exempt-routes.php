@@ -153,4 +153,5 @@ return [
     'widget.context' => 'Doc 13 FR-24: the widget_visitor_contexts row (latest wins) IS the record; visitor-device facts, no staff actor.',
     'widget.beacon' => 'Doc 13 T-08: health COUNTERS (monotone increments) and sampled scrubbed stacks are the record; anonymous, high-volume, no actor.',
     'widget.identify' => 'Doc 13 FR-07 / A-61: the customer.created / customer.identity.linked EVENTS and, on a switch, the widget.identity.switched AUDIT row (recorded by the linker with the system actor) are the record; a refused assertion mutates only a health counter.',
+    'widget.forms.steps' => 'Doc 13 FR-06/FR-15: a step validation mutates nothing; the offline completion\'s ticket.created + form.submitted EVENTS (Doc 06/12\'s own doors) are the record.',
 ];
