@@ -1,0 +1,25 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      widget-timing-wall-power
+# set:        S13-checkpointC
+# command:    bash ci/widget-loader-timing.sh --assert
+# started:    2026-09-05T16:12:49Z
+# git:        6c5a32a (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+{
+  "launcher_paint_ms": 872,
+  "loader_transfer_bytes": 0,
+  "idle_cpu_pct": 0,
+  "idle_js_heap_mb": 3,
+  "polling_gets_per_30s_socket_down": 2,
+  "search_p95_ms": 173,
+  "battery_status": "2"
+}
+FAIL launcher_paint_ms = 872 (budget 300)
+PASS idle_cpu_pct = 0 (budget 1)
+PASS idle_js_heap_mb = 3 (budget 30)
+PASS search_p95_ms = 173 (budget 200)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:13:40Z
+# duration:   51s
+# EXIT:       1
