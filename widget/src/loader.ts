@@ -114,6 +114,15 @@ declare const __NLW_CFG: ShimConfig | undefined;
 
     const queue: Queued[] = [];
     let ready = false;
+    // NFR-01 core-boot state — declared HERE, before mount: a proactive URL rule can fire during mount and call
+    // bootCore(); a `let` declared further down would still be in its temporal dead zone at that moment, the throw
+    // would land in mount's catch, and the whole widget would unmount as a "CSP" failure (found on /deposit).
+    let coreBooted = false;
+    let coreBootScheduled = false;
+    let launcherReady = false; // the launcher frame's CORE said ready
+    let panelReady = false; // the panel frame's core said ready
+    let launcherDocReady = false; // the loader-drawn launcher DOCUMENT painted and is listening
+    let bootCorePending = false; // bootCore() ran before the launcher document could hear `boot-core`
     let launcher: HTMLIFrameElement | null = null;
     let panel: HTMLIFrameElement | null = null;
     const handlers: Record<string, Array<() => void>> = {
@@ -201,6 +210,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
         }
     };
     const call = (method: keyof PlatformChatApi, args: unknown[]): void => {
+        bootCore(); // NFR-01: the first use of the API is a "first open" — the core boots now, the call queues until `ready`
         if (!ready) {
             queue.push({ method, args });
             return;
@@ -230,6 +240,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
     const fire = (id: string): void => {
         if (fired.has(id)) return;
         fired.add(id);
+        bootCore(); // the panel holds the copy and the guards — it must exist to decide
         // a rule that fires at mount lands before the panel frame can listen: held until `ready`
         if (!ready) firedBeforeReady.push(id);
         else post('proactive', { id, url: location.href });
@@ -278,7 +289,26 @@ declare const __NLW_CFG: ShimConfig | undefined;
         const { type, data } = ev.data as { type: string; data?: unknown };
         switch (type) {
             case 'ready':
-                ready = true;
+                // `ready` means THE PANEL is listening. NFR-01's deferred boot lets the launcher frame's core (injected
+                // into an already-loaded document) say ready before the panel's core has attached its listener — a
+                // queue flushed on the launcher's word would post `open` and the proactive fires into a panel that
+                // cannot hear them yet (found by the step-13 trace: the panel saw the message, its app never did).
+                if (ev.source === panel?.contentWindow) ready = true;
+                // NFR-01: the two cores boot independently — the launcher frame's may take its frame over after the panel
+                // already posted its launcher state (open flag, unread, a proactive card), or before the panel listens.
+                // Once BOTH have said ready (either order) the panel is asked to re-send that state.
+                if (ev.source === launcher?.contentWindow) launcherReady = true;
+                if (ev.source === panel?.contentWindow) panelReady = true;
+                if (launcherReady && panelReady) {
+                    try {
+                        panel?.contentWindow?.postMessage(
+                            { nlw: 1, type: 'launcher-sync' },
+                            cfg!.frame_origin,
+                        );
+                    } catch {
+                        /* silent */
+                    }
+                }
                 if (ev.source === panel?.contentWindow)
                     for (const id of firedBeforeReady.splice(0))
                         post('proactive', { id, url: location.href });
@@ -288,7 +318,9 @@ declare const __NLW_CFG: ShimConfig | undefined;
                 // says ready too — a second mint would rotate the FR-22 cookie and orphan the panel's token.
                 if (ev.source === panel?.contentWindow)
                     handHost((data as { token?: string | null } | undefined)?.token ?? null);
-                for (const q of queue.splice(0)) post('api', { method: q.method, args: q.args });
+                if (ev.source === panel?.contentWindow)
+                    for (const q of queue.splice(0))
+                        post('api', { method: q.method, args: q.args });
                 break;
             case 'title': {
                 // I02: the unread counter in the tab title — the loader's ONE declared host write (never a read),
@@ -345,6 +377,26 @@ declare const __NLW_CFG: ShimConfig | undefined;
             case 'launcher-size':
                 sizeLauncher(!!(data as { card?: boolean } | undefined)?.card);
                 break;
+            case 'launcher-ready':
+                // NFR-01 (ruling 2026-09-05): the loader-drawn launcher has PAINTED and listens — the core boots on
+                // idle after that paint (or on the first open, whichever comes first), never before it.
+                if (ev.source === launcher?.contentWindow) {
+                    launcherDocReady = true;
+                    if (bootCorePending) postBootCore();
+                    else scheduleCoreBoot();
+                }
+                break;
+            case 'api':
+                // The launcher frame's own call (a click on the bubble — the static launcher before the core,
+                // the core's Launcher after): the SAME path as window.PlatformChat — boots the core, queues until
+                // `ready`, then reaches the panel. (Before this case existed the message had no handler.)
+                if (ev.source === launcher?.contentWindow) {
+                    const d = data as
+                        { method?: keyof PlatformChatApi; args?: unknown[] } | undefined;
+                    if (d?.method && d.method in api && d.method !== 'on' && d.method !== '__nlw')
+                        call(d.method, Array.isArray(d.args) ? d.args : []);
+                }
+                break;
             case 'event': {
                 const name = (data as { name: string }).name;
                 for (const cb of handlers[name] ?? []) {
@@ -375,8 +427,10 @@ declare const __NLW_CFG: ShimConfig | undefined;
 
     // Two fixed-position iframes and nothing else (SEC-01, NFR-01 zero layout shift).
     try {
-        launcher = frame('nlw-launcher', cfg, { width: '64px', height: '64px' });
-        panel = frame('nlw-panel', cfg, { width: '0px', height: '0px' }); // opens on demand; 380×640 or the full sheet
+        launcher = frame('nlw-launcher', cfg, { width: '64px', height: '64px' }, true);
+        // NFR-01: the panel frame is created WITHOUT a document — its src (the core) is set by bootCore() on the
+        // first open or on idle after the launcher painted; 380×640 or the full sheet once open.
+        panel = frame('nlw-panel', cfg, { width: '0px', height: '0px' }, false);
         document.body.appendChild(launcher);
         document.body.appendChild(panel);
 
@@ -388,15 +442,51 @@ declare const __NLW_CFG: ShimConfig | undefined;
         unmount();
     }
 
+    function frameUrl(c: ShimConfig, kind: 'launcher' | 'panel'): string {
+        return `${c.frame_origin}/w/panel/${encodeURIComponent(c.widget_key)}?v=${encodeURIComponent(c.bundle.version)}&frame=${kind}`;
+    }
+
+    /** NFR-01: the core bundle loads on the FIRST OPEN or on IDLE after the launcher painted — never as a precondition of the bubble. */
+    function bootCore(): void {
+        if (coreBooted || !cfg || !launcher || !panel) return;
+        coreBooted = true;
+        try {
+            panel.src = frameUrl(cfg, 'panel');
+            if (launcherDocReady) postBootCore();
+            else bootCorePending = true; // delivered on `launcher-ready` — a message to a document still loading is lost
+        } catch {
+            /* silent (NFR-06) */
+        }
+    }
+    function postBootCore(): void {
+        bootCorePending = false;
+        try {
+            launcher?.contentWindow?.postMessage({ nlw: 1, type: 'boot-core' }, cfg!.frame_origin);
+        } catch {
+            /* silent */
+        }
+    }
+    function scheduleCoreBoot(): void {
+        if (coreBooted || coreBootScheduled) return;
+        coreBootScheduled = true;
+        const w = window as Window & {
+            requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+        };
+        if (typeof w.requestIdleCallback === 'function')
+            w.requestIdleCallback(() => bootCore(), { timeout: 3000 });
+        else window.setTimeout(() => bootCore(), 1500);
+    }
+
     function frame(
         id: string,
         c: ShimConfig,
         size: { width: string; height: string },
+        withDocument: boolean,
     ): HTMLIFrameElement {
         const f = document.createElement('iframe');
         f.id = id;
         f.title = id === 'nlw-launcher' ? 'chat' : 'chat panel';
-        f.src = `${c.frame_origin}/w/panel/${encodeURIComponent(c.widget_key)}?v=${encodeURIComponent(c.bundle.version)}&frame=${id === 'nlw-launcher' ? 'launcher' : 'panel'}`;
+        if (withDocument) f.src = frameUrl(c, id === 'nlw-launcher' ? 'launcher' : 'panel');
         f.setAttribute('allow', 'microphone; clipboard-write');
         f.setAttribute('aria-hidden', id === 'nlw-panel' ? 'true' : 'false');
         const side = c.position === 'bottom_left' ? 'left' : 'right';

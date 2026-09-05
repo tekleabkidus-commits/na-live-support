@@ -32,10 +32,22 @@ entry_file() { node -e "const m=require(process.argv[1]); const e=Object.values(
 LOADER_FILE="$ROOT/public/w/$(entry_file loader)"
 CORE_FILE="$ROOT/public/w/$(entry_file panel)"
 LOADER_GZ=$(gz "$LOADER_FILE"); CORE_GZ=$(gz "$CORE_FILE")
+# NFR-01 (S13 step 13, advisor rulings 2026-09-05): the LOADER-DRAWN LAUNCHER document (widget/launcher/launcher.html,
+# the template the shim route fills and SERVES from the platform origin at GET /w/panel/{key}?frame=launcher) paints
+# the bubble before any core bundle. Accounting as ruled: a SERVED document is its own resource — ≤ 2 KB gz on its own
+# (the served figure is asserted on the real response by WidgetLauncherDocumentTest; the template measured here is
+# the stack-less proxy under the same bound) — and does NOT count against the loader's 5 KB (NFR-01's own law, met
+# by the loader alone, headroom printed).
+LAUNCHER_DOC="$ROOT/widget/launcher/launcher.html"
+LAUNCHER_BUDGET=2048
+[ -f "$LAUNCHER_DOC" ] || { echo "widget-bundle-budget: FAIL — $LAUNCHER_DOC missing (the launcher document template)" >&2; exit 1; }
+LAUNCHER_GZ=$(gz "$LAUNCHER_DOC")
 FAIL=0
-printf '  loader  %6d B gz (budget %d)\n' "$LOADER_GZ" "$LOADER_BUDGET"
+printf '  loader  %6d B gz (budget %d; headroom %d B)\n' "$LOADER_GZ" "$LOADER_BUDGET" "$((LOADER_BUDGET - LOADER_GZ))"
+printf '  launcher document (template proxy) %4d B gz (budget %d; the SERVED figure is WidgetLauncherDocumentTest'"'"'s)\n' "$LAUNCHER_GZ" "$LAUNCHER_BUDGET"
 printf '  core    %6d B gz (budget %d)\n' "$CORE_GZ" "$CORE_BUDGET"
 [ "$LOADER_GZ" -le "$LOADER_BUDGET" ] || { echo "  loader over budget" >&2; FAIL=1; }
+[ "$LAUNCHER_GZ" -le "$LAUNCHER_BUDGET" ] || { echo "  launcher document over its own 2 KB budget" >&2; FAIL=1; }
 [ "$CORE_GZ" -le "$CORE_BUDGET" ] || { echo "  core over budget" >&2; FAIL=1; }
 
 # Lazy chunks: Help and forms must be DYNAMIC imports of the core — read from the

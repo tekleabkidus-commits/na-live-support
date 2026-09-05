@@ -1,0 +1,72 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-fail-first-red
+# set:        S13-step13
+# command:    npx playwright test --project=widget tests/Browser/widget-loader.spec.ts -g NFR-01: with every widget script|NFR-01: a click on the loader-drawn
+# started:    2026-09-05T16:31:47Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 2 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-loader.spec.ts:120:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open (3.6s)
+  ✘  2 [widget] › tests/Browser/widget-loader.spec.ts:137:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state (3.6s)
+
+
+  1) [widget] › tests/Browser/widget-loader.spec.ts:120:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('button.nlw-launcher')
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 3000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('button.nlw-launcher')
+
+
+      125 |     await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(key)}`);
+      126 |     const bubble = page.frameLocator('iframe#nlw-launcher').locator('button.nlw-launcher');
+    > 127 |     await expect(bubble).toBeVisible({ timeout: 3000 });
+          |                          ^
+      128 |     await expect(bubble).toHaveAttribute('aria-label', 'Open support chat');
+      129 |     expect(await page.locator('iframe#nlw-panel').getAttribute('src')).toBeNull(); // deferred: no document, no core, until first open / idle
+      130 |     // first open boots the core: the panel frame gets its document and the dialog appears
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:127:26
+
+    Error Context: test-results/widget-loader-NFR-01-with--23cc8-cument-until-the-first-open-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-loader.spec.ts:137:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('button.nlw-launcher')
+    Expected: visible
+    Timeout: 3000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 3000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('button.nlw-launcher')
+
+
+      142 |     await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(key)}`);
+      143 |     const bubble = page.frameLocator('iframe#nlw-launcher').locator('button.nlw-launcher');
+    > 144 |     await expect(bubble).toBeVisible({ timeout: 3000 });
+          |                          ^
+      145 |     await page.unroute(blockCore);
+      146 |     await bubble.click();
+      147 |     await expect(page.frameLocator('iframe#nlw-panel').locator('[role=dialog]')).toHaveCount(1, { timeout: 15000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:144:26
+
+    Error Context: test-results/widget-loader-NFR-01-a-cli-d227b-abel-follows-the-open-state-widget/error-context.md
+
+  2 failed
+    [widget] › tests/Browser/widget-loader.spec.ts:120:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+    [widget] › tests/Browser/widget-loader.spec.ts:137:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:31:56Z
+# duration:   9s
+# EXIT:       1

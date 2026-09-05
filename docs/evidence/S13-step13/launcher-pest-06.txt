@@ -1,0 +1,32 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-pest
+# set:        S13-step13
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetLauncherDocumentTest.php tests/Feature/Widget/WidgetShimTest.php tests/Security/FrameAncestorsTest.php
+# started:    2026-09-05T17:54:31Z
+# git:        c5d7053 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetLauncherDocumentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: the launcher document paints the labeled bubble WITHOUT[39m[90m…[39m [90m10.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: the panel document (no frame / frame=panel) is unchanged[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetShimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/panel/{key}: the panel document is a nonce'd module-scrip[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C3: a soft-deleted widget is dead to the wire — shim and panel b[39m[90m…[39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\FrameAncestorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit static sweep: the frame-ancestors directive is written in exactl[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit countersign condition 1 — the ESCAPE HATCH is the attribute: REQ[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit source mapping: exact https origins verbatim, *.brand wildcards[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit surfaces on real requests: the panel document frames ONLY its wi[39m[90m…[39m [90m0.15s[39m  
+
+  [90mTests:[39m    [32;1m9 passed[39;22m[90m (77 assertions)[39m
+  [90mDuration:[39m [39m11.85s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T17:54:43Z
+# duration:   12s
+# EXIT:       0

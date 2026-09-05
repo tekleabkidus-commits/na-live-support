@@ -1,0 +1,19 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-gate
+# set:        S13-step13
+# command:    bash ci/widget-bundle-budget.sh
+# started:    2026-09-05T17:32:33Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+  loader    3408 B gz + launcher doc 1774 B gz =  5182 (budget 5120 together; launcher doc alone ≤ 1024)
+  core     25719 B gz (budget 51200)
+  launcher document over its own 1 KB budget
+  loader + launcher document over budget
+  lazy    help     1567 B gz (dynamic import of the core)
+  lazy    forms    1378 B gz (dynamic import of the core)
+widget-bundle-budget: FAIL (Doc 13 NFR-01)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T17:32:34Z
+# duration:   1s
+# EXIT:       1

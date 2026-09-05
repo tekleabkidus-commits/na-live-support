@@ -93,6 +93,9 @@ final class WidgetShimController
         $bundle = $this->bundles->forWidget($widget);
         $nonce = $request->attributes->get(SecurityHeaders::REQUEST_NONCE_ATTRIBUTE);
         $nonce = is_string($nonce) ? $nonce : '';
+        if ($request->query('frame') === 'launcher') {
+            return $this->launcherDocument($widget, $bundle, $nonce);
+        }
         $src = '/w/'.$bundle['panel'];
         $links = '';
         foreach ($bundle['css'] as $css) {
@@ -109,6 +112,110 @@ final class WidgetShimController
             'Cache-Control' => 'no-store',
             'X-Widget-Bundle' => $bundle['version'],
         ]);
+    }
+
+    /**
+     * NFR-01 (advisor ruling 2026-09-05, the launcher-paint miss): the LAUNCHER frame's document is
+     * the LOADER-DRAWN LAUNCHER — a minimal, data-free document (tokens only, the labeled button + the
+     * unread badge, ≤ 1 KB gz) that paints WITHOUT fetching the core bundle. The core boots into this
+     * same document later (on first open or on idle after the paint) when the loader posts `boot-core`;
+     * the panel entry then replaces the static button in place — same markup, same tokens, no flash.
+     * Every visible string is an i18n key rendered server-side (N-03); the design tokens are read from
+     * the frozen source `resources/css/design-tokens.css`, never typed here.
+     *
+     * @param  array{panel: string, css: list<string>, version: string}  $bundle
+     */
+    private function launcherDocument(Widget $widget, array $bundle, string $nonce): Response
+    {
+        $live = $this->config->live($widget)['config'];
+        /** @var array<string, mixed> $appearance */
+        $appearance = is_array($live['appearance'] ?? null) ? $live['appearance'] : [];
+        /** @var array<string, mixed> $content */
+        $content = is_array($live['content'] ?? null) ? $live['content'] : [];
+        $language = is_string($content['default_language'] ?? null) && in_array($content['default_language'], ['en', 'am'], true) ? $content['default_language'] : 'en';
+        $theme = is_string($appearance['theme'] ?? null) && in_array($appearance['theme'], ['light', 'dark', 'auto'], true) ? $appearance['theme'] : 'auto';
+        $strings = [];
+        foreach (['en', 'am'] as $lang) {
+            $v = trans('widget.launcher', [], $lang);
+            $strings[$lang] = is_array($v) ? $v : [];
+        }
+        $tokens = self::designTokens();
+        $brand = is_array($appearance['brand'] ?? null) && is_string($appearance['brand']['accent'] ?? null) && preg_match('/^#[0-9a-fA-F]{6}$/', $appearance['brand']['accent']) === 1
+            ? 'html{--ds-accent:'.$appearance['brand']['accent'].';--ds-accent-contrast:'.self::accentContrast($appearance['brand']['accent'], $tokens).'}'
+            : '';
+        $label = $strings[$language]['open'] ?? '';
+        $json = static fn (mixed $v): string => json_encode($v, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        $template = (string) file_get_contents(base_path('widget/launcher/launcher.html'));
+        $html = strtr($template, [
+            '%LANG%' => $language,
+            '%NONCE%' => htmlspecialchars($nonce, ENT_QUOTES),
+            '%THEME%' => $theme,
+            '%WIDGET%' => htmlspecialchars(WidgetBundleResolver::id($widget), ENT_QUOTES),
+            '%LABEL%' => htmlspecialchars(is_string($label) ? $label : '', ENT_QUOTES),
+            '%TOKENS_LIGHT%' => $tokens['light'],
+            '%TOKENS_DARK%' => $tokens['dark'],
+            '%BRAND%' => $brand,
+            '%STRINGS%' => $json($strings),
+            '%CORE_SRC%' => htmlspecialchars('/w/'.$bundle['panel'], ENT_QUOTES),
+            '%CORE_CSS%' => $json(array_map(static fn (string $c): string => '/w/'.$c, $bundle['css'])),
+        ]);
+
+        return new Response($html, 200, [
+            'Content-Type' => 'text/html; charset=utf-8',
+            'Cache-Control' => 'no-store',
+            'X-Widget-Bundle' => $bundle['version'],
+        ]);
+    }
+
+    /**
+     * The launcher's token VALUES for both colourways, read from the frozen source file (the hex-extraction
+     * script's own source), cached per process. Only the tokens the launcher rules use.
+     *
+     * @return array{light: string, dark: string, values: array<string, array<string, string>>}
+     */
+    private static function designTokens(): array
+    {
+        static $cache = null;
+        if (is_array($cache)) {
+            /** @var array{light: string, dark: string, values: array<string, array<string, string>>} $cache */
+            return $cache;
+        }
+        $css = (string) file_get_contents(base_path('resources/css/design-tokens.css'));
+        $wanted = ['accent', 'accent-contrast', 'text-ink', 'danger-strong', 'focus-ring', 'panel-bg', 'text-primary'];
+        $blocks = ['light' => '/:root\s*\{([^}]*)\}/s', 'dark' => "/\[data-theme='dark'\]\s*\{([^}]*)\}/s"];
+        $out = ['light' => '', 'dark' => '', 'values' => []];
+        foreach ($blocks as $name => $pattern) {
+            $body = preg_match($pattern, $css, $m) === 1 ? $m[1] : '';
+            $decl = '';
+            foreach ($wanted as $token) {
+                if (preg_match('/--ds-'.preg_quote($token, '/').':\s*([^;]+);/', $body, $v) === 1) {
+                    $value = trim($v[1]);
+                    $decl .= '--ds-'.$token.':'.$value.';';
+                    $out['values'][$name][$token] = $value;
+                }
+            }
+            $out[$name] = $decl;
+        }
+        $cache = $out;
+
+        return $out;
+    }
+
+    /**
+     * Mirrors the panel's theme.ts `accentContrast`: white or ink on the accent, whichever reads better —
+     * both candidates are the design system's own accent-contrast tokens (light / dark colourway).
+     *
+     * @param  array{light: string, dark: string, values: array<string, array<string, string>>}  $tokens
+     */
+    private static function accentContrast(string $hex, array $tokens): string
+    {
+        $n = (int) hexdec(substr($hex, 1));
+        $lin = static fn (int $c): float => ($c / 255) <= 0.03928 ? ($c / 255) / 12.92 : ((($c / 255) + 0.055) / 1.055) ** 2.4;
+        $l = 0.2126 * $lin(($n >> 16) & 255) + 0.7152 * $lin(($n >> 8) & 255) + 0.0722 * $lin($n & 255);
+        $white = $tokens['values']['light']['accent-contrast'] ?? '';
+        $ink = $tokens['values']['dark']['accent-contrast'] ?? '';
+
+        return 1.05 / ($l + 0.05) >= ($l + 0.05) / 0.05 ? $white : $ink;
     }
 
     /** @return array<string, mixed> */

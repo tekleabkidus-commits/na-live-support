@@ -1,0 +1,17 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-state-debug
+# set:        S13-step13
+# command:    node docs/evidence/S13-step13/launcher-state-debug.mjs
+# started:    2026-09-05T16:58:33Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+after 2.5 s idle: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["launcher-sync","host"]}}
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+3 s after open(): {"launcher":{"label":"Close support chat","open":"true","static":false,"seen":["boot-core","launcher","launcher","launcher","api","launcher"]},"panel":{"dialog":true,"seen":["launcher-sync","host","api"]}}
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:58:41Z
+# duration:   8s
+# EXIT:       0

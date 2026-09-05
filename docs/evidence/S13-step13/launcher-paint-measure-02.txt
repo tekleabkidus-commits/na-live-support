@@ -1,0 +1,24 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-paint-measure
+# set:        S13-step13
+# command:    node docs/evidence/S13-step13/launcher-paint-measure.mjs
+# started:    2026-09-05T16:24:17Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 20000ms exceeded.
+    at measure (/home/kidus/projects/na-live-support/docs/evidence/S13-step13/launcher-paint-measure.mjs:33:33)
+    at async file:///home/kidus/projects/na-live-support/docs/evidence/S13-step13/launcher-paint-measure.mjs:53:1 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:24:38Z
+# duration:   21s
+# EXIT:       1

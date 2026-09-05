@@ -1,0 +1,48 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-paint-measure
+# set:        S13-step13
+# command:    node docs/evidence/S13-step13/launcher-paint-measure.mjs
+# started:    2026-09-05T16:24:52Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+{
+  "label": "A baseline (as shipped)",
+  "core_blocked": false,
+  "iframe_inserted_after_shim_ms": 21,
+  "launcher_document_received_after_shim_ms": 172,
+  "launcher_button_painted_after_shim_ms": 567,
+  "requests": [
+    "top document /host.html @+6ms",
+    "top script /w/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b.js @+228ms",
+    "frame document /w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b @+427ms",
+    "frame document /w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b @+431ms",
+    "top fetch /api/widget/v1/beacon @+437ms",
+    "frame stylesheet /w/panel.BW8bZJ7m.css @+608ms",
+    "frame script /w/panel.WC326-_Y.js @+609ms",
+    "frame stylesheet /w/panel.BW8bZJ7m.css @+625ms",
+    "frame script /w/panel.WC326-_Y.js @+625ms"
+  ]
+}
+{
+  "label": "B core bundle request BLOCKED",
+  "core_blocked": true,
+  "iframe_inserted_after_shim_ms": 31,
+  "launcher_document_received_after_shim_ms": 178,
+  "launcher_button_painted_after_shim_ms": "NEVER within 12 s",
+  "requests": [
+    "top document /host.html @+14ms",
+    "top script /w/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b.js @+234ms",
+    "frame document /w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b @+433ms",
+    "frame document /w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b @+436ms",
+    "top fetch /api/widget/v1/beacon @+479ms",
+    "frame stylesheet /w/panel.BW8bZJ7m.css @+612ms",
+    "frame script /w/panel.WC326-_Y.js @+613ms",
+    "frame stylesheet /w/panel.BW8bZJ7m.css @+629ms",
+    "frame script /w/panel.WC326-_Y.js @+630ms"
+  ]
+}
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:25:07Z
+# duration:   15s
+# EXIT:       0

@@ -16,7 +16,21 @@ const ASSERT = process.argv.includes('--assert');
 const CUSTOMER = process.env.WIDGET_BASE_URL ?? 'https://customer.harness.localhost:8443';
 const compose = ['compose', '-f', 'docker/compose.yaml', '-f', 'docker/compose.dev.yaml'];
 function key() {
-    const out = execFileSync('docker', [...compose, 'exec', '-T', 'app', 'php', 'artisan', 'db:seed', '--class=Database\\Seeders\\WidgetHarnessSeeder', '--force'], { encoding: 'utf8' });
+    const out = execFileSync(
+        'docker',
+        [
+            ...compose,
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'db:seed',
+            '--class=Database\\Seeders\\WidgetHarnessSeeder',
+            '--force',
+        ],
+        { encoding: 'utf8' },
+    );
     return /HARNESS_WIDGET_KEY=(\S+)/.exec(out)?.[1] ?? '';
 }
 function p95(xs) {
@@ -25,37 +39,82 @@ function p95(xs) {
 }
 const results = {};
 const browser = await chromium.launch();
-const context = await browser.newContext({ ignoreHTTPSErrors: true, viewport: { width: 1280, height: 800 } });
+const context = await browser.newContext({
+    ignoreHTTPSErrors: true,
+    viewport: { width: 1280, height: 800 },
+});
 const page = await context.newPage();
 const cdp = await context.newCDPSession(page);
 await cdp.send('Network.enable');
-await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 150, downloadThroughput: (1.6 * 1024 * 1024) / 8, uploadThroughput: (750 * 1024) / 8 });
+await cdp.send('Network.emulateNetworkConditions', {
+    offline: false,
+    latency: 150,
+    downloadThroughput: (1.6 * 1024 * 1024) / 8,
+    uploadThroughput: (750 * 1024) / 8,
+});
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
 const k = key();
-await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(k)}`);
-// launcher paint: from the loader script's responseEnd to the launcher iframe's first paint (a MutationObserver mark + rAF)
-const paint = await page.evaluate(
-    () =>
-        new Promise((resolve) => {
-            const started = performance.now();
-            const check = () => {
-                const f = document.querySelector('iframe#nlw-launcher');
-                if (f) requestAnimationFrame(() => resolve(performance.now()));
-                else if (performance.now() - started < 20000) setTimeout(check, 10);
-                else resolve(NaN);
-            };
-            check();
-        }),
-);
-const loader = await page.evaluate(() => {
-    const e = performance.getEntriesByType('resource').find((r) => r.name.includes('/w/') && r.name.endsWith('.js'));
-    return e ? { responseEnd: e.responseEnd, duration: e.duration, size: e.transferSize } : null;
-});
-results.launcher_paint_ms = loader ? Math.round(paint - loader.responseEnd) : NaN;
+await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(k)}`, { waitUntil: 'commit' });
+// launcher paint = the shim's responseEnd → the launcher FRAME's bubble button painted (polled INSIDE the frame + rAF).
+// (Until the S13 step-13 fix this read the iframe's presence after the host `load` event — which waits on both frames'
+// documents and the core bundle — and therefore measured the frames' load, not the launcher's paint.)
+const shim = await page
+    .waitForFunction(
+        () => {
+            const e = performance
+                .getEntriesByType('resource')
+                .find((r) => /\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js$/.test(r.name));
+            return e
+                ? {
+                      responseEnd: e.responseEnd,
+                      duration: e.duration,
+                      size: e.transferSize,
+                      origin: performance.timeOrigin,
+                  }
+                : null;
+        },
+        null,
+        { timeout: 20000 },
+    )
+    .then((h) => h.jsonValue());
+let launcherFrame = null;
+const frameDeadline = Date.now() + 20000;
+while (!launcherFrame && Date.now() < frameDeadline) {
+    launcherFrame = page.frames().find((f) => f.url().includes('frame=launcher'));
+    if (!launcherFrame) await page.waitForTimeout(10);
+}
+const painted = launcherFrame
+    ? await launcherFrame.evaluate(
+          () =>
+              new Promise((resolve) => {
+                  const s = performance.now();
+                  const c = () => {
+                      if (document.querySelector('button.nlw-launcher'))
+                          requestAnimationFrame(() =>
+                              resolve(performance.timeOrigin + performance.now()),
+                          );
+                      else if (performance.now() - s < 20000) setTimeout(c, 10);
+                      else resolve(NaN);
+                  };
+                  c();
+              }),
+      )
+    : NaN;
+const loader = shim;
+results.launcher_paint_ms =
+    loader && !Number.isNaN(painted)
+        ? Math.round(painted - (loader.origin + loader.responseEnd))
+        : NaN;
 results.loader_transfer_bytes = loader?.size ?? NaN;
 // open the panel, then an idle window
 await page.evaluate(() => window.PlatformChat.open());
-const panel = page.frames().find((f) => f.url().includes('frame=panel'));
+let panel = null;
+const panelDeadline = Date.now() + 20000;
+while (!panel && Date.now() < panelDeadline) {
+    panel = page.frames().find((f) => f.url().includes('frame=panel'));
+    if (!panel) await page.waitForTimeout(25);
+}
+if (panel) await panel.waitForSelector('[role=dialog]', { timeout: 20000 }).catch(() => {});
 await page.waitForTimeout(3000);
 const m0 = await cdp.send('Performance.getMetrics').catch(() => null);
 await cdp.send('Performance.enable').catch(() => {});
@@ -64,7 +123,11 @@ const a = await cdp.send('Performance.getMetrics');
 await page.waitForTimeout(10000);
 const b = await cdp.send('Performance.getMetrics');
 const metric = (m, name) => m.metrics.find((x) => x.name === name)?.value ?? 0;
-results.idle_cpu_pct = Math.round(((metric(b, 'TaskDuration') - metric(a, 'TaskDuration')) / ((Date.now() - t0) / 1000)) * 1000) / 10;
+results.idle_cpu_pct =
+    Math.round(
+        ((metric(b, 'TaskDuration') - metric(a, 'TaskDuration')) / ((Date.now() - t0) / 1000)) *
+            1000,
+    ) / 10;
 results.idle_js_heap_mb = Math.round((metric(b, 'JSHeapUsedSize') / 1024 / 1024) * 10) / 10;
 void m0;
 // polling load: drop the socket, count GET messages over 30 s
@@ -80,10 +143,24 @@ if (panel) {
     const times = await panel.evaluate(async () => {
         const token = localStorage.getItem('nlw.token') ?? '';
         const out = [];
-        for (const q of ['deposit', 'withdrawal', 'telebirr', 'bonus', 'account', 'ማውጣት', 'ተቀማጭ', 'card', 'limit', 'help']) {
+        for (const q of [
+            'deposit',
+            'withdrawal',
+            'telebirr',
+            'bonus',
+            'account',
+            'ማውጣት',
+            'ተቀማጭ',
+            'card',
+            'limit',
+            'help',
+        ]) {
             for (let i = 0; i < 2; i++) {
                 const t = performance.now();
-                await fetch('/api/widget/v1/kb/search?q=' + encodeURIComponent(q), { headers: { 'X-Visitor-Token': token, Accept: 'application/json' }, credentials: 'include' });
+                await fetch('/api/widget/v1/kb/search?q=' + encodeURIComponent(q), {
+                    headers: { 'X-Visitor-Token': token, Accept: 'application/json' },
+                    credentials: 'include',
+                });
                 out.push(performance.now() - t);
             }
         }
@@ -94,7 +171,11 @@ if (panel) {
 await browser.close();
 const power = (() => {
     try {
-        const o = execFileSync('powershell.exe', ['-NoProfile', '-c', '(Get-CimInstance Win32_Battery).BatteryStatus'], { encoding: 'utf8' }).trim();
+        const o = execFileSync(
+            'powershell.exe',
+            ['-NoProfile', '-c', '(Get-CimInstance Win32_Battery).BatteryStatus'],
+            { encoding: 'utf8' },
+        ).trim();
         return o;
     } catch {
         return 'unknown';
@@ -102,13 +183,22 @@ const power = (() => {
 })();
 results.battery_status = power; // 2 = charging / on AC; 1 = discharging (Win32_Battery)
 console.log(JSON.stringify(results, null, 2));
-const budgets = { launcher_paint_ms: 300, idle_cpu_pct: 1, idle_js_heap_mb: 30, search_p95_ms: 200 };
+const budgets = {
+    launcher_paint_ms: 300,
+    idle_cpu_pct: 1,
+    idle_js_heap_mb: 30,
+    search_p95_ms: 200,
+};
 if (!ASSERT) {
-    console.log('widget-loader-timing: figures printed (dev-indicative); pass --assert on wall power to hold the spec numbers');
+    console.log(
+        'widget-loader-timing: figures printed (dev-indicative); pass --assert on wall power to hold the spec numbers',
+    );
     process.exit(0);
 }
 if (power !== '2') {
-    console.log('widget-loader-timing: timing not taken — not on wall power (R-D13-6); figures above are NOT quotable');
+    console.log(
+        'widget-loader-timing: timing not taken — not on wall power (R-D13-6); figures above are NOT quotable',
+    );
     process.exit(0);
 }
 let red = 0;

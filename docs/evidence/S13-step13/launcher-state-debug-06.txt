@@ -1,0 +1,23 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-state-debug
+# set:        S13-step13
+# command:    node docs/evidence/S13-step13/launcher-state-debug.mjs click-delay
+# started:    2026-09-05T17:03:09Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+static visible: {"launcher":{"label":"Open support chat","open":"false","static":true,"seen":["boot-core"]},"panel":{"dialog":false,"seen":[]}}
+click +1s: {"launcher":{"label":"Open support chat","open":"false","static":true,"seen":["boot-core"]},"panel":{"dialog":false,"seen":[]}}
+click +2s: {"launcher":{"label":"Open support chat","open":"false","static":true,"seen":["boot-core"]},"panel":{"dialog":false,"seen":[]}}
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+click +3s: {"launcher":{"label":"launcher.open","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+click +4s: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+click +5s: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+click +6s: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+click +7s: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+click +8s: {"launcher":{"label":"Open support chat","open":"false","static":false,"seen":["boot-core","api:open","launcher","launcher","launcher"]},"panel":{"dialog":true,"seen":["api:open","launcher-sync","host"]}}
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T17:03:19Z
+# duration:   10s
+# EXIT:       0

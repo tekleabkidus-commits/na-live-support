@@ -1,0 +1,33 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-state-debug
+# set:        S13-step13
+# command:    node docs/evidence/S13-step13/launcher-state-debug.mjs spec
+# started:    2026-09-05T16:59:19Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+[reqfail] https://platform.harness.localhost:8443/api/widget/v1/beacon net::ERR_ABORTED
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('iframe#nlw-panel') to be visible[22m
+[2m    - locator resolved to hidden <iframe id="nlw-panel" title="chat panel" aria-hidden="true" allow="microphone; clipboard-write"></iframe>[22m
+[2m    62 × locator resolved to hidden <iframe id="nlw-panel" title="chat panel" aria-hidden="true" allow="microphone; clipboard-write" src="https://platform.harness.localhost:8443/w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b?v=iqNbbQaf&frame=panel"></iframe>[22m
+
+    at /home/kidus/projects/na-live-support/docs/evidence/S13-step13/launcher-state-debug.mjs:29:16 {
+  log: [
+    "  - waiting for locator('iframe#nlw-panel') to be visible",
+    '    - locator resolved to hidden <iframe id="nlw-panel" title="chat panel" aria-hidden="true" allow="microphone; clipboard-write"></iframe>',
+    '    62 × locator resolved to hidden <iframe id="nlw-panel" title="chat panel" aria-hidden="true" allow="microphone; clipboard-write" src="https://platform.harness.localhost:8443/w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b?v=iqNbbQaf&frame=panel"></iframe>'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:59:51Z
+# duration:   32s
+# EXIT:       1

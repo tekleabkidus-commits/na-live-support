@@ -41,7 +41,7 @@ it('GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG (allowlist, 
 it('GET /w/panel/{key}: the panel document is a nonce\'d module-script mount point under SecurityHeaders\' CSP whose frame-ancestors IS the widget\'s allowlist (P-FRAME-ANCESTORS); no-store', function (): void {
     [, $widget, $key] = widgetFixture();
 
-    $response = $this->get('/w/panel/'.$key.'?frame=launcher');
+    $response = $this->get('/w/panel/'.$key.'?frame=panel'); // S13 step 13: ?frame=launcher is now the loader-drawn launcher document (WidgetLauncherDocumentTest)
     $response->assertStatus(200)->assertHeader('Cache-Control', 'no-store, private');
     $html = (string) $response->getContent();
     $csp = (string) $response->headers->get('Content-Security-Policy');

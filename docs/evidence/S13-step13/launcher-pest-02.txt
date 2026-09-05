@@ -1,0 +1,49 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-pest
+# set:        S13-step13
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetLauncherDocumentTest.php tests/Feature/Widget/WidgetShimTest.php tests/Security/FrameAncestorsTest.php
+# started:    2026-09-05T16:46:51Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetLauncherDocumentTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-01: the launcher document paints the labeled bubble WITHOUT[39m[90m… [39m [90m5.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: the panel document (no frame / frame=panel) is unchanged[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetShimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/panel/{key}: the panel document is a nonce'd module-scrip[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C3: a soft-deleted widget is dead to the wire — shim and panel b[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\FrameAncestorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit static sweep: the frame-ancestors directive is written in exactl[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit countersign condition 1 — the ESCAPE HATCH is the attribute: REQ[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit source mapping: exact https origins verbatim, *.brand wildcards[39m[90m… [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit surfaces on real requests: the panel document frames ONLY its wi[39m[90m…[39m [90m0.07s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetLauncherDocumentTest[22m [90m>[39m it NFR-01: the…    
+[39;1m  Expecting '<!doctype html>[39;22m[39;1m<html lang="en…tml>[39;22m[39;1m' not to contain 'type="module"'.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39m:[32m35[39m
+     31▕     $html = $response->getContent();
+     32▕ 
+     33▕     // DATA-FREE: nothing to fetch before the bubble paints — no <script src>, no stylesheet link, no <script type="module">.
+     34▕     expect($html)->not->toMatch('/<script[^>]*\ssrc=/')
+  ➜  35▕         ->and($html)->not->toContain('type="module"')
+     36▕         ->and($html)->not->toContain('<link rel="stylesheet"')
+     37▕         // the bubble, labeled from `widget.launcher.open`, inside the mount point the core later takes over
+     38▕         ->and($html)->toContain('<button type="button" id="nlw-static" class="nlw-launcher" data-open="false" aria-label="'.trans('widget.launcher.open', [], 'en').'"')
+     39▕         ->and($html)->toContain('<div id="nlw-root" data-widget="'.(string) $widget->getKey().'"')
+
+  [33m1   [39m[39;1mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39;22m:[39;1m35[39;22m
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m8 passed[39;22m[90m (62 assertions)[39m
+  [90mDuration:[39m [39m6.22s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:46:58Z
+# duration:   7s
+# EXIT:       1

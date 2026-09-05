@@ -1,0 +1,29 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-paint-measure
+# set:        S13-step13
+# command:    node /tmp/claude-1000/-home-kidus-projects-na-live-support/efc5064d-e9a7-4c19-b990-b162daa65d60/scratchpad/launcher-paint-measure.mjs
+# started:    2026-09-05T16:23:31Z
+# git:        3bf65de (clean working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+node:internal/modules/esm/resolve:873
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@playwright/test' imported from /tmp/claude-1000/-home-kidus-projects-na-live-support/efc5064d-e9a7-4c19-b990-b162daa65d60/scratchpad/launcher-paint-measure.mjs
+    at packageResolve (node:internal/modules/esm/resolve:873:9)
+    at moduleResolve (node:internal/modules/esm/resolve:946:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:708:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:657:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:640:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:264:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:168:49) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v20.20.2
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:23:31Z
+# duration:   0s
+# EXIT:       1

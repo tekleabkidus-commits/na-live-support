@@ -1,0 +1,315 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-browser
+# set:        S13-step13
+# command:    npx playwright test --project=widget --project=widget-375 tests/Browser/widget-loader.spec.ts tests/Browser/widget-footprint.spec.ts tests/Browser/widget-hostile-host.spec.ts tests/Browser/widget-panel.spec.ts tests/Browser/widget-acceptance.spec.ts
+# started:    2026-09-05T16:40:15Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 42 tests using 1 worker
+
+  ✘   1 [widget] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) (45.7s)
+  ✘   2 [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (26.1s)
+  ✓   3 [widget] › tests/Browser/widget-acceptance.spec.ts:163:1 › S11 · focus trap: Tab and Shift+Tab cycle inside the dialog; focus never leaves it while open (1.3s)
+  ✓   4 [widget] › tests/Browser/widget-acceptance.spec.ts:191:1 › S11 · live regions: the polite log announces the staff reply; the queue card announces only when the number moves (9.8s)
+  ✓   5 [widget] › tests/Browser/widget-acceptance.spec.ts:208:1 › S11 · polling failover: the socket drops, polling takes over, a staff reply still lands; the socket returns and polling stops (9.3s)
+  ✓   6 [widget] › tests/Browser/widget-acceptance.spec.ts:230:1 › S11 · leader election: two tabs of one visitor hold ONE socket; closing the leader hands the lock over (6.3s)
+  ✘   7 [widget] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent (16.3s)
+  ✓   8 [widget] › tests/Browser/widget-acceptance.spec.ts:277:1 › S11 · text zoom 200 %: type scales with the root size; no horizontal overflow; the composer and 44 px targets survive (930ms)
+  ✓   9 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (599ms)
+  ✓  10 [widget] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (693ms)
+  ✓  11 [widget] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (671ms)
+  ✓  12 [widget] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (628ms)
+  ✓  13 [widget] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (599ms)
+  ✓  14 [widget] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  15 [widget] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (968ms)
+  ✘  16 [widget] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open (708ms)
+  ✘  17 [widget] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state (15.8s)
+  ✓  18 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (815ms)
+  ✓  19 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (772ms)
+  ✓  20 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (883ms)
+  ✓  21 [widget] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (680ms)
+  ✓  22 [widget-375] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) (3.8s)
+  ✘  23 [widget-375] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (22.1s)
+  ✓  24 [widget-375] › tests/Browser/widget-acceptance.spec.ts:163:1 › S11 · focus trap: Tab and Shift+Tab cycle inside the dialog; focus never leaves it while open (958ms)
+  ✓  25 [widget-375] › tests/Browser/widget-acceptance.spec.ts:191:1 › S11 · live regions: the polite log announces the staff reply; the queue card announces only when the number moves (7.6s)
+  ✓  26 [widget-375] › tests/Browser/widget-acceptance.spec.ts:208:1 › S11 · polling failover: the socket drops, polling takes over, a staff reply still lands; the socket returns and polling stops (9.2s)
+  ✓  27 [widget-375] › tests/Browser/widget-acceptance.spec.ts:230:1 › S11 · leader election: two tabs of one visitor hold ONE socket; closing the leader hands the lock over (8.1s)
+  ✘  28 [widget-375] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent (16.9s)
+  ✓  29 [widget-375] › tests/Browser/widget-acceptance.spec.ts:277:1 › S11 · text zoom 200 %: type scales with the root size; no horizontal overflow; the composer and 44 px targets survive (1.0s)
+  ✓  30 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize}; nodes = the two iframes — nothing else; the page input is never read (645ms)
+  ✓  31 [widget-375] › tests/Browser/widget-hostile-host.spec.ts:8:1 › SS-03: on the hostile page the two iframes mount at their fixed size; the host observes exactly two added nodes; the tampered page keeps its own input value (663ms)
+  ✓  32 [widget-375] › tests/Browser/widget-loader.spec.ts:12:1 › FR-01/FR-02: the snippet mounts two fixed-position iframes and nothing else; window.PlatformChat carries exactly the seven methods and queues until the panel is ready (644ms)
+  ✓  33 [widget-375] › tests/Browser/widget-loader.spec.ts:42:1 › T-07: history hooks are namespaced wrappers and RESTORABLE — unmount() puts the originals back and removes both iframes and both globals (668ms)
+  ✓  34 [widget-375] › tests/Browser/widget-loader.spec.ts:73:1 › EC-01: a second snippet is a no-op — still two iframes, one console warning, no second API (579ms)
+  ✓  35 [widget-375] › tests/Browser/widget-loader.spec.ts:88:1 › NFR-05: below the support matrix (no BroadcastChannel) the loader does not mount — silently; the host page is untouched (1.4s)
+  ✓  36 [widget-375] › tests/Browser/widget-loader.spec.ts:101:1 › NFR-06: an unknown key (a dead widget) leaves the host page intact — no iframe, no thrown error, the page keeps working (905ms)
+  ✘  37 [widget-375] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open (885ms)
+  ✘  38 [widget-375] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state (15.8s)
+  ✓  39 [widget-375] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (902ms)
+  ✓  40 [widget-375] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (737ms)
+  ✓  41 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (856ms)
+  ✘  42 [widget-375] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (5.8s)
+
+
+  1) [widget] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: browser.newContext: Test ended.
+    Browser logs:
+
+    <launching> /home/kidus/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-YMmdbx --remote-debugging-pipe --no-startup-window
+    <launched> pid=53541
+    [pid=53541][err] [0905/194017.765565:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=53541][err] [0905/194017.771076:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=53541][err] [0905/194017.771130:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=53541][err] [0905/194017.793389:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.
+    [pid=53541][err] [0905/194017.920378:WARNING:media/gpu/vaapi/vaapi_wrapper.cc:1655] drmGetDevices2() has not found any devices
+    [pid=53541][err] [0905/194017.922044:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.
+    [pid=53541] <gracefully close start>
+
+      75 |     colorScheme: 'light' | 'dark',
+      76 | ) {
+    > 77 |     const context = await browser.newContext({ viewport, colorScheme });
+         |                     ^
+      78 |     const page = await context.newPage();
+      79 |     await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(harnessWidgetKey())}`);
+      80 |     await expect(page.locator('iframe#nlw-panel')).toHaveCount(1);
+        at freshOpen (/home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:77:21)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:98:46
+
+    Error Context: test-results/widget-acceptance-AC-B3-01-35eb9-ht-and-dark-default-config--widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      142 |         await expect(
+      143 |             page.frameLocator('iframe#nlw-launcher').locator('[data-role=proactive]'),
+    > 144 |         ).toBeVisible({ timeout: 15000 });
+          |           ^
+      145 |         await assertNoProhibitedClass(page);
+      146 |         await context.close();
+      147 |         // out-of-hours
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:144:11
+
+    Error Context: test-results/widget-acceptance-AC-B3-01-0a0c7-ctive-fired-·-out-of-hours--widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected substring: "deposit"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 15000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      265 |     await expect(
+      266 |         page.frameLocator('iframe#nlw-launcher').locator('[data-role=proactive]'),
+    > 267 |     ).toContainText('deposit', { timeout: 15000 });
+          |       ^
+      268 |     await page.goto(`${CUSTOMER}/payments.html?key=${encodeURIComponent(key)}`);
+      269 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+      270 |     await page.waitForTimeout(4000);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:267:7
+
+    Error Context: test-results/widget-acceptance-S11-·-pr-2ee3d-n-another-page-stays-silent-widget/error-context.md
+
+  4) [widget] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+
+    Error: expect(received).toBeNull()
+
+    Received: "https://platform.harness.localhost:8443/w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b?v=BaEk4Cjl&frame=panel"
+
+      128 |     await expect(bubble).toBeVisible({ timeout: 3000 });
+      129 |     await expect(bubble).toHaveAttribute('aria-label', 'Open support chat');
+    > 130 |     expect(await page.locator('iframe#nlw-panel').getAttribute('src')).toBeNull(); // deferred: no document, no core, until first open / idle
+          |                                                                        ^
+      131 |     // first open boots the core: the panel frame gets its document and the dialog appears
+      132 |     await page.unroute(blockCore);
+      133 |     await page.evaluate(() =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:130:72
+
+    Error Context: test-results/widget-loader-NFR-01-with--23cc8-cument-until-the-first-open-widget/error-context.md
+
+  5) [widget] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[role=dialog]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[role=dialog]')
+        33 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      152 |     await page.unroute(blockCore);
+      153 |     await bubble.click();
+    > 154 |     await expect(page.frameLocator('iframe#nlw-panel').locator('[role=dialog]')).toHaveCount(1, {
+          |                                                                                  ^
+      155 |         timeout: 15000,
+      156 |     });
+      157 |     await expect(bubble).toHaveAttribute('aria-label', 'Close support chat', { timeout: 10000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:154:82
+
+    Error Context: test-results/widget-loader-NFR-01-a-cli-d227b-abel-follows-the-open-state-widget/error-context.md
+
+  6) [widget-375] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      142 |         await expect(
+      143 |             page.frameLocator('iframe#nlw-launcher').locator('[data-role=proactive]'),
+    > 144 |         ).toBeVisible({ timeout: 15000 });
+          |           ^
+      145 |         await assertNoProhibitedClass(page);
+      146 |         await context.close();
+      147 |         // out-of-hours
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:144:11
+
+    Error Context: test-results/widget-acceptance-AC-B3-01-0a0c7-ctive-fired-·-out-of-hours--widget-375/error-context.md
+
+  7) [widget-375] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+    Expected substring: "deposit"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 15000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('[data-role=proactive]')
+
+
+      265 |     await expect(
+      266 |         page.frameLocator('iframe#nlw-launcher').locator('[data-role=proactive]'),
+    > 267 |     ).toContainText('deposit', { timeout: 15000 });
+          |       ^
+      268 |     await page.goto(`${CUSTOMER}/payments.html?key=${encodeURIComponent(key)}`);
+      269 |     await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+      270 |     await page.waitForTimeout(4000);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:267:7
+
+    Error Context: test-results/widget-acceptance-S11-·-pr-2ee3d-n-another-page-stays-silent-widget-375/error-context.md
+
+  8) [widget-375] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+
+    Error: expect(received).toBeNull()
+
+    Received: "https://platform.harness.localhost:8443/w/panel/bqnii8cxller.63c9b7b7d2efd96d5d5885fba8db69a38c316bb19d529ad70116603341f9182b?v=BaEk4Cjl&frame=panel"
+
+      128 |     await expect(bubble).toBeVisible({ timeout: 3000 });
+      129 |     await expect(bubble).toHaveAttribute('aria-label', 'Open support chat');
+    > 130 |     expect(await page.locator('iframe#nlw-panel').getAttribute('src')).toBeNull(); // deferred: no document, no core, until first open / idle
+          |                                                                        ^
+      131 |     // first open boots the core: the panel frame gets its document and the dialog appears
+      132 |     await page.unroute(blockCore);
+      133 |     await page.evaluate(() =>
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:130:72
+
+    Error Context: test-results/widget-loader-NFR-01-with--23cc8-cument-until-the-first-open-widget-375/error-context.md
+
+  9) [widget-375] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('iframe#nlw-panel').contentFrame().locator('[role=dialog]')
+    Expected: 1
+    Received: 0
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[role=dialog]')
+        33 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      152 |     await page.unroute(blockCore);
+      153 |     await bubble.click();
+    > 154 |     await expect(page.frameLocator('iframe#nlw-panel').locator('[role=dialog]')).toHaveCount(1, {
+          |                                                                                  ^
+      155 |         timeout: 15000,
+      156 |     });
+      157 |     await expect(bubble).toHaveAttribute('aria-label', 'Close support chat', { timeout: 10000 });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:154:82
+
+    Error Context: test-results/widget-loader-NFR-01-a-cli-d227b-abel-follows-the-open-state-widget-375/error-context.md
+
+  10) [widget-375] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('iframe#nlw-launcher').contentFrame().locator('button')
+    Expected: "Close support chat"
+    Received: "Open support chat"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for locator('iframe#nlw-launcher').contentFrame().locator('button')
+        14 × locator resolved to <button type="button" data-open="false" data-nudge="false" class="nlw-launcher" aria-label="Open support chat">…</button>
+           - unexpected value "Open support chat"
+
+
+      86 |     await openPanel(page);
+      87 |     const launcher = page.frameLocator('iframe#nlw-launcher').locator('button');
+    > 88 |     await expect(launcher).toHaveAttribute('aria-label', 'Close support chat');
+         |                            ^
+      89 |     await page.evaluate(() =>
+      90 |         (window as unknown as { PlatformChat: { close(): void } }).PlatformChat.close(),
+      91 |     );
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-panel.spec.ts:88:28
+
+    Error Context: test-results/widget-panel-B01-B02-the-l-a69f7-a-number-—-never-a-bare-dot-widget-375/error-context.md
+
+  10 failed
+    [widget] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) 
+    [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+    [widget] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent 
+    [widget] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+    [widget] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+    [widget-375] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+    [widget-375] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent 
+    [widget-375] › tests/Browser/widget-loader.spec.ts:121:1 › NFR-01: with every widget script except the shim BLOCKED, the launcher bubble still paints with its accessible name within 3 s, and the panel frame holds no document until the first open 
+    [widget-375] › tests/Browser/widget-loader.spec.ts:144:1 › NFR-01: a click on the loader-drawn bubble (before the core booted) opens the panel through the loader relay; once the core takes the frame over, the label follows the open state 
+    [widget-375] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot 
+  32 passed (4.2m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:44:26Z
+# duration:   251s
+# EXIT:       1

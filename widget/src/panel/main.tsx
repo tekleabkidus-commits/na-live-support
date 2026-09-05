@@ -603,6 +603,10 @@ function onLoaderMessage(ev: MessageEvent): void {
         document.documentElement.lang = d.language;
         return;
     }
+    if (data.type === 'launcher-sync' && frameKind.value === 'panel') {
+        launcherFrame({ proactive: proactive.value }); // NFR-01: the launcher's core took its frame over — hand it the state it missed
+        return;
+    }
     if (data.type === 'proactive' && frameKind.value === 'panel') {
         // EC-05: never over a keyboard — ask the loader whether a page field has focus; the card waits for blur.
         pendingProactive = data.data as { id: string; url: string };
@@ -801,6 +805,9 @@ if (root) {
             frameKind.value = 'panel';
             bootPreview(PREVIEW);
         }
+        // NFR-01: in the launcher frame the core boots INTO the loader-drawn launcher document — the static
+        // button it painted with is removed in the same tick the core renders its own (same markup, same tokens).
+        if (frameKind.value === 'launcher') document.getElementById('nlw-static')?.remove();
         render(frameKind.value === 'launcher' ? <LauncherFrame /> : <PanelFrame />, root);
     });
     effect(() => void envelope.value);

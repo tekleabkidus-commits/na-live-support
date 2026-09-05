@@ -1,0 +1,78 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      launcher-pest
+# set:        S13-step13
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Widget/WidgetLauncherDocumentTest.php tests/Feature/Widget/WidgetShimTest.php tests/Feature/Widget/WidgetBundlePointerTest.php tests/Security/FrameAncestorsTest.php tests/Security/SecurityHeadersTest.php
+# started:    2026-09-05T16:40:03Z
+# git:        3bf65de (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetLauncherDocumentTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-01: the launcher document paints the labeled bubble WITHOUT[39m[90m… [39m [90m9.47s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-01: the panel document (no frame / frame=panel) is unchanged[39m[90m…[39m [90m0.02s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetShimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG[39m[90m… [39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/panel/{key}: the panel document is a nonce'd module-scrip[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C3: a soft-deleted widget is dead to the wire — shim and panel b[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBundlePointerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: the pointer is the NEWEST live row of the widget's channe[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C4: the pointer commands run on the platform connection in local[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\FrameAncestorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit static sweep: the frame-ancestors directive is written in exactl[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit countersign condition 1 — the ESCAPE HATCH is the attribute: REQ[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit source mapping: exact https origins verbatim, *.brand wildcards[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit surfaces on real requests: the panel document frames ONLY its wi[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SecurityHeadersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on the root web page[39m[90m            [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on an authenticated staff API r[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit carries the full T-07 header set on an error response[39m[90m            [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rotates the CSP nonce on every request[39m[90m                           [39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetLauncherDocumentTest[22m [90m>[39m it NFR-0… [41;1m Error [49;22m  
+[39;1m  Call to undefined function widgetShimScene()[39;22m
+
+  at [32mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39m:[32m22[39m
+     18▕ */
+     19▕ 
+     20▕ function launcherScene(): array
+     21▕ {
+  ➜  22▕     return widgetShimScene();
+     23▕ }
+     24▕ 
+     25▕ it('NFR-01: the launcher document paints the labeled bubble WITHOUT the core — no external script, the button + label from the i18n keys, both languages embedded, tokens from the frozen source, ≤ 1 KB gz, no-store', function (): void {
+     26▕     [$key, $widget] = launcherScene();
+
+  [33m1   [39m[39;1mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39;22m:[39;1m22[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39;22m:[39;1m26[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetLauncherDocumentTest[22m [90m>[39m it NFR-0… [41;1m Error [49;22m  
+[39;1m  Call to undefined function widgetShimScene()[39;22m
+
+  at [32mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39m:[32m22[39m
+     18▕ */
+     19▕ 
+     20▕ function launcherScene(): array
+     21▕ {
+  ➜  22▕     return widgetShimScene();
+     23▕ }
+     24▕ 
+     25▕ it('NFR-01: the launcher document paints the labeled bubble WITHOUT the core — no external script, the button + label from the i18n keys, both languages embedded, tokens from the frozen source, ≤ 1 KB gz, no-store', function (): void {
+     26▕     [$key, $widget] = launcherScene();
+
+  [33m1   [39m[39;1mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39;22m:[39;1m22[39;22m
+  [33m2   [39m[39;1mtests/Feature/Widget/WidgetLauncherDocumentTest.php[39;22m:[39;1m55[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m13 passed[39;22m[90m (120 assertions)[39m
+  [90mDuration:[39m [39m10.96s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T16:40:15Z
+# duration:   12s
+# EXIT:       2
