@@ -33,6 +33,12 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, ELEVENTH (owner-ordered, 2026-09-05 20:25Z): f72da6d PUSHED (origin/main = f72da6d); its run 33990000043 (created 20:24:16Z) IN PROGRESS — Stage 1 running; no verdict yet; commit = this section's SHA
+
+**Power line (R-D13-6 as amended):** BatteryStatus 1 (discharging), 82%. Docs only.
+
+**Billing/annotations first:** none yet. **The run on f72da6d carries both fixes (the Stage 4 media bucket + harness media host; the harness `queue-jump` through Doc 11's queue writer) and is the Batch C checkpoint's VERDICT OF RECORD (rule 15: the fix's run).** A full run is ~65 min from 20:24Z (Stage 4 alone ~37 m after a ~28 m Stage 3). Recorded, not polled; step 13 opens only on its green on Doc 13's own terms. (The order before this one named `<SHA>` literally and found origin/main still at fe15e93 — no run existed; recorded at the eleventh look, not as a look of its own.)
+
 ## SESSION-13 (Doc 13) — CI LOOKS OF RECORD, TENTH (owner-ordered, 2026-09-05 19:54Z): BOTH RUNS COMPLETED — c5d7053 (the Batch C verdict of record) and fe15e93 (the pre-close) each FAILURE AT STAGE 4 ON THE SAME SIX DOC 13 REDS; the first CI browser runs since step 8b; BOTH CAUSES FOUND, BOTH FIXES LANDED HERE (commit = this section's SHA — its CI run is the verdict of record, rule 15)
 
 **Power line (R-D13-6 as amended):** BatteryStatus 2 (charging) 27–36% across the diagnosis runs; the landing at BatteryStatus 1.
