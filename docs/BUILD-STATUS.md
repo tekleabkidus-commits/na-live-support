@@ -43,7 +43,7 @@ this note. All subsequent S19 work is single-session.
 
 **33984364961 on fe15e93 (the step-13 pre-close; created 18:32:06Z) — `in_progress`, Stage 1 running.** Its Stage 4 carries the loader-drawn launcher and the two new fail-first legs; verdict at the next look.
 
-**STOP:** neither run has a verdict; step 13 opens only on c5d7053's green on Doc 13's own terms (fe15e93's run then rides the close-out).
+**Re-looked on the owner's order at 18:45:28Z: UNCHANGED in kind — c5d7053's `npx playwright test` still running (15 min in; Stage 4 started 18:25Z); fe15e93's run at Stages 3 + 3b (1 + 2 green at 18:36Z); no annotation, no verdict (BatteryStatus 1, 27%). Recorded, not polled.** **STOP:** neither run has a verdict; step 13 opens only on c5d7053's green on Doc 13's own terms (fe15e93's run then rides the close-out); the next look after ~19:10Z.
 
 ## SESSION-13 (Doc 13) — STEP 13 PRE-CLOSE: THE LOADER-DRAWN LAUNCHER (NFR-01's launcher-paint miss FIXED before the close, advisor rulings 2026-09-05 — the fix ruling and the size-bounds ruling; commit = this section's SHA; rides the close-out battery)
 
