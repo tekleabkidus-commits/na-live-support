@@ -54,30 +54,38 @@ final class WidgetHarnessSeeder extends Seeder
         $rls->set($tenantId);
 
         try {
-            $issued = app(TenantKeyIssuer::class)->issue(
-                kind: 'widget',
-                label: '[S13-HARNESS] customer origin widget',
-                actor: AuditActor::PlatformAdmin,
-            );
-
+            // RIDER 2: the harness widget keeps ONE public key across seeds (it is the snippet's key; the specs read it
+            // back from `key_public`) — a pre-rider row is healed once through the migrator connection (UPDATE is
+            // app-denied by the rider's physics; a fixture seeder in local/testing/ci only).
             $existing = Widget::query()->find(self::WIDGET_ID);
-            if ($existing === null) {
-                DB::table('widgets')->insert([
-                    'id' => self::WIDGET_ID,
-                    'tenant_id' => $tenantId,
-                    'key_id' => $issued['key']->getKey(),
-                    'allowed_origins' => json_encode([self::CUSTOMER_ORIGIN], JSON_THROW_ON_ERROR),
-                    'created_at' => DB::raw('clock_timestamp()'),
-                    'updated_at' => DB::raw('clock_timestamp()'),
-                ]);
+            if ($existing !== null && is_string($existing->key_public) && $existing->key_public !== '') {
+                $plaintext = $existing->key_public;
+                $existing->forceFill(['allowed_origins' => [self::CUSTOMER_ORIGIN]])->save(); // heal to the canonical shape (the 0l heal actor)
             } else {
-                // Heal to the canonical shape every run (the 0l heal actor).
-                $existing->forceFill([
-                    'key_id' => $issued['key']->getKey(),
-                    'allowed_origins' => [self::CUSTOMER_ORIGIN],
-                ])->save();
+                $issued = app(TenantKeyIssuer::class)->issue(
+                    kind: 'widget',
+                    label: '[S13-HARNESS] customer origin widget',
+                    actor: AuditActor::PlatformAdmin,
+                );
+                $plaintext = (string) $issued['plaintext'];
+                if ($existing === null) {
+                    DB::table('widgets')->insert([
+                        'id' => self::WIDGET_ID,
+                        'tenant_id' => $tenantId,
+                        'key_id' => $issued['key']->getKey(),
+                        'allowed_origins' => json_encode([self::CUSTOMER_ORIGIN], JSON_THROW_ON_ERROR),
+                        'key_public' => $plaintext,
+                        'created_at' => DB::raw('clock_timestamp()'),
+                        'updated_at' => DB::raw('clock_timestamp()'),
+                    ]);
+                } else {
+                    $migrator = DB::connection('pgsql_migrator');
+                    $migrator->statement("SELECT set_config('app.tenant_id', ?, false)", [$tenantId]); // the RLS policy reads the GUC on every session, the migrator's too
+                    $migrator->table('widgets')->where('id', self::WIDGET_ID)
+                        ->update(['key_id' => $issued['key']->getKey(), 'key_public' => $plaintext, 'allowed_origins' => json_encode([self::CUSTOMER_ORIGIN], JSON_THROW_ON_ERROR)]);
+                }
             }
-
+            $this->command->line('HARNESS_WIDGET_KEY='.$plaintext);
             // The harness is ALWAYS OPEN by fixture (24×7 on the tenant default calendar) — the browser fixtures'
             // seeded calendar closes on weekends, which made every open-hours spec weekday-sensitive (found on a
             // Saturday at S13 step 10). The hours specs close/open explicitly through `widget:harness hours-*`.
@@ -93,7 +101,6 @@ final class WidgetHarnessSeeder extends Seeder
             } else {
                 $writer->create('[FIXTURE] Harness hours', 'Africa/Addis_Ababa', $weekdays, $actor, true, null);
             }
-            $this->command->line('HARNESS_WIDGET_KEY='.$issued['plaintext']);
         } finally {
             $context->clear();
             $rls->clear();

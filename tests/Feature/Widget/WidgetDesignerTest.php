@@ -29,8 +29,9 @@ it('creates a widget with its key shown ONCE, lists it, edits name/test mode/cha
     $show = designer($user, 'GET', '/'.$id)->assertOk();
     expect($show->json('key_plaintext'))->toBeNull('the plaintext is never readable again')
         ->and($show->json('allowed_origins'))->toBe(['https://help.nabet.example', '*.nabet.example'])
-        ->and($show->json('install.snippet'))->toBeNull('interim until P-WIDGET-KEY: the issuer keeps only the hash')
-        ->and($show->json('install.key_shown_once'))->toBeTrue()
+        ->and($show->json('install.snippet'))->toBe($created->json('install.snippet'), 'RIDER 2: the show door renders the same snippet the create door did')
+        ->and($show->json('install.key_shown_once'))->toBeFalse()
+        ->and(DB::table('widgets')->where('id', $id)->value('key_public'))->toBe($plaintext)
         ->and($show->json('install.csp'))->toContain('script-src')->toContain('frame-src')
         ->and($show->json('has_secret'))->toBeFalse();
     expect(collect(designer($user, 'GET', '')->json('widgets'))->pluck('id')->all())->toContain($id);

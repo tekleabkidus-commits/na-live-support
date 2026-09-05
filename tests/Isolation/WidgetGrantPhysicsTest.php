@@ -26,7 +26,8 @@ const DOC13_DENIED = [
         // the rotation stamp everywhere; identity/creation immutable on UPDATE; key_id stays
         // updatable (a Doc 01 key rotation re-points it).
         'INSERT' => ['identity_secret_rotated_at'],
-        'UPDATE' => ['created_at', 'id', 'identity_secret_rotated_at', 'tenant_id'],
+        // RIDER 2: key_public is written once at creation (INSERT granted) and never rewritten (UPDATE denied).
+        'UPDATE' => ['created_at', 'id', 'identity_secret_rotated_at', 'key_public', 'tenant_id'],
     ],
     'widget_config_versions' => [
         // published_at is ORDERING-RELEVANT (the publish history) — R-19b; hygiene app-denied.
@@ -112,6 +113,8 @@ it('FR-20 / Doc 02 physics: a config-version UPDATE and a widgets key_id UPDATE 
         "UPDATE widgets SET tenant_id = '00000000-0000-0000-0000-000000000000'",
         // C1's executing control: the rotation stamp is the trigger's, never the app's clock.
         'UPDATE widgets SET identity_secret_rotated_at = now()',
+        // RIDER 2's executing control: the public key is written once, never rewritten.
+        "UPDATE widgets SET key_public = 'rewritten'",
         'UPDATE widget_visitor_contexts SET captured_at = now()',
         'DELETE FROM widget_config_versions',
     ] as $sql) {

@@ -25,7 +25,7 @@ it('renders the list and the editor with their props; the preview document carri
     bindTenant($GLOBALS['__designer_tenant']);
     $editor = test()->actingAs($viewer, 'staff')->get('https://localhost/admin/widgets/'.$id.'/edit');
     $editor->assertOk();
-    $editor->assertInertia(fn ($page) => $page->component('Admin/Widgets/Editor', shouldExist: false)->where('widget.id', $id)->where('widget.live_version', 1)->has('config.appearance')->has('history', 1)->has('health.counters')->where('install.key_shown_once', true)->has('fonts', 3)->where('voice_flag', false));
+    $editor->assertInertia(fn ($page) => $page->component('Admin/Widgets/Editor', shouldExist: false)->where('widget.id', $id)->where('widget.live_version', 1)->has('config.appearance')->has('history', 1)->has('health.counters')->where('install.key_shown_once', false)->has('fonts', 3)->where('voice_flag', false));
     bindTenant($GLOBALS['__designer_tenant']);
 
     $preview = test()->actingAs($viewer, 'staff')->get('https://localhost/admin/widgets/'.$id.'/preview?theme=dark&language=am&frame=panel');

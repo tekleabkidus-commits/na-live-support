@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $name
  * @property string|null $live_version_id
  * @property string $bundle_channel
+ * @property string|null $key_public SCHEMA AMENDMENT 7 RIDER 2: the PUBLIC widget key, written once at creation (UPDATE app-denied)
  * @property bool $test_mode
  * @property string|null $identity_secret_ref
  * @property string|null $identity_secret_previous_ref
@@ -44,6 +45,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'identity_secret_ref',
     'identity_secret_previous_ref',
     'deleted_at',
+    // SCHEMA AMENDMENT 7 RIDER 2 (S13 Batch C): the PUBLIC widget key, written once at creation, UPDATE app-denied.
+    'key_public',
 ])]
 final class Widget extends Model implements TenantScoped
 {

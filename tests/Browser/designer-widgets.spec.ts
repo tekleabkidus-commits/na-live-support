@@ -173,15 +173,18 @@ test('J04–J05: Content (am incomplete gate, shortcuts builder, tab toggles) an
     await expect(
         page.getByTestId('wd-history').locator('.wd-history-row[data-status=live]'),
     ).toContainText('v3');
+    const patched = page.waitForResponse((r) => r.url().includes('/admin/widgets/api/') && r.request().method() === 'PATCH');
     await page.getByTestId('wd-test-mode').locator('input').check();
-    await expect.poll(async () => (await page.goto('/admin/widgets'))?.ok()).toBe(true);
+    expect((await patched).ok()).toBe(true);
+    await page.goto('/admin/widgets');
     await expect(page.getByTestId('widgets-list').locator(`[data-widget="${id}"]`)).toContainText(
         'Test mode',
     );
 
     // J06: Install — the shown-once line, the CSP block, the domains through the matcher, the secret
     await page.goto(`/admin/widgets/${id}/edit?tab=install`);
-    await expect(page.getByTestId('wd-snippet-shown-once')).toContainText('shown once');
+    await expect(page.getByTestId('wd-snippet')).toContainText(/\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js/); // RIDER 2: the drawn snippet, at any time
+    expect(await page.getByTestId('wd-snippet-shown-once').count()).toBe(0);
     await expect(page.getByTestId('wd-csp')).toContainText('script-src');
     await expect(page.getByTestId('wd-csp')).toContainText('frame-src');
     await expect(page.getByTestId('wd-domains')).toContainText('help.fixture.example');

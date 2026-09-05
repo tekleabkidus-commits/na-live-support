@@ -3292,6 +3292,8 @@ END OF RIDER 1.
 
 **Rider (one nullable column on item 1's table):** `widgets.key_public` text NULL — the key plaintext as the snippet carries it. **Written ONCE at creation** by `WidgetDesigner::create` from the issuer's returned plaintext (app INSERT-granted on the column; **UPDATE app-DENIED** — the executing 42501 control joins `WidgetGrantPhysicsTest`); the harness seeder backfills its own widget. Never a hash input, never logged as a secret (`ScrubSecrets` unchanged: the key is public), never read by Doc 02's key resolution (the session and shim doors keep hashing the presented key). `InstallSnippet::forWidget` renders the snippet from it; `GET /admin/widgets/api/{id}` and the editor page carry the complete snippet; the D13-D06 shown-once interim is STRUCK at landing. **Controls in the landing commit:** `WidgetDesignerTest` asserts the show-door snippet equals the create-door snippet; Doc 02's `WidgetSessionTest` / `WidgetTokenTheftTest` green unmodified; `SecretRotationTest`'s no-plaintext-in-audit pin unchanged (the identity secret stays secret). The diff + this text ride WITH the landing, in the ruling's order (after the Designer browser spec and the widget-375 run).
 
+**LANDED at S13 Batch C (the BUILD-STATUS "RIDER 2 LANDED" section's SHA): migration + INSERT-only grant + the 42501 control + the snippet from the row; Doc 02's session/origin suites green unmodified; D13-D06 struck.**
+
 END OF RIDER 2.
 
 ### DOC 11 CHANGE-LOG — position-in-queue extension (Doc 13 T-05; P-QPOS countersigned by the advisor 2026-09-04, S13 step 5b)

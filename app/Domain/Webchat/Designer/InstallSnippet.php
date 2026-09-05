@@ -20,10 +20,9 @@ final class InstallSnippet
     /**
      * The shim is addressed by the FULL widget key (Doc 02 FR-21: the key + the origin mint the
      * session; the allowlist is the control, the key is a public identifier in every host page).
-     * The issuer stores only its hash, so the snippet is complete ONLY when the plaintext is in
-     * hand — at creation. Afterwards `snippet` is null and `key_shown_once` says why (interim:
-     * P-WIDGET-KEY proposes keeping the public key on the widget row so the Install tab can
-     * always render the drawn snippet).
+     * The issuer stores only its hash; RIDER 2 keeps the PUBLIC key on the widget row (written once,
+     * UPDATE app-denied) so the drawn snippet renders at any time. A pre-rider row without it answers
+     * `snippet: null, key_shown_once: true`.
      *
      * @return array{snippet: ?string, key_shown_once: bool, script_src: string, frame_src: string, csp: string, key_prefix: string}
      */
@@ -35,9 +34,14 @@ final class InstallSnippet
         $frame = $this->origin('widget.frame_origin', $platform);
         $prefix = $widget->key->prefix ?? '';
 
+        // RIDER 2: the public key on the row (written once at creation) renders the drawn snippet at any time;
+        // `key_shown_once` stays true only for a pre-rider widget whose row never carried it.
+        $stored = $widget->key_public;
+        $key = $keyPlaintext ?? (is_string($stored) && $stored !== '' ? $stored : null);
+
         return [
-            'snippet' => $keyPlaintext !== null ? '<script async src="'.$cdn.'/w/'.$keyPlaintext.'.js"></script>' : null,
-            'key_shown_once' => $keyPlaintext === null,
+            'snippet' => $key !== null ? '<script async src="'.$cdn.'/w/'.$key.'.js"></script>' : null,
+            'key_shown_once' => $key === null,
             'script_src' => $cdn,
             'frame_src' => $frame,
             'csp' => "Content-Security-Policy:\n  script-src {$cdn};\n  frame-src  {$frame};",

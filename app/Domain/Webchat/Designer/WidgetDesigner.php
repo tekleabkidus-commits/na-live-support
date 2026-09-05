@@ -47,7 +47,8 @@ final class WidgetDesigner
             $issued = $this->keys->issue(kind: 'widget', label: $name, actor: AuditActor::Staff, actorId: $actorId);
             /** @var \App\Models\TenantKey $key */
             $key = $issued['key'];
-            $widget = Widget::query()->create(['key_id' => $key->getKey(), 'allowed_origins' => $origins, 'name' => $name]);
+            // RIDER 2: the public key rides the row ONCE (INSERT-granted, UPDATE app-denied) so the Install tab can render the snippet.
+            $widget = Widget::query()->create(['key_id' => $key->getKey(), 'allowed_origins' => $origins, 'name' => $name, 'key_public' => (string) $issued['plaintext']]);
             $widgetId = VisitorConversation::widgetId($widget);
             $this->audit->record('widget.created', 'widget', $widgetId, AuditActor::Staff, ['widget_id' => $widgetId, 'name' => $name, 'allowed_origins' => $origins], actorId: $actorId);
 
