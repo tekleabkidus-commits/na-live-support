@@ -33,6 +33,16 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — HARNESS WORKER HEALTHCHECKS LANDED (owner's go, 2026-09-05; the F-C2 correction of record; commit = this section's SHA — its CI run is the Batch C checkpoint's VERDICT OF RECORD, the first CI Stage 4 to run past the bring-up since step 8b)
+
+**Power line (R-D13-6 as amended):** BatteryStatus 1, 19%. The diff, a record line, a commit.
+
+**Landed exactly as proposed and proven in the section below:** `docker/compose.harness.yaml` — `git apply` of `docs/evidence/S13-ci/harness-healthcheck-fix.diff` (16 insertions, the two `healthcheck:` blocks with their comments; nothing else). Both compose shapes validate at landing (`config -q`: CI's base + harness pair; the dev quad). The proofs stand as captured on this exact diff: red control `harness-wait-red-02.txt` (EXIT 1, CI's line), green `harness-wait-green-01.txt` (EXIT 0, both workers Healthy), in-container controls positive 0 / negative 1.
+
+**F-C2 CORRECTION OF RECORD:** filed cosmetic at the Batch C checkpoint — **fatal under CI's `--wait`; no CI Stage 4 has completed since step 8b (cc64f52).** The checkpoint's F-C2 row is superseded by this line.
+
+**NEXT (the STOP):** the owner pushes this SHA → ONE CI look with ALL stages, billing annotation first, every red named by spec = the Batch C checkpoint's verdict of record. Green on Doc 13's own terms → step 13; red on a Doc 13 cause → fix first, report before landing.
+
 ## SESSION-13 (Doc 13) — CI LOOK OF RECORD, SECOND (owner-ordered, 2026-09-05 15:15Z): 33972978742 on 0835a7b = FAILURE AT THE STAGE 4 BRING-UP, NO TEST RAN — a Doc 13 cause (F-C2 is FATAL in CI); 33973914323 on 22108e6 still running and doomed to the same bring-up; FIX-FIRST — the harness worker healthchecks PROPOSED with red + green controls, NOT landed (report before landing, as ordered); commit = this section's SHA
 
 **Power line (R-D13-6 as amended):** BatteryStatus 1, 21% → 19% across the local controls; every leg ran.
