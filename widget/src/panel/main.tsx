@@ -632,7 +632,8 @@ function onLoaderMessage(ev: MessageEvent): void {
         const draft = data.data as { config: ConfigEnvelope['config']; theme?: 'light' | 'dark' };
         if (config.value) config.value = { ...config.value, config: draft.config };
         if (draft.theme) theme.value = draft.theme;
-        if (draft.config.content.tabs.home === false && tab.value === 'home') tab.value = 'messages';
+        if (draft.config.content.tabs.home === false && tab.value === 'home')
+            tab.value = 'messages';
         return;
     }
     if (data.type !== 'api' || !data.data) return;
@@ -756,6 +757,7 @@ function PanelFrame(): preact.JSX.Element {
 (window as unknown as { __nlwPanel?: unknown }).__nlwPanel = {
     socketUp: () => socket?.isUp() ?? false,
     isLeader: () => leader?.isLeader() ?? false,
+    themeChoice: () => theme.value, // read-only: the preview/theme legs assert the choice behind data-theme
     dropSocket: () => socket?.drop(),
     polling: () => isPolling(),
     proactive: () => ({

@@ -40,7 +40,7 @@ export const Home: FunctionComponent<{
             <p class="nlw-greeting">{welcome}</p>
             {c === null ? (
                 <div class="nlw-band">
-                    <span class="nlw-skeleton" style="width: 60%" />
+                    <span class="nlw-skeleton nlw-skeleton-band" />
                 </div>
             ) : bandText ? (
                 <p class="nlw-band" data-band={band ?? ''}>

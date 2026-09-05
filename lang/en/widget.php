@@ -380,6 +380,7 @@ return [
         'history_note' => 'Live within a minute. A visitor mid-conversation keeps the config they started with until they reload — nothing changes under someone while they are typing.',
         'version' => 'v:version',
         'saved' => 'Saved',
+        'invalid_fields' => 'Some fields do not validate yet: :fields',
         'error' => 'That did not go through — try again.',
         'back' => 'All widgets',
         'nav_backoffice' => 'Backoffice',

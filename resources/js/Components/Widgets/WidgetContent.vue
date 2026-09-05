@@ -92,6 +92,7 @@ function remove(i: number): void {
                     </select>
                     <input
                         v-model="sc.target"
+                        :data-testid="'wd-shortcut-target-' + i"
                         type="text"
                         maxlength="500"
                         :aria-label="s('shortcut_target')"

@@ -13,6 +13,7 @@ import WidgetInstall from '../../../Components/Widgets/WidgetInstall.vue';
 import {
     clone,
     door,
+    normalizeConfig,
     tr,
     type Copy,
     type Refusal,
@@ -71,8 +72,10 @@ const tabs: TabKey[] = ['appearance', 'content', 'behavior', 'install', 'health'
 const tab = ref<TabKey>(
     (new URLSearchParams(location.search).get('tab') as TabKey | null) ?? 'appearance',
 );
-draft.value = clone(props.config);
-const dirty = computed(() => JSON.stringify(draft.value) !== JSON.stringify(props.config));
+// the baseline is the live config in the SAME normalised shape the draft takes (PHP's `[]` for an empty map)
+const baseline = normalizeConfig(clone(props.config));
+draft.value = clone(baseline);
+const dirty = computed(() => JSON.stringify(draft.value) !== JSON.stringify(baseline));
 const refusal = ref<Refusal | null>(null);
 const warnings = ref<string[]>([]);
 const note = ref('');
@@ -86,9 +89,12 @@ let validateTimer: number | null = null;
 function pushPreview(): void {
     for (const frame of document.querySelectorAll<HTMLIFrameElement>('iframe[data-preview]')) {
         frame.contentWindow?.postMessage(
-            { type: 'preview-config', data: { config: draft.value, theme: frame.dataset.preview } },
+            {
+                type: 'preview-config',
+                data: { config: clone(draft.value), theme: frame.dataset.preview },
+            },
             location.origin,
-        );
+        ); // a plain object: a reactive proxy cannot be structured-cloned
     }
 }
 async function validate(): Promise<void> {
@@ -112,7 +118,7 @@ function applySuggestion(hex: string): void {
     changed();
 }
 function discard(): void {
-    draft.value = clone(props.config);
+    draft.value = clone(baseline);
     refusal.value = null;
     changed();
 }
@@ -212,6 +218,19 @@ watch(tab, (v) => history.replaceState(null, '', '?tab=' + v));
                 </div>
             </header>
             <p v-if="flash" class="wd-flash" role="status" data-testid="wd-flash">{{ flash }}</p>
+            <p
+                v-if="refusal && refusal.refusal_code !== 'contrast'"
+                class="wd-error"
+                role="alert"
+                data-testid="wd-refusal"
+            >
+                {{
+                    tr(t.invalid_fields, {
+                        fields:
+                            Object.keys(refusal.errors ?? {}).join(', ') || refusal.refusal_code,
+                    })
+                }}
+            </p>
 
             <div class="wd-tabs" role="tablist" :aria-label="widget.name">
                 <button
@@ -321,6 +340,15 @@ watch(tab, (v) => history.replaceState(null, '', '?tab=' + v));
     gap: 12px;
     font-size: 12.5px;
     color: var(--ds-text-primary);
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.wd-editor > *,
+.wd-two > *,
+.wd-stack > *,
+.wd-field > * {
+    min-width: 0;
 }
 .wd-editor-head {
     display: flex;
@@ -357,8 +385,12 @@ watch(tab, (v) => history.replaceState(null, '', '?tab=' + v));
     display: flex;
     gap: 2px;
     border-bottom: 1px solid var(--ds-border);
+    overflow-x: auto;
+    max-width: 100%;
 }
 .wd-tabs button {
+    flex: none;
+    white-space: nowrap;
     min-height: 36px;
     padding: 0 12px;
     border: 0;

@@ -1,0 +1,24 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      panel-375-after-step10
+# set:        S13-step11
+# command:    npx playwright test tests/Browser/widget-transport.spec.ts tests/Browser/widget-theme.spec.ts tests/Browser/widget-proactive.spec.ts tests/Browser/widget-home.spec.ts --project=widget-375 --reporter=line
+# started:    2026-09-05T11:02:02Z
+# git:        4a45c73 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 8 tests using 1 worker
+
+[1/8] [widget-375] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site
+[2/8] [widget-375] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents
+[3/8] [widget-375] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads
+[4/8] [widget-375] › tests/Browser/widget-proactive.spec.ts:48:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered
+[5/8] [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe
+[6/8] [widget-375] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe
+[7/8] [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt
+[8/8] [widget-375] › tests/Browser/widget-transport.spec.ts:51:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops
+  8 passed (51.6s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T11:02:55Z
+# duration:   53s
+# EXIT:       0

@@ -148,3 +148,10 @@ html, body { margin: 0; height: 100%; background: transparent; font-family: Inte
 .nlw-lightbox { position: fixed; inset: 0; background: color-mix(in srgb, var(--ds-text-ink) 88%, transparent); display: grid; place-items: center; z-index: 5; }
 .nlw-lightbox img { max-width: 92vw; max-height: 86vh; border-radius: 8px; }
 .nlw-lightbox .nlw-icon { position: absolute; inset-inline-end: 12px; inset-block-start: 12px; color: var(--ds-accent-contrast); }
+
+/* the band skeleton's width as a class: the panel's CSP allows no inline style attribute */
+.nlw-skeleton-band { width: 60%; }
+
+/* no inline style attributes (the panel's CSP): the identity badge's home placement, the two-column notify row */
+.nlw-badge-identity[data-placement='home'] { margin: 14px 16px 0; }
+.nlw-list-2col { grid-template-columns: 1fr 1fr; }

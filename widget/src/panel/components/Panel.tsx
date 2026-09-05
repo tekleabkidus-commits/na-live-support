@@ -290,7 +290,7 @@ export const Panel: FunctionComponent<Props> = (p) => {
                             <div
                                 class="nlw-badge-identity"
                                 data-role="identity"
-                                style="margin: 14px 16px 0"
+                                data-placement="home"
                             >
                                 <span aria-hidden="true">{c.visitor.display.slice(0, 1)}</span>
                                 <span>
@@ -312,7 +312,7 @@ export const Panel: FunctionComponent<Props> = (p) => {
                 <section class="nlw-queue" data-role="notify-prompt" aria-label={t('notify.title')}>
                     <strong>{t('notify.title')}</strong>
                     <span>{t('notify.body')}</span>
-                    <div class="nlw-list" style="grid-template-columns: 1fr 1fr">
+                    <div class="nlw-list nlw-list-2col">
                         <button type="button" class="nlw-btn" onClick={() => p.onNotify(true)}>
                             {t('notify.yes')}
                         </button>

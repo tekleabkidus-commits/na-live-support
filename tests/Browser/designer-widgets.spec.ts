@@ -61,7 +61,7 @@ test('J09 + J01–J03: the list, create (key ONCE), the editor chrome, the inlin
     await page.goto(`/admin/widgets/${id}/edit`);
     await expect(page.getByTestId('widgets-editor')).toBeVisible();
     await expect(page.getByTestId('wd-dirty')).toContainText('Everything published');
-    await expect(page.locator('[role=tablist] [role=tab]')).toHaveCount(5);
+    await expect(page.locator('.wd-tabs [role=tab]')).toHaveCount(5);
     // the preview frames boot the panel bundle in preview mode — the greeting renders from the SAME strings the visitor gets
     const light = page.frameLocator('[data-testid=wd-preview-light]');
     const dark = page.frameLocator('[data-testid=wd-preview-dark]');
@@ -116,11 +116,14 @@ test('J04–J05: Content (am incomplete gate, shortcuts builder, tab toggles) an
     await expect(page.getByTestId('wd-am-incomplete')).toBeVisible({ timeout: 10000 });
     await page.getByTestId('wd-welcome-am').fill('[FIXTURE] ስለ ተቀማጭ ማንኛውንም ይጠይቁን።');
     await expect(page.getByTestId('wd-am-incomplete')).toHaveCount(0, { timeout: 10000 });
-    await page.getByTestId('wd-shortcut-add').click();
-    await page.getByTestId('wd-shortcut-label-0').fill('[FIXTURE] ገንዘቤ የት ደረሰ?');
-    await expect(page.getByTestId('wd-am-incomplete')).toBeVisible({ timeout: 10000 }); // the en label is empty now
     await page.getByTestId('wd-welcome-lang-en').click();
+    await page.getByTestId('wd-shortcut-add').click();
     await page.getByTestId('wd-shortcut-label-0').fill('[FIXTURE] Where is my withdrawal?');
+    await page.getByTestId('wd-shortcut-target-0').fill('withdrawal');
+    await expect(page.getByTestId('wd-refusal')).toHaveCount(0, { timeout: 10000 }); // a complete shortcut validates
+    await expect(page.getByTestId('wd-am-incomplete')).toBeVisible({ timeout: 10000 }); // the am label is empty now
+    await page.getByTestId('wd-welcome-lang-am').click();
+    await page.getByTestId('wd-shortcut-label-0').fill('[FIXTURE] ገንዘቤ የት ደረሰ?');
     await expect(page.getByTestId('wd-am-incomplete')).toHaveCount(0, { timeout: 10000 });
     await expect(page.getByTestId('wd-agent-identity')).toContainText('First name');
     await page.getByTestId('wd-tab-home').uncheck();

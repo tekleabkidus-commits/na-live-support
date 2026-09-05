@@ -222,7 +222,7 @@ const glyph: Record<string, string> = { chat: '💬', sparkle: '✻', question: 
                     v-for="theme in ['light', 'dark']"
                     :key="theme"
                     class="wd-preview-frame"
-                    :data-theme="theme"
+                    :data-preview-theme="theme"
                 >
                     <iframe
                         :src="

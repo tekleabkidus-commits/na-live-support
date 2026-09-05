@@ -245,15 +245,18 @@ final class WidgetConfigPublisher
      */
     private function warnings(array $merged): array
     {
+        // J04: Amharic is offered only when every English string has its Amharic — an English welcome or
+        // shortcut label with an empty (or absent) Amharic counterpart is the incomplete state.
         $warnings = [];
         $welcome = data_get($merged, 'content.welcome');
+        $welcome = is_array($welcome) ? $welcome : [];
+        $str = static fn (mixed $v): string => is_scalar($v) ? trim((string) $v) : '';
+        $amMissing = $str($welcome['en'] ?? null) !== '' && $str($welcome['am'] ?? null) === '';
         $shortcuts = data_get($merged, 'content.shortcuts');
-        $needsAm = is_array($welcome) && array_key_exists('am', $welcome);
-        $amMissing = is_array($welcome) && (($welcome['am'] ?? '') === '') && $needsAm;
         if (is_array($shortcuts)) {
             foreach ($shortcuts as $s) {
                 $label = is_array($s) && is_array($s['label'] ?? null) ? $s['label'] : [];
-                if (array_key_exists('en', $label) && (($label['am'] ?? '') === '')) {
+                if ($str($label['en'] ?? null) !== '' && $str($label['am'] ?? null) === '') {
                     $amMissing = true;
                 }
             }
