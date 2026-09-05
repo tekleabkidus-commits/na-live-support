@@ -33,6 +33,20 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD FOR THE BATCH C CHECKPOINT (ONE look, 2026-09-05 15:10Z, after the owner's push of 22108e6; commit = this section's SHA)
+
+**Power line (R-D13-6 as amended):** BatteryStatus 1, 23%. Docs only.
+
+**Billing/annotations first (both runs):** no billing annotation on either run; warnings = the Node 20 → Node 24 deprecation on `actions/checkout@v4` / `setup-node@v4` / `upload-artifact@v4` (the platform's, a Doc 18 window item) and the pre-existing Prettier/ESLint warnings (42, unchanged).
+
+**The run on 22108e6 — 33973914323 (created 2026-09-05T15:09:05Z): `in_progress` at the look — Stage 1 running, no verdict yet.** Rule 15: CI is looked at once per checkpoint and never polled, and a run in progress carries no verdict — so this run's verdict (the Batch C checkpoint's VERDICT OF RECORD, the fix's run) is RECORDED AT THE NEXT LOOK the owner orders; nothing below claims it. Step 13 does not open on a run without a verdict.
+
+**The run on 0835a7b — 33972978742 (created 14:50:03Z): `in_progress` at the look with FOUR stages COMPLETE and GREEN — Stage 1 lint + static ✓ (14:52:57Z), Stage 2 unit ✓, Stage 3 integration (ephemeral stack) ✓ (15:08:48Z), Stage 3b AC-03 ordering evidence ✓; Stage 4 browser started 15:08:51Z, running.** Two facts of record from it already: **(a) Stage 3 green on CI's own Saturday means Doc 12's `CalendarTest` passed on the P-CAL-WEEKDAY landing — the WEEKEND branch is now witnessed in CI too** (the Tuesday witness stays OWED for the weekday branch); (b) Stage 4 is EXPECTED red on exactly the 13 F1-B12 `link-name` reds (P-NAV-WIDGETS's cause, fixed at 22108e6) — expected, not yet observed; recorded at the next look with every red named by spec.
+
+**Seen in the listing, not looked at, not chased:** 33965071306 on 0531613 (`failure`, 12:05Z) and 33952644913 on f3e4ba9 (`failure`, 07:28Z) — grounding pushes, not checkpoints, on pre-P-CAL-WEEKDAY trees; cause NOT established here.
+
+**STOP:** the owner orders the next look once 33973914323 completes. Green on Doc 13's own terms → step 13 close-out; red on a Doc 13 cause → fix first, report before landing anything.
+
 ## SESSION-13 (Doc 13) — P-NAV-WIDGETS LANDED (Doc 12 core edit, countersigned by the advisor 2026-09-05 at the Batch C acceptance, as diffed, three conditions; commit = this section's SHA — THE FIX for the 13 F1-B12 reds on 0835a7b; its CI run is the Batch C checkpoint's VERDICT OF RECORD, rule 15)
 
 **Power line (R-D13-6 as amended):** BatteryStatus 1 (discharging), 28% at the landing chain; every leg ran regardless (the power stop is withdrawn).
