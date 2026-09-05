@@ -33,6 +33,18 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, SEVENTH (owner-ordered, 2026-09-05 18:33Z): c5d7053's run 33982993872 — THE STAGE 4 BRING-UP PASSED; `npx playwright test` is RUNNING IN CI for the first time since step 8b; no verdict yet. fe15e93's run 33984364961 — Stage 1 running. commit = this section's SHA
+
+**Power line (R-D13-6 as amended):** BatteryStatus 1 (discharging), 31%. Docs only.
+
+**Billing/annotations first:** no billing annotation on either run; no non-warning annotation.
+
+**33982993872 on c5d7053 (the Batch C checkpoint's verdict of record; created 18:06:02Z) — `in_progress`:** Stage 1 ✓ (18:09:14Z), Stage 2 ✓, Stage 3 integration ✓ (18:25:12Z — the fourth CI witness of P-CAL-WEEKDAY's weekend branch), Stage 3b ✓. **Stage 4: step 7, the bring-up (`compose up --build --wait --wait-timeout 600`) — SUCCESS at 18:29:43Z (the dump step SKIPPED — no failure to dump); step 9 migrate + seed ✓; step 10 the relay liveness probe ✓; step 11 Playwright install ✓; step 12 the harness origins answer ✓; step 13 `npx playwright test` — `in_progress` since 18:30:16Z.** The lanes v2 check (c5d7053) and the broadcast check (7025d7a) together carried the harness stack through CI's order for the first time. The browser suite's verdict — every red named by spec — is read at the next look (a full run is ~35–40 min from 18:30Z).
+
+**33984364961 on fe15e93 (the step-13 pre-close; created 18:32:06Z) — `in_progress`, Stage 1 running.** Its Stage 4 carries the loader-drawn launcher and the two new fail-first legs; verdict at the next look.
+
+**STOP:** neither run has a verdict; step 13 opens only on c5d7053's green on Doc 13's own terms (fe15e93's run then rides the close-out).
+
 ## SESSION-13 (Doc 13) — STEP 13 PRE-CLOSE: THE LOADER-DRAWN LAUNCHER (NFR-01's launcher-paint miss FIXED before the close, advisor rulings 2026-09-05 — the fix ruling and the size-bounds ruling; commit = this section's SHA; rides the close-out battery)
 
 **Power line (R-D13-6 as amended):** the five harness figures below were taken on wall power (BatteryStatus 2, 11–36%); the landing's gates + lint at BatteryStatus 2, 34%.
