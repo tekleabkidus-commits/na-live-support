@@ -220,6 +220,29 @@ final class WidgetHarness extends Command
         }
 
         if ($action === 'queue-jump') {
+            // The URGENT jump lands in the VISITOR's queue, and jumps only where that queue's priority rules say so
+            // (Doc 11 FR-12: `urgent_priority` is a per-queue boost). Found by CI run 33984364961 and reproduced
+            // locally: once the Doc 11 structure specs swap the department order, the tenant default is the
+            // secondary department, whose queue has NO priority rules — the urgent ticket queued BEHIND the visitor
+            // by plain FIFO and the position never rose. The scene now guarantees its own precondition through the
+            // real door (audited `org.queue.boosts_changed`), never by assuming which queue is the default.
+            $visitorTicket = $this->conversation()?->open_ticket_id;
+            $visitorQueue = is_string($visitorTicket) ? DB::table('tickets')->where('id', $visitorTicket)->value('queue_id') : null;
+            if (is_string($visitorQueue)) {
+                $queue = $visitorQueue;
+                $dept = DB::table('queues')->where('id', $queue)->value('department_id');
+                if (is_string($dept)) {
+                    $department = $dept;
+                }
+            }
+            $rawRules = DB::table('queues')->where('id', $queue)->value('priority_rules');
+            $decoded = is_string($rawRules) ? json_decode($rawRules, true) : null;
+            /** @var list<string> $rules */
+            $rules = is_array($decoded) ? array_values(array_filter($decoded, 'is_string')) : [];
+            if (! in_array('urgent_priority', $rules, true)) {
+                app(\App\Domain\Org\Structure\QueueWriter::class)->update($queue, ['priority_rules' => [...$rules, 'urgent_priority']], $agent->identifier());
+                $this->line('QUEUE_RULES=urgent_priority added to '.$queue);
+            }
             $customer = Customer::query()->create(['display_name' => 'Fixture Urgent Player', 'username' => '@fixture_urgent_'.Str::random(6), 'is_shell' => true, 'created_source' => 'staff']);
             $conversationId = (string) Str::uuid7();
             DB::table('conversations')->insert(['id' => $conversationId, 'tenant_id' => app(TenantContext::class)->tenantId(), 'channel' => 'fakechan', 'channel_ref_id' => 'harness', 'external_chat_id' => 'urgent-'.Str::random(8), 'customer_id' => $customer->getKey(), 'state' => 'active']);

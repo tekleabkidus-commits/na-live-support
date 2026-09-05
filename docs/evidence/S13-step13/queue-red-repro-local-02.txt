@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      queue-red-repro-local
+# set:        S13-step13
+# command:    npx playwright test --project=widget tests/Browser/widget-queue.spec.ts
+# started:    2026-09-05T20:06:32Z
+# git:        91d006e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 1 test using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (29.6s)
+
+
+  1) [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Test timeout of 30000ms exceeded
+
+      36 |
+      37 |     harness('queue-jump'); // an URGENT ticket ahead: the server's position rises by one
+    > 38 |     await expect.poll(() => serverPositions.some((p) => p > shown), { timeout: 20000 }).toBe(true);
+         |                                                                                         ^
+      39 |     // EC-06 as DRAWN (D13): "rather than show them losing ground, the card drops to the band and holds it
+      40 |     // until the position improves" — no number at all, never the higher one.
+      41 |     await expect(card).toHaveAttribute('data-position', '');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-queue.spec.ts:38:89
+
+    Error Context: test-results/widget-queue-D10–D13-EC-06-09800-ent-joining-clears-the-card-widget/error-context.md
+
+  1 failed
+    [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card 
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T20:07:04Z
+# duration:   32s
+# EXIT:       1

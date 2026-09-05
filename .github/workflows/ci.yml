@@ -190,6 +190,10 @@ jobs:
       - run: |
           cp .env.example .env
           sed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env
+          # S13 step 13 (CI run 33984364961): the widget's media legs need the HARNESS media origin as the
+          # signed-URL base (P-MEDIA-URL; the same value the dev .env carries) — an empty AWS_TEMPORARY_URL
+          # mints URLs against minio:9000, which no browser can reach.
+          sed -i "s|^AWS_TEMPORARY_URL=$|AWS_TEMPORARY_URL=https://media.harness.localhost:8443|" .env
       # Doc 13 (S13; advisor ruling on run 33890670455): THE HARNESS is part of the
       # ephemeral stack — the platform / media / customer origins over TLS from the
       # image-baked dev CA (docker/compose.harness.yaml, the SAME overlay the local
@@ -204,6 +208,11 @@ jobs:
       # The browser stage brings up a FRESH stack, so its database is empty. The
       # session suite (Doc 02 step 6) logs in for real — it needs schema and an
       # account, and it cannot create one through a UI that does not exist yet.
+      # S13 step 13 (CI run 33984364961, the composer reds): Stage 4's ephemeral MinIO had NO bucket — Stages 3 and 3b
+      # provision it, Stage 4 never did — so every widget upload's writeStream threw UnableToWriteFile (not the
+      # InvalidArgumentException the door maps) and the attachment card showed "refused". Same command as `make fresh`.
+      - name: Provision the media bucket (same command as `make fresh`)
+        run: docker compose -f docker/compose.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
       - name: Migrate and seed browser fixtures
         run: |
           docker compose -f docker/compose.yaml exec -T app php artisan migrate:fresh --force --database=pgsql_migrator
