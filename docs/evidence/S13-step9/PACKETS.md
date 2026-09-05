@@ -40,3 +40,11 @@ it('P-KB-VIEWED control: the article door begins its own transaction around kb.a
 ## MediaStatePush — the advisor's acceptance (2026-09-05)
 
 `Doc13/MediaStatePush`'s two consumer declarations on Doc 04's `media.stored` / `media.infected` are accepted by the advisor as registry entries under A-45 (no Doc 04 file changed).
+
+## P-WIDGET-KEY — PROPOSED at S13 step 10 (schema growth; NOT landed; interim shipped)
+
+**The conflict:** B3-S08 J06 draws the Install tab with the COMPLETE snippet (`…/w/wk_9f21.js`) at any time. Doc 02's issuer stores a widget key as `prefix + sha256(secret)` only (`tenant_keys`), and the shim is addressed by the FULL key (`X-Tenant-Key` = the plaintext; `POST session` presents the same key — Doc 02 FR-21). So after creation nothing on the platform can render the snippet again. Doc 02 FR-21 makes the key a PUBLIC identifier bound to the origin allowlist (it sits in every host page's HTML) — the "shown once" rule is the API-key pattern applied to a public handle.
+
+**Interim shipped at step 10 (honest, drawn-vs-built filed):** the complete snippet rides the CREATE response only (`install.snippet`); `GET /admin/widgets/{id}` answers `install.snippet: null, install.key_shown_once: true` with the CSP block and origins intact. The Designer UI (step 11) says so inline. Deviation class 1/3 (document conflict with a technical mechanism), row D13-D06.
+
+**The packet (one expand migration, countersign BEFORE migration per R-D13-7 — the column holds a public identifier, not a secret; stated so the advisor rules on the class):** `ALTER TABLE widgets ADD COLUMN key_public text` (nullable; app INSERT/UPDATE grant on that column only), written by `WidgetDesigner::create` with the plaintext the issuer returns, backfilled for the harness widget by its seeder; `InstallSnippet::forWidget` renders from it; `GET show` returns the full snippet. Control: `WidgetDesignerTest` asserts the show-door snippet equals the create-door snippet; `SecretRotationTest`'s no-plaintext-in-audit pin stays (a widget key is not a secret; the identity secret is). Nothing in Doc 02's key resolution changes.

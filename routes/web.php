@@ -46,6 +46,25 @@ Route::middleware([
     // keys (§8's own audience); every mutation door reuses the step-3b writers, which audit themselves.
     Route::get('organization', [App\Http\Controllers\Admin\OrgScreensController::class, 'show'])
         ->middleware('permission:org.queues.manage')->name('org.screens.organization');
+
+    // Doc 13 §4.4 / FR-19 / FR-20 (S13 step 10): the Widget Designer's JSON doors. Reads under
+    // `webchat.widgets.view`; every mutation under `.configure` + its registered audit key.
+    Route::prefix('widgets')->name('widgets.')->group(function (): void {
+        $c = App\Http\Controllers\Admin\WidgetDesignerController::class;
+        Route::get('/', [$c, 'index'])->middleware('permission:webchat.widgets.view')->name('index');
+        Route::post('/', [$c, 'store'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.created'])->name('store');
+        Route::get('{widgetId}', [$c, 'show'])->middleware('permission:webchat.widgets.view')->name('show');
+        Route::patch('{widgetId}', [$c, 'update'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.updated'])->name('update');
+        Route::post('{widgetId}/retire', [$c, 'retire'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.updated'])->name('retire');
+        Route::put('{widgetId}/allowlist', [$c, 'allowlist'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.allowlist.changed'])->name('allowlist');
+        Route::post('{widgetId}/secret', [$c, 'createSecret'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.secret.created'])->name('secret.create');
+        Route::post('{widgetId}/secret/rotate', [$c, 'rotateSecret'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.secret.rotated'])->name('secret.rotate');
+        Route::post('{widgetId}/config/validate', [$c, 'validateDraft'])->middleware('permission:webchat.widgets.configure')->name('config.validate');
+        Route::post('{widgetId}/config/publish', [$c, 'publish'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.config.published'])->name('config.publish');
+        Route::post('{widgetId}/config/rollback', [$c, 'rollback'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.config.rolled_back'])->name('config.rollback');
+        Route::get('{widgetId}/health', [$c, 'health'])->middleware('permission:webchat.widgets.view')->name('health');
+    });
+
     Route::post('organization/departments/{departmentId}', [App\Http\Controllers\Admin\OrgScreensController::class, 'updateDepartment'])
         ->middleware(['permission:org.departments.manage', 'audit:org.department.updated'])->name('org.screens.department.update');
     Route::post('organization/departments/{departmentId}/reorder', [App\Http\Controllers\Admin\OrgScreensController::class, 'reorderDepartment'])

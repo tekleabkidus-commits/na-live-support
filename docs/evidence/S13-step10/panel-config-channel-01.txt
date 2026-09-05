@@ -1,0 +1,158 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      panel-config-channel
+# set:        S13-step10
+# command:    npx playwright test tests/Browser/widget-transport.spec.ts tests/Browser/widget-theme.spec.ts tests/Browser/widget-proactive.spec.ts tests/Browser/widget-home.spec.ts --project=widget --reporter=line
+# started:    2026-09-05T06:24:55Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 8 tests using 1 worker
+
+[1/8] [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site
+  1) [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('.nlw-greeting')
+    Expected pattern: /Hello 👋/
+    Received string:  "Leave a message now and we will reply in the morning."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('.nlw-greeting')
+        13 × locator resolved to <p class="nlw-greeting">Leave a message now and we will reply in the morn…</p>
+           - unexpected value "Leave a message now and we will reply in the morning."
+
+
+      14 |     );
+      15 |     const panel = page.frameLocator('iframe#nlw-panel');
+    > 16 |     await expect(panel.locator('.nlw-greeting')).toHaveText(/Hello 👋/);
+         |                                                  ^
+      17 |     await expect(panel.locator('.nlw-band')).toHaveText(/Typically replies/);
+      18 |     await expect(panel.locator('.nlw-band .nlw-dot, .nlw-band [aria-hidden]')).toHaveCount(1);
+      19 |     await expect(panel.locator('.nlw-card h3').first()).toHaveText('Quick answers');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-home.spec.ts:16:50
+
+    Error Context: test-results/widget-home-C01-C06-C07-gr-7f81a-tcut-says-it-opens-the-site-widget/error-context.md
+
+
+[2/8] [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents
+[3/8] [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads
+[4/8] [widget] › tests/Browser/widget-proactive.spec.ts:48:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered
+[5/8] [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe
+  2) [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('#nlw-tab-home')
+
+
+      43 |         ).toEqual([]);
+      44 |         // L12: the band carries a glyph AND text, never colour alone
+    > 45 |         await panel.locator('#nlw-tab-home').click();
+         |                                              ^
+      46 |         await expect(panel.locator('.nlw-band span').last()).not.toHaveText('');
+      47 |     });
+      48 | }
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-theme.spec.ts:45:46
+
+    Error Context: test-results/widget-theme-L03-axe-light-e7182--Home-and-Messages-pass-axe-widget/error-context.md
+
+
+[6/8] [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe
+  3) [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('#nlw-tab-home')
+
+
+      43 |         ).toEqual([]);
+      44 |         // L12: the band carries a glyph AND text, never colour alone
+    > 45 |         await panel.locator('#nlw-tab-home').click();
+         |                                              ^
+      46 |         await expect(panel.locator('.nlw-band span').last()).not.toHaveText('');
+      47 |     });
+      48 | }
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-theme.spec.ts:45:46
+
+    Error Context: test-results/widget-theme-L03-axe-dark--a4f88--Home-and-Messages-pass-axe-widget/error-context.md
+
+
+[7/8] [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt
+  4) [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+
+
+       at support/panel.ts:54
+
+      52 |     await panel.locator('textarea').fill(text.startsWith('[FIXTURE]') ? text : '[FIXTURE] ' + text); // FixturesOnlyEgress: synthetic text carries the tag
+      53 |     await panel.locator('textarea').press('Enter');
+    > 54 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      55 |         'data-delivery',
+      56 |         'delivered',
+      57 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:54:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:23:5
+
+    Error Context: test-results/widget-transport-NFR-03-FR-63b2b-ake-up-sync-and-one-receipt-widget/error-context.md
+
+
+[8/8] [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops
+  5) [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+    Expected: "delivered"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message][data-author=customer]').last()
+
+
+       at support/panel.ts:54
+
+      52 |     await panel.locator('textarea').fill(text.startsWith('[FIXTURE]') ? text : '[FIXTURE] ' + text); // FixturesOnlyEgress: synthetic text carries the tag
+      53 |     await panel.locator('textarea').press('Enter');
+    > 54 |     await expect(panel.locator('[data-message][data-author=customer]').last()).toHaveAttribute(
+         |                                                                                ^
+      55 |         'data-delivery',
+      56 |         'delivered',
+      57 |         { timeout: 15000 },
+        at sendFromPanel (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:54:80)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:55:5
+
+    Error Context: test-results/widget-transport-AC-08-dri-132a6--reconnects-→-polling-stops-widget/error-context.md
+
+
+  5 failed
+    [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site 
+    [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe 
+    [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe 
+    [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+    [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops 
+  3 passed (2.0m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:26:57Z
+# duration:   122s
+# EXIT:       1

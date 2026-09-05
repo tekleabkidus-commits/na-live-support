@@ -1,0 +1,24 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      propagation-live
+# set:        S13-step10
+# command:    npx playwright test tests/Browser/widget-config-propagation.spec.ts --reporter=line
+# started:    2026-09-05T06:32:24Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 2 tests using 1 worker
+
+[1/2] [widget] › tests/Browser/widget-config-propagation.spec.ts:8:1 › FR-20/EC-11: a publish reaches the open panel by push (no reload) and re-themes in place; NFR-04 well inside 60 s
+[widget] › tests/Browser/widget-config-propagation.spec.ts:8:1 › FR-20/EC-11: a publish reaches the open panel by push (no reload) and re-themes in place; NFR-04 well inside 60 s
+propagation: 1809 ms
+
+[2/2] [widget-375] › tests/Browser/widget-config-propagation.spec.ts:8:1 › FR-20/EC-11: a publish reaches the open panel by push (no reload) and re-themes in place; NFR-04 well inside 60 s
+[widget-375] › tests/Browser/widget-config-propagation.spec.ts:8:1 › FR-20/EC-11: a publish reaches the open panel by push (no reload) and re-themes in place; NFR-04 well inside 60 s
+propagation: 1630 ms
+
+  2 passed (14.3s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:32:39Z
+# duration:   15s
+# EXIT:       0

@@ -117,6 +117,11 @@ export class ReverbClient {
     private async subscribeAll(): Promise<void> {
         if (!this.socketId) return;
         for (const channel of this.o.channels) {
+            if (!channel.startsWith('private-') && !channel.startsWith('presence-')) {
+                // a PUBLIC channel (the per-widget config wake-up) needs no auth
+                this.send({ event: 'pusher:subscribe', data: { channel } });
+                continue;
+            }
             const auth = await this.o.authorize(this.socketId, channel);
             if (!auth || !this.ws) continue;
             this.send({ event: 'pusher:subscribe', data: { channel, auth } });

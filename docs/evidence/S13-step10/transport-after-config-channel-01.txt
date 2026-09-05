@@ -1,0 +1,20 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      transport-after-config-channel
+# set:        S13-step10
+# command:    npx playwright test tests/Browser/widget-transport.spec.ts --reporter=line
+# started:    2026-09-05T06:30:39Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 4 tests using 1 worker
+
+[1/4] [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt
+[2/4] [widget] › tests/Browser/widget-transport.spec.ts:51:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops
+[3/4] [widget-375] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt
+[4/4] [widget-375] › tests/Browser/widget-transport.spec.ts:51:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops
+  4 passed (59.9s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:31:40Z
+# duration:   61s
+# EXIT:       0

@@ -1,0 +1,233 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      designer-pest-01
+# set:        S13-step10
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Unit/Theme tests/Feature/Widget/WidgetDesignerTest.php tests/Feature/Widget/WidgetContrastGateTest.php tests/Feature/Widget/WidgetConfigPropagationTest.php tests/Feature/Widget/WidgetHealthTest.php tests/Feature/Widget/WidgetAuditTest.php
+# started:    2026-09-05T06:14:14Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Theme\ContrastValidatorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is symmetric and bounded: ratio(a,b) === ratio(b,a) within [1, 2[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is monotone in lightness: a lighter grey on white always contrasts LESS; the AA thresholds sit where WCAG puts them[39m
+  [32;1m✓[39;22m[90m [39m[90mit passes both B1-DS-v2 colourways as fixtures (the tokens the widget ships with)[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S08 J03: the yellow on white cannot publish; the suggestion is the SAME hue, darker, at ≥ 4.5:1; a passing colour suggests itself[39m
+  [32;1m✓[39;22m[90m [39m[90mit normalizes 3- and 6-digit hex and refuses anything else[39m
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetDesignerTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit creates a widget with its key shown ONCE, lists it, edits name/[39m[90m…[39m [90m10.07s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit EC-12: the allowlist editor accepts exact https origins and *.wi[39m[90m…[39m [90m0.09s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03: the signed-identity secret is created then rotated throu[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit FR-20: publish is a version + one pointer move; a second publish[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the permission split: view-only reads but cannot mutate (403); n[39m[90m…[39m [90m0.11s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetContrastGateTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit refuses a failing brand with the ratio and the suggestion; the s[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NO override path exists: no bypass-shaped parameter on the publi[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetConfigPropagationTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit publish and rollback each dispatch the version-only frame on wid[39m[90m…[39m [90m0.08s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit NFR-04 with the clock figures: the shim cache is ≤ 60 s and the[39m[90m… [39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetHealthTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit sums the week, lists blocked origins, counts the two diagnoses,[39m[90m… [39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Widget\WidgetAuditTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit every Designer mutation audits under its registered key with the[39m[90m…[39m [90m0.06s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetDesignerTest[22m [90m>[39m it creates a widget wit…   
+[39;1m  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetDesignerTest.php[39m:[32m22[39m
+     18▕ 
+     19▕ it('creates a widget with its key shown ONCE, lists it, edits name/test mode/channel, and retires it without a DELETE', function (): void {
+     20▕     [, $user] = designerScene();
+     21▕     $created = designer($user, 'POST', '', ['name' => '[FIXTURE] Support subdomain', 'allowed_origins' => ['https://help.nabet.example', '*.nabet.example']]);
+  ➜  22▕     $created->assertStatus(201)->assertJsonPath('name', '[FIXTURE] Support subdomain')->assertJsonPath('live_version', null);
+     23▕     $plaintext = $created->json('key_plaintext');
+     24▕     expect($plaintext)->toBeString()->and(strlen($plaintext))->toBeGreaterThan(20);
+     25▕     $id = $created->json('id');
+     26▕     expect(DB::table('tenant_keys')->where('kind', 'widget')->count())->toBe(1)
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetDesignerTest[22m [90m>[39m…  [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetDesignerTest[22m [90m>[39m…  [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetDesignerTest[22m [90m>[39m…  [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetDesignerTest[22m [90m>[39m…  [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetContrastGateTes[22m… [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetConfigPropagati[22m… [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetConfigPropagationTest[22m [90m>[39m it NFR-04 with…   
+[39;1m  Expected response status code [200] but received 404.
+Failed asserting that 404 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetConfigPropagationTest.php[39m:[32m46[39m
+     42▕     activateTenant($tenant);
+     43▕     bindTenant($tenant);
+     44▕     $prefix = (string) $widget->key->prefix;
+     45▕     $shim = test()->get('https://localhost/w/'.$prefix.'.js');
+  ➜  46▕     $shim->assertOk();
+     47▕     preg_match('/max-age=(\d+)/', (string) $shim->headers->get('Cache-Control'), $m);
+     48▕     expect((int) ($m[1] ?? PHP_INT_MAX))->toBeLessThanOrEqual(60);
+     49▕     $session = widgetSession($key)->assertCreated();
+     50▕     $cookie = visitorCookieFrom($session);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetHealthTest[22m [90m>[39m it… [41;1m NotFoundHttpException [49;22m  
+[39;1m  The route admin/widgets could not be found.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php[39m:[32m44[39m
+     40▕         if (count($others) > 0) {
+     41▕             return $this->getRouteForMethods($request, $others);
+     42▕         }
+     43▕ 
+  ➜  44▕         throw new NotFoundHttpException(sprintf(
+     45▕             'The route %s could not be found.',
+     46▕             $request->path()
+     47▕         ));
+     48▕     }
+
+      [2m+27 vendor frames [22m
+  [33m28  [39m[39;1mapp/Http/Middleware/RequireSecureTransport.php[39;22m:[39;1m54[39;22m
+      [2m+4 vendor frames [22m
+  [33m33  [39m[39;1mtests/Feature/Widget/WidgetDesignerSupport.php[39;22m:[39;1m27[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Widget\WidgetAuditTest[22m [90m>[39m it every Designer mutation…   
+[39;1m  Expected response status code [201] but received 404.
+Failed asserting that 404 is identical to 201.[39;22m
+
+  at [32mtests/Feature/Widget/WidgetAuditTest.php[39m:[32m19[39m
+     15▕ */
+     16▕ 
+     17▕ it('every Designer mutation audits under its registered key with the registered fields; plaintexts never appear', function (): void {
+     18▕     [, $user] = designerScene();
+  ➜  19▕     $created = designer($user, 'POST', '', ['name' => '[FIXTURE] W', 'allowed_origins' => ['https://a.example']])->assertStatus(201);
+     20▕     $id = $created->json('id');
+     21▕     designer($user, 'PATCH', '/'.$id, ['name' => '[FIXTURE] W2', 'test_mode' => true, 'bundle_channel' => 'early'])->assertOk();
+     22▕     designer($user, 'PUT', '/'.$id.'/allowlist', ['allowed_origins' => ['https://b.example']])->assertOk();
+     23▕     $secret = designer($user, 'POST', '/'.$id.'/secret')->assertStatus(201)->json('secret_plaintext');
+
+
+  [90mTests:[39m    [31;1m10 failed[39;22m[90m,[39m[39m [39m[32;1m6 passed[39;22m[90m (1176 assertions)[39m
+  [90mDuration:[39m [39m10.95s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:14:26Z
+# duration:   12s
+# EXIT:       2

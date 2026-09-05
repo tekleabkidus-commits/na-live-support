@@ -86,6 +86,8 @@ final class WidgetConfigController
                 'channels' => [
                     'thread' => sprintf('tenant.%s.visitor.%s.%s', $this->context->tenantId(), $visitor->visitorId, WebchatPusher::SUFFIX_THREAD),
                     'queue' => sprintf('tenant.%s.visitor.%s.%s', $this->context->tenantId(), $visitor->visitorId, WebchatPusher::SUFFIX_QUEUE),
+                    // FR-20 / NFR-04: the PUBLIC per-widget config channel — a version-only wake-up; the door is the record.
+                    'config' => \App\Events\Webchat\WidgetConfigPush::channelFor(VisitorConversation::widgetId($widget)),
                 ],
                 'polling_interval_seconds' => self::int($this->settings->get('widget.polling.interval_seconds'), 5),
                 'config_poll_seconds' => self::int($this->settings->get('widget.config.poll_seconds'), 300),

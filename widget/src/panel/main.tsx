@@ -182,6 +182,7 @@ async function bootSequence(): Promise<void> {
     lastSeenId.value = messages.value[messages.value.length - 1]?.id ?? null;
     boot.value = 'ready';
     startTransport(cfg);
+    startConfigPoll(cfg);
 }
 
 /** T-04: the leader tab owns the socket; the socket is the wake-up, the cursor page the record; polling only while the socket is down. */
@@ -202,11 +203,19 @@ function startTransport(cfg: ConfigEnvelope): void {
             const url = `wss://${host}/app/${encodeURIComponent(reverb.key)}?protocol=7&client=nlw&version=${encodeURIComponent(config.value?.version?.toString() ?? '0')}&flash=false`;
             socket = new ReverbClient({
                 url,
-                channels: [cfg.transport.channels.thread, cfg.transport.channels.queue].map(
-                    (c) => 'private-' + c,
-                ),
+                channels: [
+                    ...[cfg.transport.channels.thread, cfg.transport.channels.queue].map(
+                        (c) => 'private-' + c,
+                    ),
+                    cfg.transport.channels.config, // FR-20: public, version-only wake-up
+                ],
                 authorize: (socketId, channel) => api.broadcastAuth(socketId, channel),
                 onEvent: (_channel, event, data) => {
+                    if (event === 'widget.config.published') {
+                        // FR-20 / EC-11: a new config is live — re-read the door; the swap is in place (CSS vars, signals), no remount
+                        void refreshConfig();
+                        return;
+                    }
                     if (event === 'webchat.typing') {
                         envelope.value = { ...envelope.value, typing: true };
                         return;
@@ -252,6 +261,14 @@ function startTransport(cfg: ConfigEnvelope): void {
             socket = null;
         },
     );
+}
+
+let configPollTimer: number | null = null;
+/** NFR-04: the poll floor (config_poll_seconds, 5 min by default) — the push is the fast path, this is the guarantee. */
+function startConfigPoll(cfg: ConfigEnvelope): void {
+    if (configPollTimer !== null) window.clearInterval(configPollTimer);
+    const seconds = Math.max(30, cfg.transport.config_poll_seconds || 300);
+    configPollTimer = window.setInterval(() => void refreshConfig(), seconds * 1000);
 }
 
 async function refreshConfig(): Promise<void> {

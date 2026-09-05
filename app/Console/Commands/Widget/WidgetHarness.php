@@ -121,11 +121,9 @@ final class WidgetHarness extends Command
                     'context_allowlist' => ['page', 'plan'],
                 ],
             ];
-            $max = DB::table('widget_config_versions')->where('widget_id', $widget->getKey())->max('version');
-            $version = (is_numeric($max) ? (int) $max : 0) + 1;
-            $id = (string) Str::uuid7();
-            DB::table('widget_config_versions')->insert(['id' => $id, 'tenant_id' => app(TenantContext::class)->tenantId(), 'widget_id' => $widget->getKey(), 'version' => $version, 'config' => json_encode($config, JSON_THROW_ON_ERROR), 'published_by' => $agent->identifier(), 'note' => 'harness']);
-            $widget->forceFill(['live_version_id' => $id])->save();
+            // S13 step 10: the Designer's publish door (validation + the A-62 gate + the audit + the config push) replaces the fixture write.
+            $published = app(\App\Domain\Webchat\Designer\WidgetConfigPublisher::class)->publish($widget, $config, $agent->identifier(), 'harness');
+            $id = $published['version_id'];
             $this->line('CONFIG_VERSION='.$id.' pre_chat='.$mode);
 
             return self::SUCCESS;

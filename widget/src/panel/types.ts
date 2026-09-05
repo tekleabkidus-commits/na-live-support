@@ -64,7 +64,7 @@ export interface ConfigEnvelope {
             theme: 'light' | 'dark' | 'auto';
             font: string;
             launcher_icon: string;
-            brand: unknown;
+            brand: { accent: string } | null;
         };
         content: {
             welcome: Record<string, string>;
@@ -96,7 +96,7 @@ export interface ConfigEnvelope {
     };
     visitor: { display: string | null };
     transport: {
-        channels: { thread: string; queue: string };
+        channels: { thread: string; queue: string; config: string };
         polling_interval_seconds: number;
         config_poll_seconds: number;
         reverb: { key: string; host: string; port: number; scheme: string };

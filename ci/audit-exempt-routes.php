@@ -155,4 +155,5 @@ return [
     'widget.identify' => 'Doc 13 FR-07 / A-61: the customer.created / customer.identity.linked EVENTS and, on a switch, the widget.identity.switched AUDIT row (recorded by the linker with the system actor) are the record; a refused assertion mutates only a health counter.',
     'widget.forms.steps' => 'Doc 13 FR-06/FR-15: a step validation mutates nothing; the offline completion\'s ticket.created + form.submitted EVENTS (Doc 06/12\'s own doors) are the record.',
     'widget.media.store' => 'Doc 13 FR-16 / Doc 04 FR-10 step 5: the intake stores an OPAQUE, unscanned object under a visitor-scoped key that nothing can read back except the message door; the message row that references it + Doc 04\'s media.stored / media.infected EVENTS are the record (SEC-04). No staff actor; an audit row per upload attempt would be a second, unreconciled record.',
+    'widgets.config.validate' => 'Doc 13 FR-20 / B3-S08 J03: the Designer\'s inline refusal — the SAME validation publish() runs (the A-62 contrast gate included), against the draft, writing NOTHING; the publish door (`widgets.config.publish`, audit:widget.config.published) is the mutation.',
 ];

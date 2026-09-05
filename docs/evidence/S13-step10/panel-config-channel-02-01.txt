@@ -1,0 +1,45 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      panel-config-channel-02
+# set:        S13-step10
+# command:    npx playwright test tests/Browser/widget-transport.spec.ts tests/Browser/widget-theme.spec.ts tests/Browser/widget-proactive.spec.ts tests/Browser/widget-home.spec.ts --project=widget --reporter=line
+# started:    2026-09-05T06:28:16Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 8 tests using 1 worker
+
+[1/8] [widget] › tests/Browser/widget-home.spec.ts:7:1 › C01/C06/C07: greeting + band + Quick answers; no tour, no tips, no coach marks; a URL shortcut says it opens the site
+[2/8] [widget] › tests/Browser/widget-home.spec.ts:26:1 › BR-02: the band comes from the server (Doc 11) — the Home envelope carries a band string and never a number of agents
+[3/8] [widget] › tests/Browser/widget-proactive.spec.ts:10:1 › H01/H02/H03/H04: fires on /deposit with the page-specific message; deferred while a field has focus; dismissed = gone on that page; cooldown holds across reloads
+[4/8] [widget] › tests/Browser/widget-proactive.spec.ts:48:1 › BR-06: not on a page the rule does not name; FR-24: capture() keys reach the server, allowlist-filtered
+[5/8] [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (light): auto theme resolves to the system preference; Home and Messages pass axe
+[6/8] [widget] › tests/Browser/widget-theme.spec.ts:9:5 › L03 + axe (dark): auto theme resolves to the system preference; Home and Messages pass axe
+[7/8] [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt
+  1) [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      39 |     expect(frames.some((f) => f.includes('webchat.message'))).toBe(true);
+      40 |     await page.waitForTimeout(1500);
+    > 41 |     expect(gets - g1).toBe(1); // exactly one wake-up sync for the reply
+         |                       ^
+      42 |     expect(receipts - r1).toBe(1); // exactly one receipt for the inbound row
+      43 |     await expect(panel.locator('[data-role=log]')).toContainText('Push me, harness');
+      44 | });
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-transport.spec.ts:41:23
+
+    Error Context: test-results/widget-transport-NFR-03-FR-63b2b-ake-up-sync-and-one-receipt-widget/error-context.md
+
+
+[8/8] [widget] › tests/Browser/widget-transport.spec.ts:46:1 › AC-08 drill + K01: the socket is dropped mid-chat → polling within 10 s (no banner, no spinner) → a staff reply still lands → the socket reconnects → polling stops
+  1 failed
+    [widget] › tests/Browser/widget-transport.spec.ts:10:1 › NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls nothing while healthy, and a staff reply arrives by push with exactly one wake-up sync and one receipt 
+  7 passed (53.8s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:29:12Z
+# duration:   56s
+# EXIT:       1

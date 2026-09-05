@@ -78,6 +78,21 @@ final class WidgetHarnessSeeder extends Seeder
                 ])->save();
             }
 
+            // The harness is ALWAYS OPEN by fixture (24×7 on the tenant default calendar) — the browser fixtures'
+            // seeded calendar closes on weekends, which made every open-hours spec weekday-sensitive (found on a
+            // Saturday at S13 step 10). The hours specs close/open explicitly through `widget:harness hours-*`.
+            $writer = app(\App\Domain\Hours\CalendarWriter::class);
+            $calendarId = DB::table('business_calendars')->where('is_tenant_default', true)->whereNull('department_id')->value('id');
+            $weekdays = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $weekdays[(string) $d] = [['open' => '00:00', 'close' => '24:00']];
+            }
+            $actor = (string) \Illuminate\Support\Str::uuid7();
+            if (is_string($calendarId)) {
+                $writer->update($calendarId, ['weekdays' => $weekdays], $actor);
+            } else {
+                $writer->create('[FIXTURE] Harness hours', 'Africa/Addis_Ababa', $weekdays, $actor, true, null);
+            }
             $this->command->line('HARNESS_WIDGET_KEY='.$issued['plaintext']);
         } finally {
             $context->clear();

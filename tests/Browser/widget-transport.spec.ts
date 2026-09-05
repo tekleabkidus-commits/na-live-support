@@ -30,6 +30,11 @@ test("NFR-03 + FR-10: the socket subscribes on the visitor's own channels, polls
     // Every GET in the window is a push-driven wake-up (Doc 09's handoff pushes its own frames) — never a cadence.
     expect(gets - g0).toBeLessThanOrEqual(frames.filter((f) => f.includes('webchat.')).length - f0);
     expect(await hooks.polling()).toBe(false);
+    // The handoff's queue-position frame (P-QPOS) lands whenever Doc 11 routes — wait for it so the reply window counts the reply alone.
+    await expect
+        .poll(() => frames.some((f) => f.includes('webchat.queue')), { timeout: 20000 })
+        .toBe(true);
+    await page.waitForTimeout(1000);
     const g1 = gets;
     const r1 = receipts;
     harness('staff-reply', '--text=Push me, harness');

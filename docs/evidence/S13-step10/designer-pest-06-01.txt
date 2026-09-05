@@ -1,0 +1,46 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      designer-pest-06
+# set:        S13-step10
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Unit/Theme tests/Feature/Widget/WidgetDesignerTest.php tests/Feature/Widget/WidgetContrastGateTest.php tests/Feature/Widget/WidgetConfigPropagationTest.php tests/Feature/Widget/WidgetHealthTest.php tests/Feature/Widget/WidgetAuditTest.php
+# started:    2026-09-05T06:22:27Z
+# git:        b2fccdf (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Theme\ContrastValidatorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit is symmetric and bounded: ratio(a,b) === ratio(b,a) within [1, 2[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is monotone in lightness: a lighter grey on white always contrasts LESS; the AA thresholds sit where WCAG puts them[39m
+  [32;1m✓[39;22m[90m [39m[90mit passes both B1-DS-v2 colourways as fixtures (the tokens the widget ships with)[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S08 J03: the yellow on white cannot publish; the suggestion is the SAME hue, darker, at ≥ 4.5:1; a passing colour suggests itself[39m
+  [32;1m✓[39;22m[90m [39m[90mit normalizes 3- and 6-digit hex and refuses anything else[39m
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetDesignerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a widget with its key shown ONCE, lists it, edits name/[39m[90m…[39m [90m11.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the allowlist editor accepts exact https origins and *.wi[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the signed-identity secret is created then rotated throu[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: publish is a version + one pointer move; a second publish[39m[90m…[39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permission split: view-only reads but cannot mutate (403); n[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no staff session → no door (401)[39m[90m                                 [39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContrastGateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a failing brand with the ratio and the suggestion; the s[39m[90m…[39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NO override path exists: no bypass-shaped parameter on the publi[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetConfigPropagationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit publish and rollback each dispatch the version-only frame on wid[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04 with the clock figures: the shim cache is ≤ 60 s and the[39m[90m… [39m [90m0.17s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetHealthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit sums the week, lists blocked origins, counts the two diagnoses,[39m[90m… [39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every Designer mutation audits under its registered key with the[39m[90m…[39m [90m0.32s[39m  
+
+  [90mTests:[39m    [32;1m17 passed[39;22m[90m (1376 assertions)[39m
+  [90mDuration:[39m [39m13.79s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T06:22:41Z
+# duration:   14s
+# EXIT:       0
