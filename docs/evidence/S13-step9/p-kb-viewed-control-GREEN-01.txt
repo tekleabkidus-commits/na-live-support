@@ -1,0 +1,25 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-kb-viewed-control-GREEN
+# set:        S13-step9
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Kb/WidgetHelpContractTest.php tests/Feature/Kb/WidgetHelpLiveTest.php
+# started:    2026-09-05T05:42:36Z
+# git:        87b615f (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feed[39m[90m…[39m [90m18.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m1.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpLiveTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-KB-VIEWED control: the article door begins its own transaction[39m[90m…[39m [90m0.85s[39m  
+
+  [90mTests:[39m    [32;1m4 passed[39;22m[90m (61 assertions)[39m
+  [90mDuration:[39m [39m21.02s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T05:42:57Z
+# duration:   21s
+# EXIT:       0

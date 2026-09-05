@@ -1,0 +1,25 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      widget-help-after-landing
+# set:        S13-step9
+# command:    npx playwright test tests/Browser/widget-help.spec.ts
+# started:    2026-09-05T05:42:59Z
+# git:        87b615f (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 8 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-help.spec.ts:7:1 › E01/E02: browse lists the published article; search finds it as you type (debounced, highlighted); the start-a-chat footer is pinned (3.2s)
+  ✓  2 [widget] › tests/Browser/widget-help.spec.ts:28:1 › E03/E04: the reader shows the blocks; 👍 lands; the footer wording shifts on an article (3.3s)
+  ✓  3 [widget] › tests/Browser/widget-help.spec.ts:52:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders (3.0s)
+  ✓  4 [widget] › tests/Browser/widget-help.spec.ts:69:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works (1.5s)
+  ✓  5 [widget-375] › tests/Browser/widget-help.spec.ts:7:1 › E01/E02: browse lists the published article; search finds it as you type (debounced, highlighted); the start-a-chat footer is pinned (3.3s)
+  ✓  6 [widget-375] › tests/Browser/widget-help.spec.ts:28:1 › E03/E04: the reader shows the blocks; 👍 lands; the footer wording shifts on an article (3.1s)
+  ✓  7 [widget-375] › tests/Browser/widget-help.spec.ts:52:1 › E07: an Amharic visitor reading an English-only article sees the fallback notice; the article still renders (3.1s)
+  ✓  8 [widget-375] › tests/Browser/widget-help.spec.ts:69:1 › K05 / FS-02: the search index unreachable → one calm line, the chat still works (1.3s)
+
+  8 passed (23.9s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T05:43:24Z
+# duration:   25s
+# EXIT:       0

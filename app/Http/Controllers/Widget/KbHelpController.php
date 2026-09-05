@@ -14,6 +14,7 @@ use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Throwable;
 
@@ -75,7 +76,7 @@ final class KbHelpController extends Controller
         }
         /** @var string $variantId */
         $variantId = $article['variant_id'];
-        $this->usage->viewed($variantId, 'widget'); // FR-12; conversation attribution rides [D13]
+        DB::transaction(fn () => $this->usage->viewed($variantId, 'widget')); // FR-12; the outbox row needs its transaction (Doc 01 T-03) — found live at S13 step 9 (P-KB-VIEWED)
 
         return new JsonResponse($article + ['start_chat' => true]);
     }
@@ -111,7 +112,7 @@ final class KbHelpController extends Controller
      */
     public function media(string $articleId, string $file): \Symfony\Component\HttpFoundation\Response
     {
-        $servable = \Illuminate\Support\Facades\DB::table('kb_articles as a')
+        $servable = DB::table('kb_articles as a')
             ->join('kb_article_variants as v', 'v.article_id', '=', 'a.id')
             ->where('a.id', $articleId)->where('a.audience', 'public')->whereNull('a.deleted_at')
             ->where('v.status', 'published')->exists();
