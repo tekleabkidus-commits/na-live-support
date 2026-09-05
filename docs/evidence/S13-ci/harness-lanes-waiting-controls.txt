@@ -1,0 +1,13 @@
+### lanes healthcheck v2 — waiting state counts as alive (2026-09-05T17:36:49Z)
+-- recreate harness-lanes under the new check, wait:
+ Container na-live-support-harness-lanes-1 Started 
+ Container na-live-support-harness-lanes-1 Waiting 
+ Container na-live-support-harness-lanes-1 Healthy 
+WAIT_EXIT=0
+/na-live-support-harness-lanes-1 healthy ["CMD","sh","-c","grep -aq 'lanes[.]sh\\|lanes[:]work' /proc/*/cmdline"]
+-- positive (working state: lanes:work is PID 1):
+exit=0
+-- waiting-shaped control (a process whose cmdline carries /harness/lanes.sh, no lanes:work match):
+exit=0
+-- negative:
+exit=1

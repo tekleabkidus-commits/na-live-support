@@ -79,7 +79,10 @@ services:
     # reports unhealthy and CI's `compose up --wait` refuses the whole stack before a single browser test runs.
     # The relay's proven pattern (docker/compose.yaml): the process is alive when its command line is in /proc.
     healthcheck:
-      test: ["CMD", "sh", "-c", "grep -aq 'lanes[:]work' /proc/*/cmdline"]
+      # ALIVE while WAITING too: in CI the fixture tenant is seeded AFTER the bring-up (Stage 4 step 9), so at
+      # bring-up the script (`/bin/sh /harness/lanes.sh`, PID 1) is still in its tenant loop — run 33975886140
+      # on 7025d7a went unhealthy on exactly that (locally the tenant already existed, so the check passed).
+      test: ["CMD", "sh", "-c", "grep -aq 'lanes[.]sh\\|lanes[:]work' /proc/*/cmdline"]
       interval: 15s
       timeout: 5s
       retries: 8
