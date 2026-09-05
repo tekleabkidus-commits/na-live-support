@@ -33,6 +33,14 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, FIFTH (owner-ordered, 2026-09-05 16:11Z): 33975886140 on 7025d7a — Stages 1, 2, 3, 3b GREEN; Stage 4 IN PROGRESS inside step 7, the stack bring-up WITH the healthcheck fix (started 16:06:13Z, not yet past `--wait`); no verdict yet; commit = this section's SHA
+
+**Power line (R-D13-6 as amended):** **BatteryStatus 2 (charging) at 9% — the first wall-power window this session; 0e's clause and R-D13-6(c) bind: the timing legs are ORDERED now (recorded in the next section).**
+
+**Billing/annotations first:** no billing annotation; no non-warning annotation.
+
+**33975886140 on 7025d7a — `in_progress`:** Stage 1 ✓ (15:50:34Z), Stage 2 ✓ (15:51:05Z), Stage 3b ✓ (16:02:17Z), **Stage 3 integration ✓ (16:06:10Z)** — the third CI witness of P-CAL-WEEKDAY's weekend branch and of the P-NAV-WIDGETS Doc 12 suites; **Stage 4 browser started 16:06:13Z and at the look sits INSIDE step 7 (`compose up --build --wait --wait-timeout 600`) — the first bring-up that carries the two workers' healthchecks; steps 8–14 pending.** Whether the bring-up passes is the next fact; if it does, `npx playwright test` runs the full suite in CI for the first time since step 8b (~35–40 min). **No verdict — recorded, not polled; step 13 does not open.**
+
 ## SESSION-13 (Doc 13) — CI LOOK OF RECORD, THIRD (owner-ordered, 2026-09-05 15:55Z, after the push of 7025d7a): 33975886140 on 7025d7a IN PROGRESS — Stages 1 + 2 GREEN, 3 + 3b running, Stage 4 not yet started; 33973914323 on 22108e6 RECORDED = FAILURE at the Stage 4 bring-up exactly as predicted (no browser test ran); commit = this section's SHA
 
 **Power line (R-D13-6 as amended):** BatteryStatus 1, **10%** — stated; docs only in this commit, nothing local was run or is running.
