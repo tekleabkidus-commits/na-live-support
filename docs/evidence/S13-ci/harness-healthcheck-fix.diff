@@ -1,0 +1,31 @@
+diff --git a/docker/compose.harness.yaml b/docker/compose.harness.yaml
+index 1a14a0c..2342422 100644
+--- a/docker/compose.harness.yaml
++++ b/docker/compose.harness.yaml
+@@ -74,6 +74,16 @@ services:
+     depends_on:
+       app:
+         condition: service_healthy
++    # S13 Batch C (F-C2, found FATAL in CI run 33972978742): without its own healthcheck this worker inherits the
++    # frankenphp base image's `curl -f http://localhost:2019/metrics`, which only a Caddy process answers — so it
++    # reports unhealthy and CI's `compose up --wait` refuses the whole stack before a single browser test runs.
++    # The relay's proven pattern (docker/compose.yaml): the process is alive when its command line is in /proc.
++    healthcheck:
++      test: ["CMD", "sh", "-c", "grep -aq 'lanes[:]work' /proc/*/cmdline"]
++      interval: 15s
++      timeout: 5s
++      retries: 8
++      start_period: 90s   # lanes.sh waits for the fixture tenant (a tinker loop) before exec'ing lanes:work
+   harness-broadcast:
+     image: na-live-support/app:dev
+     command: ["php", "artisan", "queue:work", "redis", "--queue=default", "--sleep=1", "--tries=1", "--timeout=30"]
+@@ -89,3 +99,9 @@ services:
+     depends_on:
+       app:
+         condition: service_healthy
++    healthcheck:   # same reason as harness-lanes (F-C2)
++      test: ["CMD", "sh", "-c", "grep -aq 'queue[:]work' /proc/*/cmdline"]
++      interval: 15s
++      timeout: 5s
++      retries: 8
++      start_period: 30s

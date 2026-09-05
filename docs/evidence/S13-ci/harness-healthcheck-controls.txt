@@ -1,0 +1,13 @@
+### healthcheck controls in-container (2026-09-05T15:21:57Z)
+-- lanes: the matching cmdline:
+php artisan lanes:work --tenant=01a07212-ed08-71ff-ac43-915541c04036 
+  (from /proc/1/cmdline)
+sh -c for f in /proc/[0-9]*/cmdline; do tr "\0" " " < $f 2>/dev/null | grep -a "lanes:work" && echo "  (from $f)"; done | head -3 
+-- lanes positive control:
+exit=0
+-- lanes NEGATIVE control (a process that does not exist):
+exit=1
+-- broadcast positive control:
+exit=0
+-- broadcast NEGATIVE control:
+exit=1
