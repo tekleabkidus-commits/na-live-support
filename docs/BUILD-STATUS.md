@@ -33,6 +33,10 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD FOR THE BATCH B CHECKPOINT (run 33947830795 on 87b615f; ONE look, 2026-09-05; evidence `docs/evidence/S13-ci/run-33947830795-stage3.txt`)
+
+**Billing/annotations first:** no billing annotation; one runner warning (`actions/checkout@v4` on Node 20 forced to Node 24 — the platform's, not ours) and the failure marker `Process completed with exit code 1`. **Verdict: FAILURE at Stage 3 (integration, ephemeral stack): `Tests: 1 failed, 13 skipped, 1899 passed (48257 assertions)`, 634 s — the ONE red is `Tests\Feature\Hours\CalendarTest > P-A53 REAL source` (`-'08:00' +'00:00'`, `CalendarTest.php:167`): the Doc 12 weekday-sensitive finding named at the checkpoint, reproduced on CI's own Saturday (06:01Z, 2026-09-05).** Stages 1, 2, 3b green. **Stage 4 (browser) SKIPPED — never reached**, so this run carries NO browser verdict: neither the 5a125ba harness fix nor the checkpoint's own Playwright set has a CI verdict yet; the next CI look (the Batch C checkpoint) is their verdict of record. Red on Doc 12's terms, not Doc 13's: not chased here (the ruling of 2026-09-05 filed it); the one-line shape a Doc 12 window would take is a fixed day in the test (an injected clock), never a change to `HoursContract`. The routing-contract red of the local battery does NOT appear (fixed at 87b615f — confirmed by CI).
+
 ## SESSION-13 (Doc 13) — P-KB-VIEWED LANDED (Doc 10 core edit, countersigned by the advisor 2026-09-05 at the Batch B acceptance; commit = this section's SHA)
 
 **The diff, as countersigned — nothing else:** `app/Http/Controllers/Widget/KbHelpController.php` — `DB::transaction(fn () => $this->usage->viewed($variantId, 'widget'))` around FR-12's viewed event (Doc 01 T-03's own law) + the `DB` facade import. **Honest trail:** found live on the HARNESS at S13 step 9; Pest's per-test transaction wrapper masked it since S10.
