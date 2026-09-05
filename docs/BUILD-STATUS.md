@@ -43,7 +43,7 @@ this note. All subsequent S19 work is single-session.
 
 **33973914323 on 22108e6 — COMPLETED, `failure` (15:32:35Z), recorded beside it:** Stages 1, 2, 3 (15:27:07Z), 3b (15:23:24Z) GREEN — the second CI witness of P-CAL-WEEKDAY's weekend branch and of the P-NAV-WIDGETS landing's Doc 12 suites; **Stage 4 FAILURE at step 7, the stack bring-up (`compose up --build --wait`), the dump step ran, steps 9–13 (seed, relay probe, Playwright install, origin probe, `npx playwright test`) SKIPPED — the same wall as 0835a7b's run, the F-C2 cause, fixed at 7025d7a. No spec-level red exists to name.** Stages 5–7 skipped by design.
 
-**STOP:** the owner orders the next look once 33975886140 completes. Green on Doc 13's own terms → step 13 close-out; red on a Doc 13 cause → fix first, report before landing.
+**Re-looked on the owner's order at 15:58:46Z (three minutes later): UNCHANGED — Stages 3 + 3b still running, Stage 4 not started, no annotation, no verdict (BatteryStatus 1, 9%). Recorded, not polled again.** **STOP:** the owner orders the next look once 33975886140 completes (Stage 4 cannot finish before ~16:45Z). Green on Doc 13's own terms → step 13 close-out; red on a Doc 13 cause → fix first, report before landing.
 
 ## SESSION-13 (Doc 13) — HARNESS WORKER HEALTHCHECKS LANDED (owner's go, 2026-09-05; the F-C2 correction of record; commit = this section's SHA — its CI run is the Batch C checkpoint's VERDICT OF RECORD, the first CI Stage 4 to run past the bring-up since step 8b)
 
