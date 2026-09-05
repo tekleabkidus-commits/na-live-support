@@ -1,0 +1,31 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-cal-weekday-landed-saturday
+# set:        S13-batchC
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app sh -c date -u; ./vendor/bin/pest tests/Feature/Hours/CalendarTest.php tests/Feature/Routing/HoursTest.php
+# started:    2026-09-05T12:20:13Z
+# git:        0531613 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Sat Sep  5 12:20:14 UTC 2026
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Hours\CalendarTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12: creates, validates through the clock parser, and refuses[39m[90m… [39m [90m9.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-12 physics: one tenant default, split shifts stored intact, h[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05/BR-03: a calendar edit is prospective — an armed instance[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: a timezone change clears schedule_next_run_at on schedule[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-A53 PRE control: a calendar-less tenant answers the seam shape[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-A53 REAL source: a painted calendar drives windowFor/isOpen/ne[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit P-CAL-WEEKDAY: a calendar painted on all seven days, no holiday,[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Routing\HoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-14 / A-53: the fixture-shaped contract — default always open,[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-09 NO CLIFF: outside the department's hours an Online agent i[39m[90m…[39m [90m0.38s[39m  
+
+  [90mTests:[39m    [32;1m9 passed[39;22m[90m (52 assertions)[39m
+  [90mDuration:[39m [39m10.11s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T12:20:24Z
+# duration:   11s
+# EXIT:       0

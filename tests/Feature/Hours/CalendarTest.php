@@ -163,9 +163,25 @@ it('P-A53 REAL source: a painted calendar drives windowFor/isOpen/nextOpen/shift
     $writer->addHoliday($calendarId, '2026-09-11', 'Enkutatash', true, $actor);
     $hours = app(HoursContract::class);
 
+    // P-CAL-WEEKDAY (S13, countersigned 2026-09-05 with ONE condition — the assertion STAYS HERE, branched):
+    // `windowFor` projects TODAY (open/close) and the coming week (days) from the DB clock (C-11 — no seam to
+    // freeze), so with a Mon–Fri fixture and a recurring Friday holiday BOTH halves are date-sensitive. Branch on
+    // the DB clock's Addis weekday: a weekday answers the painted shift; Sat/Sun answer the EXACT closed shape a
+    // Mon–Fri calendar returns for a day with no window (open '00:00', close '24:00' — the Saturday finding); and
+    // when the projected week [today, today+6] holds the recurring 09-11 Friday, `days` omits 5. The date is
+    // read BEFORE the projection so a red names its day. Every fixed-date assertion below is byte-untouched. [flagged]
+    $todayAddis = $hours->now()->setTimezone(new DateTimeZone(ADDIS))->setTime(0, 0);
+    $isWeekend = (int) $todayAddis->format('N') >= 6;
+    $weekHoldsHoliday = false;
+    for ($n = 0; $n <= 6; $n++) {
+        if ($todayAddis->modify(sprintf('+%d day', $n))->format('m-d') === '09-11') {
+            $weekHoldsHoliday = true;
+        }
+    }
     $window = $hours->windowFor(null);
-    expect($window['open'])->toBe('08:00')
-        ->and($window['close'])->toBe('17:00');
+    expect($window['open'])->toBe($isWeekend ? '00:00' : '08:00', 'projected on '.$todayAddis->format('D Y-m-d'))
+        ->and($window['close'])->toBe($isWeekend ? '24:00' : '17:00', 'projected on '.$todayAddis->format('D Y-m-d'))
+        ->and($window['days'])->toBe($weekHoldsHoliday ? [1, 2, 3, 4] : [1, 2, 3, 4, 5], 'projected on '.$todayAddis->format('D Y-m-d'));
 
     // Wed 2026-09-02: 10:00 Addis = 07:00Z open; 18:00 Addis = 15:00Z closed.
     expect($hours->isOpen(null, new DateTimeImmutable('2026-09-02T07:00:00Z')))->toBeTrue()
@@ -180,4 +196,25 @@ it('P-A53 REAL source: a painted calendar drives windowFor/isOpen/nextOpen/shift
     // Friday holiday and the weekend: Mon 2026-09-14 05:00Z.
     expect($hours->nextOpen(null, new DateTimeImmutable('2026-09-10T15:00:00Z'))->format('Y-m-d\TH:i:s\Z'))
         ->toBe('2026-09-14T05:00:00Z');
+});
+
+it('P-CAL-WEEKDAY: a calendar painted on all seven days, no holiday, projects its window on ANY day the DB clock lands on — weekday-independent by construction', function (): void {
+    $tenant = createTenant();
+    bindTenant($tenant);
+    $writer = app(CalendarWriter::class);
+    $actor = (string) Str::uuid7();
+    $allWeek = [];
+    for ($d = 1; $d <= 7; $d++) {
+        $allWeek[$d] = [['open' => '08:00', 'close' => '17:00']];
+    }
+    $writer->create('Every day', ADDIS, $allWeek, $actor, isTenantDefault: true);
+    $hours = app(HoursContract::class);
+
+    $window = $hours->windowFor(null);
+    expect($window['open'])->toBe('08:00')
+        ->and($window['close'])->toBe('17:00')
+        ->and($window['days'])->toBe([1, 2, 3, 4, 5, 6, 7]);
+    // the day the projection used is the DB's, in the calendar's zone — recorded so a red names its day
+    $today = (int) $hours->now()->setTimezone(new DateTimeZone(ADDIS))->format('N');
+    expect($today)->toBeGreaterThanOrEqual(1)->toBeLessThanOrEqual(7);
 });
