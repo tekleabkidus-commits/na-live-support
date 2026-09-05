@@ -4,14 +4,43 @@
 // themes, both frames, the draft pushed in place), Content (am incomplete), Behavior (voice ABSENT under the flag),
 // Install (snippet shown-once line, CSP block, domains through the matcher, the secret), Health (counters, history),
 // publish → history → rollback; light/dark + en/am; axe on every screen.
+import { execFileSync } from 'node:child_process';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { composeFiles } from './support/harness';
 
 const PASSWORD = 'browser-fixture-password';
 const AGENT_EMAIL = 'agent@fixture.example';
 const V1440 = { width: 1440, height: 900 };
 const V375 = { width: 375, height: 740 };
 
+/**
+ * The staff language is the USER's stored locale (Doc 02 ApplyUserLocale: an authenticated user's `users.locale`
+ * ALWAYS wins over the guest `locale` cookie) — so the Amharic leg sets it the way F1-B12 does, through the DB under
+ * the fixture tenant's GUC, and restores it after. The cookie hop this spec used until the Batch C landing only
+ * worked while the agent's stored locale was still empty (a fresh seed) — order-fragile, found on the landing run.
+ */
+function setAgentLocale(locale: 'en' | 'am'): void {
+    execFileSync(
+        'docker',
+        [
+            'compose',
+            ...composeFiles(),
+            'exec',
+            '-T',
+            'app',
+            'php',
+            'artisan',
+            'tinker',
+            '--execute',
+            `use Illuminate\\Support\\Facades\\DB;
+$t = DB::connection('pgsql_platform')->table('tenants')->where('name','Fixture Operator A')->value('id');
+DB::statement("SELECT set_config('app.tenant_id', ?, false)", [(string) $t]);
+DB::table('users')->where('email','${AGENT_EMAIL}')->update(['locale' => '${locale}']);`,
+        ],
+        { encoding: 'utf8', stdio: 'pipe' },
+    );
+}
 async function login(page: Page): Promise<void> {
     await page.goto('/login');
     await page.locator('#login-email').fill(AGENT_EMAIL);
@@ -228,8 +257,12 @@ test('J09 at 375: the admin on their phone — the list, version and status firs
             () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
         ),
     ).toBeLessThanOrEqual(0);
-    await page.context().addCookies([{ name: 'locale', value: 'am', url: 'https://localhost' }]);
-    await page.goto('/admin/widgets');
-    await expect(page.getByTestId('widgets-index')).toContainText('አዲስ መግብር');
-    await axeClean(page, 'widgets list 375 (am, dark)');
+    setAgentLocale('am');
+    try {
+        await page.goto('/admin/widgets');
+        await expect(page.getByTestId('widgets-index')).toContainText('አዲስ መግብር');
+        await axeClean(page, 'widgets list 375 (am, dark)');
+    } finally {
+        setAgentLocale('en');
+    }
 });

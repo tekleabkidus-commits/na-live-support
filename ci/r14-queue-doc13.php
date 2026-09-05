@@ -57,6 +57,25 @@ foreach ($flatEn as $key => $english) {
     }
     $entries[] = ['key' => 'widget.'.$key, 'am' => $amharic, 'en' => $english, 'tier' => in_array($key, $destructive, true) ? 'destructive' : 'standard'];
 }
+// P-NAV-WIDGETS (S13 Batch C, countersign condition 1): Doc 13-owned strings that LIVE in another document's
+// lang file join this queue too — the shared Backoffice row's name inside Doc 12's `workflow.php` (non-destructive).
+$crossFile = [
+    ['file' => 'workflow', 'path' => 'ui.nav.widgets', 'origin' => 'P-NAV-WIDGETS (Doc 12 file, Doc 13 row)'],
+];
+foreach ($crossFile as $ref) {
+    /** @var array<mixed> $otherEn */
+    $otherEn = require __DIR__.'/../lang/en/'.$ref['file'].'.php';
+    /** @var array<mixed> $otherAm */
+    $otherAm = require __DIR__.'/../lang/am/'.$ref['file'].'.php';
+    $english = flatten($otherEn)[$ref['path']] ?? null;
+    $amharic = flatten($otherAm)[$ref['path']] ?? null;
+    if (! is_string($english) || ! is_string($amharic)) {
+        $missing[] = $ref['file'].'.'.$ref['path'];
+
+        continue;
+    }
+    $entries[] = ['key' => $ref['file'].'.'.$ref['path'], 'am' => $amharic, 'en' => $english, 'tier' => 'standard', 'origin' => $ref['origin']];
+}
 $queue = [
     'doc' => 'Doc13',
     'spec' => 'R-14 native-review queue — Doc 13 machine-authored Amharic (opened S13 step 12): every widget.* key, customer-facing branches and the Designer, the destructive tier flagged per entry for the native reviewer.',

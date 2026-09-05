@@ -1,0 +1,50 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-nav-widgets-landing-designer
+# set:        S13-checkpointC
+# command:    npx playwright test --project=chromium tests/Browser/designer-widgets.spec.ts
+# started:    2026-09-05T14:59:48Z
+# git:        0835a7b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › tests/Browser/designer-widgets.spec.ts:47:1 › J09 + J01–J03: the list, create (key ONCE), the editor chrome, the inline contrast refusal with the suggestion applied at 36 px, the preview both themes both frames receiving the draft (4.0s)
+  ✓  2 [chromium] › tests/Browser/designer-widgets.spec.ts:105:1 › J04–J05: Content (am incomplete gate, shortcuts builder, tab toggles) and Behavior (chatbot read-only, triggers, cooldown ceiling, voice ABSENT); publish → history → rollback (J10); Install + Health (J06–J08) (6.2s)
+  ✘  3 [chromium] › tests/Browser/designer-widgets.spec.ts:204:1 › J09 at 375: the admin on their phone — the list, version and status first; the editor behind; 44 px targets; dark + Amharic axe (6.8s)
+
+
+  1) [chromium] › tests/Browser/designer-widgets.spec.ts:204:1 › J09 at 375: the admin on their phone — the list, version and status first; the editor behind; 44 px targets; dark + Amharic axe 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('widgets-index')
+    Expected substring: "አዲስ መግብር"
+    Received string:    "panel.WC326-_Y.jsNew widget[FIXTURE] Content widgethttps://help.fixture.examplev3● Test mode[FIXTURE] Phone checkhttps://help.fixture.example—● Never published[FIXTURE] Support subdomainhttps://help.fixture.example—● Never published"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByTestId('widgets-index')
+        14 × locator resolved to <div class="wd-index" data-testid="widgets-index">…</div>
+           - unexpected value "panel.WC326-_Y.jsNew widget[FIXTURE] Content widgethttps://help.fixture.examplev3● Test mode[FIXTURE] Phone checkhttps://help.fixture.example—● Never published[FIXTURE] Support subdomainhttps://help.fixture.example—● Never published"
+
+
+      231 |     await page.context().addCookies([{ name: 'locale', value: 'am', url: 'https://localhost' }]);
+      232 |     await page.goto('/admin/widgets');
+    > 233 |     await expect(page.getByTestId('widgets-index')).toContainText('አዲስ መግብር');
+          |                                                     ^
+      234 |     await axeClean(page, 'widgets list 375 (am, dark)');
+      235 | });
+      236 |
+        at /home/kidus/projects/na-live-support/tests/Browser/designer-widgets.spec.ts:233:53
+
+    Error Context: test-results/designer-widgets-J09-at-37-161a3-px-targets-dark-Amharic-axe-chromium/error-context.md
+
+  1 failed
+    [chromium] › tests/Browser/designer-widgets.spec.ts:204:1 › J09 at 375: the admin on their phone — the list, version and status first; the editor behind; 44 px targets; dark + Amharic axe 
+  2 passed (18.1s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T15:00:07Z
+# duration:   19s
+# EXIT:       1

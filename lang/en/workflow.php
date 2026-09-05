@@ -83,6 +83,7 @@ return [
             'hours' => 'Business hours',
             'workflow' => 'Workflow',
             'kb' => 'Knowledge base',
+            'widgets' => 'Web chat widget', // P-NAV-WIDGETS (S13 Batch C) — the shared Backoffice row (Doc 13 §4.4)
             'macros' => 'Macros',
             'fields' => 'Custom fields',
             'forms' => 'Forms',

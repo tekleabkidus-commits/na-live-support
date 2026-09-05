@@ -36,6 +36,7 @@ const t = computed<Record<string, string>>(() => ({
     nav_channels: c.nav?.channels ?? '',
     nav_kb: c.nav?.kb ?? '',
     nav_workflow: c.nav?.workflow ?? '',
+    nav_widgets: c.nav?.widgets ?? '', // P-NAV-WIDGETS (S13 Batch C): the shared shell's Doc 13 row needs its name here too
 }));
 const crumb = computed(() => {
     if (props.crumb) return props.crumb;

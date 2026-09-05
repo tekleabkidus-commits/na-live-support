@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-nav-widgets-landing-suites
+# set:        S13-checkpointC
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Workflow/ScreensTest.php tests/Contract/Forms/FormPreChatContractTest.php tests/Feature/Csat/CaptureTest.php tests/Feature/Kb/WidgetHelpContractTest.php
+# started:    2026-09-05T15:00:07Z
+# git:        0835a7b (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Workflow\ScreensTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders all seven surfaces + the hub for a full-map admin, each[39m[90m…[39m [90m10.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit every page is gated by its catalog key — a viewer without it is[39m[90m… [39m [90m0.22s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rules: create → edit (draft revision) → dry-run against a recent[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook destinations + keyword sets from the rules surface: an i[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SLA + hours: a policy is created through PolicyWriter, the live[39m[90m… [39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit macros + fields + forms + CSAT: each surface's doors land throug[39m[90m…[39m [90m0.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14: every workflow.ui string resolves in en AND am (the bundle[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Csat\CaptureTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-25: the 1-tap score lands, prompts for a comment, and an in-w[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-11: an hour-73 tap records NOTHING, answers the polite window[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit closing rows 2/4: an AI-resolver score lands csat_scored on the[39m[90m… [39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kb\WidgetHelpContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-18/US-04: browse → search → article (viewed event) → 👎 feedb[39m[90m…[39m [90m4.79s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05 endpoint legs: the rate limit answers 429 rate_limited (p[39m[90m…[39m [90m1.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-02: Meilisearch unreachable → unavailable:true with start_cha[39m[90m…[39m [90m0.12s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (2030 assertions)[39m
+  [90mDuration:[39m [39m18.56s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T15:00:26Z
+# duration:   19s
+# EXIT:       0
