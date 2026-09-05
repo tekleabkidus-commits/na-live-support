@@ -100,6 +100,8 @@ server-side message pipeline → Doc 04 (the adapter conforms) · chatbot logic 
 
 _**R-D13-6 (owner directive, 2026-09-04, recorded in BUILD-STATUS's Doc 13 section): cadence is PER-BATCH from step 4 — targeted suites + gates + lint at every step-commit; the FULL battery once per batch checkpoint and at the close-out; the PC-power rule (read and state BAT1 before any full run; below 40% discharging = wait for the owner; timing legs wall power only). Supersedes the "full battery every step-commit" clause above._
 
+_**R-D13-6 AMENDED BY OWNER DIRECTIVE (2026-09-05, at the Batch C resume):** clause 2b — the below-40 % power STOP — is WITHDRAWN. Never ask the owner to plug in; never wait for power. Every battery, browser leg and timing leg runs when the step reaches it; the power line is still stated in each report; a §12 timing figure taken while discharging is labeled "battery-run, indicative" (the wall-power figure stays OWED under 0e); a run killed by the laptop is relaunched, never salvaged. Recorded in BUILD-STATUS's R-D13-6 block._
+
 _**R-D13-6 amendment (advisor, 2026-09-05, from the Batch B checkpoint's lesson):** the per-step TARGETED set always includes the CONTRACT suites of every registry a step writes (ConsumerRegistry, EventCatalog consumers, routing/tickets fixtures) — a registry entry without its contract suite in the same run is how P-QPOS's miss escaped._
 
 **Batch A — substrate (adapter + visitor API; Doc 13 §21 "the guarantees underneath are the product")**
