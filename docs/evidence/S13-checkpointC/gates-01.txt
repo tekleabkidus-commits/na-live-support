@@ -1,0 +1,35 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      gates
+# set:        S13-checkpointC
+# command:    make gates
+# started:    2026-09-05T13:52:14Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/run-gates.sh
+Running 16 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+  widget-bundle-budget      PASS
+  widget-vocabulary         PASS
+-----------------------------------------------------------------
+Gate summary: 16 passed, 0 failed, 0 skipped.
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:54:03Z
+# duration:   109s
+# EXIT:       0

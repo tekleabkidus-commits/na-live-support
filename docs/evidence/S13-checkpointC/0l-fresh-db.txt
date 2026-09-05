@@ -1,0 +1,44 @@
+### 0l FRESH-DB VERDICT (CI Stage-4 shape, locally) — 2026-09-05T13:30:39Z: migrate:fresh (migrator role) → BrowserFixtureSeeder → inbox:views-rebuild → bucket ensured → long-lived workers restarted → the battery's 26 reds re-run ONCE (--last-failed from the saved battery record). Power: 1 45 
+  2026_09_04_000200_schema_amendment_7_rider_1_vault_secrets .... 30.86ms DONE
+  2026_09_05_000100_schema_amendment_7_rider_2_key_public ........ 8.62ms DONE
+
+   INFO  Seeding database.  
+
+Browser fixtures ready: tenant A 01a071c3-cede-7244-9d97-3a2bd8608766, tenant B 01a071c3-d3a3-715a-b76c-65ea33d3a83b
+rebuilt saved views; scoped variants dropped for lazy rebuild
+inbox:views-rebuild complete
+Bucket created successfully `local/na-live-support`.
+
+ Container na-live-support-scheduler-1 Started 
+ Container na-live-support-reverb-1 Started 
+ Container na-live-support-harness-broadcast-1 Started 
+ Container na-live-support-worker-1 Started 
+ Container na-live-support-relay-1 Started 
+ Container na-live-support-harness-lanes-1 Started 
+na-live-support-harness-1	Up 2 hours (healthy)
+na-live-support-harness-broadcast-1	Up 2 seconds (health: starting)
+na-live-support-harness-lanes-1	Up Less than a second (health: starting)
+na-live-support-relay-1	Up Less than a second (health: starting)
+na-live-support-reverb-1	Up 3 seconds (health: starting)
+na-live-support-scheduler-1	Up 3 seconds (health: starting)
+na-live-support-worker-1	Up 1 second (health: starting)
+--- rerun ---
+
+### SECOND FRESH DB — 2026-09-05T13:46:59Z: the --last-failed subset's two harness reds (widget-acceptance assertion two + F09/F10 on [widget]) were a SUBSET-ORDER artifact with a real cause underneath — the first browser action on the fresh DB was 'widget:harness config' before any spec had fetched the key (the seeder), so the harness widget row did not exist (ModelNotFound). The driver now heals its own fixture (WidgetHarness.php). Proof = the same two tests, FIRST, on a fresh DB in CI shape. Power: 1 43 
+
+Browser fixtures ready: tenant A 01a071d2-bb53-7235-9597-088bdbe48262, tenant B 01a071d2-c01b-722a-8084-afed725f494b
+inbox:views-rebuild complete
+Bucket created successfully `local/na-live-support`.
+
+ Container na-live-support-relay-1 Started 
+widgets rows on the fresh DB before the run:    Illuminate\Database\QueryException  SQLSTATE[42704]: Undefined object: 7 ERROR:  unrecognized configuration parameter "app.tenant_id" (Connection: pgsql_migrator, Host: postgres, Port: 5432, Database: na_live_support, SQL: select count(*) as "aggregate" from "widgets").
+--- rerun (the two tests, first) ---
+
+### THIRD FRESH DB — 2026-09-05T13:50:39Z: the second fresh run moved the same two tests one step further — 'no default department/queue' (the driver's routing target comes from Doc 07's InboxBrowserSeeder, which precedes every widget spec in a full battery). The driver now runs that seeder when the default is missing (the full battery's own precondition). Proof = the same two tests, FIRST, on a fresh DB in CI shape. Power: 1 42 
+
+Browser fixtures ready: tenant A 01a071d6-1946-7123-af15-0547c8993eb6, tenant B 01a071d6-1e1a-71b0-881a-ea52ec49e958
+inbox:views-rebuild complete
+Bucket created successfully `local/na-live-support`.
+
+ Container na-live-support-relay-1 Started 
+--- rerun (the two tests, first) ---

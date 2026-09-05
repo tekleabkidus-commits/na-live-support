@@ -1,0 +1,47 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      fixes-widget-warm
+# set:        S13-checkpointC
+# command:    npx playwright test --project=widget --project=widget-375 tests/Browser/widget-panel.spec.ts tests/Browser/widget-forms-hours.spec.ts tests/Browser/widget-acceptance.spec.ts
+# started:    2026-09-05T13:27:55Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 30 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) (5.0s)
+  ✓   2 [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (11.5s)
+  ✓   3 [widget] › tests/Browser/widget-acceptance.spec.ts:163:1 › S11 · focus trap: Tab and Shift+Tab cycle inside the dialog; focus never leaves it while open (996ms)
+  ✓   4 [widget] › tests/Browser/widget-acceptance.spec.ts:191:1 › S11 · live regions: the polite log announces the staff reply; the queue card announces only when the number moves (9.2s)
+  ✓   5 [widget] › tests/Browser/widget-acceptance.spec.ts:208:1 › S11 · polling failover: the socket drops, polling takes over, a staff reply still lands; the socket returns and polling stops (9.2s)
+  ✓   6 [widget] › tests/Browser/widget-acceptance.spec.ts:230:1 › S11 · leader election: two tabs of one visitor hold ONE socket; closing the leader hands the lock over (8.7s)
+  ✓   7 [widget] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent (5.6s)
+  ✓   8 [widget] › tests/Browser/widget-acceptance.spec.ts:277:1 › S11 · text zoom 200 %: type scales with the root size; no horizontal overflow; the composer and 44 px targets survive (1.4s)
+  ✓   9 [widget] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named (2.3s)
+  ✓  10 [widget] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread (2.0s)
+  ✓  11 [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (4.4s)
+  ✓  12 [widget] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.2s)
+  ✓  13 [widget] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (1.1s)
+  ✓  14 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.0s)
+  ✓  15 [widget] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (818ms)
+  ✓  16 [widget-375] › tests/Browser/widget-acceptance.spec.ts:89:1 › AC-B3-01 assertion one: contains-only Home on a fresh profile at 375 and 1440, light and dark (default config) (5.2s)
+  ✓  17 [widget-375] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (12.8s)
+  ✓  18 [widget-375] › tests/Browser/widget-acceptance.spec.ts:163:1 › S11 · focus trap: Tab and Shift+Tab cycle inside the dialog; focus never leaves it while open (1.3s)
+  ✓  19 [widget-375] › tests/Browser/widget-acceptance.spec.ts:191:1 › S11 · live regions: the polite log announces the staff reply; the queue card announces only when the number moves (8.4s)
+  ✓  20 [widget-375] › tests/Browser/widget-acceptance.spec.ts:208:1 › S11 · polling failover: the socket drops, polling takes over, a staff reply still lands; the socket returns and polling stops (12.4s)
+  ✓  21 [widget-375] › tests/Browser/widget-acceptance.spec.ts:230:1 › S11 · leader election: two tabs of one visitor hold ONE socket; closing the leader hands the lock over (8.6s)
+  ✓  22 [widget-375] › tests/Browser/widget-acceptance.spec.ts:259:1 › S11 · proactive cooldown across rules: one fire per visitor per cooldown — a second rule on another page stays silent (5.7s)
+  ✓  23 [widget-375] › tests/Browser/widget-acceptance.spec.ts:277:1 › S11 · text zoom 200 %: type scales with the root size; no horizontal overflow; the composer and 44 px targets survive (1.2s)
+  ✓  24 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:8:1 › F03: optional pre-chat — no tab bar, Skip opens the thread; F04: required blocks until name + phone; a refusal is inline with the field named (1.8s)
+  ✓  25 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:36:1 › F03 optional: Skip goes straight to the thread (1.6s)
+  ✓  26 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (2.8s)
+  ✓  27 [widget-375] › tests/Browser/widget-panel.spec.ts:21:1 › B05/B06 + §13: the panel is a modal dialog with a persona header, three tabs from config, focus inside it, Esc closes it and the frame collapses (1.0s)
+  ✓  28 [widget-375] › tests/Browser/widget-panel.spec.ts:39:1 › L07: Tab from the last control wraps to the first (the trap); the header carries minimize on desktop only, the sheet has none (908ms)
+  ✓  29 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.2s)
+  ✓  30 [widget-375] › tests/Browser/widget-panel.spec.ts:83:1 › B01/B02: the launcher label names the state and the unread COUNT as a number — never a bare dot (831ms)
+
+  30 passed (2.2m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:30:09Z
+# duration:   134s
+# EXIT:       0

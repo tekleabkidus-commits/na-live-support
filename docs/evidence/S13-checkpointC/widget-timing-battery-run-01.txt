@@ -1,0 +1,23 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      widget-timing-battery-run
+# set:        S13-checkpointC
+# command:    make widget-timing
+# started:    2026-09-05T13:54:56Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+bash ci/widget-loader-timing.sh
+{
+  "launcher_paint_ms": 914,
+  "loader_transfer_bytes": 0,
+  "idle_cpu_pct": 0,
+  "idle_js_heap_mb": 3,
+  "polling_gets_per_30s_socket_down": 2,
+  "search_p95_ms": 196,
+  "battery_status": "1"
+}
+widget-loader-timing: figures printed (dev-indicative); pass --assert on wall power to hold the spec numbers
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:55:47Z
+# duration:   51s
+# EXIT:       0

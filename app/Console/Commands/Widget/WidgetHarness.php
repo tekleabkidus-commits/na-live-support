@@ -66,6 +66,26 @@ final class WidgetHarness extends Command
         $context->clear();
         $context->bind($row->id, ResolutionSource::Console);
         $rls->set($row->id);
+        // S13 Batch C: the driver heals its own fixture. On a fresh DB whose FIRST browser action is a staff-side
+        // command (before any spec has fetched the key through the seeder) the harness widget row did not exist
+        // (ModelNotFound on `config`) — found by the Batch C fresh-DB verdict's --last-failed subset. The seeder is
+        // idempotent and clears the console context when it finishes, so the binding is re-applied after it.
+        if (! \App\Models\Widget::query()->whereKey(\Database\Seeders\WidgetHarnessSeeder::WIDGET_ID)->exists()) {
+            $this->callSilently('db:seed', ['--class' => \Database\Seeders\WidgetHarnessSeeder::class, '--force' => true]);
+            $context->clear();
+            $context->bind($row->id, ResolutionSource::Console);
+            $rls->set($row->id);
+        }
+        // Same lesson, one layer down: on a fresh DB the default department/queue the driver routes into come from
+        // Doc 07's InboxBrowserSeeder, which every inbox spec runs BEFORE the widget specs in a full battery (the
+        // alphabetical order CI's Stage 4 has). A subset run had no such predecessor. The driver runs that same
+        // seeder — the full battery's own precondition, not a new structure — when the default is missing.
+        if (app(TenantDefaultDepartment::class)->resolve() === null) {
+            $this->callSilently('db:seed', ['--class' => \Database\Seeders\InboxBrowserSeeder::class, '--force' => true]);
+            $context->clear();
+            $context->bind($row->id, ResolutionSource::Console);
+            $rls->set($row->id);
+        }
         try {
             return $this->run_((string) $this->argument('action'));
         } finally {

@@ -97,7 +97,16 @@ final class WidgetHarnessSeeder extends Seeder
             }
             $actor = (string) \Illuminate\Support\Str::uuid7();
             if (is_string($calendarId)) {
-                $writer->update($calendarId, ['weekdays' => $weekdays], $actor);
+                // S13 Batch C: the seeder runs at EVERY spec's key fetch, so it must never override the harness's
+                // OWN explicit hours state — `widget:harness hours-close` (00:00–00:01 ×7) / `hours-open` (24×7).
+                // It heals only a FOREIGN shape (the browser fixtures' weekend-closed calendar) to 24×7. Found by
+                // the Batch C battery: F09/F10 and AC-B3-01's out-of-hours leg closed the hours, then the key fetch
+                // silently reopened them.
+                $raw = DB::table('business_calendars')->where('id', $calendarId)->value('weekdays');
+                $current = is_string($raw) ? json_decode($raw, true) : null;
+                if (! self::isHarnessShape(is_array($current) ? $current : [])) {
+                    $writer->update($calendarId, ['weekdays' => $weekdays], $actor);
+                }
             } else {
                 $writer->create('[FIXTURE] Harness hours', 'Africa/Addis_Ababa', $weekdays, $actor, true, null);
             }
@@ -105,5 +114,31 @@ final class WidgetHarnessSeeder extends Seeder
             $context->clear();
             $rls->clear();
         }
+    }
+
+    /**
+     * True when every one of the seven days carries exactly one shift that is a harness shape —
+     * all open (00:00–24:00) or the harness's closed minute (00:00–00:01).
+     *
+     * @param  array<int|string, mixed>  $weekdays
+     */
+    private static function isHarnessShape(array $weekdays): bool
+    {
+        if (count($weekdays) !== 7) {
+            return false;
+        }
+        foreach ([1, 2, 3, 4, 5, 6, 7] as $d) {
+            $shifts = $weekdays[(string) $d] ?? $weekdays[$d] ?? null;
+            if (! is_array($shifts) || count($shifts) !== 1 || ! is_array($shifts[0])) {
+                return false;
+            }
+            $open = $shifts[0]['open'] ?? null;
+            $close = $shifts[0]['close'] ?? null;
+            if ($open !== '00:00' || ($close !== '24:00' && $close !== '00:01')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

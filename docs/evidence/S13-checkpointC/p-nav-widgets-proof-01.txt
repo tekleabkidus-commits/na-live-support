@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      p-nav-widgets-proof
+# set:        S13-checkpointC
+# command:    npx playwright test --project=chromium tests/Browser/f1-b12.spec.ts -g the shared Backoffice nav with the Workflow group live|M01: the hub|M02: the execution detail
+# started:    2026-09-05T13:59:27Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 3 tests using 1 worker
+
+
+  ✓  1 [chromium] › tests/Browser/f1-b12.spec.ts:121:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (3.2s)
+  ✓  2 [chromium] › tests/Browser/f1-b12.spec.ts:1401:5 › B9-S13 — degraded, error and cross-cutting › §M M01: the hub — seven cards with live sub-lines, the chrome legend (Organization real, People / Channels drawn, Knowledge base, the seven rows), the palette row; axe-clean light + dark (2.8s)
+  ✓  3 [chromium] › tests/Browser/f1-b12.spec.ts:1428:5 › B9-S13 — degraded, error and cross-cutting › §M M02: the execution detail page — event, ticket, rule, guards, the condition results with evaluated values and the elided twin beside them, the action outcomes in order; reached from the editor’s log (6.1s)
+
+  3 passed (16.7s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:59:45Z
+# duration:   18s
+# EXIT:       0

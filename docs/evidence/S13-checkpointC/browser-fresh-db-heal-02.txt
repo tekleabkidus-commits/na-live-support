@@ -1,0 +1,19 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      browser-fresh-db-heal
+# set:        S13-checkpointC
+# command:    npx playwright test --project=widget -g AC-B3-01 assertion two|F09/F10 tests/Browser/widget-acceptance.spec.ts tests/Browser/widget-forms-hours.spec.ts
+# started:    2026-09-05T13:50:59Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 2 tests using 1 worker
+
+  ✓  1 [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (42.7s)
+  ✓  2 [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (4.2s)
+
+  2 passed (47.7s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:51:48Z
+# duration:   49s
+# EXIT:       0

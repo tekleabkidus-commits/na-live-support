@@ -65,9 +65,12 @@ test('B07: the overflow menu offers sound, both languages and privacy; switching
         .locator('[role=dialog]')
         .evaluate((el) => ((el as HTMLElement & { __id?: number }).__id = Math.random()));
     await panel.locator('button[aria-label="More options"]').click();
+    // B07 draws sound · both languages · transcript · privacy (+ theme): SIX items since step 12 landed the
+    // SEC-06 transcript row (the count was pinned at five before that row existed — corrected at the Batch C battery)
     await expect(
         panel.locator('[role=menu] [role=menuitem], [role=menu] [role=menuitemradio]'),
-    ).toHaveCount(5);
+    ).toHaveCount(6);
+    await expect(panel.locator('[role=menu] [data-role=transcript]')).toHaveCount(1);
     await panel.locator('[role=menuitemradio]', { hasText: 'አማርኛ' }).click();
     await expect(panel.locator('[role=tab]').first()).toHaveText(/መነሻ/);
     const same = await panel

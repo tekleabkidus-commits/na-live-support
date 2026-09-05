@@ -1,0 +1,447 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      browser-fresh-db
+# set:        S13-checkpointC
+# command:    npx playwright test --last-failed
+# started:    2026-09-05T13:31:02Z
+# git:        91fa741 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 26 tests using 1 worker
+
+
+  ✘   1 [chromium] › tests/Browser/f1-b12.spec.ts:121:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark (2.7s)
+
+  ✘   2 [chromium] › tests/Browser/f1-b12.spec.ts:139:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark (3.2s)
+
+  ✘   3 [chromium] › tests/Browser/f1-b12.spec.ts:226:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark (3.5s)
+
+  ✘   4 [chromium] › tests/Browser/f1-b12.spec.ts:276:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline (4.0s)
+
+  ✘   5 [chromium] › tests/Browser/f1-b12.spec.ts:427:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark (4.0s)
+
+  ✘   6 [chromium] › tests/Browser/f1-b12.spec.ts:599:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark (4.9s)
+
+  ✘   7 [chromium] › tests/Browser/f1-b12.spec.ts:792:5 › B9-S09 — macros manager › §I I01 + I02 + I04: the manager grouped by scope (personal before shared, the permission key on the group head, kind tag, bundled chips, usage); the pill body — brace-free pills, delete-as-unit by Backspace and by ✕, the announced state list; bundled actions with the EC-09 notice quoted; axe-clean light + dark (3.3s)
+
+  ✘   8 [chromium] › tests/Browser/f1-b12.spec.ts:927:5 › B9-S10 — fields manager › §J J01 + J02 + J06: entity tabs with counts; the row anatomy (↑↓, both labels, the immutable key, the 🔒 type badge, flags, used-in counts); the editor — key derived at birth, the 13-type picker on a new field, NO type control on a saved one (the lock law in words), options with stable values, validation per type, the N-06 line, where-used live; the Doc 08 seam on the customer tab; axe-clean light + dark (3.7s)
+
+  ✘   9 [chromium] › tests/Browser/f1-b12.spec.ts:1114:5 › B9-S11 — form builder › §K K01 + K02 + K03: the B5-S07 chrome — the 13 types and the refs on the palette, step tabs with dots, the field cards (both labels, key, ref/inline tag, type), the placement menu with Alt-arrows, the inspector with labels/help per language, required-when-visible, the conditional that never offers a later field and its plain sentence, the branch glyph on the card; axe-clean light + dark (4.2s)
+
+  ✘  10 [chromium] › tests/Browser/f1-b12.spec.ts:1278:5 › B9-S11 — form builder › §K K07: the forms list — the seeded forms carry "seeded · editable" (content, not config), each row its shape, version and bindings; K01 375: the builder is READ posture with the notice, steps and fields; no overflow; axe-clean both themes (2.6s)
+
+  ✘  11 [chromium] › tests/Browser/f1-b12.spec.ts:1309:5 › B9-S12 — CSAT › §L L01 + L04: the three registered keys as settings rows (label · key · description · control · provenance · reset) with the consequence BEFORE save and the live change count on the verb; what a survey is, the Doc 15 events, the designed absence; the shipped labels per language; axe-clean light + dark (3.2s)
+
+  ✘  12 [chromium] › tests/Browser/f1-b12.spec.ts:1401:5 › B9-S13 — degraded, error and cross-cutting › §M M01: the hub — seven cards with live sub-lines, the chrome legend (Organization real, People / Channels drawn, Knowledge base, the seven rows), the palette row; axe-clean light + dark (2.7s)
+
+  ✘  13 [chromium] › tests/Browser/f1-b12.spec.ts:1428:5 › B9-S13 — degraded, error and cross-cutting › §M M02: the execution detail page — event, ticket, rule, guards, the condition results with evaluated values and the elided twin beside them, the action outcomes in order; reached from the editor’s log (6.4s)
+  ✓  14 [chromium] › tests/Browser/inbox-bell.spec.ts:65:1 › FR-26: the badge carries the server unread count; the dropdown renders the seeded rows with identifier-built copy; a row deep-links to its thread IN PLACE (2.4s)
+  ✓  15 [chromium] › tests/Browser/inbox-composer.spec.ts:167:1 › FR-20 REAL DATA (the step-12 gap-closed proof): the PAUSED card names the connection account from the live payload; the blocked_by_user card renders from the latest delivery_error — no seam props (2.4s)
+  ✓  16 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:63:1 › FR-24: the High-priority chip composes WITHIN Unassigned — normal rows leave, the total tells the filtered truth, clear-all restores (2.1s)
+  ✓  17 [chromium] › tests/Browser/inbox-filter-bar.spec.ts:87:1 › FR-24: on My Open the same chip KEEPS the matching rows — the urgent R1 and the high Yonas stay, the normal FR-20 fixtures leave (1.8s)
+  ✓  18 [chromium] › tests/Browser/inbox-list.spec.ts:68:1 › FR-09 line 1+2, My Open: SLA pill outranks the window, unread bold + count from the viewer marker, language chip, sentiment + priority dots, tag overflow, assignee avatar (3.4s)
+  ✘  19 [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (2.2s)
+  ✘  20 [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (863ms)
+  ✓  21 [widget] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.6s)
+  ✓  22 [widget] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (16.6s)
+  ✓  23 [widget-375] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) (12.8s)
+  ✓  24 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone (4.1s)
+  ✓  25 [widget-375] › tests/Browser/widget-panel.spec.ts:60:1 › B07: the overflow menu offers sound, both languages and privacy; switching to Amharic re-renders the tab bar in real Ethiopic without a remount (the dialog node stays) (1.3s)
+  ✓  26 [widget-375] › tests/Browser/widget-queue.spec.ts:10:1 › D10–D13 + EC-06: the pushed position renders; an urgent jump raises the server's number but never the card's; the agent joining clears the card (13.7s)
+
+
+  1) [chromium] › tests/Browser/f1-b12.spec.ts:121:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark 
+
+    Error: axe violations — workflow chrome (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:132:9
+
+    Error Context: test-results/f1-b12-B9-S13-M01-—-the-Wo-8e461--crumb-axe-clean-light-dark-chromium/error-context.md
+
+  2) [chromium] › tests/Browser/f1-b12.spec.ts:139:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark 
+
+    Error: axe violations — rules list (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:167:9
+
+    Error Context: test-results/f1-b12-B9-S05-—-the-rules--caec4-legend-axe-clean-light-dark-chromium/error-context.md
+
+  3) [chromium] › tests/Browser/f1-b12.spec.ts:226:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+
+    Error: axe violations — rule editor (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:248:9
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-ec650--hints-axe-clean-light-dark-chromium/error-context.md
+
+  4) [chromium] › tests/Browser/f1-b12.spec.ts:276:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+
+    Error: axe violations — rule editor · 15 cards (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:312:9
+
+    Error Context: test-results/f1-b12-B9-S06-—-the-rule-e-6c9a7-template-blocks-save-inline-chromium/error-context.md
+
+  5) [chromium] › tests/Browser/f1-b12.spec.ts:427:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark 
+
+    Error: axe violations — sla (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:462:9
+
+    Error Context: test-results/f1-b12-B9-S07-—-SLA-polici-2c0e6-h-hook-axe-clean-light-dark-chromium/error-context.md
+
+  6) [chromium] › tests/Browser/f1-b12.spec.ts:599:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark 
+
+    Error: axe violations — hours editor (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:658:9
+
+    Error Context: test-results/f1-b12-B9-S08-—-business-h-2b6b6-g-rows-axe-clean-light-dark-chromium/error-context.md
+
+  7) [chromium] › tests/Browser/f1-b12.spec.ts:792:5 › B9-S09 — macros manager › §I I01 + I02 + I04: the manager grouped by scope (personal before shared, the permission key on the group head, kind tag, bundled chips, usage); the pill body — brace-free pills, delete-as-unit by Backspace and by ✕, the announced state list; bundled actions with the EC-09 notice quoted; axe-clean light + dark 
+
+    Error: axe violations — macros (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:831:9
+
+    Error Context: test-results/f1-b12-B9-S09-—-macros-man-1c1ae-quoted-axe-clean-light-dark-chromium/error-context.md
+
+  8) [chromium] › tests/Browser/f1-b12.spec.ts:927:5 › B9-S10 — fields manager › §J J01 + J02 + J06: entity tabs with counts; the row anatomy (↑↓, both labels, the immutable key, the 🔒 type badge, flags, used-in counts); the editor — key derived at birth, the 13-type picker on a new field, NO type control on a saved one (the lock law in words), options with stable values, validation per type, the N-06 line, where-used live; the Doc 08 seam on the customer tab; axe-clean light + dark 
+
+    Error: axe violations — fields (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:971:9
+
+    Error Context: test-results/f1-b12-B9-S10-—-fields-man-f2f04-er-tab-axe-clean-light-dark-chromium/error-context.md
+
+  9) [chromium] › tests/Browser/f1-b12.spec.ts:1114:5 › B9-S11 — form builder › §K K01 + K02 + K03: the B5-S07 chrome — the 13 types and the refs on the palette, step tabs with dots, the field cards (both labels, key, ref/inline tag, type), the placement menu with Alt-arrows, the inspector with labels/help per language, required-when-visible, the conditional that never offers a later field and its plain sentence, the branch glyph on the card; axe-clean light + dark 
+
+    Error: axe violations — form builder (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:1179:9
+
+    Error Context: test-results/f1-b12-B9-S11-—-form-build-52f52-e-card-axe-clean-light-dark-chromium/error-context.md
+
+  10) [chromium] › tests/Browser/f1-b12.spec.ts:1278:5 › B9-S11 — form builder › §K K07: the forms list — the seeded forms carry "seeded · editable" (content, not config), each row its shape, version and bindings; K01 375: the builder is READ posture with the notice, steps and fields; no overflow; axe-clean both themes 
+
+    Error: axe violations — forms list (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:1292:9
+
+    Error Context: test-results/f1-b12-B9-S11-—-form-build-6041a-rflow-axe-clean-both-themes-chromium/error-context.md
+
+  11) [chromium] › tests/Browser/f1-b12.spec.ts:1309:5 › B9-S12 — CSAT › §L L01 + L04: the three registered keys as settings rows (label · key · description · control · provenance · reset) with the consequence BEFORE save and the live change count on the verb; what a survey is, the Doc 15 events, the designed absence; the shipped labels per language; axe-clean light + dark 
+
+    Error: axe violations — csat (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:1336:9
+
+    Error Context: test-results/f1-b12-B9-S12-—-CSAT-§L-L0-6e3f6-nguage-axe-clean-light-dark-chromium/error-context.md
+
+  12) [chromium] › tests/Browser/f1-b12.spec.ts:1401:5 › B9-S13 — degraded, error and cross-cutting › §M M01: the hub — seven cards with live sub-lines, the chrome legend (Organization real, People / Channels drawn, Knowledge base, the seven rows), the palette row; axe-clean light + dark 
+
+    Error: axe violations — hub (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:1421:9
+
+    Error Context: test-results/f1-b12-B9-S13-—-degraded-e-fe91e-te-row-axe-clean-light-dark-chromium/error-context.md
+
+  13) [chromium] › tests/Browser/f1-b12.spec.ts:1428:5 › B9-S13 — degraded, error and cross-cutting › §M M02: the execution detail page — event, ticket, rule, guards, the condition results with evaluated values and the elided twin beside them, the action outcomes in order; reached from the editor’s log 
+
+    Error: axe violations — execution (light)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "link-name: a[href$=\"widgets\"]",
+    + ]
+
+      81 |         ),
+      82 |         `axe violations — ${label}`,
+    > 83 |     ).toEqual([]);
+         |       ^
+      84 | }
+      85 | async function shot(
+      86 |     page: Page,
+        at axeClean (/home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:83:7)
+        at /home/kidus/projects/na-live-support/tests/Browser/f1-b12.spec.ts:1502:9
+
+    Error Context: test-results/f1-b12-B9-S13-—-degraded-e-58a9e-ached-from-the-editor’s-log-chromium/error-context.md
+
+  14) [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+
+    Error: widget:harness config failed: Illuminate\Database\Eloquent\ModelNotFoundException No query results for model [App\Models\Widget] 018f6b2e-0000-7000-8000-00000000d131 at vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php:634 630▕ return $result; 631▕ } 632▕ 633▕ if (is_null($result)) { ➜ 634▕ throw (new ModelNotFoundException)->setModel( 635▕ get_class($this->model), $id 636▕ ); 637▕ } 638▕ 1 app/Console/Commands/Widget/WidgetHarness.php:110 Illuminate\Database\Eloquent\Builder::findOrFail("018f6b2e-0000-7000-8000-00000000d131") 2 app/Console/Commands/Widget/WidgetHarness.php:70 App\Console\Commands\Widget\WidgetHarness::run_("config") Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan widget:harness config --latest --value=off
+
+       at support/panel.ts:42
+
+      40 |     } catch (e) {
+      41 |         const err = e as { stdout?: string; stderr?: string; message: string };
+    > 42 |         throw new Error(
+         |               ^
+      43 |             `widget:harness ${action} failed: ${String(err.stderr ?? '')} ${String(err.stdout ?? '')} ${err.message}`
+      44 |                 .replace(/\s+/g, ' ')
+      45 |                 .slice(0, 1500),
+        at harness (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:42:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-acceptance.spec.ts:159:9
+
+    Error Context: test-results/widget-acceptance-AC-B3-01-0a0c7-ctive-fired-·-out-of-hours--widget/error-context.md
+
+  15) [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone 
+
+    Error: widget:harness config failed: Illuminate\Database\Eloquent\ModelNotFoundException No query results for model [App\Models\Widget] 018f6b2e-0000-7000-8000-00000000d131 at vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php:634 630▕ return $result; 631▕ } 632▕ 633▕ if (is_null($result)) { ➜ 634▕ throw (new ModelNotFoundException)->setModel( 635▕ get_class($this->model), $id 636▕ ); 637▕ } 638▕ 1 app/Console/Commands/Widget/WidgetHarness.php:110 Illuminate\Database\Eloquent\Builder::findOrFail("018f6b2e-0000-7000-8000-00000000d131") 2 app/Console/Commands/Widget/WidgetHarness.php:70 App\Console\Commands\Widget\WidgetHarness::run_("config") Command failed: docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app php artisan widget:harness config --latest --value=off
+
+       at support/panel.ts:42
+
+      40 |     } catch (e) {
+      41 |         const err = e as { stdout?: string; stderr?: string; message: string };
+    > 42 |         throw new Error(
+         |               ^
+      43 |             `widget:harness ${action} failed: ${String(err.stderr ?? '')} ${String(err.stdout ?? '')} ${err.message}`
+      44 |                 .replace(/\s+/g, ' ')
+      45 |                 .slice(0, 1500),
+        at harness (/home/kidus/projects/na-live-support/tests/Browser/support/panel.ts:42:15)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:49:5
+
+    Error Context: test-results/widget-forms-hours-F09-F10-1cf25-ticket-and-the-MASKED-phone-widget/error-context.md
+
+  15 failed
+    [chromium] › tests/Browser/f1-b12.spec.ts:121:5 › B9-S13 M01 — the Workflow chrome › the shared Backoffice nav with the Workflow group live: Organization a link, People/Channels drawn, Knowledge base one row, the seven Workflow rows with aria-current; the hub crumb; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:139:5 › B9-S05 — the rules list › §E: the toolbar (search · trigger · state · guard trips · the BR-05 limits), the explainer, the row anatomy (position with ↑↓ on the selected row · name + description · trigger · matched + sparkline or "no runs yet" · last run · switch + state word), the legend; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:226:5 › B9-S06 — the rule editor › §F F01 + F02: three numbered panels in execution order, the header state + position stamp, the 13 trigger chips, schedule → cron with the five-minute floor stated and the tenant-timezone next run, cooldown + run window hints; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:276:5 › B9-S06 — the rule editor › §F F05 + F06: all 15 action types as cards with their door named; the three external arms CLOSED (SMS = template reference, webhook = allowlist pick with no URL field, AI task = three names); an SMS card without a template blocks save inline 
+    [chromium] › tests/Browser/f1-b12.spec.ts:427:5 › B9-S07 — SLA policies › §G G01 + G02 + G04 + G06: the ordered two-pane page — list rows (position · name · match summary · target line · state), ↑↓ on the selected row, the FR-09 footer; the editor with the BR-03 banner, the FR-08 match pickers, targets per priority × stage, clock + calendar + warn %, the pause switches with captions and the implied line, the breach hook; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:599:5 › B9-S08 — business hours › §H H01 + H02 + H03 + H05: the editor for the default calendar — the BR-03/EC-05 banner naming both facts, the tenant timezone labelled (UTC offset), THE PAINTER (drag paints a band with the live line, release applies, Esc cancels), the interval list with a 24:00 close, the holiday table with recurring rows; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:792:5 › B9-S09 — macros manager › §I I01 + I02 + I04: the manager grouped by scope (personal before shared, the permission key on the group head, kind tag, bundled chips, usage); the pill body — brace-free pills, delete-as-unit by Backspace and by ✕, the announced state list; bundled actions with the EC-09 notice quoted; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:927:5 › B9-S10 — fields manager › §J J01 + J02 + J06: entity tabs with counts; the row anatomy (↑↓, both labels, the immutable key, the 🔒 type badge, flags, used-in counts); the editor — key derived at birth, the 13-type picker on a new field, NO type control on a saved one (the lock law in words), options with stable values, validation per type, the N-06 line, where-used live; the Doc 08 seam on the customer tab; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:1114:5 › B9-S11 — form builder › §K K01 + K02 + K03: the B5-S07 chrome — the 13 types and the refs on the palette, step tabs with dots, the field cards (both labels, key, ref/inline tag, type), the placement menu with Alt-arrows, the inspector with labels/help per language, required-when-visible, the conditional that never offers a later field and its plain sentence, the branch glyph on the card; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:1278:5 › B9-S11 — form builder › §K K07: the forms list — the seeded forms carry "seeded · editable" (content, not config), each row its shape, version and bindings; K01 375: the builder is READ posture with the notice, steps and fields; no overflow; axe-clean both themes 
+    [chromium] › tests/Browser/f1-b12.spec.ts:1309:5 › B9-S12 — CSAT › §L L01 + L04: the three registered keys as settings rows (label · key · description · control · provenance · reset) with the consequence BEFORE save and the live change count on the verb; what a survey is, the Doc 15 events, the designed absence; the shipped labels per language; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:1401:5 › B9-S13 — degraded, error and cross-cutting › §M M01: the hub — seven cards with live sub-lines, the chrome legend (Organization real, People / Channels drawn, Knowledge base, the seven rows), the palette row; axe-clean light + dark 
+    [chromium] › tests/Browser/f1-b12.spec.ts:1428:5 › B9-S13 — degraded, error and cross-cutting › §M M02: the execution detail page — event, ticket, rule, guards, the condition results with evaluated values and the elided twin beside them, the action outcomes in order; reached from the editor’s log 
+    [widget] › tests/Browser/widget-acceptance.spec.ts:110:1 › AC-B3-01 assertion two: the prohibited class is absent across the configuration matrix (default · Messages-only · pre-chat off/optional/required · proactive fired · out-of-hours) 
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:46:1 › F09/F10: closed hours with the bot off → the offline form instead of the composer; the receipt cites the ticket and the MASKED phone 
+  11 passed (3.5m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T13:44:43Z
+# duration:   821s
+# EXIT:       1
