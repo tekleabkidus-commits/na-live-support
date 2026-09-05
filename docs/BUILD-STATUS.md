@@ -33,6 +33,18 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, THIRD (owner-ordered, 2026-09-05 15:55Z, after the push of 7025d7a): 33975886140 on 7025d7a IN PROGRESS — Stages 1 + 2 GREEN, 3 + 3b running, Stage 4 not yet started; 33973914323 on 22108e6 RECORDED = FAILURE at the Stage 4 bring-up exactly as predicted (no browser test ran); commit = this section's SHA
+
+**Power line (R-D13-6 as amended):** BatteryStatus 1, **10%** — stated; docs only in this commit, nothing local was run or is running.
+
+**Billing/annotations first:** no billing annotation on either run; no non-warning annotation yet on 33975886140.
+
+**33975886140 on 7025d7a (created 15:47:51Z) — `in_progress` at the look:** Stage 1 lint + static ✓ (15:50:34Z), Stage 2 unit ✓ (15:51:05Z), Stage 3 integration + Stage 3b soak running since 15:51Z; Stage 4 browser not started (it follows Stage 3, then runs the whole Playwright suite for the first time in CI since step 8b — on the order of 35–40 minutes once its bring-up passes). **No verdict — the Batch C checkpoint's verdict of record is read at the next look the owner orders. Step 13 does not open.**
+
+**33973914323 on 22108e6 — COMPLETED, `failure` (15:32:35Z), recorded beside it:** Stages 1, 2, 3 (15:27:07Z), 3b (15:23:24Z) GREEN — the second CI witness of P-CAL-WEEKDAY's weekend branch and of the P-NAV-WIDGETS landing's Doc 12 suites; **Stage 4 FAILURE at step 7, the stack bring-up (`compose up --build --wait`), the dump step ran, steps 9–13 (seed, relay probe, Playwright install, origin probe, `npx playwright test`) SKIPPED — the same wall as 0835a7b's run, the F-C2 cause, fixed at 7025d7a. No spec-level red exists to name.** Stages 5–7 skipped by design.
+
+**STOP:** the owner orders the next look once 33975886140 completes. Green on Doc 13's own terms → step 13 close-out; red on a Doc 13 cause → fix first, report before landing.
+
 ## SESSION-13 (Doc 13) — HARNESS WORKER HEALTHCHECKS LANDED (owner's go, 2026-09-05; the F-C2 correction of record; commit = this section's SHA — its CI run is the Batch C checkpoint's VERDICT OF RECORD, the first CI Stage 4 to run past the bring-up since step 8b)
 
 **Power line (R-D13-6 as amended):** BatteryStatus 1, 19%. The diff, a record line, a commit.
