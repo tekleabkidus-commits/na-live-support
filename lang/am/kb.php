@@ -108,6 +108,7 @@ return [
         'nav_channels' => 'ቻናሎች',
         'nav_kb' => 'የእውቀት ማዕከል',
         'nav_workflow' => 'የስራ ፍሰት',
+        'nav_widgets' => 'የድር ውይይት መግብር',
         'categories_title' => 'ምድቦች',
         'crumb_editing' => 'በማረም ላይ',
         'category_one' => 'ምድብ',

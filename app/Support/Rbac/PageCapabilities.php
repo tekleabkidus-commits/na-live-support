@@ -49,6 +49,9 @@ final class PageCapabilities
         'Workflow/Forms' => ['forms.view', 'forms.edit', 'forms.publish'],
         'Workflow/FormBuilder' => ['forms.view', 'forms.edit', 'forms.publish'],
         'Workflow/Csat' => ['settings.view', 'settings.edit'],
+        // Doc 13 §4.4 (S13 step 11): the Widget Designer — reads under view, every editor control under configure.
+        'Admin/Widgets/Index' => ['webchat.widgets.view', 'webchat.widgets.configure'],
+        'Admin/Widgets/Editor' => ['webchat.widgets.view', 'webchat.widgets.configure'],
         'Conversations/DeadLetters' => [
             'tickets.reply',
         ],

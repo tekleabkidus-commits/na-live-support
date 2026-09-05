@@ -7,7 +7,7 @@
 // page states its READ posture (Doc 10 §9): nothing greyed, nothing blank.
 defineProps<{
     t: Record<string, string>;
-    active: 'kb' | 'workflow' | 'organization';
+    active: 'kb' | 'workflow' | 'organization' | 'widgets';
     title: string;
     crumb?: { label: string; href?: string }[];
     readNote?: string;
@@ -47,6 +47,15 @@ defineProps<{
                     :aria-current="active === 'workflow' && !$slots['nav-sub'] ? 'page' : undefined"
                     data-testid="bo-nav-workflow"
                     >{{ t.nav_workflow }}</a
+                >
+                <!-- Doc 13 §4.4 (S13 step 11): the Widget Designer — a real row ("an unlinked screen is a worse deviation") -->
+                <a
+                    href="/admin/widgets"
+                    class="bo-nav-a"
+                    :class="{ on: active === 'widgets' }"
+                    :aria-current="active === 'widgets' ? 'page' : undefined"
+                    data-testid="bo-nav-widgets"
+                    >{{ t.nav_widgets }}</a
                 >
                 <!-- the Workflow group's sub-rows (Doc 12's pages render them; B9-S05 §E chrome) -->
                 <div v-if="$slots['nav-sub']" class="bo-nav-sub"><slot name="nav-sub" /></div>

@@ -123,6 +123,50 @@ effect(() => {
     if (q && q.position !== null) announce(t('queue.announce', { n: q.position }));
 });
 
+interface PreviewBoot {
+    envelope: ConfigEnvelope;
+    theme: 'light' | 'dark';
+    language: string;
+}
+/** Designer preview mode (S13 step 11): the panel bundle booted from an inlined envelope — no session, no transport, a fixture thread. */
+const PREVIEW = (window as unknown as { __NLW_PREVIEW?: PreviewBoot }).__NLW_PREVIEW ?? null;
+
+function bootPreview(p: PreviewBoot): void {
+    config.value = p.envelope;
+    strings.value = p.envelope.strings;
+    language.value = p.language;
+    document.documentElement.lang = p.language;
+    theme.value = p.theme;
+    if (!p.envelope.config.content.tabs.home) tab.value = 'messages';
+    const now = new Date().toISOString();
+    const fixture = (id: string, author: 'customer' | 'ai' | 'agent', body: string): Message => ({
+        id: 'preview:' + id,
+        created_at: now,
+        direction: author === 'customer' ? 'in' : 'out',
+        author,
+        kind: 'text',
+        body,
+        media: [],
+        delivery_state: author === 'customer' ? 'delivered' : null,
+        external_message_id: null,
+        occurred_at: now,
+        survey: null,
+        local: author === 'customer' ? 'delivered' : undefined,
+    });
+    // The drawn preview thread (B3-S08 J03): the greeting, a shortcut question, the assistant's line — all strings from the envelope.
+    const t = (k: string): string => {
+        const v = p.envelope.strings[k];
+        return typeof v === 'string' ? v : '';
+    };
+    messages.value = [
+        fixture('1', 'customer', t('preview.customer_line') || '…'),
+        fixture('2', 'ai', t('preview.assistant_line') || '…'),
+    ];
+    visitorId.value = 'preview';
+    boot.value = 'ready';
+    open.value = true;
+}
+
 async function bootSequence(): Promise<void> {
     boot.value = 'booting';
     // The session is the LOADER's mint (Doc 02 FR-21: only the host page can present the operator's origin).
@@ -583,6 +627,14 @@ function onLoaderMessage(ev: MessageEvent): void {
         if (!visitorId.value) void bootSequence();
         return;
     }
+    if (data.type === 'preview-config' && PREVIEW) {
+        // B3-S08 J03: the editor's draft, applied in place (EC-11) — the SAME object that publishes.
+        const draft = data.data as { config: ConfigEnvelope['config']; theme?: 'light' | 'dark' };
+        if (config.value) config.value = { ...config.value, config: draft.config };
+        if (draft.theme) theme.value = draft.theme;
+        if (draft.config.content.tabs.home === false && tab.value === 'home') tab.value = 'messages';
+        return;
+    }
     if (data.type !== 'api' || !data.data) return;
     const call = data.data as { method: string; args: unknown[] };
     switch (call.method) {
@@ -720,6 +772,10 @@ if (root) {
     window.addEventListener('message', onLoaderMessage);
     effect(() => {
         // Both frames share state through the loader's bus; each renders its own kind.
+        if (PREVIEW) {
+            frameKind.value = 'panel';
+            bootPreview(PREVIEW);
+        }
         render(frameKind.value === 'launcher' ? <LauncherFrame /> : <PanelFrame />, root);
     });
     effect(() => void envelope.value);

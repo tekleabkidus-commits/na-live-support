@@ -247,22 +247,10 @@ final class WidgetConfigController
         return ['en', 'am']; // the platform's shipped pair (C-08); operator content gates per language at the Designer
     }
 
-    /** @return array<string, mixed> the widget.* namespace for one language, keys intact (N-03) */
+    /** @return array<string, mixed> the widget.* namespace for one language, keys intact (N-03) — shared with the Designer's preview */
     private function strings(string $language): array
     {
-        $strings = trans('widget', [], $language);
-        if (! is_array($strings)) {
-            return [];
-        }
-        // Customer-facing branches ONLY: the staff notes (`staff.*`), the Backoffice
-        // label (`feature.*`) and the Designer (`designer.*`) never ride to the visitor.
-        foreach (['feature', 'staff', 'designer'] as $staff) {
-            unset($strings[$staff]);
-        }
-        /** @var array<string, mixed> $customer */
-        $customer = array_filter($strings, static fn ($k): bool => is_string($k), ARRAY_FILTER_USE_KEY);
-
-        return $customer;
+        return \App\Domain\Webchat\Config\CustomerStrings::for($language);
     }
 
     private static function int(mixed $value, int $default): int

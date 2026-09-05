@@ -117,6 +117,7 @@ return [
         'nav_channels' => 'Channels',
         'nav_kb' => 'Knowledge base',
         'nav_workflow' => 'Workflow',
+        'nav_widgets' => 'Web chat widget',
         'categories_title' => 'Categories',
         'crumb_editing' => 'Editing',
         'category_one' => 'Category',

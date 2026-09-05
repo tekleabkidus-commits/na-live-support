@@ -20,7 +20,7 @@ function designerScene(array $permissions = ['webchat.widgets.view', 'webchat.wi
 
 function designer(User $user, string $method, string $path, array $body = []): TestResponse
 {
-    $url = 'https://localhost/admin/widgets'.$path;
+    $url = 'https://localhost/admin/widgets/api'.$path;
     $request = test()->actingAs($user, 'staff');
 
     $response = match ($method) {

@@ -116,6 +116,6 @@ it('the permission split: view-only reads but cannot mutate (403); no session â†
 it('no staff session â†’ no door (401)', function (): void {
     [$tenant] = designerScene();
     bindTenant($tenant);
-    $status = test()->getJson('https://localhost/admin/widgets')->status();
+    $status = test()->getJson('https://localhost/admin/widgets/api')->status();
     expect(in_array($status, [401, 302], true))->toBeTrue('the staff guard refuses (401) or sends to login (302): '.$status);
 });

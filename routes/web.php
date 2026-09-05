@@ -49,7 +49,12 @@ Route::middleware([
 
     // Doc 13 §4.4 / FR-19 / FR-20 (S13 step 10): the Widget Designer's JSON doors. Reads under
     // `webchat.widgets.view`; every mutation under `.configure` + its registered audit key.
-    Route::prefix('widgets')->name('widgets.')->group(function (): void {
+    // S13 step 11: the Designer's PAGES (B3-S08 v3) — reads under the view key; the preview document is the panel bundle in preview mode.
+    $screens = App\Http\Controllers\Admin\WidgetDesignerScreensController::class;
+    Route::get('widgets', [$screens, 'index'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.index');
+    Route::get('widgets/{widgetId}/edit', [$screens, 'editor'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.editor');
+    Route::get('widgets/{widgetId}/preview', [$screens, 'preview'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.preview');
+    Route::prefix('widgets/api')->name('widgets.')->group(function (): void {
         $c = App\Http\Controllers\Admin\WidgetDesignerController::class;
         Route::get('/', [$c, 'index'])->middleware('permission:webchat.widgets.view')->name('index');
         Route::post('/', [$c, 'store'])->middleware(['permission:webchat.widgets.configure', 'audit:widget.created'])->name('store');
