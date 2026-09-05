@@ -92,6 +92,10 @@ capture:
 perf:
 	$(COMPOSE) exec -e PERF_BUDGETS_ENFORCE=1 app ./vendor/bin/pest --testsuite=Performance
 
+## Doc 13 §12 timing harness (dev-indicative; --assert holds the spec numbers on wall power only, R-D13-6)
+widget-timing:
+	bash ci/widget-loader-timing.sh
+
 ## every CI gate, in registry order, with a PASS/FAIL summary
 gates:
 	bash ci/run-gates.sh

@@ -12,6 +12,7 @@ import {
     sheet,
     tab,
     tabsShown,
+    messages,
 } from '../state';
 import { theme } from '../theme';
 import type { Shortcut } from '../types';
@@ -24,6 +25,7 @@ import { lightbox, Thread } from './Thread';
 interface Props {
     onClose: () => void;
     onSend: (text: string, media?: { reference: string; mime: string }) => void;
+    onTranscript: () => void;
     onTyping: () => void;
     onStar: (token: string, score: number) => void;
     onShortcut: (s: Shortcut) => void;
@@ -59,6 +61,7 @@ export const Panel: FunctionComponent<Props> = (p) => {
                 !c.hours.open &&
                 !c.capabilities.chatbot &&
                 c.forms.offline.version_id &&
+                messages.value.length === 0 && // F11: a visitor IN a thread keeps it across the boundary — the offline form is for a visitor with no thread yet
                 (tab.value === 'messages' || !tabs.home)
               ? 'offline'
               : 'none';
@@ -223,6 +226,17 @@ export const Panel: FunctionComponent<Props> = (p) => {
                         onClick={() => (theme.value = theme.value === 'dark' ? 'light' : 'dark')}
                     >
                         ◐ {theme.value}
+                    </button>
+                    <button
+                        type="button"
+                        role="menuitem"
+                        data-role="transcript"
+                        onClick={() => {
+                            setMenu(false);
+                            p.onTranscript();
+                        }}
+                    >
+                        ⤓ {t('overflow.transcript')}
                     </button>
                     <button type="button" role="menuitem" onClick={() => setMenu(false)}>
                         {t('overflow.privacy')}

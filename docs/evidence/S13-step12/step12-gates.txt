@@ -1,0 +1,25 @@
+== make gates ==
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   PASS
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              PASS
+  isolation-suite           PASS
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+  widget-bundle-budget      PASS
+  widget-vocabulary         PASS
+Gate summary: 16 passed, 0 failed, 0 skipped.
+== make lint ==
+
+✖ 42 problems (0 errors, 42 warnings)
+  0 errors and 15 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+npx tsc --noEmit -p widget/tsconfig.json

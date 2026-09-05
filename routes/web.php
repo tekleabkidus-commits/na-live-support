@@ -53,7 +53,7 @@ Route::middleware([
     $screens = App\Http\Controllers\Admin\WidgetDesignerScreensController::class;
     Route::get('widgets', [$screens, 'index'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.index');
     Route::get('widgets/{widgetId}/edit', [$screens, 'editor'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.editor');
-    Route::get('widgets/{widgetId}/preview', [$screens, 'preview'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.preview');
+    Route::get('widgets/{widgetId}/preview', [$screens, 'preview'])->middleware(['permission:webchat.widgets.view', App\Http\Middleware\WidgetFrameSurface::class.':self'])->name('widgets.screens.preview');
     Route::prefix('widgets/api')->name('widgets.')->group(function (): void {
         $c = App\Http\Controllers\Admin\WidgetDesignerController::class;
         Route::get('/', [$c, 'index'])->middleware('permission:webchat.widgets.view')->name('index');

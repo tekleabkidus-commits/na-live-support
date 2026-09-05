@@ -147,6 +147,7 @@ return [
     'workflow.forms.preview' => 'Doc 12 FR-22: FormPublisher::preview runs the publish validations over a draft schema and returns the blocks + usage — a read; publish is the audited door.',
     'widget.config' => 'Read-only: the live config version + capabilities; mutates nothing.',
     'widget.messages.index' => 'Read-only cursor page of the visitor\'s own thread; mutates nothing (the thread rows are the record).',
+    'widget.transcript' => 'Doc 13 SEC-06: a read-only download of the visitor\'s own thread rows; mutates nothing (the rate-limit counter lives in redis-volatile).',
     'widget.messages.store' => 'Doc 13 T-03 / Doc 04 FR-10: the inbound door enqueues; the message row + message.received EVENT are the durable record (the telegram webhook precedent) — an audit row per visitor message would be a second ledger.',
     'widget.typing' => 'A TTL-bound presence signal in redis-volatile (EC-12); nothing durable is mutated.',
     'widget.receipts' => 'Doc 13 T-02: the delivery transition is DeliveryStateMachine\'s and publishes message.delivered — the event IS the record (Doc 04 FR-13).',

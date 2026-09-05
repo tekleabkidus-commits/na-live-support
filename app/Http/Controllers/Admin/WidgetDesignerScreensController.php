@@ -108,7 +108,7 @@ final class WidgetDesignerScreensController extends Controller
 
     /**
      * The preview document: the panel bundle, booted in preview mode (no session, no socket),
-     * framed by the Backoffice page itself — `frame-ancestors 'self'` for THIS document only.
+     * framed by the Backoffice page itself — `frame-ancestors 'self'` for THIS document only (the route's WidgetFrameSurface `self` mode).
      */
     public function preview(Request $request, string $widgetId): Response
     {
@@ -119,7 +119,7 @@ final class WidgetDesignerScreensController extends Controller
         $bundle = $this->bundles->forWidget($widget);
         $nonce = $request->attributes->get(SecurityHeaders::REQUEST_NONCE_ATTRIBUTE);
         $nonce = is_string($nonce) ? $nonce : '';
-        $request->attributes->set(SecurityHeaders::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE, ["'self'"]);
+        // frame-ancestors 'self' comes from WidgetFrameSurface's `self` mode on the route — the ONE setter (P-FRAME-ANCESTORS condition 1).
         $envelope = [
             'v' => 1,
             'widget_id' => VisitorConversation::widgetId($widget),

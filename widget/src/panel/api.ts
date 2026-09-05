@@ -193,6 +193,16 @@ export class WidgetApi {
         });
     }
 
+    /** SEC-06 — the visitor's own transcript as text (null = the door is closed, refused or rate-limited). */
+    async transcript(language: string): Promise<{ text: string | null; status: number }> {
+        const r = await this.call(
+            'GET',
+            '/api/widget/v1/transcript?language=' + encodeURIComponent(language),
+        );
+        if (!r) return { text: null, status: 0 };
+        return { text: r.ok ? await r.text() : null, status: r.status };
+    }
+
     /** FR-24 — page context, allowlist-filtered SERVER-side (an undeclared key never persists). */
     async context(context: Record<string, unknown>): Promise<boolean> {
         const r = await this.call('POST', '/api/widget/v1/context', { context });

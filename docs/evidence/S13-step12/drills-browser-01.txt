@@ -1,0 +1,41 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      drills-browser
+# set:        S13-step12
+# command:    npx playwright test tests/Browser/widget-bot-down.spec.ts tests/Browser/widget-hours-cliff.spec.ts tests/Browser/widget-attended.spec.ts tests/Browser/widget-transcript.spec.ts --project=widget --reporter=line
+# started:    2026-09-05T11:42:39Z
+# git:        01b5b15 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 4 tests using 1 worker
+
+[1/4] [widget] › tests/Browser/widget-attended.spec.ts:6:1 › I02/I03: unattended → notification + title counter + one sound; attended → none of the three
+[2/4] [widget] › tests/Browser/widget-bot-down.spec.ts:6:1 › K04 / FS-04: with the chatbot switched off the visitor goes straight to the queue — no AI bubble, no failure word, the queue card
+  1) [widget] › tests/Browser/widget-bot-down.spec.ts:6:1 › K04 / FS-04: with the chatbot switched off the visitor goes straight to the queue — no AI bubble, no failure word, the queue card 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      24 |         await expect(panel.locator('[data-role=queue]')).toBeVisible({ timeout: 30000 });
+      25 |         await page.waitForTimeout(4000);
+    > 26 |         expect(await panel.locator('[data-message][data-author=ai]').count()).toBe(0);
+         |                                                                               ^
+      27 |         const text = await panel.locator('[role=dialog]').innerText();
+      28 |         expect(text).not.toMatch(/error|fail|unavailable|down/i);
+      29 |         await expect(panel.locator('textarea')).toBeVisible(); // the visitor keeps typing into the same thread (BR-04)
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-bot-down.spec.ts:26:79
+
+    Error Context: test-results/widget-bot-down-K04-FS-04--2f5f1-failure-word-the-queue-card-widget/error-context.md
+
+
+[3/4] [widget] › tests/Browser/widget-hours-cliff.spec.ts:7:1 › F11: the calendar closes mid-conversation — the thread and the composer stay; the band tells the truth; a staff reply still lands
+[4/4] [widget] › tests/Browser/widget-transcript.spec.ts:6:1 › SEC-06: the transcript carries the thread verbatim with localized frame text and no internal note; the file is handed to the browser
+  1 failed
+    [widget] › tests/Browser/widget-bot-down.spec.ts:6:1 › K04 / FS-04: with the chatbot switched off the visitor goes straight to the queue — no AI bubble, no failure word, the queue card 
+  3 passed (53.5s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T11:43:34Z
+# duration:   55s
+# EXIT:       1

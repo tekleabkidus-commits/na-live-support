@@ -557,6 +557,8 @@ Route::group([], function (): void {
                         ->name('widget.config');
                     Route::get('messages', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'index'])
                         ->name('widget.messages.index');
+                    // Doc 13 SEC-06 (S13 step 12): the visitor's OWN transcript, text download; notes structurally absent; rate-limited per visitor.
+                    Route::get('transcript', [App\Http\Controllers\Widget\WidgetTranscriptController::class, 'show'])->name('widget.transcript');
                     Route::post('messages', [App\Http\Controllers\Widget\WidgetMessagesController::class, 'store'])
                         ->middleware(App\Http\Middleware\ThrottleVisitorToken::class.':messages')
                         ->name('widget.messages.store');

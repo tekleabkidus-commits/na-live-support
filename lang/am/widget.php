@@ -197,6 +197,18 @@ return [
     ],
 
     // S13 step 11 — the Designer's preview thread (customer-facing copy: rides the preview envelope only; the vocabulary gate sweeps it)
+    // S13 step 12 — SEC-06 transcript: the frame text (content verbatim)
+    'transcript' => [
+        'title' => 'የውይይትዎ ግልባጭ',
+        'exported' => 'የተላከበት :at',
+        'note' => 'ይህ ፋይል የእርስዎን ውይይት ብቻ ይይዛል። ለድጋፍ ቡድኑ ውስጣዊ የሆነ ምንም ነገር የዚህ አካል አይደለም።',
+        'you' => 'እርስዎ',
+        'assistant' => 'የ AI ረዳት',
+        'team' => 'የድጋፍ ቡድን',
+        'system' => 'ማስታወሻ',
+        'attachment' => '{1} [:count አባሪ]|[2,*] [:count አባሪዎች]',
+        'rate_limited' => 'ይህን ግልባጭ አስቀድመው ጥቂት ጊዜ አውርደዋል — እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።',
+    ],
     'preview' => [
         'customer_line' => 'ገንዘቤ የት ደረሰ?',
         'assistant_line' => 'ማውጣቶች አብዛኛውን ጊዜ በ24 ሰዓታት ውስጥ ይደርሳሉ። ማጣቀሻውን ይንገሩኝ እና ሁኔታውን አረጋግጥልዎታለሁ።',

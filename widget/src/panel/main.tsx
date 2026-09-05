@@ -375,6 +375,26 @@ function ready(): Promise<void> {
 
 let pendingPreChat: Record<string, unknown> | null = null;
 let seq = 0;
+/** SEC-06: the visitor's own transcript, fetched with the visitor token and handed to the browser as a text file. */
+async function downloadTranscript(): Promise<void> {
+    const r = await api.transcript(language.value);
+    if (!r.text) {
+        announce(t(r.status === 429 ? 'transcript.rate_limited' : 'retry.body'));
+        return;
+    }
+    const blob = new Blob([r.text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'transcript-' + new Date().toISOString().slice(0, 10) + '.txt';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    (window as unknown as { __nlwTranscript?: string }).__nlwTranscript = r.text; // test hook: the text that was handed over
+}
+
 async function send(text: string, media?: { reference: string; mime: string }): Promise<void> {
     const clientId = `wc_${Date.now().toString(36)}_${(seq++).toString(36)}`;
     const now = new Date().toISOString();
@@ -735,6 +755,7 @@ function PanelFrame(): preact.JSX.Element {
                 post('api', { method: 'close', args: [] });
             }}
             onSend={(text, media) => void send(text, media)}
+            onTranscript={() => void downloadTranscript()}
             onTyping={() => void api.typing()}
             onStar={(token, score) => {
                 void api.csat(token, score).then(() => sync(api));
@@ -758,6 +779,8 @@ function PanelFrame(): preact.JSX.Element {
     socketUp: () => socket?.isUp() ?? false,
     isLeader: () => leader?.isLeader() ?? false,
     themeChoice: () => theme.value, // read-only: the preview/theme legs assert the choice behind data-theme
+    hoursOpen: () => config.value?.hours.open ?? null, // read-only: F11's proof reads the envelope's hours fact
+    chatbot: () => config.value?.capabilities.chatbot ?? null, // read-only: K04's proof reads the enablement fact
     dropSocket: () => socket?.drop(),
     polling: () => isPolling(),
     proactive: () => ({

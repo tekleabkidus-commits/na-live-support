@@ -26,8 +26,21 @@ use Symfony\Component\HttpFoundation\Response;
 final class WidgetFrameSurface
 {
     /** @param  Closure(Request): Response  $next */
-    public function handle(Request $request, Closure $next): Response
+    /**
+     * @param  Closure(Request): Response  $next
+     * @param  string  $mode  `widget` (default): the widget's allowlist frames the panel document;
+     *                        `self` (S13 step 11, the Designer's preview): the platform's OWN pages frame
+     *                        the preview document — a staff-authenticated route only. This middleware stays
+     *                        the ONE setter of the attribute (P-FRAME-ANCESTORS condition 1); the mode is
+     *                        a route declaration, never a request input.
+     */
+    public function handle(Request $request, Closure $next, string $mode = 'widget'): Response
     {
+        if ($mode === 'self') {
+            $request->attributes->set(SecurityHeaders::REQUEST_ANCESTOR_SOURCES_ATTRIBUTE, ["'self'"]);
+
+            return $next($request);
+        }
         $keyId = $request->attributes->get(ResolveTenant::KEY_ID_ATTRIBUTE);
         $widget = is_string($keyId) ? Widget::query()->where('key_id', $keyId)->first() : null;
         $origins = $widget instanceof Widget && $widget->deleted_at === null ? $widget->allowed_origins : [];

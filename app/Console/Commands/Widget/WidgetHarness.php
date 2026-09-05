@@ -129,6 +129,15 @@ final class WidgetHarness extends Command
             return self::SUCCESS;
         }
 
+        if ($action === 'chatbot-off' || $action === 'chatbot-on') {
+            // K04 / FS-04: Doc 09's kill switch for the webchat chatbot surface — the widget shows the straight-to-queue
+            // experience (no AI bubble, the handoff line + the queue card); `capabilities.chatbot` answers false.
+            $id = app(\App\Domain\Ai\KillSwitch\KillSwitches::class)->flip('chatbot', null, null, $action === 'chatbot-off', 'harness fixture', $agent->identifier()); // tenant-wide: the switch grid's channel names are Doc 09's (telegram|web), the surface switch covers webchat
+            $this->line('SWITCH='.$id.' '.$action);
+
+            return self::SUCCESS;
+        }
+
         if ($action === 'hours-close' || $action === 'hours-open') {
             // Doc 12's calendar door: the tenant default calendar's weekdays — closed = a one-minute window at 00:00, open = all day.
             $writer = app(\App\Domain\Hours\CalendarWriter::class);
@@ -250,6 +259,13 @@ final class WidgetHarness extends Command
                 $this->line('STATE='.$conversation->state);
 
                 return self::SUCCESS;
+            case 'note':
+                // SEC-06's positive control: an internal note in the visitor's conversation — the staff thread sees it, the visitor never does.
+                $text = (string) $this->option('text');
+                $note = app(\App\Domain\Conversations\Notes\NotesWriter::class)->addSystemNote($conversation, $text !== '' ? $text : '[FIXTURE] STAFF ONLY note');
+                $this->line('NOTE='.$note->identifier());
+
+                return self::SUCCESS;
             case 'resolve':
                 $ticket = $this->openTicket($conversation);
                 app(ResolveTicket::class)->resolve($ticket, $agent, 'Resolved from the harness (fixture).');
@@ -257,7 +273,7 @@ final class WidgetHarness extends Command
 
                 return self::SUCCESS;
             default:
-                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|block|unblock');
+                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|block|unblock|note');
 
                 return self::FAILURE;
         }

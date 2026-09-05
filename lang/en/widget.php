@@ -204,6 +204,18 @@ return [
     ],
 
     // S13 step 11 — the Designer's preview thread (customer-facing copy: rides the preview envelope only; the vocabulary gate sweeps it)
+    // S13 step 12 — SEC-06 transcript: the frame text (content verbatim)
+    'transcript' => [
+        'title' => 'Your conversation transcript',
+        'exported' => 'Exported :at',
+        'note' => 'This file holds your own conversation only. Nothing internal to the support team is part of it.',
+        'you' => 'You',
+        'assistant' => 'AI assistant',
+        'team' => 'Support team',
+        'system' => 'Note',
+        'attachment' => '{1} [:count attachment]|[2,*] [:count attachments]',
+        'rate_limited' => 'You have downloaded this transcript a few times already — please try again in a little while.',
+    ],
     'preview' => [
         'customer_line' => 'Where is my withdrawal?',
         'assistant_line' => 'Withdrawals usually land within 24 hours. Tell me the reference and I will check the status for you.',

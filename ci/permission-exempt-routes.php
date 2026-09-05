@@ -131,6 +131,7 @@ return [
     // pair is the principal, no staff permission model applies (BR-06).
     'widget.config' => 'Visitor surface (Doc 13 T-03/FR-20): the live config + capability envelope for the resolved widget; visitor-authenticated, no staff principal exists on this stack.',
     'widget.messages.index' => 'Visitor surface (Doc 13 T-03/FR-10): the visitor\'s OWN cursor page by the channel key (AC-04) — visitor-authenticated.',
+    'widget.transcript' => 'Visitor surface (Doc 13 SEC-06): the visitor\'s OWN conversation as a text download; visitor-token + cookie authenticated (widget guard), no staff principal exists; rate-limited per visitor.',
     'widget.messages.store' => 'Visitor surface (Doc 13 T-03/FR-12): the ONE inbound door — quota + enqueue + 202; the visitor principal is the author (customer), no staff permission applies.',
     'widget.typing' => 'Visitor surface (Doc 13 FR-10/T-03): the customer typing signal, TTL-bound (EC-12).',
     'widget.receipts' => 'Visitor surface (Doc 13 T-02): the visitor client\'s delivery ack on its OWN outbound rows (AC-04); the guard is the principal.',

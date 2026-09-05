@@ -1,0 +1,21 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      transcript-pest
+# set:        S13-step12
+# command:    docker compose -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app vendor/bin/pest tests/Feature/Widget/WidgetTranscriptTest.php
+# started:    2026-09-05T11:35:46Z
+# git:        01b5b15 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetTranscriptTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serves the visitor's own thread as text — you / assistant / staf[39m[90m…[39m [90m7.57s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is rate-limited per visitor by widget.transcript.rate_per_hour ([39m[90m…[39m [90m0.27s[39m  
+
+  [90mTests:[39m    [32;1m2 passed[39;22m[90m (25 assertions)[39m
+  [90mDuration:[39m [39m7.90s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-05T11:35:54Z
+# duration:   8s
+# EXIT:       0
