@@ -1,0 +1,43 @@
+diff --git a/tests/Feature/Hours/CalendarTest.php b/tests/Feature/Hours/CalendarTest.php
+index b9eabc0..54ca414 100644
+--- a/tests/Feature/Hours/CalendarTest.php
++++ b/tests/Feature/Hours/CalendarTest.php
+@@ -163,9 +163,10 @@ function weekdays95(): array
+     $writer->addHoliday($calendarId, '2026-09-11', 'Enkutatash', true, $actor);
+     $hours = app(HoursContract::class);
+ 
+-    $window = $hours->windowFor(null);
+-    expect($window['open'])->toBe('08:00')
+-        ->and($window['close'])->toBe('17:00');
++    // P-CAL-WEEKDAY (S13): `windowFor` projects TODAY (open/close) and the coming week (days) from the DB clock
++    // (C-11 — no seam to freeze); with a Mon–Fri fixture and a recurring Friday holiday BOTH halves are
++    // date-sensitive (weekends answered '00:00'; the week holding 2026-09-11 drops day 5). The windowFor
++    // assertion moved to the seven-day test below; every fixed-date assertion here is byte-untouched. [flagged]
+ 
+     // Wed 2026-09-02: 10:00 Addis = 07:00Z open; 18:00 Addis = 15:00Z closed.
+     expect($hours->isOpen(null, new DateTimeImmutable('2026-09-02T07:00:00Z')))->toBeTrue()
+@@ -181,3 +182,24 @@ function weekdays95(): array
+     expect($hours->nextOpen(null, new DateTimeImmutable('2026-09-10T15:00:00Z'))->format('Y-m-d\TH:i:s\Z'))
+         ->toBe('2026-09-14T05:00:00Z');
+ });
++
++it('P-CAL-WEEKDAY: a calendar painted on all seven days, no holiday, projects its window on ANY day the DB clock lands on — weekday-independent by construction', function (): void {
++    $tenant = createTenant();
++    bindTenant($tenant);
++    $writer = app(CalendarWriter::class);
++    $actor = (string) Str::uuid7();
++    $allWeek = [];
++    for ($d = 1; $d <= 7; $d++) {
++        $allWeek[$d] = [['open' => '08:00', 'close' => '17:00']];
++    }
++    $writer->create('Every day', ADDIS, $allWeek, $actor, isTenantDefault: true);
++    $hours = app(HoursContract::class);
++
++    $window = $hours->windowFor(null);
++    expect($window['open'])->toBe('08:00')
++        ->and($window['close'])->toBe('17:00')
++        ->and($window['days'])->toBe([1, 2, 3, 4, 5, 6, 7]);
++    // the day the projection used is the DB's, in the calendar's zone — recorded so a red names its day
++    $today = (int) $hours->now()->setTimezone(new DateTimeZone(ADDIS))->format('N');
++    expect($today)->toBeGreaterThanOrEqual(1)->toBeLessThanOrEqual(7);
++});
