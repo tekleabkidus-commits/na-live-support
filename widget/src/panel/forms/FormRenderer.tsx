@@ -133,6 +133,13 @@ export const FormRenderer: FunctionComponent<Props> = (p) => {
                                     </option>
                                 ))}
                             </select>
+                        ) : f.type === 'file' ? (
+                            // SEC-04 (step 13b): a file field renders INERT — no input, no upload
+                            // path. Uploads are the COMPOSER's, under the adapter's capability
+                            // (G05); a form never collects a file, so nothing interactive ships.
+                            <p class="nlw-field-note" data-role="file-inert">
+                                {t('prechat.file_note')}
+                            </p>
                         ) : f.type === 'checkbox' ? (
                             <input
                                 {...common}

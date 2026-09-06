@@ -137,6 +137,7 @@ return [
         'articles_count' => '{1} :count article|[2,*] :count articles',
     ],
     'prechat' => [
+        'file_note' => 'Attachments are shared in the chat, not on this form.',
         'optional_intro' => 'Leave a name and number if you would like us to follow up — or skip and start typing.',
         'required_intro' => 'So we can find your account, please tell us who you are.',
         'optional' => 'Optional',

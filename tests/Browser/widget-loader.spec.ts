@@ -6,6 +6,7 @@
 // frame-ancestors control.
 import { expect, test } from '@playwright/test';
 import { CUSTOMER, harnessWidgetKey } from './support/harness';
+import { harness } from './support/panel';
 
 const API = ['open', 'close', 'openHelp', 'identify', 'setLanguage', 'on', 'capture'];
 
@@ -165,4 +166,75 @@ test('NFR-01: a click on the loader-drawn bubble BEFORE the core arrived (the co
     await expect(
         page.frameLocator('iframe#nlw-launcher').locator('button.nlw-launcher'),
     ).toHaveAttribute('aria-label', 'Close support chat', { timeout: 10000 });
+});
+
+// S13 step 13b (advisor main recount) — FR-23: the plan's SPA leg, EXECUTED. A
+// pushState route change re-evaluates the URL proactive rules with NO re-init:
+// the same two iframes (sentinel-marked), no extra frames, the API object
+// untouched. The rule fires on the NEW url exactly as it does on a direct load.
+test('FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init)', async ({
+    page,
+}) => {
+    harness('config', '--value=off');
+    const key = harnessWidgetKey();
+    await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(key)}`);
+    await expect(page.locator('iframe#nlw-launcher')).toHaveCount(1);
+    await page.evaluate(() => {
+        document.getElementById('nlw-launcher')!.dataset.sentinel = 'fr23';
+        document.getElementById('nlw-panel')!.dataset.sentinel = 'fr23';
+        (window as unknown as { __nlwApiRef?: unknown }).__nlwApiRef = (
+            window as unknown as { PlatformChat: unknown }
+        ).PlatformChat;
+    });
+    const launcher = page.frameLocator('iframe#nlw-launcher');
+    await page.waitForTimeout(2500); // idle core boot; /host.html matches no rule
+    expect(await launcher.locator('[data-role=proactive]').count()).toBe(0);
+    await page.evaluate(() => history.pushState({}, '', '/deposit'));
+    await expect(launcher.locator('[data-role=proactive]')).toContainText(
+        'how long your deposit should take',
+        { timeout: 15000 },
+    );
+    // no re-init: same elements, same API object, exactly two widget frames
+    const survived = await page.evaluate(() => ({
+        launcher: document.getElementById('nlw-launcher')?.dataset.sentinel,
+        panel: document.getElementById('nlw-panel')?.dataset.sentinel,
+        sameApi:
+            (window as unknown as { __nlwApiRef?: unknown }).__nlwApiRef ===
+            (window as unknown as { PlatformChat: unknown }).PlatformChat,
+        frames: document.querySelectorAll('iframe').length,
+    }));
+    expect(survived).toEqual({ launcher: 'fr23', panel: 'fr23', sameApi: true, frames: 2 });
+});
+
+// S13 step 13b (advisor main recount) — EC-02: the plan's CSP leg, EXECUTED in the
+// browser on the harness. csp-host.html allows the snippet and the beacon but
+// refuses every frame (frame-src 'none'): the widget must fail SILENTLY (no
+// uncaught error, no visible remnant) and beacon `mount_fail:csp` — the reason
+// Health turns into the copy-paste fix.
+test('EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind', async ({
+    page,
+}) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    const beacons: string[] = [];
+    page.on('request', (r) => {
+        if (r.url().includes('/api/widget/v1/beacon') && r.method() === 'POST')
+            beacons.push(r.postData() ?? '');
+    });
+    const key = harnessWidgetKey();
+    await page.goto(`${CUSTOMER}/csp-host.html?key=${encodeURIComponent(key)}`);
+    await expect
+        .poll(() => beacons.some((b) => b.includes('mount_fail') && b.includes('csp')), {
+            timeout: 15000,
+        })
+        .toBe(true);
+    // silent + unmounted: no frames left, the namespaced globals withdrawn, the page unharmed
+    await expect(page.locator('iframe')).toHaveCount(0);
+    expect(
+        await page.evaluate(() => ({
+            api: (window as unknown as { PlatformChat?: unknown }).PlatformChat === undefined,
+            flag: (window as unknown as { __nlwLoaded?: unknown }).__nlwLoaded === undefined,
+        })),
+    ).toEqual({ api: true, flag: true });
+    expect(errors).toEqual([]);
 });

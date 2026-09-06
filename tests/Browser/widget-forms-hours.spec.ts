@@ -68,3 +68,34 @@ test('F09/F10: closed hours with the bot off → the offline form instead of the
         harness('hours-open');
     }
 });
+
+// S13 step 13b (advisor main recount) — SEC-04's form half, EXECUTED: a Doc 12
+// form carrying a FILE field (harness `config --value=file-prechat`, minted
+// through Doc 12's own doors) renders the field INERT in the widget — no input
+// of any kind, no upload path (uploads belong to the composer under the
+// adapter's capability, G05); the form still submits without it.
+test('SEC-04: a form file field renders inert — no input, no upload control; the form completes without it', async ({
+    page,
+}) => {
+    harness('config', '--value=file-prechat');
+    try {
+        const { panel } = await openWidget(page);
+        await panel.locator('#nlw-tab-messages').click();
+        const form = panel.locator('[data-role=prechat]');
+        await expect(form).toBeVisible();
+        const fileField = form.locator('[data-field=screenshot]');
+        await expect(fileField).toContainText('Screenshot');
+        await expect(fileField.locator('[data-role=file-inert]')).toHaveText(
+            'Attachments are shared in the chat, not on this form.',
+        );
+        // INERT: not an upload control, not a text box, nothing interactive
+        expect(await fileField.locator('input, select, textarea, button').count()).toBe(0);
+        expect(await form.locator('input[type=file]').count()).toBe(0);
+        // the form still works without the field: name in, continue, thread opens
+        await form.locator('[data-field=name] input').fill('[FIXTURE] Abebe');
+        await form.locator('button[type=submit]').click(); // labeled per mode ('Start the chat' under optional)
+        await expect(panel.locator('textarea')).toBeVisible({ timeout: 10000 });
+    } finally {
+        harness('config', '--value=off');
+    }
+});

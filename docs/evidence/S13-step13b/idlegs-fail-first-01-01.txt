@@ -1,0 +1,84 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      idlegs-fail-first-01
+# set:        S13-step13b
+# command:    npx playwright test --project=widget --grep a staff split changes nothing|pushState to /deposit|a host CSP that blocks the frame|a form file field renders inert
+# started:    2026-09-06T14:24:59Z
+# git:        46def89 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 4 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it (4.8s)
+  ✓  2 [widget] › tests/Browser/widget-loader.spec.ts:175:1 › FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init) (4.6s)
+  ✘  3 [widget] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind (16.0s)
+  ✘  4 [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert (18.4s)
+
+
+  1) [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      87 |         await expect(fileField).toContainText('Screenshot');
+      88 |         // INERT: not an upload control, not a text box, nothing interactive
+    > 89 |         expect(await fileField.locator('input, select, textarea, button').count()).toBe(0);
+         |                                                                                    ^
+      90 |         expect(await form.locator('input[type=file]').count()).toBe(0);
+      91 |         // the form still works without the field: name in, continue, thread opens
+      92 |         await form.locator('[data-field=name] input').fill('[FIXTURE] Abebe');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:89:84
+
+    Error Context: test-results/widget-forms-hours-SEC-04--7e2a8-e-form-completes-without-it-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+      228 |             timeout: 15000,
+      229 |         })
+    > 230 |         .toBe(true);
+          |          ^
+      231 |     // silent + unmounted: no frames left, the namespaced globals withdrawn, the page unharmed
+      232 |     await expect(page.locator('iframe')).toHaveCount(0);
+      233 |     expect(
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-loader.spec.ts:230:10
+
+    Error Context: test-results/widget-loader-EC-02-a-host-e5b1a-acon-nothing-is-left-behind-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /split|linked|ticket|moved/
+    Received string:      "ssupportconnecting you to a specialist⋯－✕today[fixture] split leg: my withdrawal is late05:25 pm✓✓[fixture] split leg: it was 2,500 birr05:25 pm✓✓✦ai assistanthi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.
+    
+    thanks for your message. a member of our team will be with you shortly — about 20 minutes.05:25 pmsupport[fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>05:25 pmsupport[fixture] after the split — same thread05:25 pm#2 in lineabout an houryou can keep the page open or close it — we will hold your place either way.＋⌂home✉messages?helpyou wrote: [fixture] split leg: it was 2,500 birrai assistant wrote: hi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.thanks for your message. a member of our team will be with you shortly — about 20 minutes.you are number 2 in linesupport wrote: [fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>support wrote: [fixture] after the split — same thread"
+
+      125 |     expect(await panel.locator('[data-author=system]').count()).toBe(systemBefore);
+      126 |     const text = ((await panel.locator('[role=dialog]').textContent()) ?? '').toLowerCase();
+    > 127 |     expect(text).not.toMatch(/split|linked|ticket|moved/); // no word of the mechanics (BR-04); the door's note stays internal
+          |                      ^
+      128 | });
+      129 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:127:22
+
+    Error Context: test-results/widget-thread-FR-10-BR-04--2366a-e-staff-reply-renders-inert-widget/error-context.md
+
+  3 failed
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+    [widget] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind 
+    [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+  1 passed (48.0s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-06T14:25:49Z
+# duration:   50s
+# EXIT:       1

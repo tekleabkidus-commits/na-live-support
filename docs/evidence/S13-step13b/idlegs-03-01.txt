@@ -1,0 +1,27 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      idlegs-03
+# set:        S13-step13b
+# command:    npx playwright test --project=widget --project=widget-375 --grep a staff split changes nothing|pushState to /deposit|a host CSP that blocks the frame|a form file field renders inert|AC-02
+# started:    2026-09-06T14:30:06Z
+# git:        46def89 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 10 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize, securitypolicyviolation}; nodes = the two iframes — nothing else; the page input is never read (1.4s)
+  ✓   2 [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it (3.3s)
+  ✓   3 [widget] › tests/Browser/widget-loader.spec.ts:175:1 › FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init) (4.6s)
+  ✓   4 [widget] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind (758ms)
+  ✓   5 [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert (12.9s)
+  ✓   6 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize, securitypolicyviolation}; nodes = the two iframes — nothing else; the page input is never read (825ms)
+  ✓   7 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it (2.5s)
+  ✓   8 [widget-375] › tests/Browser/widget-loader.spec.ts:175:1 › FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init) (4.6s)
+  ✓   9 [widget-375] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind (1.4s)
+  ✓  10 [widget-375] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert (15.3s)
+
+  10 passed (50.6s)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-06T14:30:56Z
+# duration:   50s
+# EXIT:       0

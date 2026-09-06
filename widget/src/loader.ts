@@ -10,7 +10,9 @@
  *   DOM       two fixed-position iframes (launcher, panel), nothing else — no
  *             stylesheet, no script, no wrapper element
  *   listeners message (the panel's postMessage), popstate (T-07), the wrapped
- *             pushState/replaceState (T-07, restorable)
+ *             pushState/replaceState (T-07, restorable),
+ *             securitypolicyviolation (EC-02 — a CSP frame block never throws;
+ *             the violation event is its only signal)
  * It reads NO cookies, NO localStorage, NO form fields — those code paths do
  * not exist here (FR-24's structural clause). The only host reads are
  * location (origin + URL for triggers), document.referrer, and
@@ -425,6 +427,21 @@ declare const __NLW_CFG: ShimConfig | undefined;
     }
     window.addEventListener('message', onMessage);
 
+    // EC-02: a host CSP that blocks the frame never throws — appendChild succeeds and the
+    // browser refuses the LOAD, reporting it only as a securitypolicyviolation event
+    // (found by step 13b's fail-first CSP leg: the catch below never fired, no beacon
+    // ever left). Declared in the inventory; the footprint audit asserts it. One beacon
+    // with the copy-paste fix's reason, then the silent unmount.
+    const onCspViolation = (e: SecurityPolicyViolationEvent): void => {
+        if (!cfg) return;
+        const directive = e.effectiveDirective || e.violatedDirective || '';
+        if (!/^(frame-src|child-src|default-src)/.test(directive)) return;
+        if (!String(e.blockedURI || '').startsWith(cfg.frame_origin)) return;
+        beacon(cfg, 'mount_fail', 'csp');
+        unmount();
+    };
+    window.addEventListener('securitypolicyviolation', onCspViolation);
+
     // Two fixed-position iframes and nothing else (SEC-01, NFR-01 zero layout shift).
     try {
         launcher = frame('nlw-launcher', cfg, { width: '64px', height: '64px' }, true);
@@ -547,6 +564,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
         try {
             window.removeEventListener('message', onMessage);
             window.removeEventListener('popstate', onRoute);
+            window.removeEventListener('securitypolicyviolation', onCspViolation);
             history.pushState = origPush;
             history.replaceState = origReplace;
             launcher?.remove();
@@ -567,6 +585,7 @@ declare const __NLW_CFG: ShimConfig | undefined;
                 'message',
                 'popstate',
                 'resize',
+                'securitypolicyviolation',
                 'history.pushState',
                 'history.replaceState',
                 ...(exitRules ? ['mouseout'] : []),

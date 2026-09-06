@@ -41,6 +41,7 @@ use Illuminate\Support\Str;
  *   widget:harness agent-join   --visitor=<id>   Doc 11's system assignment to the fixture agent
  *   widget:harness staff-reply  --visitor=<id> --text=…   a staff message through Doc 04's outbound door
  *   widget:harness resolve      --visitor=<id>   Doc 06's resolve door (Doc 12's CSAT armer follows)
+ *   widget:harness split        --visitor=<id>   Doc 06's split door on the newest message (BR-04's test)
  *   widget:harness setting      --key=widget.cache.content --value=false   a registered setting through the one writer
  *
  * `--latest` picks the tenant's newest webchat conversation. Actor = the
@@ -135,8 +136,30 @@ final class WidgetHarness extends Command
             $offline = DB::table('forms')->where('name', \App\Domain\Webchat\Seeding\WidgetFormSeeder::OFFLINE)->value('id');
             $mode = (string) ($this->option('value') ?: 'off');
             $messagesOnly = $mode === 'messages-only'; // B3-A01's matrix: Messages-only mode (no Home, no Help)
+            if ($mode === 'file-prechat') {
+                // Step 13b (SEC-04): a pre-chat form CARRYING A FILE FIELD, minted through Doc 12's own
+                // doors exactly as WidgetFormSeeder mints the canonical pair (presence-by-name, no reseed).
+                // The canonical Pre-chat stays two fields (the drawn law, B3-S05 F03/F04) — this is a
+                // separate fixture form for the inert-render assertion only.
+                $fileFormName = '[FIXTURE] File pre-chat';
+                if (! DB::table('forms')->where('name', $fileFormName)->exists()) {
+                    $fileFormId = app(\App\Domain\Forms\FormWriter::class)->create(['name' => $fileFormName, 'entity_bindings' => []], $agent->identifier());
+                    app(\App\Domain\Forms\FormPublisher::class)->publish($fileFormId, [
+                        'languages' => ['en', 'am'],
+                        'steps' => [
+                            ['key' => 'identity', 'title' => ['en' => 'So we can find your account', 'am' => 'መለያዎን እንድናገኝ'],
+                                'fields' => [
+                                    ['key' => 'name', 'type' => 'text', 'required' => true, 'label' => ['en' => 'Name', 'am' => 'ስም']],
+                                    ['key' => 'screenshot', 'type' => 'file', 'required' => false, 'label' => ['en' => 'Screenshot', 'am' => 'ቅጽበታዊ ገጽ እይታ']],
+                                ]],
+                        ],
+                        'completion' => ['tags' => ['pre-chat']],
+                    ], $agent->identifier());
+                }
+                $preChat = DB::table('forms')->where('name', $fileFormName)->value('id');
+            }
             $config = [
-                'content' => ['tabs' => ['home' => ! $messagesOnly, 'help' => ! $messagesOnly], 'pre_chat_form_id' => $preChat, 'pre_chat_mode' => in_array($mode, ['off', 'optional', 'required'], true) ? $mode : 'off', 'offline_form_id' => $offline,
+                'content' => ['tabs' => ['home' => ! $messagesOnly, 'help' => ! $messagesOnly], 'pre_chat_form_id' => $preChat, 'pre_chat_mode' => in_array($mode, ['optional', 'required'], true) || $mode === 'file-prechat' ? ($mode === 'file-prechat' ? 'optional' : $mode) : 'off', 'offline_form_id' => $offline,
                     'shortcuts' => [['kind' => 'chat', 'label' => ['en' => 'Where is my withdrawal?', 'am' => 'ገንዘቤ የት ደረሰ?'], 'target' => 'withdrawal'], ['kind' => 'url', 'label' => ['en' => 'Payment methods', 'am' => 'የክፍያ ዘዴዎች'], 'target' => 'https://customer.harness.localhost:8443/payments.html']]],
                 'behavior' => [
                     'proactive' => [['id' => 'deposit-help', 'condition' => ['kind' => 'url', 'match' => '/deposit'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Stuck? I can check how long your deposit should take.', 'am' => '[FIXTURE] ተጣብቀዋል? ተቀማጭዎ ምን ያህል ጊዜ እንደሚወስድ ማረጋገጥ እችላለሁ።']]], ['id' => 'payments-help', 'condition' => ['kind' => 'url', 'match' => '/payments'], 'action' => ['kind' => 'message', 'message' => ['en' => '[FIXTURE] Questions about a payment method? Ask here.', 'am' => '[FIXTURE] ስለ ክፍያ ዘዴ ጥያቄ አለዎት? እዚህ ይጠይቁ።']]]],
@@ -361,6 +384,21 @@ final class WidgetHarness extends Command
                 $this->line('MESSAGE='.$message->identifier());
 
                 return self::SUCCESS;
+            case 'split':
+                // Doc 06 FR-21 through the REAL split door (permission-checked, audited, its own internal
+                // note): the newest message becomes the linked ticket's anchor. BR-04's law is what the
+                // widget spec then asserts — the visitor's thread shows NOTHING of it (step 13b, FR-10/BR-04).
+                $ticket = $this->openTicket($conversation);
+                $messageId = DB::table('messages')->where('conversation_id', $conversation->identifier())->orderByDesc('created_at')->value('id');
+                if (! is_string($messageId)) {
+                    $this->error('no message to split on');
+
+                    return self::FAILURE;
+                }
+                $linked = app(\App\Domain\Tickets\Split\SplitTicket::class)->split($ticket, [$messageId], $agent, $department, null, '[FIXTURE] split (harness)');
+                $this->line('SPLIT='.$linked->identifier());
+
+                return self::SUCCESS;
             case 'block':
             case 'unblock':
                 // G02: a blocked visitor sees the paused copy (vocabulary-gated), never a failure word; through Doc 04's own door.
@@ -383,7 +421,7 @@ final class WidgetHarness extends Command
 
                 return self::SUCCESS;
             default:
-                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|block|unblock|note');
+                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|split|block|unblock|note');
 
                 return self::FAILURE;
         }

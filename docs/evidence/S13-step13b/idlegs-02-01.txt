@@ -1,0 +1,111 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      idlegs-02
+# set:        S13-step13b
+# command:    npx playwright test --project=widget --project=widget-375 --grep a staff split changes nothing|pushState to /deposit|a host CSP that blocks the frame|a form file field renders inert|AC-02
+# started:    2026-09-06T14:27:16Z
+# git:        46def89 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 10 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize, securitypolicyviolation}; nodes = the two iframes — nothing else; the page input is never read (1.4s)
+  ✘   2 [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it (31.1s)
+  ✓   3 [widget] › tests/Browser/widget-loader.spec.ts:175:1 › FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init) (4.2s)
+  ✓   4 [widget] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind (1.1s)
+  ✘   5 [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert (13.9s)
+  ✓   6 [widget-375] › tests/Browser/widget-footprint.spec.ts:8:1 › AC-02: globals = {PlatformChat, __nlwLoaded}; listeners = {focus, message, popstate, resize, securitypolicyviolation}; nodes = the two iframes — nothing else; the page input is never read (852ms)
+  ✘   7 [widget-375] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it (30.9s)
+  ✓   8 [widget-375] › tests/Browser/widget-loader.spec.ts:175:1 › FR-23: pushState to /deposit → the URL rule fires; the frames and API survive untouched (no re-init) (4.8s)
+  ✓   9 [widget-375] › tests/Browser/widget-loader.spec.ts:214:1 › EC-02: a host CSP that blocks the frame → silent fail + the mount-fail:csp beacon; nothing is left behind (1.2s)
+  ✘  10 [widget-375] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert (11.3s)
+
+
+  1) [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]').getByRole('button', { name: 'Continue' })
+
+
+      91 |         // the form still works without the field: name in, continue, thread opens
+      92 |         await form.locator('[data-field=name] input').fill('[FIXTURE] Abebe');
+    > 93 |         await form.getByRole('button', { name: 'Continue' }).click();
+         |                                                              ^
+      94 |         await expect(panel.locator('textarea')).toBeVisible({ timeout: 10000 });
+      95 |     } finally {
+      96 |         harness('config', '--value=off');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:93:62
+
+    Error Context: test-results/widget-forms-hours-SEC-04--7e2a8-e-form-completes-without-it-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /split|linked|ticket|moved/
+    Received string:      "ssupportconnecting you to a specialist⋯－✕today[fixture] continuity leg: my withdrawal is late05:28 pm✓✓✦ai assistanthi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.
+    
+    thanks for your message. a member of our team will be with you shortly — about 20 minutes.05:28 pm[fixture] continuity leg: it was 2,500 birr05:28 pm✓✓support[fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>05:28 pmsupport[fixture] after the split — same thread05:28 pm#4 in lineabout an houryou can keep the page open or close it — we will hold your place either way.＋⌂home✉messages?helpyou wrote: [fixture] continuity leg: it was 2,500 birrai assistant wrote: hi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.thanks for your message. a member of our team will be with you shortly — about 20 minutes.you are number 4 in linesupport wrote: [fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>support wrote: [fixture] after the split — same thread"
+
+      125 |     expect(await panel.locator('[data-author=system]').count()).toBe(systemBefore);
+      126 |     const text = ((await panel.locator('[role=dialog]').textContent()) ?? '').toLowerCase();
+    > 127 |     expect(text).not.toMatch(/split|linked|ticket|moved/); // no word of the mechanics (BR-04); the door's note stays internal
+          |                      ^
+      128 | });
+      129 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:127:22
+
+    Error Context: test-results/widget-thread-FR-10-BR-04--2366a-e-staff-reply-renders-inert-widget/error-context.md
+
+  3) [widget-375] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=prechat]').getByRole('button', { name: 'Continue' })
+
+
+      91 |         // the form still works without the field: name in, continue, thread opens
+      92 |         await form.locator('[data-field=name] input').fill('[FIXTURE] Abebe');
+    > 93 |         await form.getByRole('button', { name: 'Continue' }).click();
+         |                                                              ^
+      94 |         await expect(panel.locator('textarea')).toBeVisible({ timeout: 10000 });
+      95 |     } finally {
+      96 |         harness('config', '--value=off');
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-forms-hours.spec.ts:93:62
+
+    Error Context: test-results/widget-forms-hours-SEC-04--7e2a8-e-form-completes-without-it-widget-375/error-context.md
+
+  4) [widget-375] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /split|linked|ticket|moved/
+    Received string:      "ssupportconnecting you to a specialist⋯✕today[fixture] continuity leg: my withdrawal is late05:28 pm✓✓✦ai assistanthi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.
+    
+    thanks for your message. a member of our team will be with you shortly — over an hour.05:28 pm[fixture] continuity leg: it was 2,500 birr05:28 pm✓✓support[fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>05:29 pmsupport[fixture] after the split — same thread05:29 pm#6 in lineabout an houryou can keep the page open or close it — we will hold your place either way.＋⌂home✉messages?helpyou wrote: [fixture] continuity leg: it was 2,500 birrai assistant wrote: hi! i'm an ai assistant for this support team — a human colleague is one message away whenever you need one.thanks for your message. a member of our team will be with you shortly — over an hour.you are number 6 in linesupport wrote: [fixture] before the split <img src=x onerror=\"window.__nlwpwned=1\"> <b>bold?</b>support wrote: [fixture] after the split — same thread"
+
+      125 |     expect(await panel.locator('[data-author=system]').count()).toBe(systemBefore);
+      126 |     const text = ((await panel.locator('[role=dialog]').textContent()) ?? '').toLowerCase();
+    > 127 |     expect(text).not.toMatch(/split|linked|ticket|moved/); // no word of the mechanics (BR-04); the door's note stays internal
+          |                      ^
+      128 | });
+      129 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-thread.spec.ts:127:22
+
+    Error Context: test-results/widget-thread-FR-10-BR-04--2366a-e-staff-reply-renders-inert-widget-375/error-context.md
+
+  4 failed
+    [widget] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+    [widget] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+    [widget-375] › tests/Browser/widget-forms-hours.spec.ts:77:1 › SEC-04: a form file field renders inert — no input, no upload control; the form completes without it 
+    [widget-375] › tests/Browser/widget-thread.spec.ts:87:1 › FR-10/BR-04: a staff split changes nothing the visitor sees — one continuous list, no boundary marker; the hostile staff reply renders inert 
+  6 passed (1.8m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-06T14:29:03Z
+# duration:   107s
+# EXIT:       1

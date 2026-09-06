@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Doc 13 EC-02 (S13 step 13b): the HOSTILE-CSP host page. The operator installed the
+  snippet correctly, but the site's CSP blocks the widget's frames (frame-src 'none')
+  while still allowing the script and the beacon endpoint. The loader must fail
+  SILENTLY (NFR-06) and beacon `mount_fail:csp` so Health can show the copy-paste fix.
+  Fixtures only; the key rides ?key= exactly as on host.html.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://platform.harness.localhost:8443; connect-src https://platform.harness.localhost:8443; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'none'">
+<title>HARNESS — CSP host page (frames blocked)</title>
+<style>body{font:16px/1.5 system-ui,sans-serif;margin:2rem;color:#222}</style>
+</head>
+<body>
+<h1>Fixture operator site — CSP blocks frames</h1>
+<p>The loader snippet is installed below; this page's CSP refuses every iframe.</p>
+<script>
+  const key = new URLSearchParams(location.search).get('key');
+  const platform = new URLSearchParams(location.search).get('platform') || 'https://platform.harness.localhost:8443';
+  if (key) {
+    const s = document.createElement('script');
+    s.src = platform + '/w/' + encodeURIComponent(key) + '.js';
+    s.dataset.harness = 'snippet';
+    document.head.appendChild(s);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      idrows-pest-02
+# set:        S13-step13b
+# command:    docker compose --profile embeddings -f docker/compose.yaml -f docker/compose.dev.yaml exec -T app ./vendor/bin/pest tests/Feature/Forms tests/Feature/Widget tests/Security/SignedIdentityTest.php
+# started:    2026-09-06T14:38:44Z
+# git:        46def89 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\FormPublishTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: publish mints sequential immutable versions, moves the p[39m[90m…[39m [90m10.82s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22 blocks: retired ref (EC-14), unknown field, EC-07 required[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-22: a REQUIRED file field blocks publish when a registered ch[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-23/§21: the seeder mints the three forms PUBLISHED + three ex[39m[90m…[39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\SubmissionSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: a submission names its exact version forever — a later pu[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07 server truth: a COMPLETE submission missing a required-and-[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Forms\TelegramFlowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit US-04 end-to-end (direct mode): one field per message, buttons f[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-21 retries: three friendly failures then the human offer; /hu[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-06: a version published MID-FLOW never moves the running flow[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-04 DRILL: Redis state killed mid-flow → the next message resu[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-07: one live flow per conversation — a second start supersedes[39m[90m…[39m [90m0.33s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MediaStatePushTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit registers on media.stored and media.infected[39m[90m                     [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pushes a bytes-free wake-up to the webchat visitor's thread chan[39m[90m…[39m [90m0.11s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\MetricExclusionTestModeTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-14 second half (P-N14): a ticket whose conversation opened und[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit positive control: a LIVE widget's ticket stays INCLUDED by both[39m[90m… [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\NoGhostProfileTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a session + a config read + a cursor read mint NO custome[39m[90m…[39m [90m0.32s[39m  
+
+[§12 dev-scale] QueuePositionPush fan-out: 3 waiting (2 webchat) → placement 2 frames, unchanged re-event 0 frames, assignment 1 move frame + 1 joined frame; reads per event: 1 ZRANGE + 1 membership query + 1 estimate per webchat member
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\QueuePositionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-QPOS: forWaitingTicket answers band + the ticket's own positio[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit Doc13/QueuePositionPush: ONE ordered read + ONE membership query[39m[90m…[39m [90m0.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\SecretRotationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit rotates with an overlap window: old + new verify inside it, only[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every Designer mutation audits under its registered key with the[39m[90m…[39m [90m0.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBeaconTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-08: load/open/blocked-origin/mount-fail beacons increment the[39m[90m… [39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08: a panel error beacon with a stack is SCRUBBED before sampl[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetBundlePointerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: the pointer is the NEWEST live row of the widget's channe[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C4: the pointer commands run on the platform connection in local[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetConfigFormsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit resolves pre_chat_form_id / offline_form_id to version ids with[39m[90m… [39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetConfigPropagationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit publish and rollback each dispatch the version-only frame on wid[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04 with the clock figures: the shim cache is ≤ 60 s and the[39m[90m… [39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContextAllowlistTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-24: only allowlisted custom keys survive; the row is one per[39m[90m… [39m [90m0.19s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetContrastGateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit refuses a failing brand with the ratio and the suggestion; the s[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NO override path exists: no bypass-shaped parameter on the publi[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetDesignerScreensTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders the list and the editor with their props; the preview do[39m[90m…[39m [90m0.24s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetDesignerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a widget with its key shown ONCE, lists it, edits name/t[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-12: the allowlist editor accepts exact https origins and *.wi[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the signed-identity secret is created then rotated throu[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-20: publish is a version + one pointer move; a second publish[39m[90m…[39m [90m0.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permission split: view-only reads but cannot mutate (403); n[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no staff session → no door (401)[39m[90m                                 [39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormStepsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit validates a pre-chat step against the published schema: required[39m[90m…[39m [90m0.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetFormsSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds the pre-chat and offline forms once, byte-equal to the Doc[39m[90m…[39m [90m0.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetHealthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit sums the week, lists blocked origins, counts the two diagnoses,[39m[90m… [39m [90m0.31s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetLauncherDocumentTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: the launcher document paints the labeled bubble WITHOUT[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01: the panel document (no frame / frame=panel) is unchanged[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaOriginTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-MEDIA-URL: the media disk wires AWS_TEMPORARY_URL and a signed[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-04 stands: an unscanned key has no download path even on the[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMediaTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST media: a photo lands in the intake (kind from the mime); ov[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the pipeline fetches the intake through the egress proxy, scans[39m[90m… [39m [90m0.49s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetMessagesTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit POST messages ACKs 202 and enqueues NormalizeInbound on webchat-[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit idempotency: the same client_message_id POSTed twice lands ONE r[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET messages is the visitor-curated cursor page: notes and quara[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST receipts: the FIRST delivered producer — an outbound row mo[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit POST typing records the customer signal with its TTL (EC-12) and[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET config: the live config over the neutral defaults, the adapt[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetModelTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit P-WIDGET: the Designer's columns are mass-assignable on the Widg[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetOfflineFormTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15: the offline form lands a REAL offline-tagged ticket (sour[39m[90m…[39m [90m0.43s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 refusals are inline and neutral: a missing required answer[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetShimTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/{key}.js: the shim wraps the BUILT loader with __NLW_CFG[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit GET /w/panel/{key}: the panel document is a nonce'd module-scrip[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C3: a soft-deleted widget is dead to the wire — shim and panel b[39m[90m…[39m [90m0.23s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetTranscriptTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit serves the visitor's own thread as text — you / assistant / staf[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is rate-limited per visitor by widget.transcript.rate_per_hour ([39m[90m…[39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SignedIdentityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit VALID: a correctly signed payload creates the customer with sour[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit INVALID + REPLAYED: a bad signature, a stale timestamp and a mal[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SWITCHED (EC-04): a visitor already anchored to customer Y recei[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03: the compare is constant-time and the payload canonical f[39m[90m…[39m [90m0.17s[39m  
+
+  [90mTests:[39m    [32;1m64 passed[39;22m[90m (810 assertions)[39m
+  [90mDuration:[39m [39m24.83s[39m
+
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-06T14:39:09Z
+# duration:   25s
+# EXIT:       0
