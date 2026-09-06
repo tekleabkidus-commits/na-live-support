@@ -60,7 +60,7 @@ Legend as in `docs/evidence/F1-B8/register.md`: **DONE** = built and proven (the
 |---|---|---|
 | C01 | DONE (pair anatomy unproven on the one-version fixture) | two panes; version rows with author · note · badges (B9-D24); View / Compare / Restore (absent on the current); the diff pane: +/−/±/= blocks, word marks (B9-D25), collapsed stubs, prev/next landmarks, summary counts; empty-compare message |
 | C02 | DONE | restore CONFIRMATION with from / creates / keeps / history + the EC-05 media warning + the unsaved-edits warning (B9-D26) → the restore door |
-| C03 | DONE (staff landing) · NOT-DONE (widget Help panel — Doc 13, plan §4) | the staff citation landing: state chip (Current · Superseded · Retired · Unknown), the version-pinned snapshot, what changed since (diff summary + compare link), one primary, the resolver-states rail with the no-404 law (B9-D28) — f1-b9 S03 C03 |
+| C03 | DONE (staff landing) · DONE (widget Help panel — flipped at the S13 close: `widget-help.spec` E03/E04 render the reader with tombstones after P-KB-VIEWED) | the staff citation landing: state chip (Current · Superseded · Retired · Unknown), the version-pinned snapshot, what changed since (diff summary + compare link), one primary, the resolver-states rail with the no-404 law (B9-D28) — f1-b9 S03 C03 |
 | C04 | DONE | archive dialog with the consequences in nouns (leaves · keeps · undo · audited) → the archive door; the archived banner with Un-archive → Draft and Open tombstone; the un-archive card names Delete as absent (B9-D27) |
 
 ## D. B9-S04 categories + the shell's one KB entry — `Manager.vue` (categories mode)
@@ -84,4 +84,4 @@ Legend as in `docs/evidence/F1-B8/register.md`: **DONE** = built and proven (the
 
 ## Totals
 
-Rows: 3 (X) + 9 (A) + 14 (B) + 4 (C) + 4 (D) = 34. DONE 32 · PARTIAL 1 (D02, follow-on F1-FO-4) · NOT-DONE half 1 (C03's widget Help panel — Doc 13, recorded before the first commit).
+Rows: 3 (X) + 9 (A) + 14 (B) + 4 (C) + 4 (D) = 34. DONE 33 · PARTIAL 1 (D02, follow-on F1-FO-4) · NOT-DONE half 0 (C03's widget Help panel — Doc 13's, flipped at the S13 close-out).

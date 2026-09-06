@@ -2601,19 +2601,19 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED AT S13 STEP 1 (plan of record 0f2949e): the conformance half is REAL now — the unmodified suite green on the real WebchatAdapter (56 passed, zero core edits; the fail-first capability lie captured RED first); the truthful-delivery DOM half (double check ONLY after the receipt ack) flips at step 8 (tests/Browser/widget-thread.spec.ts).
+      FLIPPED AT THE S13 CLOSE-OUT: the conformance half — the unmodified suite green on the real WebchatAdapter with ZERO core edits (S13 step 1; the capability lie captured RED first) — and the truthful delivery-glyph DOM half — tests/Browser/widget-thread.spec.ts (the visitor's own bubble shows ✓✓ only once the server's page carries it; sabotage (h) red). CI verdict of record: run 33990000043 on f72da6d, Stage 4 429 passed.
   - ac_ref: "Doc13 AC-02"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/widget-footprint.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED (justified manual until the suite lands — the registry gate requires an existing path): flips at step 7 — tests/Browser/widget-footprint.spec.ts + the hostile-host suite (tests/Browser/widget-hostile-host.spec.ts, SS-03) green + the loader footprint audit asserting globals/listeners/DOM EXACTLY.
+      FLIPPED AT S13 STEP 7 (recorded at the close-out): the footprint audit — globals {PlatformChat, __nlwLoaded}, listeners {focus, message, popstate, resize}, nodes the two iframes, ZERO host reads — asserted EXACTLY against the loader's own inventory, on both widget projects; tests/Browser/widget-hostile-host.spec.ts (SS-03) runs in every battery; sabotage (c) red. Inventory unchanged by the step-13 loader-drawn launcher.
   - ac_ref: "Doc13 AC-03"
     suite_path: tests/Security/WidgetOriginLayersTest.php
     type: automated
@@ -2621,9 +2621,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S13 STEP 3: the SERVER and CORS layers each block ALONE on the visitor doors (WidgetOriginLayersTest — the CORS stamp removed by the AC-06 precedent and the server still refuses 403 origin_not_allowed; a hostile origin gets no stamp; the layers are independent code paths); EC-12's wildcard boundary re-pinned on the doors (evil-brand 403, www under the wildcard 201, bare domain 403); sabotage (d)/(e) red+restored. REMAINING: the LOADER (client) layer + frame-ancestors on THE HARNESS browser leg at step 7 (tests/Browser/widget-origin-layers.spec.ts).
+      FLIPPED AT THE S13 CLOSE-OUT: the three layers each block ALONE — the SERVER layer with the CORS stamp removed (403 origin_not_allowed), the CORS layer withholding the stamp from a hostile origin (WidgetOriginLayersTest, sabotage (d)/(e) red), and the frame-ancestors layer emitted per widget config (tests/Browser/widget-frame-ancestors.spec.ts: mounts on the HARNESS customer origin, refused on the platform origin; FrameAncestorsTest's one-setter sweep). The real registered-domain half is SEC-02's [OA] row, stated in BUILD-STATUS.
   - ac_ref: "Doc13 AC-04"
     suite_path: tests/Security/WidgetVisitorScopeTest.php
     type: automated
@@ -2633,39 +2633,59 @@ entries:
     owner: platform-engineering
     status: covered
     justification: >-
-      FLIPPED AT S13 STEP 3: WidgetVisitorScopeTest — a visitor token reaches EXACTLY its own thread/receipts/context (the channel key webchat+widget+visitor, A-61); a foreign message id is ABSENT (404) on receipts and context; a token minted on another tenant's widget 401; a staff session 401; a bare token 401; the CSAT door 404 on a foreign token; sabotage (b) red+restored. The Reverb-channel half: WidgetPartitionTest + tests/Browser/widget-reverb-auth.spec.ts (own channel subscribed from the customer origin, a foreign visitor's channel 403 never 500).
+      FLIPPED AT S13 STEP 3: WidgetVisitorScopeTest — a visitor token reaches EXACTLY its own thread/receipts/context (the channel key webchat+widget+visitor, A-61); a foreign message id is ABSENT (404) on receipts and context; a token minted on another tenant's widget, a staff session and a bare token are all 401; the CSAT door 404s on a foreign token; sabotage (b) red.
   - ac_ref: "Doc13 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/widget-thread.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED (justified manual until the suite lands): flips at steps 8-9 with tests/Browser/widget-thread.spec.ts — the four scripted journeys (AI-resolve+CSAT, handoff+queue+agent, off-hours form, blocked visitor) rendering every §8 state; EC-06 queue honesty in tests/Browser/widget-queue.spec.ts.
+      FLIPPED AT THE S13 CLOSE-OUT: the journeys across tests/Browser/widget-thread.spec.ts (the AI handoff bubble + queue card live through the mock-AI path), widget-queue.spec.ts (D10–D13 + EC-06 as drawn; its fixture-shape fix at f72da6d), widget-csat.spec.ts (resolve → star row → the same thread continues), widget-forms-hours.spec.ts (off-hours offline form → the real offline-tagged ticket), widget-composer.spec.ts G02 (the blocked visitor's paused copy); both widget projects.
   - ac_ref: "Doc13 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/widget-proactive.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      PLANNED (justified manual until the suite lands): flips at step 9 with tests/Browser/widget-proactive.spec.ts — cooldown, dismissal-respect, focus-politeness (EC-05), SPA re-evaluation.
+      FLIPPED AT S13 STEP 9 (recorded at the close-out): H01 fires on /deposit with the page-specific message; H02 a dismissal ends the rule on that page across a reload; EC-05 the card defers while a page field has focus (presence only); the cross-rule cooldown in tests/Browser/widget-acceptance.spec.ts (S11's six).
   - ac_ref: "Doc13 AC-07"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Security/SignedIdentityTest.php
+    type: automated
     tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
+    status: covered
+    justification: >-
+      FLIPPED AT S13 STEP 4 (recorded at the close-out): valid → source=api on both identities, one customer created_source=api, no phone identity anywhere, the first message lands under that customer with no shell; invalid/replayed/malformed → 204 ×3 + the Health counter, the window exact at 299/301 s; switched (EC-04) → the conversation stays, the internal note names both, nothing re-linked; SEC-03 canonical form + hash_equals only (sabotage (g) red twice). A-61 as ruled.
+  - ac_ref: "Doc13 AC-08"
+    suite_path: tests/Browser/widget-transport.spec.ts
+    type: automated
+    tier: browser
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: covered
+    justification: >-
+      FLIPPED AT S13 STEP 8b (recorded at the close-out): the socket dropped mid-chat → polling engages ≤ 10 s on the same cursor endpoint (K01: no banner) → a staff reply lands while polling → reconnect + resubscribe → polling stops; no polling while healthy (NFR-03 by request count); two tabs one socket with hand-over on close (tests/Browser/widget-acceptance.spec.ts, S11's six). The channel-auth precondition: tests/Browser/widget-reverb-auth.spec.ts (the visitor principal from the customer origin; a foreign channel 403).
+  - ac_ref: "Doc13 AC-09"
+    suite_path: ci/widget-bundle-budget.sh
+    type: automated
+    tier: integration
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED (justified manual until the suite lands): flips at step 4 with tests/Security/SignedIdentityTest.php — valid/invalid/replayed/switched (EC-04) fixtures with Doc 08 BR-01 provenance labels; A-61 as ruled.
-  - ac_ref: "Doc13 AC-08"
-    suite_path: tests/Browser/widget-reverb-auth.spec.ts
+      S13: the NFR-01 budgets are a CI GATE from the first build (loader 3408 B gz ≤ 5120, the served launcher document 2024 B gz ≤ 2048 as re-set by the advisor, core 25.7 KB ≤ 51 200; falsified at step 6); launcher paint ≤ 300 ms on 3G-fast + 4× CPU proven on five wall-power runs (203–279 ms, ci/widget-loader-timing.mjs --assert) after the step-13 loader-drawn launcher; zero host-page layout shift (fixed-position frames, the footprint audit). PARTIAL: the throttled real-network profile and the WebView device lab are [OA]/[D19] (R-D13-1).
+  - ac_ref: "Doc13 AC-10"
+    suite_path: tests/Browser/widget-theme.spec.ts
     type: automated
     tier: browser
     cadence: every-push
@@ -2673,24 +2693,4 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      PLANNED AT S13 STEP 1 (the channel-auth precondition is REAL today in widget-reverb-auth.spec.ts): flips at step 8 with tests/Browser/widget-transport.spec.ts — the FR-21 fallback drill (socket killed mid-chat → polling ≤ 10 s → resume → converge, zero duplicates) + multi-tab leader hand-off ≤ 2 s. The channel-auth precondition is proven now (widget-reverb-auth.spec.ts).
-  - ac_ref: "Doc13 AC-09"
-    suite_path: manual
-    type: manual
-    tier: integration
-    cadence: every-push
-    environment: ci
-    owner: platform-engineering
-    status: partial
-    justification: >-
-      PLANNED (justified manual until the gate lands): ci/widget-bundle-budget.sh — the NFR-01 budgets become a CI GATE at step 6 (first build); zero host-page layout shift measured at step 7; throttled-profile and WebView-lab legs are [OA]/[D19] — stated per row, never claimed.
-  - ac_ref: "Doc13 AC-10"
-    suite_path: manual
-    type: manual
-    tier: browser
-    cadence: every-push
-    environment: ci
-    owner: platform-engineering
-    status: partial
-    justification: >-
-      PLANNED (justified manual until the suite lands): flips at steps 8-9 with tests/Browser/widget-i18n.spec.ts — axe (WCAG 2.2 AA) both themes both viewports, announcements asserted; the language-resolution matrix incl. setLanguage() and completeness gates; screen-reader legs NVDA/VoiceOver are [OA].
+      S13: axe (wcag2a/aa) clean light + dark on every widget screen and on the Designer, both widget projects (widget-theme.spec.ts L03 both ways; the panel/designer specs' axe legs); the language chain proven at the switcher (widget-panel.spec.ts B07: Amharic re-renders in real Ethiopic without a remount) and the Designer's completeness gate (designer-widgets.spec.ts J04); text zoom 200 % (widget-acceptance.spec.ts). PARTIAL, stated: the planned widget-i18n.spec.ts was never written — setLanguage() from the host has no executed browser leg; NVDA/VoiceOver are [OA].
