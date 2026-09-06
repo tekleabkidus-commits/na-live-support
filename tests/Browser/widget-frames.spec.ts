@@ -38,6 +38,13 @@ test('row 9 · C02/C04: a first visit draws no resume card; after a message and 
         panel.locator('.nlw-card h3', { hasText: 'Continue where you left off' }),
     ).toHaveCount(0);
     await sendFromPanel(panel, 'row 9: my deposit has not arrived');
+    // SETTLE the thread before the reload: the mock AI answers, and the card draws the LAST
+    // message whoever wrote it (the frame's own scene shows the staff reply). CI run 34040424869:
+    // on the fresh runner the reply landed before the reload and the card rightly showed it —
+    // the old assertion had assumed the visitor's message stays last (a test artifact, not the product).
+    const aiBubble = panel.locator('[data-message][data-author=ai]').first();
+    await expect(aiBubble).toBeVisible({ timeout: 30000 });
+    const lastBody = ((await aiBubble.locator('.nlw-bubble').textContent()) ?? '').trim();
     // the same visitor returns (the cookie survives the reload); the history restores (FR-08) and the card outranks the shortcuts (C04)
     await page.goto(`${CUSTOMER}/host.html?key=${encodeURIComponent(key)}`);
     await page.evaluate(() =>
@@ -48,9 +55,8 @@ test('row 9 · C02/C04: a first visit draws no resume card; after a message and 
     const resume = again.locator('.nlw-card', { hasText: 'Continue where you left off' });
     await expect(resume).toHaveCount(1, { timeout: 15000 });
     await expect(resume.locator('h3')).toHaveText('Continue where you left off');
-    await expect(resume.locator('button span').first()).toContainText(
-        'row 9: my deposit has not arrived',
-    );
+    // C02 at cause: the card shows the THREAD'S last message (the AI reply captured above, 60-char slice)
+    await expect(resume.locator('button span').first()).toContainText(lastBody.slice(0, 40));
     await expect(resume.locator('small')).toContainText(/\d+ messages/);
     // C04: the resume card sits ABOVE the shortcuts
     const cards = await again.locator('.nlw-card h3').allTextContents();
@@ -143,6 +149,11 @@ test('row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — 
         timeout: 10000,
     });
     await sendFromPanel(panel, 'row 34: who is speaking?');
+    // SETTLE: await the AI's reply so the baseline is a quiet thread (CI's fresh runner answered
+    // inside the old 2.5 s window and the count moved by the REPLY, not by the switch — run 34040424869)
+    await expect(panel.locator('[data-message][data-author=ai]').first()).toBeVisible({
+        timeout: 30000,
+    });
     const messagesBefore = await panel.locator('[data-message]').count();
     const systemBefore = await panel.locator('[data-author=system]').count();
     // the switch (EC-04 on the server: a staff note + `widget.identity.switched`, never a re-link — tests/Security/SignedIdentityTest)

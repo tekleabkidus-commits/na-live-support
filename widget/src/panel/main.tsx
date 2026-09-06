@@ -364,14 +364,27 @@ async function confirmSend(clientId: string): Promise<void> {
 }
 
 function ready(): Promise<void> {
-    if (boot.value === 'ready') return Promise.resolve();
+    // 'down' is a SETTLED state here exactly as the effect below treats it (the caller's API
+    // call then fails through its own error path). The old guard missed it: an effect body
+    // runs SYNCHRONOUSLY at creation, so ready() during 'down' called `stop` before its
+    // `const` initialized — an uncaught ReferenceError in the frame (CI run 34040424869,
+    // reproduced locally: a slow handshake hits the 4 s no-loader fallback, boot dips 'down',
+    // and the loader's next relayed call — identify, context, focus-probe — throws).
+    if (boot.value === 'ready' || boot.value === 'down') return Promise.resolve();
     return new Promise((resolve) => {
-        const stop = effect(() => {
+        let settled = false;
+        // The TDZ-proof shape: `let` + optional call, because the effect body runs
+        // synchronously at creation, before any `const` here would have initialized.
+        let stop: (() => void) | undefined;
+        // eslint-disable-next-line prefer-const -- assigned once, but `const` would re-open the synchronous-first-run TDZ this fixes
+        stop = effect(() => {
             if (boot.value === 'ready' || boot.value === 'down') {
-                stop();
+                settled = true;
+                stop?.(); // undefined only during the synchronous first run; the flag below disposes then
                 resolve();
             }
         });
+        if (settled) stop();
     });
 }
 
