@@ -114,10 +114,12 @@ onNewMessage((m: Message) => {
         });
 });
 
-/** D10–D13: the queue position is ANNOUNCED on change only, never on every recompute. */
+/** D10–D13 / L09: the queue position is ANNOUNCED when the NUMBER changes — never on every recompute, and not
+ *  when only the band behind it moves (the sentence names the number alone; step 13b's negative leg found the
+ *  band-keyed version re-reading "You are number 4 in line" after a band flip with the number unchanged). */
 effect(() => {
     const q = envelope.value.queue;
-    const key = q ? `${q.position ?? 'band'}:${q.band}` : null;
+    const key = q ? String(q.position ?? 'band') : null;
     if (key === lastQueueAnnounced) return;
     lastQueueAnnounced = key;
     if (q && q.position !== null) announce(t('queue.announce', { n: q.position }));

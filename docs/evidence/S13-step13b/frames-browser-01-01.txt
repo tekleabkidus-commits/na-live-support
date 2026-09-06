@@ -1,0 +1,128 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      frames-browser-01
+# set:        S13-step13b
+# command:    npx playwright test --project=widget --project=widget-375 tests/Browser/widget-frames.spec.ts
+# started:    2026-09-06T10:00:38Z
+# git:        4559870 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 12 tests using 1 worker
+
+  ✓   1 [widget] › tests/Browser/widget-frames.spec.ts:31:1 › row 9 · C02/C04: a first visit draws no resume card; after a message and a reload, Home leads with "Continue where you left off" and the last message (5.5s)
+  ✓   2 [widget] › tests/Browser/widget-frames.spec.ts:67:1 › row 13 · S02 "busy, and a slower band": with a deep default queue the SERVER band is long and Home draws the long copy with the amber marker, never a count (2.7s)
+  ✘   3 [widget] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line (16.5s)
+  ✓   4 [widget] › tests/Browser/widget-frames.spec.ts:150:1 › row 65 · L06: the panel mirrors under an RTL document direction (placeholder — no RTL locale ships): the own bubble and the header controls swap sides, nothing overflows (5.3s)
+  ✘   5 [widget] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing (13.7s)
+  ✓   6 [widget] › tests/Browser/widget-frames.spec.ts:215:1 › row 73 · M01/M02/M04 asserted individually: the AI is labelled with the platform token; the handoff line names who speaks per the identity setting and the bot never wears a name; the green dot is ABSENT out of hours (21.1s)
+  ✓   7 [widget-375] › tests/Browser/widget-frames.spec.ts:31:1 › row 9 · C02/C04: a first visit draws no resume card; after a message and a reload, Home leads with "Continue where you left off" and the last message (5.7s)
+  ✓   8 [widget-375] › tests/Browser/widget-frames.spec.ts:67:1 › row 13 · S02 "busy, and a slower band": with a deep default queue the SERVER band is long and Home draws the long copy with the amber marker, never a count (5.0s)
+  ✘   9 [widget-375] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line (17.0s)
+  ✓  10 [widget-375] › tests/Browser/widget-frames.spec.ts:150:1 › row 65 · L06: the panel mirrors under an RTL document direction (placeholder — no RTL locale ships): the own bubble and the header controls swap sides, nothing overflows (5.7s)
+  ✘  11 [widget-375] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing (21.2s)
+  ✓  12 [widget-375] › tests/Browser/widget-frames.spec.ts:215:1 › row 73 · M01/M02/M04 asserted individually: the AI is labelled with the platform token; the handoff line names who speaks per the identity setting and the bot never wears a name; the green dot is ABSENT out of hours (19.2s)
+
+
+  1) [widget] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+    Expected substring: "Signed in as አበበ ታደሰ"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+
+
+      127 |     await panel.locator('#nlw-tab-home').click();
+      128 |     await identify(first);
+    > 129 |     await expect(panel.locator('[data-role=identity]')).toContainText('Signed in as አበበ ታደሰ', {
+          |                                                         ^
+      130 |         timeout: 10000,
+      131 |     });
+      132 |     await panel.locator('#nlw-tab-messages').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:129:57
+
+    Error Context: test-results/widget-frames-row-34-·-F13-057c8--they-were-no-error-no-line-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      209 |     await page.waitForTimeout(1500);
+      210 |     await expect(card).toHaveAttribute('data-position', String(shown)); // the number did not move…
+    > 211 |     expect(await announcements()).toBe(1); // …so it was not announced again (L09: "only when the number moves")
+          |                                   ^
+      212 |     harness('queue-clear');
+      213 | });
+      214 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:211:35
+
+    Error Context: test-results/widget-frames-row-69-·-L09-ef3e0-AME-number-announce-nothing-widget/error-context.md
+
+  3) [widget-375] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+    Expected substring: "Signed in as አበበ ታደሰ"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=identity]')
+
+
+      127 |     await panel.locator('#nlw-tab-home').click();
+      128 |     await identify(first);
+    > 129 |     await expect(panel.locator('[data-role=identity]')).toContainText('Signed in as አበበ ታደሰ', {
+          |                                                         ^
+      130 |         timeout: 10000,
+      131 |     });
+      132 |     await panel.locator('#nlw-tab-messages').click();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:129:57
+
+    Error Context: test-results/widget-frames-row-34-·-F13-057c8--they-were-no-error-no-line-widget-375/error-context.md
+
+  4) [widget-375] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+    Expected pattern: /^\d+$/
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=queue]')
+
+
+      190 |     harness('handoff');
+      191 |     const card = panel.locator('[data-role=queue]');
+    > 192 |     await expect(card).toHaveAttribute('data-position', /^\d+$/, { timeout: 15000 });
+          |                        ^
+      193 |     const shown = Number(await card.getAttribute('data-position'));
+      194 |     const log = panel.locator('[data-role=log]');
+      195 |     await expect(log).toContainText(`You are number ${shown} in line`);
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:192:24
+
+    Error Context: test-results/widget-frames-row-69-·-L09-ef3e0-AME-number-announce-nothing-widget-375/error-context.md
+
+  4 failed
+    [widget] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+    [widget] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing 
+    [widget-375] › tests/Browser/widget-frames.spec.ts:103:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+    [widget-375] › tests/Browser/widget-frames.spec.ts:184:1 › row 69 · L09 (the negative): the position is announced ONCE; a push and a sync that carry the SAME number announce nothing 
+  8 passed (2.4m)
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-06T10:03:04Z
+# duration:   146s
+# EXIT:       1

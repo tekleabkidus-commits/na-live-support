@@ -36,6 +36,8 @@ use Illuminate\Support\Str;
  *                                                routed by Doc 11 into the default queue (the queue card)
  *   widget:harness queue-jump                    an URGENT fixture ticket ahead of everyone (EC-06's test)
  *   widget:harness queue-clear                   every waiting ticket assigned away (a deterministic #1)
+ *   widget:harness queue-fill   --value=N        N ordinary fixture tickets waiting in the default queue (the slower bands)
+ *   widget:harness queue-unfill                  the fill's tickets marked spam (Doc 06's door; no assignment — the throughput window stays honest)
  *   widget:harness agent-join   --visitor=<id>   Doc 11's system assignment to the fixture agent
  *   widget:harness staff-reply  --visitor=<id> --text=…   a staff message through Doc 04's outbound door
  *   widget:harness resolve      --visitor=<id>   Doc 06's resolve door (Doc 12's CSAT armer follows)
@@ -214,6 +216,7 @@ final class WidgetHarness extends Command
                     $waiting->remove($queue, $ticketId);
                 }
             }
+            app(\App\Domain\Routing\Estimator\BandMapper::class)->forget($queue); // the shown-band memory follows the emptied queue (step 13b)
             $this->line('QUEUE_CLEARED='.$n);
 
             return self::SUCCESS;
@@ -250,6 +253,70 @@ final class WidgetHarness extends Command
             $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent, actor: $agent, priority: 'urgent', departmentId: $department));
             app(RoutingPipeline::class)->route($ticket, 'created', ['explicit_department_id' => $department, 'explicit_queue_id' => $queue]);
             $this->line('QUEUE_JUMP_TICKET='.$ticket->identifier());
+
+            return self::SUCCESS;
+        }
+
+        if ($action === 'queue-fill') {
+            // S13 step 13b (B3-S02 "busy, and a slower band" — register row 13): N ordinary fixture tickets routed
+            // into the default queue through Doc 06's create door + Doc 11's pipeline, so the depth-driven
+            // estimate (Doc 11 FR-13) reaches the slower bands. The shown-band memory is forgotten through the
+            // mapper's own heal hook so the band answers the depth NOW (hysteresis otherwise holds the last band
+            // for 30 s); the vocabulary and thresholds are untouched. Prints the depth and the band the widget's
+            // Home will read (`Estimator::forQueue` — the same call `GET config` makes).
+            $value = $this->option('value');
+            $n = max(0, min(60, is_string($value) && $value !== '' ? (int) $value : 6)); // `--value=0` reads the estimate without filling
+            for ($i = 0; $i < $n; $i++) {
+                $customer = Customer::query()->create(['display_name' => 'Fixture Waiting Player', 'username' => '@fixture_waiting_'.Str::random(6), 'is_shell' => true, 'created_source' => 'staff']);
+                $conversationId = (string) Str::uuid7();
+                DB::table('conversations')->insert(['id' => $conversationId, 'tenant_id' => app(TenantContext::class)->tenantId(), 'channel' => 'fakechan', 'channel_ref_id' => 'harness', 'external_chat_id' => 'waiting-'.Str::random(8), 'customer_id' => $customer->getKey(), 'state' => 'active']);
+                $conversation = Conversation::query()->findOrFail($conversationId);
+                $ticket = app(CreateTicket::class)->create(new NewTicket($conversation, TicketSource::Agent, actor: $agent, departmentId: $department));
+                app(RoutingPipeline::class)->route($ticket, 'created', ['explicit_department_id' => $department, 'explicit_queue_id' => $queue]);
+            }
+            $this->drainLanes();
+            app(\App\Domain\Routing\Estimator\BandMapper::class)->forget($queue);
+            // The estimator's internal detail is printed for the DRIVER only (a console line, never a customer surface):
+            // the throughput of the last 30 minutes decides how deep the queue must be for the slower bands, and the
+            // battery's own assignments (queue-clear, agent-join) raise it — the scene sizes its fill from this line.
+            $detail = app(\App\Domain\Routing\Estimator\Estimator::class)->detail($queue, null);
+            $this->line('QUEUE_FILLED='.$n);
+            $this->line('QUEUE_DEPTH='.app(\App\Domain\Routing\Waiting\WaitingSets::class)->depth($queue));
+            $this->line('THROUGHPUT30='.($detail['throughput30'] ?? 'null').' RAW_MINUTES='.round($detail['raw_minutes'], 1));
+            $this->line('BAND='.$detail['band'].' DEGRADED='.($detail['degraded'] ? '1' : '0'));
+
+            return self::SUCCESS;
+        }
+
+        if ($action === 'queue-unfill') {
+            // The fill's own tickets leave through Doc 06's SPAM door (new → spam is the one legal exit that neither
+            // assigns nor re-routes: the routing consumer skips spam, and N-14 keeps spam out of every metric) — never
+            // through an assignment, which counts in Doc 11's 30-minute throughput window and inflates the very
+            // estimate the scene reads (the third 13b run measured throughput30 = 239, then 485, after clears of
+            // 128-ticket fills); new → resolved is illegal (Doc 06's matrix). The waiting set forgets them, the band
+            // memory follows, and the lanes drain before returning.
+            $ids = DB::table('tickets as t')->join('conversations as c', 'c.id', '=', 't.conversation_id')
+                ->where('c.channel', 'fakechan')->where('c.external_chat_id', 'like', 'waiting-%')
+                ->whereNull('t.assignee_id')->whereNotIn('t.status', ['resolved', 'closed', 'spam'])->pluck('t.id');
+            $waiting = app(\App\Domain\Routing\Waiting\WaitingSets::class);
+            $n = 0;
+            foreach ($ids as $id) {
+                $ticket = is_string($id) ? Ticket::query()->find($id) : null;
+                if (! is_string($id) || ! $ticket instanceof Ticket) {
+                    continue;
+                }
+                try {
+                    app(\App\Domain\Tickets\Spam\SpamTicket::class)->mark($ticket, $agent, '[FIXTURE] queue-fill cleanup (S13 step 13b)');
+                } catch (\Throwable $e) {
+                    $this->line('UNFILL_SKIPPED='.$ticket->identifier().' '.$e::class);
+                }
+                $waiting->remove($queue, $id);
+                $n++;
+            }
+            $this->drainLanes();
+            app(\App\Domain\Routing\Estimator\BandMapper::class)->forget($queue);
+            $this->line('QUEUE_UNFILLED='.$n);
+            $this->line('QUEUE_DEPTH='.$waiting->depth($queue));
 
             return self::SUCCESS;
         }
@@ -320,6 +387,32 @@ final class WidgetHarness extends Command
 
                 return self::FAILURE;
         }
+    }
+
+    /**
+     * Bulk fixture work leaves the platform's own lanes with events to consume (routing, automation, SLA, projections,
+     * indexing — the dev/CI compose runs ONE process per family). The driver waits for them to drain, bounded, so the
+     * next scene meets a quiet platform and its waits stay honest; the wait is printed, never hidden.
+     */
+    private function drainLanes(int $maxSeconds = 150): void
+    {
+        $redis = app('redis')->connection('durable');
+        $start = microtime(true);
+        $pending = 0;
+        $settled = 0; // the relay hands the outbox to the lanes about once a second — two quiet readings in a row count as drained
+        do {
+            $pending = DB::table('outbox')->whereNull('relayed_at')->count();
+            foreach (['automation', 'default', 'routing', 'ai'] as $lane) { // `ai`: every fixture ticket also queues Doc 09's subject generation
+                $len = $redis->command('llen', ['queues:'.$lane]);
+                $pending += is_numeric($len) ? (int) $len : 0;
+            }
+            $settled = $pending === 0 ? $settled + 1 : 0;
+            if ($settled >= 2) {
+                break;
+            }
+            usleep(500_000);
+        } while (microtime(true) - $start < $maxSeconds);
+        $this->line('LANES_DRAINED='.($pending === 0 ? '1' : '0').' AFTER_MS='.(int) ((microtime(true) - $start) * 1000).' PENDING='.$pending);
     }
 
     private function conversation(): ?Conversation
