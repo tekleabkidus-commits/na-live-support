@@ -66,6 +66,14 @@ this note. All subsequent S19 work is single-session.
 
 ---
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, THIRTEENTH (owner-ordered, 2026-09-07 19:29Z): 645565b PUSHED (origin/main = 645565b); its run 34154003771 = STARTUP_FAILURE with the BILLING annotation — filed incident-#16-adjacent (billing class); the owner's re-run is NOT YET VISIBLE from the API — no verdict, not polled
+
+**THE BILLING INCIDENT (owner-read annotation, recorded as ordered):** the original run on 645565b (34154003771, created 19:02:07Z) ended STARTUP_FAILURE before any job was created — the annotation reads "recent account payments have failed or your spending limit needs to be increased". Filed as the incident-#16-adjacent BILLING class: an infrastructure refusal upstream of every stage, proving nothing about the tree (rule 11's shape — a run that never started is not a red). The owner fixed billing and re-ran.
+
+**THE LOOK'S FINDING:** at 19:29Z the API shows ONLY attempt 1 (startup_failure) on 34154003771 and no second run on 645565b — the re-run has not surfaced (a startup-failed run sometimes cannot be re-run in place and needs a fresh trigger). No verdict exists to record; nothing is polled (rule 15). STOP: the owner confirms the re-run is live (or triggers a fresh run on 645565b) and orders the look again; green on Doc 13's own terms then becomes the 13b VERDICT OF RECORD, ahead of the advisor's final recount.
+
+---
+
 ## SESSION-13 (Doc 13) — CI LOOK OF RECORD, TWELFTH (owner-ordered): 725a58f's run 34040424869 (#317) — Stages 1–3b GREEN; Stage 4 FAILURE (2 failed · 1 flaky · 447 passed, 33.6 m); FIX FIRST executed — one panel defect fixed at cause, two 13b test artifacts named and strengthened (commit = this section's SHA; ITS run is the 13b verdict)
 
 **THE LOOK (owner-read; no billing annotation; warnings = the Node 20 notices + pre-existing lint warnings):** the two reds are 13b frame legs — `widget-frames.spec.ts:31` row 9 (widget) and `:116` row 34 (widget, and flaky on widget-375). Diagnosed from the Stage 4 log (`docs/evidence/S13-cifix/ci-34040424869-stage4-log.txt`; Stage 4 uploads no Playwright artifacts, so the log is the evidence of record).
