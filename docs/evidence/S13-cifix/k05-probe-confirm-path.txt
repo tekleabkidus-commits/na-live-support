@@ -1,0 +1,11 @@
+
+Running 1 test using 1 worker
+
+PROBE before-confirm :: {"url":"/admin/workflow/forms/01a07d93-ccfc-73ac-bca4-f9cf63ff161c","toggleExpanded":"true","historyPresent":true,"rows":["draft"]}
+PROBE after-networkidle :: {"url":"/admin/workflow/forms/01a07d93-ccfc-73ac-bca4-f9cf63ff161c","toggleExpanded":"true","historyPresent":true,"rows":["1"],"live":"v1 published"}
+PROBE after-live-assert :: {"url":"/admin/workflow/forms/01a07d93-ccfc-73ac-bca4-f9cf63ff161c","toggleExpanded":"true","historyPresent":true,"rows":["1"],"live":"v1 published"}
+PROBE after-toggle-click :: {"url":"/admin/workflow/forms/01a07d93-ccfc-73ac-bca4-f9cf63ff161c","toggleExpanded":"false","historyPresent":false,"rows":[],"live":"v1 published"}
+PROBE after-1500ms :: {"url":"/admin/workflow/forms/01a07d93-ccfc-73ac-bca4-f9cf63ff161c","toggleExpanded":"false","historyPresent":false,"rows":[],"live":"v1 published"}
+  ✓  1 [chromium] › tests/Browser/zzk05probe.spec.ts:17:1 › k05 probe (4.3s)
+
+  1 passed (5.2s)

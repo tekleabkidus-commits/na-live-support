@@ -1,0 +1,101 @@
+// THROWAWAY K05 instrumentation probe (never lands): the exact K05 flow with the
+// history panel's state printed around the toggle click.
+import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
+
+const V1440 = { width: 1440, height: 900 };
+const FORM = '[F1] form proof';
+
+async function login(page: Page): Promise<void> {
+    await page.goto('/login');
+    await page.locator('#login-email').fill('agent@fixture.example');
+    await page.locator('#login-password').fill('browser-fixture-password');
+    await page.getByTestId('login-submit').click();
+    await page.waitForURL((url) => !url.pathname.startsWith('/login'));
+}
+
+test('k05 probe', async ({ page }) => {
+    test.setTimeout(90000);
+    await login(page);
+    await page.setViewportSize(V1440);
+    await page.goto('/admin/workflow/forms');
+    const row = page.locator('[data-form-row]', { hasText: FORM });
+    let id = '';
+    if ((await row.count()) > 0) id = (await row.first().getAttribute('data-form-row')) ?? '';
+    else {
+        await page.getByTestId('wf-form-name').fill(FORM);
+        await page.getByTestId('wf-form-create').click();
+        await page.waitForURL(/\/admin\/workflow\/forms\/[0-9a-f-]+$/);
+        id = page.url().split('/').pop() ?? '';
+    }
+    await page.goto(`/admin/workflow/forms/${id}`);
+    await expect(page.getByTestId('wf-form-builder')).toBeVisible();
+    await page.evaluate(() => {
+        Object.keys(localStorage)
+            .filter((k) => k.startsWith('wf-form-draft:'))
+            .forEach((k) => localStorage.removeItem(k));
+    });
+    await page.reload();
+    await expect(page.getByTestId('wf-form-builder')).toBeVisible();
+    // buildStep
+    if ((await page.getByTestId('wf-step-0').count()) === 0)
+        await page.getByTestId('wf-step-add').click();
+    await page.getByTestId('wf-step-title-en').fill('Payment');
+    await page.getByTestId('wf-step-title-am').fill('ክፍያ');
+    if ((await page.getByTestId('wf-canvas-field-f1_proof_field').count()) === 0)
+        await page.getByTestId('wf-palette-ref-f1_proof_field').click();
+    if (
+        (await page.getByTestId('wf-canvas-field-text_2').count()) === 0 &&
+        (await page.locator('[data-testid^="wf-canvas-field-text_"]').count()) === 0
+    ) {
+        await page.getByTestId('wf-palette-text').click();
+    }
+    const textCard = page.locator('[data-testid^="wf-canvas-field-text_"]').first();
+    await textCard.locator('.body').click();
+    await page.getByTestId('wf-inspector-label-en').fill('Transaction reference');
+    await page.getByTestId('wf-inspector-label-am').fill('የግብይት ማጣቀሻ');
+    await textCard.locator('.body').click();
+    await page.getByTestId('wf-cond-field').selectOption('f1_proof_field');
+    await page.getByTestId('wf-cond-op').selectOption('not_equals');
+    await page.getByTestId('wf-cond-value').selectOption('telebirr');
+    await page.getByTestId('wf-inspector-required').check();
+    await page.getByTestId('wf-inspector-required-when-visible').uncheck();
+    await page.getByTestId('wf-publish').click();
+    const dlg = page.getByTestId('wf-publish-dialog');
+    await expect(dlg).toContainText('Publish blocked');
+    await page.getByTestId('wf-fix-required-hidden').click();
+    await expect(dlg).toContainText(/Becomes|Publish blocked/);
+    await expect(page.getByTestId('wf-publish-confirm')).toBeVisible({ timeout: 10000 }); // FORCE the confirm path (CI 318's shape)
+    const state = async (label: string) =>
+        console.log(
+            'PROBE ' +
+                label +
+                ' :: ' +
+                JSON.stringify(
+                    await page.evaluate(() => ({
+                        url: location.pathname,
+                        toggleExpanded: document
+                            .querySelector('[data-testid=wf-history-toggle]')
+                            ?.getAttribute('aria-expanded'),
+                        historyPresent: !!document.querySelector('[data-testid=wf-history]'),
+                        rows: [
+                            ...document.querySelectorAll('[data-version-row]'),
+                        ].map((r) => r.getAttribute('data-version-row')),
+                        live: document
+                            .querySelector('[data-testid=wf-form-live]')
+                            ?.textContent?.trim()
+                            .slice(0, 40),
+                    })),
+                ),
+        );
+    await state('before-confirm');
+    await page.getByTestId('wf-publish-confirm').click();
+    await page.waitForLoadState('networkidle');
+    await state('after-networkidle');
+    await expect(page.getByTestId('wf-form-live')).toContainText(/v\d+ published/);
+    await state('after-live-assert');
+    await page.getByTestId('wf-history-toggle').click();
+    await state('after-toggle-click');
+    await page.waitForTimeout(1500);
+    await state('after-1500ms');
+});

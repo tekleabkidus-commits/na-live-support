@@ -66,6 +66,23 @@ this note. All subsequent S19 work is single-session.
 
 ---
 
+## SESSION-13 (Doc 13) — CI LOOK OF RECORD, FOURTEENTH (owner-ordered): the fresh-trigger commit's run 34155857302 (#318, tree = 645565b + docs) = **THE 13b VERDICT OF RECORD — GREEN ON DOC 13'S OWN TERMS (the S10 Option-A shape, owner-ruled)** (commit = this section's SHA; STOP for the advisor's final recount)
+
+**THE RUN (owner-read + the Stage 4 log of record, `docs/evidence/S13-cifix/ci-34155857302-stage4-log.txt`):** Stages 1–3b green; Stage 4 bring-up, bucket, probes green; Playwright **449 passed · 1 failed · 1 skipped (34.5 m)**; no billing annotation; warnings = the Node 20 notices + pre-existing lint warnings. **Both 13b frame legs (rows 9 and 34) GREEN** — the twelfth look's fix holds in CI. The one red: `f1-b12.spec.ts:1227` (B9-S11 §K K05+K06), deterministic on all three attempts.
+
+**THE ONE RED, ESTABLISHED AS F1/DOC 12 TEST DEBT — NOT DOC 13'S (the owner's Option-A condition met by proof):**
+- **Mechanism, proven with the app's own printed state** (instrumented probe, `k05-probe-confirm-path.txt`; the probe spec kept as `k05-probe-final.spec.ts.txt`, never landed): after publish-confirm the builder reloads and the HISTORY PANEL IS ALREADY OPEN by default — expanded true, the v1 row "published", the live badge — the PRODUCT is correct and matches the drawn B9 state (open-by-default landed in the Sep 3 fidelity commit 949057e). The test then clicks the history toggle, CLOSING the open panel — rows gone, the exact CI red at line 1272.
+- **Why it hid until #318:** the leg checks for the confirm button with a single unawaited count that RACES the async re-validation after the auto-fix click (the button appears only with the validation response). Every prior run lost the race → the test took its back-out branch and passed TRIVIALLY, never reaching the publish or history assertions; #318's runner won the race for the first time → the real path executed → deterministic red.
+- **Independence from Doc 13's changes, both accepted shapes:** the probe reproduced the failing state with NO harness mode and no widget code path; and the tree delta of the green run #317 → red #318 is two files (`widget/src/panel/main.tsx`, `tests/Browser/widget-frames.spec.ts`), neither loaded by the failing path, while the deciding code predates 13b.
+- **F-13b-6 FILED BY NAME for Doc 12's window (two test defects in `tests/Browser/f1-b12.spec.ts` K05+K06; nothing touched):** (1) the unawaited confirm-count race that makes K05's substance silently skippable — a trivial-green hazard; (2) the toggle click stale against the open-by-default history. The fix is Doc 12's window's: await the confirm button; drop or invert the toggle click.
+- **Local observations, recorded honestly:** the K05 leg is green on today's fresh local DB (CI's chromium prefix, `local-fresh-prefix-run.txt` — it took the back-out branch); two OTHER legs (§H H04, §I I03) were red locally in that run but are GREEN on #318 — observed after an incomplete local service restart, local-only, no finding.
+
+**FINAL RECOUNTS FROM ROWS (this SHA, mechanical):** id rows — 96 gapless: **72 DONE / 24 PARTIAL / 0 NOT DONE** (every PARTIAL tagged with its bucket or refused packet). Frame register (`docs/evidence/S13-design/register.md`, 75 rows): **66 PROVEN / 6 PARTIAL / 1 BUILT / 2 NOT BUILT**. Findings carried by name: F-13b-1 (P-FOLD) · F-13b-2 (P-AGENT-LABEL) · F-13b-3 (re_session unconsumed) · F-13b-4 (resume meta) — Doc 13's own, reported; F-13b-5 (FormPublishTest order-dependence) and **F-13b-6** — Doc 12's window.
+
+**VERDICT OF RECORD: run 34155857302 on the fresh-trigger commit — green on Doc 13's own terms (S10 Option-A), owner-ruled. STOP for the advisor's FINAL RECOUNT; acceptance follows it.**
+
+---
+
 ## SESSION-13 (Doc 13) — CI LOOK OF RECORD, THIRTEENTH (owner-ordered, 2026-09-07 19:29Z): 645565b PUSHED (origin/main = 645565b); its run 34154003771 = STARTUP_FAILURE with the BILLING annotation — filed incident-#16-adjacent (billing class); the owner's re-run is NOT YET VISIBLE from the API — no verdict, not polled
 
 **THE BILLING INCIDENT (owner-read annotation, recorded as ordered):** the original run on 645565b (34154003771, created 19:02:07Z) ended STARTUP_FAILURE before any job was created — the annotation reads "recent account payments have failed or your spending limit needs to be increased". Filed as the incident-#16-adjacent BILLING class: an infrastructure refusal upstream of every stage, proving nothing about the tree (rule 11's shape — a run that never started is not a red). The owner fixed billing and re-ran.
