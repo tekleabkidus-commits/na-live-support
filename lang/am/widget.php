@@ -46,6 +46,7 @@ return [
         'quick_answers' => 'ፈጣን መልሶች',
         'resume' => 'ካቆሙበት ይቀጥሉ',
         'resume_meta' => ':who :when መልስ ሰጠ · :count መልእክቶች',
+        'resume_meta_count' => ':count መልእክቶች',
         'external' => 'ድረ-ገጹን ይከፍታል',
         'no_account' => 'አካውንት አያስፈልግም — መጻፍ ይጀምሩ፣ እኛ እንቀበላለን።',
     ],

@@ -53,6 +53,7 @@ return [
         'quick_answers' => 'Quick answers',
         'resume' => 'Continue where you left off',
         'resume_meta' => ':who replied :when · :count messages',
+        'resume_meta_count' => ':count messages',
         'external' => 'opens the site',
         'no_account' => 'No account needed — start typing and we will pick it up.',
     ],

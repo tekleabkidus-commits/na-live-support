@@ -15,6 +15,22 @@ function localTime(iso: string, tz: string): string {
     }
 }
 
+/** 13c F-13b-4: the meta line's :when — today / yesterday / the date, in the panel's language. */
+function relativeDay(iso: string): string {
+    const d = new Date(iso);
+    const now = new Date();
+    const same = (a: Date, b: Date): boolean => a.toDateString() === b.toDateString();
+    if (same(d, now)) return t('messages.today').toLocaleLowerCase();
+    const y = new Date(now);
+    y.setDate(now.getDate() - 1);
+    if (same(d, y)) return t('messages.yesterday').toLocaleLowerCase();
+    try {
+        return new Intl.DateTimeFormat(language.value, { day: 'numeric', month: 'long' }).format(d);
+    } catch {
+        return iso.slice(0, 10);
+    }
+}
+
 /** C01–C07: greeting from cached config (instant, never a skeleton), the honest band, the resume card outranking the shortcuts, four shortcut kinds, nothing else. */
 export const Home: FunctionComponent<{
     onShortcut: (s: Shortcut) => void;
@@ -58,11 +74,18 @@ export const Home: FunctionComponent<{
                     <button type="button" class="nlw-btn" onClick={() => (tab.value = 'messages')}>
                         <span>{last.body ? last.body.slice(0, 60) : t('a11y.attachment')}</span>
                         <small>
-                            {t('home.resume_meta', {
-                                who: last.author === 'customer' ? '' : t('header.team'),
-                                when: '',
-                                count: history.length,
-                            })}
+                            {/* 13c F-13b-4: the line is COMPLETE or it is the count alone — an empty
+                                :who/:when hole never renders (the frame draws "ሰላም ትናንት መልስ ሰጠች · 3 መልእክቶች") */}
+                            {last.author === 'agent' || last.author === 'ai'
+                                ? t('home.resume_meta', {
+                                      who:
+                                          last.author === 'ai'
+                                              ? t('messages.ai_label')
+                                              : last.author_display || t('header.team'),
+                                      when: relativeDay(last.created_at),
+                                      count: history.length,
+                                  })
+                                : t('home.resume_meta_count', { count: history.length })}
                         </small>
                     </button>
                 </div>

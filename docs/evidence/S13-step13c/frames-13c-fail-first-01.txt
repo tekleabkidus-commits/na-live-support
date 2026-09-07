@@ -1,0 +1,114 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      frames-13c-fail-first
+# set:        S13-step13c
+# command:    npx playwright test --project=widget tests/Browser/widget-frames.spec.ts --grep row 9 |row 20|row 34|row 73
+# started:    2026-09-07T21:00:14Z
+# git:        839304e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+Running 4 tests using 1 worker
+
+  ✘  1 [widget] › tests/Browser/widget-frames.spec.ts:31:1 › row 9 · C02/C04: a first visit draws no resume card; after a message and a reload, Home leads with "Continue where you left off" and the last message (10.8s)
+  ✘  2 [widget] › tests/Browser/widget-frames.spec.ts:126:1 › row 20 · D19 fold: past 200 messages the thread renders at most 200 rows; "Load earlier messages" brings older ones back through the cursor; the newest are on screen first (3.1m)
+  ✘  3 [widget] › tests/Browser/widget-frames.spec.ts:171:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line (29.4s)
+  ✘  4 [widget] › tests/Browser/widget-frames.spec.ts:303:1 › row 73 · M01/M02/M04 asserted individually: the AI is labelled with the platform token; the handoff line names who speaks per the identity setting and the bot never wears a name; the green dot is ABSENT out of hours (2.9s)
+
+
+  1) [widget] › tests/Browser/widget-frames.spec.ts:31:1 › row 9 · C02/C04: a first visit draws no resume card; after a message and a reload, Home leads with "Continue where you left off" and the last message 
+
+    Error: expect(received).not.toMatch(expected)
+
+    Expected pattern: not /^\s*replied|replied\s+·/
+    Received string:      "Support replied  · 2 messages"
+
+      61 |     // 13c (F-13b-4): the meta line renders COMPLETE or not at all — never an empty :who/:when hole.
+      62 |     const meta = ((await resume.locator('small').textContent()) ?? '').trim();
+    > 63 |     expect(meta).not.toMatch(/^\s*replied|replied\s+·/); // an empty :who or :when never renders
+         |                      ^
+      64 |     expect(meta).toMatch(/^(\S.+ replied \S.+ · \d+ messages|\d+ messages)$/);
+      65 |     // C04: the resume card sits ABOVE the shortcuts
+      66 |     const cards = await again.locator('.nlw-card h3').allTextContents();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:63:22
+
+    Error Context: test-results/widget-frames-row-9-·-C02--3f389-ft-off-and-the-last-message-widget/error-context.md
+
+  2) [widget] › tests/Browser/widget-frames.spec.ts:126:1 › row 20 · D19 fold: past 200 messages the thread renders at most 200 rows; "Load earlier messages" brings older ones back through the cursor; the newest are on screen first 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-message]').last()
+    Expected substring: "history line 210"
+    Received string:    "Support[FIXTURE] history line 02412:00 AM"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 20000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-message]').last()
+        43 × locator resolved to <div class="nlw-msg" data-delivery="" data-author="agent" data-message="01a07dac-2ff0-7197-9a98-2ee496df6154">…</div>
+           - unexpected value "Support[FIXTURE] history line 02412:00 AM"
+
+
+      138 |     await again.locator('#nlw-tab-messages').click();
+      139 |     // the NEWEST line is on screen without any interaction (the tail page)
+    > 140 |     await expect(again.locator('[data-message]').last()).toContainText('history line 210', {
+          |                                                          ^
+      141 |         timeout: 20000,
+      142 |     });
+      143 |     const countNow = await again.locator('[data-message]').count();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:140:58
+
+    Error Context: test-results/widget-frames-row-20-·-D19-6a9b0--newest-are-on-screen-first-widget/error-context.md
+
+  3) [widget] › tests/Browser/widget-frames.spec.ts:171:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('iframe#nlw-panel').contentFrame().locator('[data-role=empty]')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('iframe#nlw-panel').contentFrame().locator('[data-role=empty]')
+
+
+      228 |     await expect(next.locator('.nlw-greeting')).toBeVisible();
+      229 |     await next.locator('#nlw-tab-messages').click();
+    > 230 |     await expect(next.locator('[data-role=empty]')).toBeVisible({ timeout: 15000 }); // no prior history under the new identity
+          |                                                     ^
+      231 |     expect(await next.locator('[data-message]').count()).toBe(0);
+      232 | });
+      233 |
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:230:53
+
+    Error Context: test-results/widget-frames-row-34-·-F13-057c8--they-were-no-error-no-line-widget/error-context.md
+
+  4) [widget] › tests/Browser/widget-frames.spec.ts:303:1 › row 73 · M01/M02/M04 asserted individually: the AI is labelled with the platform token; the handoff line names who speaks per the identity setting and the bot never wears a name; the green dot is ABSENT out of hours 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "rgb(21, 111, 69)"
+    Received: "rgb(143, 95, 8)"
+
+      315 |         expect(
+      316 |             await band.locator('.nlw-dot').evaluate((el) => getComputedStyle(el).backgroundColor),
+    > 317 |         ).toBe(await tokenValue(page, '--ds-success-text'));
+          |           ^
+      318 |         // M01 · the AI message: the words "AI assistant", the ✦ mark, the accent from the PLATFORM's ai-edge token (not the operator's accent)
+      319 |         await sendFromPanel(panel, 'row 73: ገንዘቤ አልደረሰኝም');
+      320 |         const ai = panel.locator('[data-message][data-author=ai]').first();
+        at /home/kidus/projects/na-live-support/tests/Browser/widget-frames.spec.ts:317:11
+
+    Error Context: test-results/widget-frames-row-73-·-M01-75168--dot-is-ABSENT-out-of-hours-widget/error-context.md
+
+  4 failed
+    [widget] › tests/Browser/widget-frames.spec.ts:31:1 › row 9 · C02/C04: a first visit draws no resume card; after a message and a reload, Home leads with "Continue where you left off" and the last message 
+    [widget] › tests/Browser/widget-frames.spec.ts:126:1 › row 20 · D19 fold: past 200 messages the thread renders at most 200 rows; "Load earlier messages" brings older ones back through the cursor; the newest are on screen first 
+    [widget] › tests/Browser/widget-frames.spec.ts:171:1 › row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line 
+    [widget] › tests/Browser/widget-frames.spec.ts:303:1 › row 73 · M01/M02/M04 asserted individually: the AI is labelled with the platform token; the handoff line names who speaks per the identity setting and the bot never wears a name; the green dot is ABSENT out of hours 
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-07T21:04:07Z
+# duration:   233s
+# EXIT:       1

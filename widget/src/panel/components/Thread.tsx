@@ -2,7 +2,7 @@ import type { FunctionComponent } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { signal } from '@preact/signals';
 import { t } from '../i18n';
-import { config, envelope, language, messages } from '../state';
+import { config, earlierCursor, envelope, language, messages } from '../state';
 import type { Message } from '../types';
 
 function dayLabel(iso: string): string {
@@ -80,14 +80,14 @@ const MediaItem: FunctionComponent<{ item: Message['media'][number] }> = ({ item
 
 const Bubble: FunctionComponent<{ m: Message }> = ({ m }) => {
     const g = glyph(m);
-    const agentIdentity = config.value?.settings.agent_identity;
+    // 13c F-13b-2 (M02): the agent label follows `widget.agent_identity` — the server sends the
+    // name only when the mode wants one (first_name; alias = the first-name stand-in, filed);
+    // team_name (or no name on record) draws the team label. The bot's label is never a person's.
     const name =
         m.author === 'ai'
             ? t('messages.ai_label')
             : m.author === 'agent'
-              ? agentIdentity === 'team'
-                  ? t('header.team')
-                  : t('header.team')
+              ? m.author_display || t('header.team')
               : '';
     if (m.author === 'system') {
         return (
@@ -168,11 +168,15 @@ const QueueCard: FunctionComponent = () => {
     );
 };
 
+/** 13c P-FOLD (D19, frame row 20): at most this many rows render; older ones come back on request. */
+const FOLD = 200;
+
 export const Thread: FunctionComponent<{
     onStar: (token: string, score: number) => void;
     onShortcut: (label: string) => void;
-}> = ({ onStar, onShortcut }) => {
-    const list = messages.value;
+    onLoadEarlier: () => void;
+}> = ({ onStar, onShortcut, onLoadEarlier }) => {
+    const list = messages.value.slice(-FOLD);
     const endRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         endRef.current?.scrollIntoView({ block: 'end' });
@@ -204,6 +208,16 @@ export const Thread: FunctionComponent<{
     const survey = list.filter((m) => m.survey).pop()?.survey ?? null;
     return (
         <div class="nlw-thread" data-role="thread">
+            {earlierCursor.value !== null ? (
+                <button
+                    type="button"
+                    class="nlw-btn nlw-load-earlier"
+                    data-role="load-earlier"
+                    onClick={onLoadEarlier}
+                >
+                    {t('messages.load_earlier')}
+                </button>
+            ) : null}
             {list.map((m) => {
                 const day = dayLabel(m.created_at);
                 const sep = day !== lastDay;

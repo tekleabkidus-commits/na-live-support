@@ -16,6 +16,7 @@ export const visitorId = signal<string | null>(null);
 export const language = signal<string>('en');
 export const messages = signal<Message[]>([]);
 export const conversationId = signal<string | null>(null);
+export const earlierCursor = signal<string | null>(null); // 13c P-FOLD: the walk into history (null = nothing earlier)
 export const envelope = signal<MessagesPage['envelope']>({
     typing: false,
     queue: null,

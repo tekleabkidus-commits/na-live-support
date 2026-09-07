@@ -9,7 +9,7 @@
  * staff-side; the widget shows nothing for inbound).
  */
 import type { WidgetApi } from '../api';
-import { conversationId, envelope, messages, open } from '../state';
+import { conversationId, earlierCursor, envelope, messages, open } from '../state';
 import type { Message } from '../types';
 
 let timer: number | null = null;
@@ -38,12 +38,25 @@ export function merge(page: Message[]): Message[] {
     return Object.assign(list, { fresh }) as Message[] & { fresh: Message[] };
 }
 
+let walked = false; // 13c P-FOLD: once the visitor walks into history, the tail poll must not clobber the walk's cursor
+
+export async function loadEarlier(api: WidgetApi): Promise<void> {
+    const cursor = earlierCursor.value;
+    if (!cursor) return;
+    const page = await api.messages(cursor);
+    if (!page) return;
+    walked = true;
+    earlierCursor.value = page.next_cursor; // null when the beginning is reached — the control leaves
+    messages.value = [...(merge(page.data) as Message[])];
+}
+
 export async function sync(api: WidgetApi): Promise<boolean> {
     const page = await api.messages(null);
     if (!page) return false;
     const merged = merge(page.data) as Message[] & { fresh?: Message[] };
     conversationId.value = page.conversation_id;
     envelope.value = page.envelope;
+    if (!walked) earlierCursor.value = page.next_cursor; // the tail's own "earlier" until the visitor walks
     messages.value = [...merged];
     const inbound = (merged.fresh ?? []).filter((m) => m.author !== 'customer');
     for (const m of inbound) announceHook?.(m);

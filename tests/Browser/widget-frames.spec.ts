@@ -58,6 +58,10 @@ test('row 9 · C02/C04: a first visit draws no resume card; after a message and 
     // C02 at cause: the card shows the THREAD'S last message (the AI reply captured above, 60-char slice)
     await expect(resume.locator('button span').first()).toContainText(lastBody.slice(0, 40));
     await expect(resume.locator('small')).toContainText(/\d+ messages/);
+    // 13c (F-13b-4): the meta line renders COMPLETE or not at all — never an empty :who/:when hole.
+    const meta = ((await resume.locator('small').textContent()) ?? '').trim();
+    expect(meta).not.toMatch(/^\s*replied|replied\s+·/); // an empty :who or :when never renders
+    expect(meta).toMatch(/^(\S.+ replied \S.+ · \d+ messages|\d+ messages)$/);
     // C04: the resume card sits ABOVE the shortcuts
     const cards = await again.locator('.nlw-card h3').allTextContents();
     expect(cards.indexOf('Continue where you left off')).toBeLessThan(
@@ -119,6 +123,57 @@ test('row 13 · S02 "busy, and a slower band": with a deep default queue the SER
     }
 });
 
+test('row 20 · D19 fold: the tail renders first; "Load earlier messages" walks the cursor to the start; past 200 loaded rows at most 200 render', async ({
+    page,
+}) => {
+    test.setTimeout(420000); // the 210-message seed walks Doc 04's outbound door one message at a time
+    harness('setting', '--key=widget.cache.content', '--value=false'); // the scene is the CURSOR's, not the cache's (a registered setting through the one writer)
+    try {
+        const { panel } = await openWidget(page);
+        await sendFromPanel(panel, 'row 20: start my history');
+        harness('seed-messages', '--value=210');
+        await page.reload();
+        await page.evaluate(() =>
+            (window as unknown as { PlatformChat: { open(): void } }).PlatformChat.open(),
+        );
+        const again = page.frameLocator('iframe#nlw-panel');
+        await again.locator('#nlw-tab-messages').click();
+        // the NEWEST line is on screen without any interaction (the tail page)
+        await expect(again.locator('[data-message]').last()).toContainText('history line 210', {
+            timeout: 20000,
+        });
+        expect(await again.locator('[data-message]').count()).toBeLessThanOrEqual(25); // one page — the fold never loads the world up front
+        const earlier = again.locator('[data-role=load-earlier]');
+        await expect(earlier).toBeVisible();
+        await expect(earlier).toHaveText('Load earlier messages');
+        const oldestBefore = (
+            (await again.locator('[data-message]').first().textContent()) ?? ''
+        ).trim();
+        await earlier.click();
+        await expect
+            .poll(
+                async () =>
+                    ((await again.locator('[data-message]').first().textContent()) ?? '').trim(),
+                { timeout: 15000 },
+            )
+            .not.toBe(oldestBefore); // older ones came back on request
+        // walk to the very beginning: the control leaves when nothing earlier exists on the server
+        for (let i = 0; i < 12 && (await earlier.count()) > 0; i++) {
+            await earlier.click();
+            await page.waitForTimeout(800);
+        }
+        await expect(earlier).toHaveCount(0);
+        // 211 rows are loaded; the FOLD renders at most 200 — the newest stay, the start is folded away
+        expect(await again.locator('[data-message]').count()).toBe(200);
+        await expect(again.locator('[data-message]').last()).toContainText('history line 210');
+        await expect(again.locator('[data-message]', { hasText: 'start my history' })).toHaveCount(
+            0,
+        );
+    } finally {
+        harness('setting', '--key=widget.cache.content', '--value=true');
+    }
+});
+
 test('row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — nothing visible happens: the badge, the thread and the composer stay as they were; no error, no line', async ({
     page,
 }) => {
@@ -169,6 +224,17 @@ test('row 34 · F13: the site asserts a DIFFERENT identity mid-conversation — 
     await panel.locator('#nlw-tab-messages').click();
     await expect(panel.locator('textarea')).toBeEnabled(); // the visitor can go on talking
     expect(errors).toEqual([]);
+    // 13c (F-13b-3, EC-04's third clause): the NEXT conversation begins under the new identity —
+    // a reload after the switch opens on a FRESH visitor session; the prior thread is not rendered.
+    await page.reload();
+    await page.evaluate(() =>
+        (window as unknown as { PlatformChat: { open(): void } }).PlatformChat.open(),
+    );
+    const next = page.frameLocator('iframe#nlw-panel');
+    await expect(next.locator('.nlw-greeting')).toBeVisible();
+    await next.locator('#nlw-tab-messages').click();
+    await expect(next.locator('[data-role=empty]')).toBeVisible({ timeout: 15000 }); // no prior history under the new identity
+    expect(await next.locator('[data-message]').count()).toBe(0);
 });
 
 test('row 65 · L06: the panel mirrors under an RTL document direction (placeholder — no RTL locale ships): the own bubble and the header controls swap sides, nothing overflows', async ({
@@ -275,6 +341,8 @@ test('row 73 · M01/M02/M04 asserted individually: the AI is labelled with the p
         const agentMsg = panel.locator('[data-message][data-author=agent]').last();
         await expect(agentMsg).toContainText('a person here', { timeout: 15000 });
         await expect(agentMsg.locator('.nlw-label')).not.toContainText('AI assistant'); // a person is never labelled as the bot…
+        // 13c (F-13b-2): the BUBBLE's label follows `widget.agent_identity` — first_name (the default) names the person
+        await expect(agentMsg.locator('.nlw-label')).toHaveText('Fixture');
         await expect(ai.locator('.nlw-label')).not.toContainText('Fixture'); // …and the bot never wears a person's name
         expect(await agentMsg.locator('.nlw-label[data-ai]').count()).toBe(0);
         // M04 · out of hours: the dot is ABSENT (not recoloured); the clock glyph and the opens-at copy instead

@@ -42,6 +42,7 @@ use Illuminate\Support\Str;
  *   widget:harness staff-reply  --visitor=<id> --text=…   a staff message through Doc 04's outbound door
  *   widget:harness resolve      --visitor=<id>   Doc 06's resolve door (Doc 12's CSAT armer follows)
  *   widget:harness split        --visitor=<id>   Doc 06's split door on the newest message (BR-04's test)
+ *   widget:harness seed-messages --value=N       N staff messages through Doc 04's outbound door (the fold scene)
  *   widget:harness setting      --key=widget.cache.content --value=false   a registered setting through the one writer
  *
  * `--latest` picks the tenant's newest webchat conversation. Actor = the
@@ -384,6 +385,18 @@ final class WidgetHarness extends Command
                 $this->line('MESSAGE='.$message->identifier());
 
                 return self::SUCCESS;
+            case 'seed-messages':
+                // S13 step 13c (P-FOLD, frame row 20): N staff messages through Doc 04's outbound door —
+                // the 200-message scene the fold leg needs. Bounded; the lanes drain after (the bulk law).
+                $n = max(1, min(250, is_string($this->option('value')) && $this->option('value') !== '' ? (int) $this->option('value') : 210));
+                for ($i = 1; $i <= $n; $i++) {
+                    app(ComposeOutbound::class)->compose($conversation, 'agent', $agent->identifier(), 'text', sprintf('[FIXTURE] history line %03d', $i), null);
+                }
+                $this->drainLanes(300);
+                $this->line('SEEDED='.$n);
+
+                return self::SUCCESS;
+
             case 'split':
                 // Doc 06 FR-21 through the REAL split door (permission-checked, audited, its own internal
                 // note): the newest message becomes the linked ticket's anchor. BR-04's law is what the
@@ -421,7 +434,7 @@ final class WidgetHarness extends Command
 
                 return self::SUCCESS;
             default:
-                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|split|block|unblock|note');
+                $this->error('action must be handoff|queue-jump|agent-join|staff-reply|resolve|split|seed-messages|block|unblock|note');
 
                 return self::FAILURE;
         }

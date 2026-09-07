@@ -28,6 +28,7 @@ interface Props {
     onTranscript: () => void;
     onTyping: () => void;
     onStar: (token: string, score: number) => void;
+    onLoadEarlier: () => void;
     onShortcut: (s: Shortcut) => void;
     onLanguage: (code: string) => void;
     onRetry: () => void;
@@ -319,7 +320,11 @@ export const Panel: FunctionComponent<Props> = (p) => {
                         />
                     </>
                 ) : (
-                    <Thread onStar={p.onStar} onShortcut={(label) => p.onSend(label)} />
+                    <Thread
+                        onLoadEarlier={p.onLoadEarlier}
+                        onStar={p.onStar}
+                        onShortcut={(label) => p.onSend(label)}
+                    />
                 )}
             </div>
             {notifyPromptOpen.value ? (

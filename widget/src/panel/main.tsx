@@ -40,6 +40,7 @@ import {
 import { theme } from './theme';
 import {
     isPolling,
+    loadEarlier,
     onNewMessage,
     resetAcks,
     startPolling,
@@ -709,11 +710,22 @@ function onLoaderMessage(ev: MessageEvent): void {
                 .then(() =>
                     api.identify(call.args[0] as { payload: Record<string, unknown>; sig: string }),
                 )
-                .then(async (ok) => {
-                    if (ok) {
-                        await sync(api);
-                        await refreshConfig();
+                .then(async (r) => {
+                    if (!r.ok) return;
+                    if (r.reSession) {
+                        // EC-04's third clause (13c F-13b-3): the CURRENT conversation continues under the
+                        // person who started it (this page keeps its in-memory session; nothing visible
+                        // changes), and the NEXT one begins under the new identity — the stored token and
+                        // the cached thread are withdrawn so the next boot mints a fresh visitor session.
+                        try {
+                            localStorage.removeItem('nlw.token');
+                        } catch {
+                            /* a private window: nothing was stored */
+                        }
+                        await purgeCache();
                     }
+                    await sync(api);
+                    await refreshConfig();
                 });
             break;
         case 'setLanguage':
@@ -776,6 +788,7 @@ function PanelFrame(): preact.JSX.Element {
             onSend={(text, media) => void send(text, media)}
             onTranscript={() => void downloadTranscript()}
             onTyping={() => void api.typing()}
+            onLoadEarlier={() => void loadEarlier(api)}
             onStar={(token, score) => {
                 void api.csat(token, score).then(() => sync(api));
             }}

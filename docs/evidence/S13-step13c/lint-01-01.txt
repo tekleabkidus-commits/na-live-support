@@ -1,0 +1,110 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      lint-01
+# set:        S13-step13c
+# command:    make lint
+# started:    2026-09-07T21:51:26Z
+# git:        839304e (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+./vendor/bin/pint --test
+{"tool":"pint","result":"passed"}./vendor/bin/phpstan analyse --memory-limit=1G
+{"tool":"phpstan","result":"passed","errors":0}
+npx eslint resources/js tests/Browser widget/src
+
+/home/kidus/projects/na-live-support/resources/js/Components/Ai/copilotApi.ts
+  23:11  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+  39:10  warning  Replace `·article_ref:·string;·excerpt:·string;·url?:·string;·title?:·string;·version_id?:·string` with `⏎········article_ref:·string;⏎········excerpt:·string;⏎········url?:·string;⏎········title?:·string;⏎········version_id?:·string;⏎···`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Customers/CustomerPanel.vue
+  433:38  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-text-muted)'` with `⏎································borderColor:·'var(--ds-border-strong)',⏎································color:·'var(--ds-text-muted)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/OperationDialog.vue
+   49:58  warning  Replace `·assignees:·{·id:·string;·name:·string·}[]` with `⏎····················assignees:·{·id:·string;·name:·string·}[];⏎···············`                                                                                                                                                                                         prettier/prettier
+  125:31  warning  Replace `·v-model="path"·type="radio"·value="supervisor_review"·data-testid="path-supervisor"` with `⏎····························v-model="path"⏎····························type="radio"⏎····························value="supervisor_review"⏎····························data-testid="path-supervisor"⏎·······················`  prettier/prettier
+  223:36  warning  Insert `⏎···························`                                                                                                                                                                                                                                                                                               prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/SplitUnmergeDialog.vue
+   68:28  warning  Replace `1,·Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000)` with `⏎········1,⏎········Math.floor((new·Date(props.unmergeUntil).getTime()·-·Date.now())·/·3_600_000),⏎····`                                  prettier/prettier
+   76:17  warning  Replace `·props.kind·===·'split'·?·`/inbox/t/${props.ticketId}/split`` with `⏎········props.kind·===·'split'⏎············?·`/inbox/t/${props.ticketId}/split`⏎···········`                                                                 prettier/prettier
+  313:38  warning  Replace `·background:·'var(--ds-text-ink)',·color:·'var(--ds-page-bg)'` with `⏎································background:·'var(--ds-text-ink)',⏎································color:·'var(--ds-page-bg)',⏎···························`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/Thread/ThreadPane.vue
+  674:13  warning  Attribute "v-if" should go before "ref"  vue/attributes-order
+
+/home/kidus/projects/na-live-support/resources/js/Components/Inbox/TicketPanel.vue
+  947:19  warning  Replace `(can.tickets_escalate·||·can.tickets_spam_mark)·&&·ticket.status·!==·'spam'·&&·ticket.status·!==·'closed'` with `⏎················(can.tickets_escalate·||·can.tickets_spam_mark)·&&⏎················ticket.status·!==·'spam'·&&⏎················ticket.status·!==·'closed'⏎············`  prettier/prettier
+  976:26  warning  Replace `·borderColor:·'var(--ds-border-strong)',·color:·'var(--ds-danger-strong)'` with `⏎····················borderColor:·'var(--ds-border-strong)',⏎····················color:·'var(--ds-danger-strong)',⏎···············`                                                                       prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Components/Workflow/workflowApi.ts
+  55:1  warning  Delete `⏎`  prettier/prettier
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Ai/Decisions.vue
+  28:5  warning  Prop "config_versions" is not in camelCase  vue/prop-name-casing
+  37:5  warning  Prop "kb_categories" is not in camelCase    vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Ai/Providers.vue
+  34:5  warning  Prop "honesty_hash" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Kb/Editor.vue
+  72:5  warning  Prop "current_version" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/PendingGrants.vue
+  26:5  warning  Prop "four_eyes_enabled" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Rbac/RolesList.vue
+  27:5  warning  Prop "soft_limit" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Widgets/Editor.vue
+  44:5  warning  Prop "voice_flag" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Admin/Widgets/Index.vue
+  21:5  warning  Prop "bundle_version" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Conversations/DeadLetters.vue
+  27:5  warning  Prop "next_cursor" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Kb/Tombstone.vue
+  32:5  warning  Prop "article_id" is not in camelCase          vue/prop-name-casing
+  33:5  warning  Prop "version_id" is not in camelCase          vue/prop-name-casing
+  35:5  warning  Prop "current_url" is not in camelCase         vue/prop-name-casing
+  36:5  warning  Prop "current_version_id" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Execution.vue
+  45:5  warning  Prop "retention_days" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Fields.vue
+  50:5  warning  Prop "choice_types" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/FormBuilder.vue
+  50:5  warning  Prop "usage_labels" is not in camelCase    vue/prop-name-casing
+  63:5  warning  Prop "field_types" is not in camelCase     vue/prop-name-casing
+  64:5  warning  Prop "custom_fields" is not in camelCase   vue/prop-name-casing
+  74:5  warning  Prop "render_strings" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Forms.vue
+  26:5  warning  Prop "usage_labels" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Macros.vue
+  34:5  warning  Prop "sample_tickets" is not in camelCase  vue/prop-name-casing
+  37:5  warning  Prop "user_id" is not in camelCase         vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/RuleEditor.vue
+  55:5  warning  Prop "action_types" is not in camelCase   vue/prop-name-casing
+  56:5  warning  Prop "ai_tasks" is not in camelCase       vue/prop-name-casing
+  57:5  warning  Prop "keyword_sets" is not in camelCase   vue/prop-name-casing
+  70:5  warning  Prop "recent_events" is not in camelCase  vue/prop-name-casing
+  71:5  warning  Prop "rule_count" is not in camelCase     vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/tests/Browser/designer-widgets.spec.ts
+  205:42  warning  Replace `(r)·=>·r.url().includes('/admin/widgets/api/')·&&·r.request().method()·===·'PATCH'` with `⏎········(r)·=>·r.url().includes('/admin/widgets/api/')·&&·r.request().method()·===·'PATCH',⏎····`  prettier/prettier
+  215:64  warning  Replace `/\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js/` with `⏎········/\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js/,⏎····`                                                                                            prettier/prettier
+
+✖ 42 problems (0 errors, 42 warnings)
+  0 errors and 15 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+npx tsc --noEmit -p widget/tsconfig.json
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-09-07T21:53:07Z
+# duration:   101s
+# EXIT:       0

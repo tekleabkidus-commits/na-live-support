@@ -148,10 +148,16 @@ export class WidgetApi {
         return { ok: r.ok, status: r.status, body: json };
     }
 
-    /** FR-07 — the host page's signed assertion; the server answers 204 either way (an invalid one only counts). */
-    async identify(signed: { payload: Record<string, unknown>; sig: string }): Promise<boolean> {
+    /** FR-07 — the host page's signed assertion; the server answers 204 either way (an invalid one only counts).
+     *  13c F-13b-3: a verified assertion answers `re_session` (EC-04's switch) — consumed by the panel. */
+    async identify(signed: {
+        payload: Record<string, unknown>;
+        sig: string;
+    }): Promise<{ ok: boolean; reSession: boolean }> {
         const r = await this.call('POST', '/api/widget/v1/identify', signed);
-        return !!r && r.ok;
+        if (!r || !r.ok) return { ok: false, reSession: false };
+        const body = (await r.json().catch(() => null)) as { re_session?: boolean } | null;
+        return { ok: true, reSession: body?.re_session === true };
     }
 
     /** FR-16 — the INTAKE (multipart, with progress and a cancel handle); the cap is the server's too (EC-08). */

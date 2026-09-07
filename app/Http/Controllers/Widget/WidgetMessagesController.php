@@ -15,6 +15,7 @@ use App\Domain\Webchat\WebchatAdapter;
 use App\Jobs\Conversations\NormalizeInbound;
 use App\Models\Conversation;
 use App\Support\Http\CursorPagination;
+use App\Support\Http\Exceptions\InvalidPaginationRequest;
 use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
 use App\Support\Quota\Quota;
@@ -128,22 +129,46 @@ final class WidgetMessagesController
             return new JsonResponse(['data' => [], 'next_cursor' => null, 'conversation_id' => null] + $this->envelope(null));
         }
 
-        $page = CursorPagination::fromRequest($request)->paginateByTimestampAndId(
-            DB::table('messages')
-                ->where('tenant_id', $conversation->getAttribute('tenant_id'))
-                ->where('conversation_id', $conversation->identifier())
-                ->where('is_internal', false)
-                ->where('quarantined', false)
-                ->whereNull('deleted_at')
-                ->select(['id', 'created_at', 'direction', 'author_type', 'kind', 'body', 'media', 'delivery_state', 'edited_at', 'external_message_id', 'reply_to_message_id', 'channel_occurred_at', 'channel_meta']),
-            'created_at',
-        );
+        // S13 step 13c (P-FOLD, frame row 20): the TAIL page — newest first, served oldest-first
+        // for rendering; `cursor` walks EARLIER history (Doc 07 ThreadController's composite-cursor
+        // discipline, C-05's names kept: cursor / limit ≤ 100 / next_cursor). The old ascending page
+        // served a >25-message thread its OLDEST window and could never reach a fresh send's ✓✓.
+        $pagination = CursorPagination::fromRequest($request);
+        $query = DB::table('messages')
+            ->where('tenant_id', $conversation->getAttribute('tenant_id'))
+            ->where('conversation_id', $conversation->identifier())
+            ->where('is_internal', false)
+            ->where('quarantined', false)
+            ->whereNull('deleted_at')
+            ->select(['id', 'created_at', 'direction', 'author_type', 'author_id', 'kind', 'body', 'media', 'delivery_state', 'edited_at', 'external_message_id', 'reply_to_message_id', 'channel_occurred_at', 'channel_meta'])
+            ->orderByDesc('created_at')->orderByDesc('id')
+            ->limit($pagination->limit + 1);
+        if ($pagination->afterId !== null) {
+            $parts = explode('|', $pagination->afterId, 2);
+            if (count($parts) !== 2) {
+                throw new InvalidPaginationRequest('The cursor does not belong to this collection.');
+            }
+            $query->whereRaw('(created_at, id) < (?, ?)', [$parts[0], $parts[1]]);
+        }
+        $rows = $query->get();
+        $hasMore = $rows->count() > $pagination->limit;
+        $items = $rows->take($pagination->limit);
+        $nextCursor = null;
+        $oldest = $items->last();
+        if ($hasMore && $oldest instanceof \stdClass && is_string($oldest->created_at) && is_string($oldest->id)) {
+            $nextCursor = self::cursorFor($oldest->created_at.'|'.$oldest->id);
+        }
+        // S13 step 13c (F-13b-2): what the agent BUBBLE's label needs, per `widget.agent_identity`
+        // (the registry's values: first_name | alias | team_name) — the same rule QueuePositionPush
+        // applies to the joined line. team_name → null (the client draws its team label); alias has
+        // no column of its own yet, so the first name stands in (the S13 filing). One batch read.
+        $displays = $this->agentDisplays($items);
 
-        $data = $page->items->map(fn (\stdClass $row): array => $this->conversations->present($row))->values()->all();
+        $data = $items->reverse()->values()->map(fn (\stdClass $row): array => $this->conversations->present($row, is_string($row->id) ? ($displays[$row->id] ?? null) : null))->all();
 
         return new JsonResponse([
             'data' => $data,
-            'next_cursor' => $page->nextCursor,
+            'next_cursor' => $nextCursor,
             'conversation_id' => $conversation->identifier(),
         ] + $this->envelope($conversation));
     }
@@ -187,6 +212,42 @@ final class WidgetMessagesController
         }
 
         return new JsonResponse(['delivered' => $delivered]);
+    }
+
+    /**
+     * The same cursor grammar CursorPagination issues (v1-prefixed, base64url) so the
+     * client's `cursor` round-trips through `fromRequest` unchanged — issued here because
+     * this door pages DESCENDING (the tail) while the kernel's helper pages ascending.
+     */
+    private static function cursorFor(string $payload): string
+    {
+        return rtrim(strtr(base64_encode('v1:'.$payload), '+/', '-_'), '=');
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<int, \stdClass>  $items
+     * @return array<string, string> message id => the display the label may carry
+     */
+    private function agentDisplays(\Illuminate\Support\Collection $items): array
+    {
+        $mode = app(\App\Support\Settings\SettingsRepository::class)->get('widget.agent_identity');
+        if ($mode === 'team_name') {
+            return [];
+        }
+        $agentRows = $items->filter(fn (\stdClass $r): bool => $r->author_type === 'agent' && is_string($r->author_id));
+        if ($agentRows->isEmpty()) {
+            return [];
+        }
+        $names = DB::table('users')->whereIn('id', $agentRows->pluck('author_id')->unique()->all())->pluck('name', 'id');
+        $out = [];
+        foreach ($agentRows as $r) {
+            $name = is_string($r->author_id) ? ($names[$r->author_id] ?? null) : null;
+            if (is_string($name) && trim($name) !== '' && is_string($r->id)) {
+                $out[$r->id] = explode(' ', trim($name))[0];
+            }
+        }
+
+        return $out;
     }
 
     private function visitor(Request $request): WidgetVisitor

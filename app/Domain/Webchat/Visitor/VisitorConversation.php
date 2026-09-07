@@ -83,7 +83,7 @@ final class VisitorConversation
      *
      * @return array<string, mixed>
      */
-    public function present(\stdClass $row): array
+    public function present(\stdClass $row, ?string $authorDisplay = null): array
     {
         $media = [];
         $decoded = is_string($row->media) ? json_decode($row->media, true) : [];
@@ -120,7 +120,8 @@ final class VisitorConversation
             'id' => $row->id,
             'created_at' => $row->created_at,
             'direction' => $row->direction,
-            'author' => $row->author_type,          // customer | staff | ai | system — the kind a11y announces (Doc 04 §13)
+            'author' => $row->author_type,          // customer | agent | ai | system — the kind a11y announces (Doc 04 §13)
+            'author_display' => $authorDisplay,     // 13c F-13b-2: the label's name per widget.agent_identity (null = the team label)
             'kind' => $row->kind,
             'body' => $row->body,
             'media' => $media,

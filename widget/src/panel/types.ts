@@ -6,6 +6,7 @@ export interface Message {
     created_at: string;
     direction: 'in' | 'out';
     author: Author;
+    author_display?: string | null; // 13c F-13b-2: the agent label's name per widget.agent_identity (null = team label)
     kind: string;
     body: string | null;
     media: Array<{
