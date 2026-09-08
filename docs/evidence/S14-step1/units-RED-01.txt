@@ -1,0 +1,451 @@
+intl
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\ChipTruthTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mevery state maps to exactly one chip and the double check exists fo[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mexpired reads "sent · unconfirmed" in the gray tone — never a check, never success green[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe mapper takes a STATE — there is no door that accepts a carrier word (sabotage (c): success → delivered has no path)[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\CredentialRefTest[39m
+  [31;1m⨯[39;22m[90m [39m[90ma vault ref under the sms namespace is accepted and round-trips unc[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90manything that is not a vault ref under sms is REFUSED — a token-sha[39m[90m…[39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mthe ref never serializes to anything but itself and carries no plaintext accessor[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\GuardTruthTableTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe FR-03 truth table — every branch, every order interaction, exac[39m[90m…[39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mevery decision carries an ordered guard_log naming each check evaluated, in FR-03 order[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe guard is pure: the same input evaluates to the same decision and reads no clock[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe exception sets are the document's and nothing more[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\SegmenterCorpusTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mevery corpus entry segments exactly as the fixture states[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe corpus names the six mandated classes: GSM-7, GSM-7 extension,[39m[90m… [39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mone non-GSM character forces UCS-2 (the sabotage (j) control: Amharic counted as GSM-7 is a red)[39m
+  [31;1m⨯[39;22m[90m [39m[90msegment boundaries are reported for the editor's inline markers and lie on the per-segment stride[39m
+  [31;1m⨯[39;22m[90m [39m[90mUS-03: the Amharic counter warns at the 71st character — 70 is one segment, 71 is two[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\StateMachineMatrixTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe pipeline transition matrix — every legal edge, every illegal ed[39m[90m…[39m [90m0.01s[39m  
+  [31;1m⨯[39;22m[90m [39m[90msent NEVER rolls back — no edge leaves sent except delivered, undelivered, expired[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe DLR precedence matrix (FR-13) — idempotent, out-of-order safe, contradiction retained[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe GeezSMS profile's [39m[37msuccess[39m[90m maps to acceptance and NOTHING beyond (R-D14-1.5) — never delivered[39m
+  [31;1m⨯[39;22m[90m [39m[90mexpiry is a DB-time fact computed from sent_at + the setting, never from a wall clock[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe backing values are the column values and the event identifiers — frozen[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\StopWordByteExactTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe seed carries the document's Amharic stop-word byte-for-byte[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno normalization, transliteration or trimming is applied to the word (a one-byte change is detected)[39m
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, s[39m[90m…[39m [90m11.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.02s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\ChipTruthTest[22m [90m>[39m every state maps to exactly… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\ChipMapper" not found[39;22m
+
+  at [32mtests/Unit/Sms/ChipTruthTest.php[39m:[32m21[39m
+     17▕ | fills from B1-DS-v2's glyph row.
+     18▕ */
+     19▕ 
+     20▕ test('every state maps to exactly one chip and the double check exists for delivered ONLY', function () {
+  ➜  21▕     $mapper = new ChipMapper;
+     22▕     $glyphs = [];
+     23▕ 
+     24▕     foreach (SmsDeliveryState::cases() as $state) {
+     25▕         $chip = $mapper->for($state);
+
+  [33m1   [39m[39;1mtests/Unit/Sms/ChipTruthTest.php[39;22m:[39;1m21[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\ChipTruthTest[22m [90m>[39m expired reads "sent · uncon… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\ChipMapper" not found[39;22m
+
+  at [32mtests/Unit/Sms/ChipTruthTest.php[39m:[32m48[39m
+     44▕     expect(array_keys(array_filter($glyphs, static fn (string $g): bool => $g === 'double_check')))->toBe(['delivered']);
+     45▕ });
+     46▕ 
+     47▕ test('expired reads "sent · unconfirmed" in the gray tone — never a check, never success green', function () {
+  ➜  48▕     $chip = (new ChipMapper)->for(SmsDeliveryState::Expired);
+     49▕ 
+     50▕     expect($chip->tone)->toBe('muted')
+     51▕         ->and($chip->glyph)->toBe('unconfirmed')
+     52▕         ->and((new ChipMapper)->for(SmsDeliveryState::Delivered)->tone)->toBe('success')
+
+  [33m1   [39m[39;1mtests/Unit/Sms/ChipTruthTest.php[39;22m:[39;1m48[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\ChipTruthTest[22m [90m>[39m the mapper ta… [41;1m ReflectionException [49;22m  
+[39;1m  Class "App\Domain\Sms\State\ChipMapper" does not exist[39;22m
+
+  at [32mtests/Unit/Sms/ChipTruthTest.php[39m:[32m60[39m
+     56▕ 
+     57▕ test('the mapper takes a STATE — there is no door that accepts a carrier word (sabotage (c): success → delivered has no path)', function () {
+     58▕     $methods = array_map(
+     59▕         static fn (ReflectionMethod $m): string => $m->getName(),
+  ➜  60▕         (new ReflectionClass(ChipMapper::class))->getMethods(ReflectionMethod::IS_PUBLIC),
+     61▕     );
+     62▕ 
+     63▕     expect($methods)->toBe(['for']);
+     64▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/ChipTruthTest.php[39;22m:[39;1m60[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\CredentialRefTest[22m [90m>[39m a vault ref under the s… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Gateways\CredentialRef" not found[39;22m
+
+  at [32mtests/Unit/Sms/CredentialRefTest.php[39m:[32m19[39m
+     15▕ | credential column, fixture or capture is a Sev-1 (§7).
+     16▕ */
+     17▕ 
+     18▕ test('a vault ref under the sms namespace is accepted and round-trips unchanged', function () {
+  ➜  19▕     $ref = CredentialRef::fromString('vault://sms/0192a3b4-0000-7000-8000-000000000001/token/v1');
+     20▕ 
+     21▕     expect((string) $ref)->toBe('vault://sms/0192a3b4-0000-7000-8000-000000000001/token/v1')
+     22▕         ->and($ref->namespace())->toBe('sms');
+     23▕ });
+
+  [33m1   [39m[39;1mtests/Unit/Sms/CredentialRefTest.php[39;22m:[39;1m19[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\CredentialRefTest[22m [90m>[39m anything that is not a vault r…   
+[39;1m  [fixture-geezsms-token] must be refused
+Failed asserting that an instance of class Error is an instance of class InvalidArgumentException.[39;22m
+
+  at [32mtests/Unit/Sms/CredentialRefTest.php[39m:[32m38[39m
+     34▕         '',
+     35▕         ' vault://sms/x/v1',
+     36▕     ] as $value) {
+     37▕         expect(static fn () => CredentialRef::fromString($value))
+  ➜  38▕             ->toThrow(InvalidArgumentException::class, null, "[{$value}] must be refused");
+     39▕     }
+     40▕ });
+     41▕ 
+     42▕ test('the ref never serializes to anything but itself and carries no plaintext accessor', function () {
+
+  [33m1   [39m[39;1mtests/Unit/Sms/CredentialRefTest.php[39;22m:[39;1m38[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\CredentialRefTest[22m [90m>[39m the ref n… [41;1m ReflectionException [49;22m  
+[39;1m  Class "App\Domain\Sms\Gateways\CredentialRef" does not exist[39;22m
+
+  at [32mtests/Unit/Sms/CredentialRefTest.php[39m:[32m45[39m
+     41▕ 
+     42▕ test('the ref never serializes to anything but itself and carries no plaintext accessor', function () {
+     43▕     $methods = array_map(
+     44▕         static fn (ReflectionMethod $m): string => $m->getName(),
+  ➜  45▕         (new ReflectionClass(CredentialRef::class))->getMethods(ReflectionMethod::IS_PUBLIC),
+     46▕     );
+     47▕     sort($methods);
+     48▕ 
+     49▕     expect($methods)->toBe(['__toString', 'fromString', 'namespace'])
+
+  [33m1   [39m[39;1mtests/Unit/Sms/CredentialRefTest.php[39;22m:[39;1m45[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\GuardTruthTableTest[22m [90m>[39m the FR-03 truth table… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Guards\GuardFunction" not found[39;22m
+
+  at [32mtests/Unit/Sms/GuardTruthTableTest.php[39m:[32m139[39m
+    135▕     ];
+    136▕ }
+    137▕ 
+    138▕ test('the FR-03 truth table — every branch, every order interaction, exact skip reasons', function () {
+  ➜ 139▕     $guard = new GuardFunction;
+    140▕ 
+    141▕     foreach (smsGuardTable() as $label => [$input, $outcome, $reason]) {
+    142▕         $decision = $guard->evaluate($input);
+    143▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/GuardTruthTableTest.php[39;22m:[39;1m139[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\GuardTruthTableTest[22m [90m>[39m every decision carrie… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Guards\GuardFunction" not found[39;22m
+
+  at [32mtests/Unit/Sms/GuardTruthTableTest.php[39m:[32m150[39m
+    146▕     }
+    147▕ });
+    148▕ 
+    149▕ test('every decision carries an ordered guard_log naming each check evaluated, in FR-03 order', function () {
+  ➜ 150▕     $guard = new GuardFunction;
+    151▕ 
+    152▕     $log = $guard->evaluate(smsGuardInput(SendableEvent::TicketResolved))->log;
+    153▕     $checks = array_map(static fn (array $entry): string => $entry['check'], $log);
+    154▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/GuardTruthTableTest.php[39;22m:[39;1m150[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\GuardTruthTableTest[22m [90m>[39m the guard is pure: th… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Guards\GuardFunction" not found[39;22m
+
+  at [32mtests/Unit/Sms/GuardTruthTableTest.php[39m:[32m168[39m
+    164▕         ->and(count($skipped))->toBe(5);
+    165▕ });
+    166▕ 
+    167▕ test('the guard is pure: the same input evaluates to the same decision and reads no clock', function () {
+  ➜ 168▕     $guard = new GuardFunction;
+    169▕     $input = smsGuardInput(SendableEvent::TicketCreated, lastSameSendAt: smsGuardNow()->modify('-5 minutes'));
+    170▕ 
+    171▕     expect($guard->evaluate($input))->toEqual($guard->evaluate($input))
+    172▕         ->and((new ReflectionClass(GuardFunction::class))->getConstructor())->toBeNull();
+
+  [33m1   [39m[39;1mtests/Unit/Sms/GuardTruthTableTest.php[39;22m:[39;1m168[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\GuardTruthTableTest[22m [90m>[39m the exception sets ar… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Catalog\SendableEvent" not found[39;22m
+
+  at [32mtests/Unit/Sms/GuardTruthTableTest.php[39m:[32m179[39m
+    175▕     expect($source)->not->toContain('now()')->not->toContain('time()')->not->toContain('Carbon::');
+    176▕ });
+    177▕ 
+    178▕ test('the exception sets are the document\'s and nothing more', function () {
+  ➜ 179▕     expect(array_map(static fn (SendableEvent $e): string => $e->value, array_values(array_filter(SendableEvent::cases(), static fn (SendableEvent $e): bool => $e->exemptFromBlocked()))))
+    180▕         ->toBe(['security_notification'])
+    181▕         ->and(array_map(static fn (SendableEvent $e): string => $e->value, array_values(array_filter(SendableEvent::cases(), static fn (SendableEvent $e): bool => $e->essentialServiceContinuity()))))
+    182▕         ->toBe(['ticket_resolved', 'window_reengagement']);
+    183▕ });
+
+  [33m1   [39m[39;1mtests/Unit/Sms/GuardTruthTableTest.php[39;22m:[39;1m179[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\SegmenterCorpusTest[22m [90m>[39m every corpus entry se… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Encoding\Segmenter" not found[39;22m
+
+  at [32mtests/Unit/Sms/SegmenterCorpusTest.php[39m:[32m35[39m
+     31▕     return $decoded['entries'];
+     32▕ }
+     33▕ 
+     34▕ test('every corpus entry segments exactly as the fixture states', function () {
+  ➜  35▕     $segmenter = new Segmenter;
+     36▕     $seen = [];
+     37▕ 
+     38▕     foreach (smsCorpus() as $entry) {
+     39▕         $result = $segmenter->segment($entry['text']);
+
+  [33m1   [39m[39;1mtests/Unit/Sms/SegmenterCorpusTest.php[39;22m:[39;1m35[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\SegmenterCorpusTest[22m [90m>[39m one non-GSM character… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Encoding\Segmenter" not found[39;22m
+
+  at [32mtests/Unit/Sms/SegmenterCorpusTest.php[39m:[32m62[39m
+     58▕     }
+     59▕ });
+     60▕ 
+     61▕ test('one non-GSM character forces UCS-2 (the sabotage (j) control: Amharic counted as GSM-7 is a red)', function () {
+  ➜  62▕     $segmenter = new Segmenter;
+     63▕     $ascii = str_repeat('a', 100);
+     64▕ 
+     65▕     expect($segmenter->segment($ascii)->encoding)->toBe(Encoding::Gsm7)
+     66▕         ->and($segmenter->segment($ascii.'ሀ')->encoding)->toBe(Encoding::Ucs2)
+
+  [33m1   [39m[39;1mtests/Unit/Sms/SegmenterCorpusTest.php[39;22m:[39;1m62[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\SegmenterCorpusTest[22m [90m>[39m segment boundaries ar… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Encoding\Segmenter" not found[39;22m
+
+  at [32mtests/Unit/Sms/SegmenterCorpusTest.php[39m:[32m73[39m
+     69▕         ->and($segmenter->segment('ትኬትዎ ተፈትቷል')->encoding)->toBe(Encoding::Ucs2);
+     70▕ });
+     71▕ 
+     72▕ test('segment boundaries are reported for the editor\'s inline markers and lie on the per-segment stride', function () {
+  ➜  73▕     $segmenter = new Segmenter;
+     74▕ 
+     75▕     $gsm = $segmenter->segment(str_repeat('a', 400));
+     76▕     expect($gsm->segments)->toBe(3)->and($gsm->boundaries)->toBe([153, 306]);
+     77▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/SegmenterCorpusTest.php[39;22m:[39;1m73[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\SegmenterCorpusTest[22m [90m>[39m US-03: the Amharic co… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\Encoding\Segmenter" not found[39;22m
+
+  at [32mtests/Unit/Sms/SegmenterCorpusTest.php[39m:[32m88[39m
+     84▕     expect($segmenter->segment('')->segments)->toBe(0);
+     85▕ });
+     86▕ 
+     87▕ test('US-03: the Amharic counter warns at the 71st character — 70 is one segment, 71 is two', function () {
+  ➜  88▕     $segmenter = new Segmenter;
+     89▕ 
+     90▕     expect($segmenter->segment(str_repeat('ሀ', 70))->segments)->toBe(1)
+     91▕         ->and($segmenter->segment(str_repeat('ሀ', 71))->segments)->toBe(2)
+     92▕         ->and($segmenter->segment(str_repeat('ሀ', 71))->perSegment)->toBe(67);
+
+  [33m1   [39m[39;1mtests/Unit/Sms/SegmenterCorpusTest.php[39;22m:[39;1m88[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m the pipeline trans… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryState" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m47[39m
+     43▕         ['sent', 'delivered'],
+     44▕         ['sent', 'undelivered'],
+     45▕         ['sent', 'expired'],     // the 48 h sweep
+     46▕     ];
+  ➜  47▕     $all = SmsDeliveryState::cases();
+     48▕ 
+     49▕     foreach ($all as $from) {
+     50▕         foreach ($all as $to) {
+     51▕             $isLegal = in_array([$from->value, $to->value], $legal, true);
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m47[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m sent NEVER rolls b… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryState" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m64[39m
+     60▕     }
+     61▕ });
+     62▕ 
+     63▕ test('sent NEVER rolls back — no edge leaves sent except delivered, undelivered, expired', function () {
+  ➜  64▕     foreach ([SmsDeliveryState::Queued, SmsDeliveryState::Held, SmsDeliveryState::Sending, SmsDeliveryState::Skipped, SmsDeliveryState::Failed] as $to) {
+     65▕         expect(static fn () => smsMachine()->transition(SmsDeliveryState::Sent, $to))
+     66▕             ->toThrow(IllegalSmsTransition::class, null, "sent → {$to->value} must be refused");
+     67▕     }
+     68▕     expect(SmsDeliveryState::Sent->isTerminal())->toBeFalse()
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m64[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m the DLR precedence… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryStateMachine" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m29[39m
+     25▕ */
+     26▕ 
+     27▕ function smsMachine(): SmsDeliveryStateMachine
+     28▕ {
+  ➜  29▕     return new SmsDeliveryStateMachine;
+     30▕ }
+     31▕ 
+     32▕ test('the pipeline transition matrix — every legal edge, every illegal edge', function () {
+     33▕     $legal = [
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m29[39;22m
+  [33m2   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m77[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m the GeezSMS profil… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryStateMachine" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m29[39m
+     25▕ */
+     26▕ 
+     27▕ function smsMachine(): SmsDeliveryStateMachine
+     28▕ {
+  ➜  29▕     return new SmsDeliveryStateMachine;
+     30▕ }
+     31▕ 
+     32▕ test('the pipeline transition matrix — every legal edge, every illegal edge', function () {
+     33▕     $legal = [
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m29[39;22m
+  [33m2   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m131[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m expiry is a DB-tim… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryStateMachine" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m29[39m
+     25▕ */
+     26▕ 
+     27▕ function smsMachine(): SmsDeliveryStateMachine
+     28▕ {
+  ➜  29▕     return new SmsDeliveryStateMachine;
+     30▕ }
+     31▕ 
+     32▕ test('the pipeline transition matrix — every legal edge, every illegal edge', function () {
+     33▕     $legal = [
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m29[39;22m
+  [33m2   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m140[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StateMachineMatrixTest[22m [90m>[39m the backing values… [41;1m Error [49;22m  
+[39;1m  Class "App\Domain\Sms\State\SmsDeliveryState" not found[39;22m
+
+  at [32mtests/Unit/Sms/StateMachineMatrixTest.php[39m:[32m151[39m
+    147▕     expect($source)->not->toContain('now()')->not->toContain('time()')->not->toContain('Carbon::');
+    148▕ });
+    149▕ 
+    150▕ test('the backing values are the column values and the event identifiers — frozen', function () {
+  ➜ 151▕     expect(array_map(static fn (SmsDeliveryState $s): string => $s->value, SmsDeliveryState::cases()))
+    152▕         ->toBe(['queued', 'held', 'sending', 'sent', 'delivered', 'undelivered', 'expired', 'skipped', 'failed']);
+    153▕ });
+    154▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StateMachineMatrixTest.php[39;22m:[39;1m151[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StopWordByteExactTest[22m [90m>[39m the seed carries the docum…   
+[39;1m  Failed asserting that 9 is identical to 12.[39;22m
+
+  at [32mtests/Unit/Sms/StopWordByteExactTest.php[39m:[32m43[39m
+     39▕ 
+     40▕     expect($seed['en'])->toBe(['STOP'])
+     41▕         ->and($seed['am'])->toHaveCount(1)
+     42▕         ->and(bin2hex($seed['am'][0]))->toBe(bin2hex($fromDoc))
+  ➜  43▕         ->and(strlen($fromDoc))->toBe(12)                       // four Ethiopic syllables × 3 bytes
+     44▕         ->and(mb_strlen($fromDoc, 'UTF-8'))->toBe(4)
+     45▕         ->and(bin2hex($fromDoc))->toBe('e189b0e18b88e18b8d');   // ተ ወ ው — pinned so the doc file itself cannot drift silently
+     46▕ });
+     47▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StopWordByteExactTest.php[39;22m:[39;1m43[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SmsNoFreeTextTest[22m [90m>[39m no class in the SMS namespaces…   
+[39;1m  Expecting [] not to be empty 'the sweep found no SMS classe…othing'.[39;22m
+
+  at [32mtests/Security/SmsNoFreeTextTest.php[39m:[32m125[39m
+    121▕     foreach ($classes as $class) {
+    122▕         $violations = [...$violations, ...smsFreeTextViolations($class)];
+    123▕     }
+    124▕ 
+  ➜ 125▕     expect($classes)->not->toBeEmpty('the sweep found no SMS classes — it would prove nothing')
+    126▕         ->and($violations)->toBe([]);
+    127▕ });
+    128▕ 
+    129▕ test('no route named sms.* (or *.sms.*) binds a controller parameter or a request rule that carries text', function () {
+
+  [33m1   [39m[39;1mtests/Security/SmsNoFreeTextTest.php[39;22m:[39;1m125[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SmsNoFreeTextTest[22m [90m>[39m POSITIVE CONTROL — a request t…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[32m Array &0 [[39m[39;1m
+  [39;22m[32m     0 => 'Tests\Support\Sms\SmugglesBodyControl::$body',[39m[39;1m
+  [39;22m[31m-    1 => 'Tests\Support\Sms\SmugglesBodyControl::$text',[39m[39;1m
+  [39;22m[31m-    2 => 'Tests\Support\Sms\SmugglesBodyControl::rules[msg]',[39m[39;1m
+  [39;22m[32m+    1 => 'Tests\Support\Sms\SmugglesBodyControl::$body',[39m[39;1m
+  [39;22m[32m+    2 => 'Tests\Support\Sms\SmugglesBodyControl::$text',[39m[39;1m
+  [39;22m[32m+    3 => 'Tests\Support\Sms\SmugglesBodyControl::$body',[39m[39;1m
+  [39;22m[32m+    4 => 'Tests\Support\Sms\SmugglesBodyControl::rules[msg]',[39m[39;1m
+  [39;22m[32m ][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/SmsNoFreeTextTest.php[39m:[32m161[39m
+    157▕ 
+    158▕ test('POSITIVE CONTROL — a request that smuggles a `body` is caught by the same sweep (the gate must be seen to fail)', function () {
+    159▕     $violations = smsFreeTextViolations(SmugglesBodyControl::class);
+    160▕ 
+  ➜ 161▕     expect($violations)->toBe([
+    162▕         SmugglesBodyControl::class.'::$body',
+    163▕         SmugglesBodyControl::class.'::$text',
+    164▕         SmugglesBodyControl::class.'::rules[msg]',
+    165▕     ]);
+
+  [33m1   [39m[39;1mtests/Security/SmsNoFreeTextTest.php[39;22m:[39;1m161[39;22m
+
+
+  [90mTests:[39m    [31;1m23 failed[39;22m[90m,[39m[39m [39m[32;1m3 passed[39;22m[90m (21 assertions)[39m
+  [90mDuration:[39m [39m11.97s[39m
+
+EXIT 2

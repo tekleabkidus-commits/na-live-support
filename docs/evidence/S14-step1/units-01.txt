@@ -1,0 +1,86 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\ChipTruthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery state maps to exactly one chip and the double check exists fo[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexpired reads "sent · unconfirmed" in the gray tone — never a check, never success green[39m
+  [32;1m✓[39;22m[90m [39m[90mthe mapper takes a STATE — there is no door that accepts a carrier word (sabotage (c): success → delivered has no path)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\CredentialRefTest[39m
+  [32;1m✓[39;22m[90m [39m[90ma vault ref under the sms namespace is accepted and round-trips unc[39m[90m…[39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90manything that is not a vault ref under sms is REFUSED — a token-shaped value, a bare word, another namespace, an empty string[39m
+  [32;1m✓[39;22m[90m [39m[90mthe ref never serializes to anything but itself and carries no plaintext accessor[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\GuardTruthTableTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FR-03 truth table — every branch, every order interaction, exac[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mevery decision carries an ordered guard_log naming each check evalu[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe guard is pure: the same input evaluates to the same decision an[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe exception sets are the document's and nothing more[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\SegmenterCorpusTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery corpus entry segments exactly as the fixture states[39m[90m           [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe corpus names the six mandated classes: GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script (EC-09)[39m
+  [32;1m✓[39;22m[90m [39m[90mone non-GSM character forces UCS-2 (the sabotage (j) control: Amharic counted as GSM-7 is a red)[39m
+  [32;1m✓[39;22m[90m [39m[90msegment boundaries are reported for the editor's inline markers and lie on the per-segment stride[39m
+  [32;1m✓[39;22m[90m [39m[90mUS-03: the Amharic counter warns at the 71st character — 70 is one segment, 71 is two[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\StateMachineMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe pipeline transition matrix — every legal edge, every illegal ed[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90msent NEVER rolls back — no edge leaves sent except delivered, undelivered, expired[39m
+  [32;1m✓[39;22m[90m [39m[90mthe DLR precedence matrix (FR-13) — idempotent, out-of-order safe, contradiction retained[39m
+  [32;1m✓[39;22m[90m [39m[90mthe GeezSMS profile's [39m[37msuccess[39m[90m maps to acceptance and NOTHING beyond (R-D14-1.5) — never delivered[39m
+  [32;1m✓[39;22m[90m [39m[90mexpiry is a DB-time fact computed from sent_at + the setting, never from a wall clock[39m
+  [32;1m✓[39;22m[90m [39m[90mthe backing values are the column values and the event identifiers — frozen[39m
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Unit\Sms\StopWordByteExactTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mthe seed carries the document's Amharic stop-word byte-for-byte[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno normalization, transliteration or trimming is applied to the word (a one-byte change is detected)[39m
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, s[39m[90m…[39m [90m11.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Sms\StopWordByteExactTest[22m [90m>[39m the seed carries the docum…   
+[39;1m  Failed asserting that 9 is identical to 12.[39;22m
+
+  at [32mtests/Unit/Sms/StopWordByteExactTest.php[39m:[32m43[39m
+     39▕ 
+     40▕     expect($seed['en'])->toBe(['STOP'])
+     41▕         ->and($seed['am'])->toHaveCount(1)
+     42▕         ->and(bin2hex($seed['am'][0]))->toBe(bin2hex($fromDoc))
+  ➜  43▕         ->and(strlen($fromDoc))->toBe(12)                       // four Ethiopic syllables × 3 bytes
+     44▕         ->and(mb_strlen($fromDoc, 'UTF-8'))->toBe(4)
+     45▕         ->and(bin2hex($fromDoc))->toBe('e189b0e18b88e18b8d');   // ተ ወ ው — pinned so the doc file itself cannot drift silently
+     46▕ });
+     47▕
+
+  [33m1   [39m[39;1mtests/Unit/Sms/StopWordByteExactTest.php[39;22m:[39;1m43[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SmsNoFreeTextTest[22m [90m>[39m no class in the SMS namespaces…   
+[39;1m  Failed asserting that two arrays are identical.
+  [39;22m[31m-Array &0 [][39m[39;1m
+  [39;22m[32m+Array &0 [[39m[39;1m
+  [39;22m[32m+    0 => 'App\Domain\Sms\Encoding\Segmenter::$text',[39m[39;1m
+  [39;22m[32m+    1 => 'App\Domain\Sms\State\IllegalSmsTransition::$message',[39m[39;1m
+  [39;22m[32m+][39m[39;1m
+  [39;22m
+
+  at [32mtests/Security/SmsNoFreeTextTest.php[39m:[32m126[39m
+    122▕         $violations = [...$violations, ...smsFreeTextViolations($class)];
+    123▕     }
+    124▕ 
+    125▕     expect($classes)->not->toBeEmpty('the sweep found no SMS classes — it would prove nothing')
+  ➜ 126▕         ->and($violations)->toBe([]);
+    127▕ });
+    128▕ 
+    129▕ test('no route named sms.* (or *.sms.*) binds a controller parameter or a request rule that carries text', function () {
+    130▕     $violations = [];
+
+  [33m1   [39m[39;1mtests/Security/SmsNoFreeTextTest.php[39;22m:[39;1m126[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m,[39m[39m [39m[32;1m24 passed[39;22m[90m (416 assertions)[39m
+  [90mDuration:[39m [39m11.68s[39m
+
+EXIT 1

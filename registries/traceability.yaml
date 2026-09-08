@@ -2694,3 +2694,103 @@ entries:
     status: partial
     justification: >-
       S13: axe (wcag2a/aa) clean light + dark on every widget screen and on the Designer, both widget projects (widget-theme.spec.ts L03 both ways; the panel/designer specs' axe legs); the language chain proven at the switcher (widget-panel.spec.ts B07: Amharic re-renders in real Ethiopic without a remount) and the Designer's completeness gate (designer-widgets.spec.ts J04); text zoom 200 % (widget-acceptance.spec.ts). PARTIAL, stated: the planned widget-i18n.spec.ts was never written — setLanguage() from the host has no executed browser leg; NVDA/VoiceOver are [OA].
+  - ac_ref: "Doc14 AC-01"
+    suite_path: tests/Unit/Sms/GuardTruthTableTest.php
+    type: automated
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14 step 1: the FR-03 truth table as a PURE unit — every branch, every order interaction, exact skip reasons, the ordered guard_log, the pre-guards (A-67), the RG × event and blocked × security exceptions, the 10-min duplicate window, quiet-hours × policy — RED first on absence (units-RED-01.txt), then green. PARTIAL: the live-guard legs against real Doc 08 facts and the registry land at steps 5/8 (LiveGuardsTest, OptOutAbsolutenessTest).
+  - ac_ref: "Doc14 AC-02"
+    suite_path: tests/Unit/Sms/StateMachineMatrixTest.php
+    type: automated
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14 step 1: the full transition matrix (every legal and illegal edge), sent never rolls back, the FR-13 DLR precedence matrix incl. EC-04 (contradiction retained + flagged), duplicates and out-of-order idempotent, the GeezSMS `success` → acceptance only (R-D14-1.5), the 48 h expiry as a DB-time comparison — as a PURE unit. PARTIAL: the table half (sms_messages, step 2b), the wire-driven matrix (DlrIngestionTest, step 7) and the zero-inferred-delivered DOM gate (sms-no-inferred-delivered.spec, step 12).
+  - ac_ref: "Doc14 AC-03"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET BUILT — the routing trie (longest prefix, EC-01 shadowing warnings), failover chains, the circuit trip/half-open/close cycle and the EC-12 no-viable-route ladder land at step 4 (RoutingTrieTest, FailoverTest, CircuitBreakerTest) and step 7 (ExpiredSweepTest TTL leg); the row flips when they land. Recorded honestly as unbuilt, never as covered.
+  - ac_ref: "Doc14 AC-04"
+    suite_path: tests/Unit/Sms/SegmenterCorpusTest.php
+    type: automated
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14 step 1: the encoding & segmentation corpus (fixtures/sms/encoding-corpus.json — GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script) under A-66 (160/153, 70/67); the sabotage (j) control (one Ethiopic character forces UCS-2). PARTIAL: editor-estimate vs accrual parity (EstimateVsAccrualParityTest step 3, CostAccrualTest step 11) and rate-card currency rendering (sms-templates.spec, step 13).
+  - ac_ref: "Doc14 AC-05"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET BUILT — STOP parsing per language (the ተወው byte-exact seed half is proven at step 1: tests/Unit/Sms/StopWordByteExactTest.php), absoluteness for every event, restoration audit and the mid-broadcast live-guard sequence land at steps 8 and 10 (StopParsingTest, OptOutAbsolutenessTest, OptOutRestorationAuditTest, BroadcastLiveGuardsTest).
+  - ac_ref: "Doc14 AC-06"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET BUILT — broadcasts land at step 10 (BroadcastLifecycleTest: preview = executed ± live skips, pinned version, cancel, typed-confirm threshold; SmsBroadcastRgExclusionTest; BroadcastQuotaPauseTest).
+  - ac_ref: "Doc14 AC-07"
+    suite_path: manual
+    type: drill
+    tier: integration
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET RUN — the SS-04 lane-isolation drill (transactional p95 delta ≤ 5 % during a broadcast) runs at step 10 at a stated dev-scale N (SmsLaneIsolationDrillTest; the 8,000-recipient scale is [D19]); a discharging run is labelled battery-run, indicative.
+  - ac_ref: "Doc14 AC-08"
+    suite_path: manual
+    type: manual
+    tier: integration
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET BUILT — the http_generic zero-code onboarding of the mock aggregator (HttpGenericOnboardingTest) and the sidecar contract suite incl. restart transparency against the mock sidecar (SidecarContractTest) land at step 4. The FIXTURE's two profiles already stand (652977c); a fixture result is never proof of the [OA] live rows.
+  - ac_ref: "Doc14 AC-09"
+    suite_path: manual
+    type: manual
+    tier: browser
+    cadence: every-push
+    environment: local
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14: NOT YET BUILT — the timeline integration (Doc 07 fixture) lands at step 12 under P-TIMELINE-SMS (tests/Browser/inbox-sms-timeline.spec.ts). The chip-truth unit half is proven at step 1 (tests/Unit/Sms/ChipTruthTest.php: the double check exists for `delivered` only).
+  - ac_ref: "Doc14 AC-10"
+    suite_path: tests/Unit/Sms/CredentialRefTest.php
+    type: automated
+    tier: unit
+    cadence: every-push
+    environment: ci
+    owner: platform-engineering
+    status: partial
+    justification: >-
+      S14 step 1: the vault-ref-only value object (a plaintext or token-shaped credential is REFUSED; no reveal accessor) — the model half of SEC-01. PARTIAL: the credential write-only round-trip (SmsCredentialWriteOnlyTest, step 4), phone masking in logs (SmsPhoneMaskingTest, step 5) and the {{link}} domain restriction (TemplateValidationTest, step 3).

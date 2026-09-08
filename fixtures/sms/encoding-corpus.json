@@ -1,0 +1,198 @@
+{
+  "doc": "Doc14",
+  "spec": "FR-05 / NFR-06 / EC-09 / AC-04 / A-66 — the encoding & segmentation corpus. Hand-law: expected values stated per string under A-66 (GSM-7 160 single / 153 concatenated, extension chars cost 2; UCS-2 70 single / 67 concatenated, astral chars cost 2). SegmenterCorpusTest asserts the segmenter matches every entry; EstimateVsAccrualParityTest (step 3) asserts the editor estimate and the accrual agree within one segment on the same strings. Every string is synthetic; the Amharic is real Ethiopic, never lorem.",
+  "entries": [
+    {
+      "id": "gsm7-short-en",
+      "text": "Your ticket #4812 is resolved. Reply STOP to opt out.",
+      "encoding": "gsm7",
+      "units": 53,
+      "segments": 1,
+      "per_segment": 160
+    },
+    {
+      "id": "gsm7-exactly-160",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "encoding": "gsm7",
+      "units": 160,
+      "segments": 1,
+      "per_segment": 160
+    },
+    {
+      "id": "gsm7-161-two-segments",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "encoding": "gsm7",
+      "units": 161,
+      "segments": 2,
+      "per_segment": 153
+    },
+    {
+      "id": "gsm7-306-two-segments",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "encoding": "gsm7",
+      "units": 306,
+      "segments": 2,
+      "per_segment": 153
+    },
+    {
+      "id": "gsm7-307-three-segments",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "encoding": "gsm7",
+      "units": 307,
+      "segments": 3,
+      "per_segment": 153
+    },
+    {
+      "id": "gsm7-basic-accents-and-symbols",
+      "text": "Café ¡Hola! £5 ¥100 Ø ñ ü à § ¿Qué?",
+      "encoding": "gsm7",
+      "units": 35,
+      "segments": 1,
+      "per_segment": 160
+    },
+    {
+      "id": "gsm7-ext-euro-costs-two",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa€",
+      "encoding": "gsm7",
+      "units": 160,
+      "segments": 1,
+      "per_segment": 160
+    },
+    {
+      "id": "gsm7-ext-euro-pushes-to-two",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa€",
+      "encoding": "gsm7",
+      "units": 161,
+      "segments": 2,
+      "per_segment": 153
+    },
+    {
+      "id": "gsm7-ext-braces-brackets",
+      "text": "{code} [ref] a|b ~ ^ \\ €",
+      "encoding": "gsm7",
+      "units": 33,
+      "segments": 1,
+      "per_segment": 160
+    },
+    {
+      "id": "ucs2-amharic-short",
+      "text": "ትኬትዎ ተፈትቷል",
+      "encoding": "ucs2",
+      "units": 10,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "amharic-exactly-70",
+      "text": "ሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀ",
+      "encoding": "ucs2",
+      "units": 70,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "amharic-71-two-segments",
+      "text": "ሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀ",
+      "encoding": "ucs2",
+      "units": 71,
+      "segments": 2,
+      "per_segment": 67
+    },
+    {
+      "id": "amharic-134-two-segments",
+      "text": "ሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀ",
+      "encoding": "ucs2",
+      "units": 134,
+      "segments": 2,
+      "per_segment": 67
+    },
+    {
+      "id": "amharic-135-three-segments",
+      "text": "ሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀሀ",
+      "encoding": "ucs2",
+      "units": 135,
+      "segments": 3,
+      "per_segment": 67
+    },
+    {
+      "id": "amharic-resolved-template",
+      "text": "ውድ አበበ፣ ትኬት ቁጥር 4812 ተፈትቷል። እናመሰግናለን — ናቤት ድጋፍ። ለማቆም ተወው ብለው ይላኩ።",
+      "encoding": "ucs2",
+      "units": 65,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "amharic-stop-word",
+      "text": "ተወው",
+      "encoding": "ucs2",
+      "units": 3,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "mixed-english-one-ethiopic",
+      "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaሀ",
+      "encoding": "ucs2",
+      "units": 101,
+      "segments": 2,
+      "per_segment": 67
+    },
+    {
+      "id": "mixed-ticket-number-amharic",
+      "text": "Ticket 4812 — ትኬትዎ ተፈትቷል",
+      "encoding": "ucs2",
+      "units": 24,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "ucs2-emoji-astral-two-units",
+      "text": "Resolved ✓ 🎉",
+      "encoding": "ucs2",
+      "units": 13,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "ucs2-cyrillic",
+      "text": "Ваш билет решён",
+      "encoding": "ucs2",
+      "units": 15,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "rare-script-tifinagh",
+      "text": "ⵜⴰⵎⴰⵣⵉⵖⵜ",
+      "encoding": "ucs2",
+      "units": 8,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "rare-script-ol-chiki",
+      "text": "ᱚᱞ ᱪᱤᱠᱤ",
+      "encoding": "ucs2",
+      "units": 7,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "rare-script-osage-astral",
+      "text": "𐒰𐒱𐒲",
+      "encoding": "ucs2",
+      "units": 6,
+      "segments": 1,
+      "per_segment": 70
+    },
+    {
+      "id": "empty",
+      "text": "",
+      "encoding": "gsm7",
+      "units": 0,
+      "segments": 0,
+      "per_segment": 160
+    }
+  ]
+}

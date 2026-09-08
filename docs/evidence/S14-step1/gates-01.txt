@@ -1,0 +1,40 @@
+bash ci/run-gates.sh
+Running 16 gates (registries/gates.yaml order):
+-----------------------------------------------------------------
+  registry-check            PASS
+  string-lint               PASS
+  no-channel-conditionals   FAIL
+      no-channel-conditionals: app/Domain/Sms/Catalog/Lane.php:16:    case Transactional = 'sms';
+      no-channel-conditionals: FAIL (1 violation(s)). Channel behavior belongs behind the Channel Adapter contract (Doc 04 T-09, invariant N-20).
+  migration-safety          PASS
+  permission-mapping        PASS
+  audit-coverage            PASS
+  traceability              FAIL
+      traceability: 50 AC(s) PENDING across 5 not-started document(s) — not enforced until their BUILD-STATUS row leaves NOT STARTED (ADR 0004).
+      traceability: FAIL unmapped AC: Doc14 AC-01
+      traceability: FAIL unmapped AC: Doc14 AC-02
+      traceability: FAIL unmapped AC: Doc14 AC-03
+      traceability: FAIL unmapped AC: Doc14 AC-04
+      traceability: FAIL unmapped AC: Doc14 AC-05
+      traceability: FAIL unmapped AC: Doc14 AC-06
+      traceability: FAIL unmapped AC: Doc14 AC-07
+      traceability: FAIL unmapped AC: Doc14 AC-08
+      traceability: FAIL unmapped AC: Doc14 AC-09
+      traceability: FAIL unmapped AC: Doc14 AC-10
+      traceability: FAIL (10 unmapped AC(s) in 14 in-progress document(s)). Every AC of a document being built maps to a test or a justified manual/drill entry (Doc 19 FR-02).
+  isolation-suite           PASS
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OctaneConnectionLifecycleTest[39m
+        [30;43;1m WARN [39;49;22m[39m Tests\Isolation\OutboxChaosTest[39m
+  log-scrubber              PASS
+  event-catalog             PASS
+  gate-skip-guard           PASS
+  adapter-conformance       PASS
+  ticket-status-writer      PASS
+  bundle-budget             PASS
+  widget-bundle-budget      PASS
+  widget-vocabulary         PASS
+-----------------------------------------------------------------
+Gate summary: 14 passed, 2 failed, 0 skipped.
+FAILED: no-channel-conditionals traceability
+make: *** [Makefile:101: gates] Error 1
+EXIT 2
