@@ -1,0 +1,26 @@
+# mock-sms FIXTURE in the compose stack — rebuilt on the two-profile file; answers from the app container THROUGH the egress proxy (ADR 0008). 2026-09-08T11:44:38Z
+
+## rebuild + recreate
+#12 resolving provenance for metadata file
+#12 DONE 0.0s
+ Image na-live-support/mock-sms:dev Built 
+ Container na-live-support-mock-sms-1 Starting 
+ Container na-live-support-mock-sms-1 Started 
+NAME                         IMAGE                          COMMAND                  SERVICE    CREATED         STATUS                            PORTS
+na-live-support-mock-sms-1   na-live-support/mock-sms:dev   "docker-entrypoint.s…"   mock-sms   9 seconds ago   Up 4 seconds (health: starting)   
+
+## from app container via egress-proxy: healthz
+{"ok":true,"service":"mock-sms","fixture":true,"profiles":["reference","geezsms"]}
+
+## via proxy: GeezSMS profile WITHOUT token (fail-closed)
+{"error":true,"msg":"token is required"} HTTP 401
+
+## via proxy: GeezSMS profile WITH token
+{"error":false,"msg":"Message sent","data":{"api_log_id":6569830}} HTTP 200
+
+## via proxy: REFERENCE profile without / with Bearer
+{"error":"unauthorized","detail":"reference profile: Bearer token missing or wrong (fail-closed)"} HTTP 401
+{"message_id":"ref-1","status":"accepted"} HTTP 200
+
+## via proxy: a NON-allowlisted host is refused BY THE PROXY (api.geezsms.com is not yet on the filter — a plan row)
+HTTP 000
