@@ -1,0 +1,7 @@
+# HALF-PROOF P-TIMELINE-SMS (second run — the closure typed) — applied then REVERTED. 2026-09-08T20:09:45Z
+applied
+## pint
+{"tool":"pint","result":"passed"}## phpstan (the ONE remaining finding is the step-12 dependency App\Domain\Sms\Timeline\SmsTimelineFacts — it exists when the packet lands)
+{"tool":"phpstan","result":"failed","errors":2,"error_details":{"/home/kidus/projects/na-live-support/app/Http/Controllers/Inbox/TicketActionsController.php":[{"line":243,"message":"Call to method forMessageIds() on an unknown class App\\Domain\\Sms\\Timeline\\SmsTimelineFacts.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"},{"line":243,"message":"Class App\\Domain\\Sms\\Timeline\\SmsTimelineFacts not found.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"}]},"instructions":"Each err
+## reverted
+tree clean of the packet

@@ -1,0 +1,29 @@
+# HALF-PROOF P-QUOTA-SMS — applied on the tree (951401a + the uncommitted 2a filing), controls run, then REVERTED. 2026-09-08T20:02:55Z
+applied
+
+## pint --test on the packet's PHP
+{"tool":"pint","result":"passed"}
+## phpstan on the packet's PHP
+{"tool":"phpstan","result":"passed","errors":0}
+
+## controls + the owning suites (in-container)
+  ✓ it the four foundation quotas keep the intdiv wall-clock bucket EXA… 8.59s  
+  ✓ it Quota::SmsSegmentsPerMonth exists, is keyed by sms.quota.segment… 0.09s  
+  ✓ it admits under the limit and refuses over it with a 429 naming the… 0.06s  
+  ✓ it does not let a refused attempt consume capacity                   0.04s  
+  ✓ it raises the internal alert exactly once per window, at 80% (NFR-0… 0.06s  
+  ✓ it blocks forward writes and destroys nothing when a limit drops be… 0.04s  
+  ✓ it enforces the cumulative storage quota from the durable ledger, i… 0.05s  
+  ✓ it persists counters to the ledger and repairs a flushed counter fr… 0.21s  
+  ✓ it fails OPEN for staff and CLOSED for public ingestion when meteri… 0.05s  
+  ✓ it RULED EDIT obligation: headroom() mirrors allow()'s own counter…  0.12s  
+  ✓ it T-07: every orchestrator call accumulates the provider's ACTUAL…  0.08s  
+  ✓ it EC-12 (sabotage #12 target): inside the reserve band NEW turns a… 0.07s  
+  ✓ it EC-12: the band itself refuses — at 96% used a new turn is refus… 0.06s  
+  ✓ it COUNTERSIGN-REQUIRED FIXTURE: a metering OUTAGE lands in RESERVE… 0.06s  
+  ✓ it NFR-06: the registered reserve and rate-card settings exist with… 0.05s  
+  Tests:    15 passed (48 assertions)
+EXIT 0
+
+## reverted
+tree clean of the packet

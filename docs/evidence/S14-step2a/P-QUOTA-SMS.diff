@@ -1,0 +1,147 @@
+diff --git a/app/Support/Quota/Quota.php b/app/Support/Quota/Quota.php
+index 964b107..697aa00 100644
+--- a/app/Support/Quota/Quota.php
++++ b/app/Support/Quota/Quota.php
+@@ -9,6 +9,12 @@
+  * API req/min. Limits live in the settings registry (platform defaults, tenant_editable:
+  * false — an operator cannot raise their own ceiling) with per-tenant overrides in
+  * tenants.quota_overrides, which only the platform console writes.
++ *
++ * P-QUOTA-SMS (Doc 14 FR-19, countersigned S14 step 2a): a FIFTH case — monthly SMS
++ * segments — keyed by the document's own setting `sms.quota.segments` and bucketed by
++ * the TENANT-LOCAL calendar month from DB time (a calendar month is not a fixed second
++ * count; `intdiv(time(), window)` cannot express it). The four foundation cases keep
++ * their `intdiv` wall-clock buckets byte-identically (QuotaSmsMonthlyTest pins it).
+  */
+ enum Quota: string
+ {
+@@ -16,11 +22,27 @@ enum Quota: string
+     case AiTokensPerDay = 'ai_tokens_per_day';
+     case StorageGb = 'storage_gb';
+     case ApiRequestsPerMinute = 'api_requests_per_minute';
++    case SmsSegmentsPerMonth = 'sms_segments_per_month';
+ 
+     /** The registered setting holding this quota's platform default. */
+     public function settingKey(): string
+     {
+-        return 'quota.'.$this->value;
++        return match ($this) {
++            self::SmsSegmentsPerMonth => 'sms.quota.segments',
++            default => 'quota.'.$this->value,
++        };
++    }
++
++    /** P-QUOTA-SMS: a calendar-month quota buckets by the tenant-local YYYY-MM, never by intdiv. */
++    public function isCalendarMonth(): bool
++    {
++        return $this === self::SmsSegmentsPerMonth;
++    }
++
++    /** The counter's TTL for a calendar-month bucket: the longest month plus the reconcile margin. */
++    public function calendarMonthTtlSeconds(): int
++    {
++        return 35 * 86_400;
+     }
+ 
+     /**
+@@ -33,6 +55,8 @@ public function windowSeconds(): ?int
+         return match ($this) {
+             self::MessagesPerMinute, self::ApiRequestsPerMinute => 60,
+             self::AiTokensPerDay => 86_400,
++            // a calendar month has no fixed second count — the meter buckets it by name (isCalendarMonth)
++            self::SmsSegmentsPerMonth => 86_400,
+             self::StorageGb => null,
+         };
+     }
+diff --git a/app/Support/Quota/QuotaMeter.php b/app/Support/Quota/QuotaMeter.php
+index d4070af..6ec2262 100644
+--- a/app/Support/Quota/QuotaMeter.php
++++ b/app/Support/Quota/QuotaMeter.php
+@@ -68,12 +68,11 @@ public function allow(
+         }
+ 
+         try {
+-            $bucket = intdiv(time(), $window) * $window;
+-            $suffix = sprintf('quota:%s:%d', $quota->value, $bucket);
++            [$suffix, $ttl] = $this->bucket($quota, $window);
+ 
+             // TTL twice the window: the counter must outlive its window long enough for
+             // quota:reconcile to persist it (FS-05), not so long that dead windows pile up.
+-            $counted = $this->cache->increment($suffix, $amount, $window * 2, 'quota.window_expired');
++            $counted = $this->cache->increment($suffix, $amount, $ttl, 'quota.window_expired');
+ 
+             if ($counted > $limit) {
+                 $this->cache->decrement($suffix, $amount);
+@@ -81,7 +80,7 @@ public function allow(
+                 throw QuotaExceeded::forQuota($quota, $limit);
+             }
+ 
+-            $this->warnOnFirstCrossing($quota, $counted, $limit, $suffix, $window);
++            $this->warnOnFirstCrossing($quota, $counted, $limit, $suffix, $ttl);
+         } catch (QuotaExceeded $e) {
+             throw $e;
+         } catch (Throwable $e) {
+@@ -115,18 +114,13 @@ public function headroom(Quota $quota): array
+             return ['used' => $used, 'limit' => $limit * $quota->limitUnitMultiplier()];
+         }
+ 
+-        $bucket = intdiv(time(), $window) * $window;
++        [$suffix, $ttl] = $this->bucket($quota, $window);
+         // increment-by-ZERO, not get(): the cache client's get() is FAIL-SOFT
+         // on a dead connection (null, no throw — proven by probe at S09
+         // step 8), while the add/increment path THROWS — and "outage
+         // propagates" is this method's contract. Same key, same TTL as
+         // allow(); a zero increment creates nothing allow() would not.
+-        $counted = $this->cache->increment(
+-            sprintf('quota:%s:%d', $quota->value, $bucket),
+-            0,
+-            $window * 2,
+-            'quota.window_expired',
+-        );
++        $counted = $this->cache->increment($suffix, 0, $ttl, 'quota.window_expired');
+ 
+         return ['used' => $counted, 'limit' => $limit];
+     }
+@@ -184,14 +178,40 @@ private function limit(Quota $quota): int
+         return $default;
+     }
+ 
+-    private function warnOnFirstCrossing(Quota $quota, int $counted, int $limit, string $suffix, int $window): void
++    /**
++     * The counter's cache suffix and TTL for a windowed quota. The four foundation
++     * quotas: the wall-clock epoch bucket (`intdiv(time(), window)`) with TTL twice the
++     * window — byte-identical to the pre-P-QUOTA-SMS behaviour. A calendar-month quota
++     * (P-QUOTA-SMS): the tenant-local `YYYY-MM` read from DB time (C-11 — the month
++     * boundary is a tenant fact, never an app-clock guess) with a 35-day TTL.
++     *
++     * @return array{0: string, 1: int}
++     */
++    private function bucket(Quota $quota, int $window): array
++    {
++        if ($quota->isCalendarMonth()) {
++            /** @var object{m: string} $row */
++            $row = DB::selectOne(
++                "SELECT to_char(clock_timestamp() AT TIME ZONE (SELECT timezone_name FROM tenants WHERE id = ?), 'YYYY-MM') AS m",
++                [$this->context->tenantId()],
++            );
++
++            return [sprintf('quota:%s:%s', $quota->value, $row->m), $quota->calendarMonthTtlSeconds()];
++        }
++
++        $bucket = intdiv(time(), $window) * $window;
++
++        return [sprintf('quota:%s:%d', $quota->value, $bucket), $window * 2];
++    }
++
++    private function warnOnFirstCrossing(Quota $quota, int $counted, int $limit, string $suffix, int $ttl): void
+     {
+         if ($counted < (int) ceil($limit * self::WARN_FRACTION)) {
+             return;
+         }
+ 
+         // increment() as an atomic once-guard: only the first crosser sees 1.
+-        if ($this->cache->increment($suffix.':warned', 1, $window * 2, 'quota.window_expired') === 1) {
++        if ($this->cache->increment($suffix.':warned', 1, $ttl, 'quota.window_expired') === 1) {
+             Log::warning('tenant quota at 80 percent', [
+                 'quota' => $quota->value,
+                 'counted' => $counted,

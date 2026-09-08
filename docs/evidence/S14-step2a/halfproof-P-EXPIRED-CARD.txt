@@ -1,0 +1,10 @@
+# HALF-PROOF P-EXPIRED-CARD — applied on the tree (951401a + the uncommitted 2a filing), controls run, then REVERTED. 2026-09-08T20:04:48Z
+applied
+
+## pint --test on the packet's PHP
+{"tool":"pint","result":"passed"}
+## phpstan on the packet's PHP
+{"tool":"phpstan","result":"failed","errors":2,"error_details":{"/home/kidus/projects/na-live-support/app/Http/Controllers/Inbox/ThreadController.php":[{"line":428,"message":"Call to method exists() on an unknown class App\\Domain\\Sms\\Gateways\\GatewayAvailability.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"},{"line":428,"message":"Class App\\Domain\\Sms\\Gateways\\GatewayAvailability not found.","identifier":"class.notFound","tip":"Learn more at https://phpstan.org/user-guide/discovering-symbols"}]},"instructions":"Each error has an associated identifier, like `argument.type` or `return.missing`. Each error identifier has documentation at URL https://phpstan.org/error-identifiers/<identifier>, which contains a code example, explanation why it is an error, and instructions on how to fix it. Before fixing the error, fetch the documentation page for its identifier. The error usually indicates a real bug or incorrect type in the code. Fix the underlying cause, do not just make the error go away. Do not add `@phpstan-ignore` comments, `@phpstan-ignore-next-line` comments, or baseline entries to suppress the error. Do not use assert() or inline @var PHPDoc tag to override PHPStan's inferred type. Do not add type casts just to silence errors. Do not widen parameter or return types just to make the error go away."}
+
+## reverted
+tree clean of the packet

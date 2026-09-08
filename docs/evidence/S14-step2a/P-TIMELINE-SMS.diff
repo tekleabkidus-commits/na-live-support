@@ -1,0 +1,151 @@
+diff --git a/app/Http/Controllers/Inbox/TicketActionsController.php b/app/Http/Controllers/Inbox/TicketActionsController.php
+index 6214203..926ba3c 100644
+--- a/app/Http/Controllers/Inbox/TicketActionsController.php
++++ b/app/Http/Controllers/Inbox/TicketActionsController.php
+@@ -184,8 +184,13 @@ public function timeline(Request $request, string $ticketId): JsonResponse
+         }
+ 
+         $all = $request->query('all') === '1';
++        // P-TIMELINE-SMS (Doc 14 FR-12 / AC-09, countersigned): the eight sms.* lifecycle
++        // events carrying this ticket_id are timeline rows too (Doc 06's "SMS sends related
++        // to a ticket appear as system events with live state"). An explicit name list —
++        // never `sms.%` — so the opt-out/health/broadcast/cost events stay off the timeline.
++        $smsLifecycle = ['sms.queued', 'sms.held', 'sms.sent', 'sms.delivered', 'sms.undelivered', 'sms.failed', 'sms.skipped', 'sms.expired'];
+         $base = \Illuminate\Support\Facades\DB::table('events')
+-            ->where('name', 'like', 'ticket.%')
++            ->where(fn (\Illuminate\Database\Query\Builder $q) => $q->where('name', 'like', 'ticket.%')->orWhereIn('name', $smsLifecycle))
+             ->where('payload->ticket_id', $ticket->identifier());
+         $total = (clone $base)->count();
+         /** @var list<object{id: string, name: string, payload: string, occurred_at: string}> $rows */
+@@ -195,7 +200,8 @@ public function timeline(Request $request, string $ticketId): JsonResponse
+ 
+         // S11 step 11b (STOP-G, the packet's named lines): ticket.routed carries record_id (the
+         // expandable fetches the record by id through its own SEC-02 door), ticket.waiting its queue/position.
+-        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path', 'record_id', 'queue', 'position'];
++        // P-TIMELINE-SMS: the SMS keys are ids and enums (SEC-02 — never a phone, never a body).
++        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path', 'record_id', 'queue', 'position', 'sms_message_id', 'event', 'lane', 'template_version_id'];
+         $decoded = array_map(function (object $row) use ($detailKeys): array {
+             /** @var array<string, mixed> $payload */
+             $payload = json_decode($row->payload, true, 8, JSON_THROW_ON_ERROR);
+@@ -224,10 +230,25 @@ public function timeline(Request $request, string $ticketId): JsonResponse
+             ? []
+             : \Illuminate\Support\Facades\DB::table('users')->whereIn('id', array_keys($ids))->pluck('name', 'id')->all();
+ 
++        // P-TIMELINE-SMS: the row's LIVE state and the DRAWN masked phone (+251 91 ••• 4417),
++        // read from sms_messages by id through Doc 14's timeline facts door — so a later DLR
++        // updates the chip (US-02 "delivered turns green") and the full number never crosses.
++        $smsIds = [];
++        foreach ($decoded as $row) {
++            if (is_string($row['detail']['sms_message_id'] ?? null)) {
++                $smsIds[] = $row['detail']['sms_message_id'];
++            }
++        }
++        /** @var array<string, array{state: string, phone_masked: string, event: string}> $smsFacts */
++        $smsFacts = $smsIds === [] ? [] : app(\App\Domain\Sms\Timeline\SmsTimelineFacts::class)->forMessageIds($smsIds);
++
+         return new JsonResponse([
+             'total' => $total,
+-            'rows' => array_map(function (array $row) use ($names): array {
++            'rows' => array_map(function (array $row) use ($names, $smsFacts): array {
+                 $detail = $row['detail'];
++                if (is_string($detail['sms_message_id'] ?? null) && isset($smsFacts[$detail['sms_message_id']])) {
++                    $detail['sms'] = $smsFacts[$detail['sms_message_id']];
++                }
+                 $detail['old_assignee_name'] = is_string($detail['old_assignee_id'] ?? null) ? ($names[$detail['old_assignee_id']] ?? null) : null;
+                 $detail['new_assignee_name'] = is_string($detail['new_assignee_id'] ?? null) ? ($names[$detail['new_assignee_id']] ?? null) : null;
+                 unset($detail['old_assignee_id'], $detail['new_assignee_id']);
+diff --git a/lang/am/inbox.php b/lang/am/inbox.php
+index 6d9b898..ccd1cf9 100644
+--- a/lang/am/inbox.php
++++ b/lang/am/inbox.php
+@@ -266,6 +266,19 @@
+         'expired_hint' => 'ደንበኛው እንደገና በመጻፍ ብቻ ውይይቱን መክፈት ይችላል።',
+         'expired_sms' => 'የSMS ማሳወቂያ ላክ',
+         'expired_no_phone' => 'ስልክ ቁጥር የለም — SMS አይገኝም።',
++        // P-TIMELINE-SMS (Doc 14, S14) — machine Amharic, R-14 native-review queue
++        'sms_chip_queued' => 'ተሰልፏል',
++        'sms_chip_held' => 'ተይዟል — ጸጥታ ሰዓታት',
++        'sms_chip_sending' => 'በመላክ ላይ',
++        'sms_chip_sent' => 'ተልኳል',
++        'sms_chip_delivered' => 'ደርሷል',
++        'sms_chip_undelivered' => 'አልደረሰም',
++        'sms_chip_failed' => 'አልተሳካም',
++        'sms_chip_skipped' => 'ተዘሏል',
++        'sms_chip_expired' => 'ተልኳል · አልተረጋገጠም',
++        'sms_menu_neither' => 'SMS · ምንም',
++        'sms_menu_copy' => 'ጽሑፉን ቅዳ',
++        'sms_menu_why' => 'SMS የተላከ መልእክትን መመለስ ወይም መቀየር አይችልም፤ ስለዚህ አርትዕ እና ሰርዝ በዚህ ምናሌ ውስጥ የሉም። ምንም ግራጫ አልሆነም — ቻናሉ ያንን አያቀርብም።',
+         'paused_card' => 'የተገናኘው መለያ ":account" ቆሟል — መልሶች መላክ አይችሉም። የቻናል ጤንነትን ይመልከቱ።',
+         'paused_link' => 'የቻናል ጤንነት ክፈት',
+         'blocked_user_card' => 'ይህ ደንበኛ ቦቱን አግዷል። መልሶች ሊደርሱ አይችሉም።',
+diff --git a/lang/en/inbox.php b/lang/en/inbox.php
+index 14e032c..8bc0184 100644
+--- a/lang/en/inbox.php
++++ b/lang/en/inbox.php
+@@ -272,6 +272,19 @@
+         'expired_hint' => 'Only the customer can reopen this conversation by writing again.',
+         'expired_sms' => 'Send SMS notification',
+         'expired_no_phone' => 'No phone number on file — SMS unavailable.',
++        // P-TIMELINE-SMS (Doc 14 §9 / B12-S02, S14): the SMS chips and the drawn menu case
++        'sms_chip_queued' => 'Queued',
++        'sms_chip_held' => 'Held — quiet hours',
++        'sms_chip_sending' => 'Sending',
++        'sms_chip_sent' => 'Sent',
++        'sms_chip_delivered' => 'Delivered',
++        'sms_chip_undelivered' => 'Undelivered',
++        'sms_chip_failed' => 'Failed',
++        'sms_chip_skipped' => 'Skipped',
++        'sms_chip_expired' => 'Sent · unconfirmed',
++        'sms_menu_neither' => 'SMS · neither',
++        'sms_menu_copy' => 'Copy text',
++        'sms_menu_why' => 'SMS cannot recall or change a sent message, so Edit and Delete are not in this menu. Nothing is greyed out — the channel simply does not offer it.',
+         'paused_card' => 'The connected account ":account" is paused — replies cannot send. Check channel health.',
+         'paused_link' => 'Open channel health',
+         'blocked_user_card' => 'This customer has blocked the bot. Replies cannot be delivered.',
+diff --git a/resources/js/Components/Inbox/TicketTimeline.vue b/resources/js/Components/Inbox/TicketTimeline.vue
+index 5ec307e..efbd170 100644
+--- a/resources/js/Components/Inbox/TicketTimeline.vue
++++ b/resources/js/Components/Inbox/TicketTimeline.vue
+@@ -6,14 +6,41 @@
+ // expander serves the rest of the log on demand ("Show N earlier events").
+ import { ref, watch } from 'vue';
+ 
++type SmsFacts = { state: string; phone_masked: string; event: string };
+ type TimelineRow = {
+     id: string;
+     name: string;
+     occurred_at: string;
+     actor_type: string;
+     actor_name: string | null;
+-    detail: Record<string, string | null | undefined>;
++    detail: Record<string, string | null | undefined> & { sms?: SmsFacts };
+ };
++// P-TIMELINE-SMS (Doc 14 §9 / NFR-04 / B12-S02, countersigned): the SMS row's chip
++// reads the row's LIVE state — queued ◷ · held ☾ · sent ✓ · delivered ✓✓ (a real
++// DLR only) · undelivered/failed ! · expired "sent · unconfirmed". The menu case is
++// the drawn one: no Edit, no Delete, Copy text — "SMS cannot recall or change a
++// sent message". Nothing is greyed out; the channel simply does not offer it.
++const smsGlyph: Record<string, string> = {
++    queued: '◷',
++    held: '☾',
++    sending: '◷',
++    sent: '✓',
++    delivered: '✓✓',
++    undelivered: '!',
++    failed: '!',
++    skipped: '!',
++    expired: '✓',
++};
++function smsChipKey(state: string): string {
++    return `sms_chip_${state}`;
++}
++function copySmsText(row: TimelineRow): void {
++    const facts = row.detail.sms;
++    if (!facts) return;
++    void navigator.clipboard?.writeText(
++        `${props.t[smsChipKey(facts.state)] ?? facts.state} · ${facts.phone_masked}`,
++    );
++}
+ 
+ const props = defineProps<{
+     ticketId: string | null;

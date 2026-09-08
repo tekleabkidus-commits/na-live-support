@@ -1,0 +1,194 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sms\DlrAuthTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit control 1 — FAIL-CLOSED: a gateway whose credential row carries[39m[90m…[39m [90m11.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit control 2 — a wrong secret is refused with the same byte-identic[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit control 3 — a byte-identical replay within the window answers 20[39m[90m…[39m [90m0.06s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit control 4 (POSITIVE) — the right secret once: 202, the tenant re[39m[90m…[39m [90m0.06s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\LiveSecretValuesScrubTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit plant → detect → remove: a revealed vault secret is scrubbed und[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit is bounded (≤ 32 values), refuses short values (< 12 chars are n[39m[90m…[39m [90m0.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit is cleared at exactly the TenantContext clear points — a value r[39m[90m…[39m [90m0.03s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sms\QuotaSmsMonthlyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the four foundation quotas keep the intdiv wall-clock bucket EXA[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit Quota::SmsSegmentsPerMonth exists, is keyed by sms.quota.segment[39m[90m…[39m [90m0.04s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\ExpiredCardSmsMetaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit customer_has_phone is TRUE for a customer with a phone IDENTITY[39m[90m… [39m [90m0.26s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\TimelineSmsRowsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit an sms.sent event with a ticket_id appears on the ticket timelin[39m[90m…[39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\DlrAuthTest[22m [90m>[39m it control 1 — FAIL-CLOSED: a gat…   
+[39;1m  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Sms/DlrAuthTest.php[39m:[32m60[39m
+     56▕ it('control 1 — FAIL-CLOSED: a gateway whose credential row carries no callback secret is refused 403', function (): void {
+     57▕     [, $plaintext] = dlrUrlFixture(configured: false);
+     58▕ 
+     59▕     postDlrByUrl($plaintext, DLR_URL_SECRET)
+  ➜  60▕         ->assertForbidden()
+     61▕         ->assertJsonPath('code', 'webhook_rejected');
+     62▕ });
+     63▕ 
+     64▕ it('control 2 — a wrong secret is refused with the same byte-identical body (no oracle)', function (): void {
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\DlrAuthTest[22m [90m>[39m it control 2 — a wrong secret is…    
+[39;1m  Expected response status code [403] but received 404.
+Failed asserting that 404 is identical to 403.[39;22m
+
+  at [32mtests/Feature/Sms/DlrAuthTest.php[39m:[32m68[39m
+     64▕ it('control 2 — a wrong secret is refused with the same byte-identical body (no oracle)', function (): void {
+     65▕     [, $plaintext] = dlrUrlFixture();
+     66▕ 
+     67▕     $wrong = postDlrByUrl($plaintext, 'fixture-dlr-url-secret-WRONG0000');
+  ➜  68▕     $wrong->assertForbidden()->assertJsonPath('code', 'webhook_rejected');
+     69▕ 
+     70▕     // the secret is never echoed and never logged
+     71▕     expect($wrong->getContent())->not->toContain('fixture-dlr-url-secret');
+     72▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\DlrAuthTest[22m [90m>[39m it control 3 — a byte-identical r…   
+[39;1m  Expected response status code [202] but received 404.
+Failed asserting that 404 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Sms/DlrAuthTest.php[39m:[32m78[39m
+     74▕ it('control 3 — a byte-identical replay within the window answers 202 with `webhook.replay_ignored` and processes nothing', function (): void {
+     75▕     [, $plaintext] = dlrUrlFixture();
+     76▕     $records = &capturedLogsRef();
+     77▕ 
+  ➜  78▕     postDlrByUrl($plaintext, DLR_URL_SECRET)->assertStatus(202)->assertJsonPath('replay', null);
+     79▕     $replay = postDlrByUrl($plaintext, DLR_URL_SECRET);
+     80▕ 
+     81▕     $replay->assertStatus(202)->assertJsonPath('replay', 'ignored');
+     82▕     $metrics = array_map(fn (array $r) => $r['context']['security_metric'] ?? null, $records);
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\DlrAuthTest[22m [90m>[39m it control 4 (POSITIVE) — the rig…   
+[39;1m  Expected response status code [202] but received 404.
+Failed asserting that 404 is identical to 202.[39;22m
+
+  at [32mtests/Feature/Sms/DlrAuthTest.php[39m:[32m90[39m
+     86▕ it('control 4 (POSITIVE) — the right secret once: 202, the tenant resolved from the PATH alone', function (): void {
+     87▕     [$tenant, $plaintext] = dlrUrlFixture();
+     88▕ 
+     89▕     postDlrByUrl($plaintext, DLR_URL_SECRET)
+  ➜  90▕         ->assertStatus(202)
+     91▕         ->assertJsonPath('resolved_tenant_id', $tenant->id)
+     92▕         ->assertJsonPath('resolution_source', 'sms_gateway_key');
+     93▕ 
+     94▕     // the signed surface (body_hmac) stays for gateways that sign — WebhookHmacTest proves it unmodified
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\LiveSecretValuesScrubTest[22m [90m>[39m it plant → detect → re…   
+[39;1m  Expecting 'after reveal fixture-geezsms-…07"}' not to contain 'fixture-geezsms-token-9f2c4e7a1b'.[39;22m
+
+  at [32mtests/Security/LiveSecretValuesScrubTest.php[39m:[32m57[39m
+     53▕         // DETECT: after the reveal, the SAME value under an innocent key and inside the message is scrubbed
+     54▕         Log::info('after reveal '.$secret, ['detail' => $secret, 'nested' => ['deep' => 'x'.$secret.'y']]);
+     55▕         $sink = (string) file_get_contents($path);
+     56▕         $after = substr($sink, strpos($sink, 'after reveal') ?: 0);
+  ➜  57▕         expect($after)->not->toContain($secret)
+     58▕             ->and(substr_count($after, ScrubSecrets::REDACTED))->toBeGreaterThanOrEqual(3);
+     59▕     });
+     60▕ 
+     61▕     // REMOVE: the TenantContext clear point (the asTenant boundary) clears the set — the value survives into a later log line
+
+  [33m1   [39m[39;1mtests/Security/LiveSecretValuesScrubTest.php[39;22m:[39;1m57[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\LiveSecretValuesScrubTest[22m [90m>[39m it is bounded (… [41;1m Error [49;22m  
+[39;1m  Class "App\Support\Secrets\LiveSecretValues" not found[39;22m
+
+  at [32mtests/Security/LiveSecretValuesScrubTest.php[39m:[32m69[39m
+     65▕     @unlink($path);
+     66▕ });
+     67▕ 
+     68▕ it('is bounded (≤ 32 values), refuses short values (< 12 chars are not scrubbed by value), and cannot be serialized', function (): void {
+  ➜  69▕     LiveSecretValues::clear();
+     70▕     foreach (range(1, 40) as $i) {
+     71▕         LiveSecretValues::register(sprintf('fixture-secret-value-%04d', $i));
+     72▕     }
+     73▕     expect(count(LiveSecretValues::all()))->toBeLessThanOrEqual(32);
+
+  [33m1   [39m[39;1mtests/Security/LiveSecretValuesScrubTest.php[39;22m:[39;1m69[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\LiveSecretValuesScrubTest[22m [90m>[39m it is cleared a… [41;1m Error [49;22m  
+[39;1m  Class "App\Support\Secrets\LiveSecretValues" not found[39;22m
+
+  at [32mtests/Security/LiveSecretValuesScrubTest.php[39m:[32m90[39m
+     86▕ it('is cleared at exactly the TenantContext clear points — a value revealed in one request does not survive into the next', function (): void {
+     87▕     $tenant = createTenant();
+     88▕ 
+     89▕     asTenant($tenant, function (): void {
+  ➜  90▕         LiveSecretValues::register('fixture-secret-value-survives?');
+     91▕         expect(LiveSecretValues::all())->toContain('fixture-secret-value-survives?');
+     92▕     });
+     93▕ 
+     94▕     // asTenant's exit is the TenantContext::clear() call site (the same one ResolveTenant's finally and
+
+  [33m1   [39m[39;1mtests/Security/LiveSecretValuesScrubTest.php[39;22m:[39;1m90[39;22m
+  [33m2   [39m[39;1mtests/Pest.php[39;22m:[39;1m115[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\QuotaSmsMonthlyTest[22m [90m>[39m it Quota::Sms… [41;1m ValueError [49;22m  
+[39;1m  "sms_segments_per_month" is not a valid backing value for enum App\Support\Quota\Quota[39;22m
+
+  at [32mtests/Feature/Sms/QuotaSmsMonthlyTest.php[39m:[32m49[39m
+     45▕     $tenant = createTenant(['quota_overrides' => ['sms.quota.segments' => 5]]);
+     46▕     $meter = app(QuotaMeter::class);
+     47▕     $cache = app(TenantCache::class);
+     48▕ 
+  ➜  49▕     $quota = Quota::from('sms_segments_per_month');
+     50▕     expect($quota->settingKey())->toBe('sms.quota.segments')
+     51▕         ->and($quota->isCalendarMonth())->toBeTrue();
+     52▕ 
+     53▕     $meter->allow($quota, 3);
+
+  [33m1   [39m[39;1mtests/Feature/Sms/QuotaSmsMonthlyTest.php[39;22m:[39;1m49[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\ExpiredCardSmsMetaTest[22m [90m>[39m it customer_has_phon…   
+[39;1m  Expected response status code [200] but received 403.
+Failed asserting that 403 is identical to 200.[39;22m
+
+  at [32mtests/Feature/Inbox/ExpiredCardSmsMetaTest.php[39m:[32m42[39m
+     38▕     ]);
+     39▕     DB::table('customers')->where('id', $ticket->customer_id)->update(['phone' => null]);
+     40▕ 
+     41▕     $page = $this->actingAs($actor, 'staff')->get('https://localhost/inbox/thread/'.$conversation->identifier());
+  ➜  42▕     $page->assertOk();
+     43▕ 
+     44▕     $meta = $page->viewData('page')['props']['conversation'] ?? null;
+     45▕     expect($meta)->not->toBeNull()
+     46▕         ->and($meta['customer_has_phone'])->toBeTrue('the composer must read Doc 08\'s phone identity, never the deprecated mirror (D07-N3)')
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\TimelineSmsRowsTest[22m [90m>[39m it an sms.sent e… [41;1m Error [49;22m  
+[39;1m  Call to undefined function actionScene()[39;22m
+
+  at [32mtests/Feature/Inbox/TimelineSmsRowsTest.php[39m:[32m18[39m
+     14▕  * (`+251 91 ••• 4417`) from a Doc 14 read — never the full number, never a
+     15▕  * body (SEC-02). The actor is class-only (system).
+     16▕  */
+     17▕ it('an sms.sent event with a ticket_id appears on the ticket timeline as a system row with the SMS detail keys', function (): void {
+  ➜  18▕     [$tenant, $conversation, $ticket, $actor] = actionScene('open');
+     19▕     $tenantId = $tenant->identifier();
+     20▕ 
+     21▕     inboxSeedEvent('ticket.status_changed', [
+     22▕         'tenant_id' => $tenantId, 'ticket_id' => $ticket->identifier(),
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/TimelineSmsRowsTest.php[39;22m:[39;1m18[39;22m
+
+
+  [90mTests:[39m    [31;1m10 failed[39;22m[90m,[39m[39m [39m[32;1m1 passed[39;22m[90m (16 assertions)[39m
+  [90mDuration:[39m [39m11.81s[39m
+
+EXIT 2

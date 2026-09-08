@@ -1,0 +1,126 @@
+diff --git a/lang/am/kb.php b/lang/am/kb.php
+index 6f607ec..3693dc4 100644
+--- a/lang/am/kb.php
++++ b/lang/am/kb.php
+@@ -109,6 +109,8 @@
+         'nav_kb' => 'የእውቀት ማዕከል',
+         'nav_workflow' => 'የስራ ፍሰት',
+         'nav_widgets' => 'የድር ውይይት መግብር',
++        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14) — R-14 queue
++        'nav_sms_settings' => 'የSMS ቅንብሮች', // P-NAV-SMS — R-14 queue
+         'categories_title' => 'ምድቦች',
+         'crumb_editing' => 'በማረም ላይ',
+         'category_one' => 'ምድብ',
+diff --git a/lang/am/widget.php b/lang/am/widget.php
+index 20d4b70..aba63ce 100644
+--- a/lang/am/widget.php
++++ b/lang/am/widget.php
+@@ -397,5 +397,7 @@
+         'nav_kb' => 'የእውቀት መሠረት',
+         'nav_workflow' => 'የስራ ፍሰት',
+         'nav_widgets' => 'የድር ውይይት መግብር',
++        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14) — R-14 queue
++        'nav_sms_settings' => 'የSMS ቅንብሮች', // P-NAV-SMS — R-14 queue
+     ],
+ ];
+diff --git a/lang/am/workflow.php b/lang/am/workflow.php
+index 71ce2b9..5ab95b5 100644
+--- a/lang/am/workflow.php
++++ b/lang/am/workflow.php
+@@ -69,7 +69,7 @@
+     //    FLAGGED for native review: rules.activate_confirm / deactivate_confirm / *_verb, fields.deactivate_*,
+     //    forms.publish_confirm / publish_verb, hub.paused_banner.
+     'ui' => [
+-        'nav' => ['backoffice' => 'የኋላ ቢሮ', 'organization' => 'ድርጅት', 'people' => 'ሰዎች እና ሚናዎች', 'channels' => 'ቻናሎች', 'sla' => 'የSLA ፖሊሲዎች', 'automation' => 'አውቶሜሽን', 'hours' => 'የስራ ሰዓታት', 'workflow' => 'የስራ ፍሰት', 'kb' => 'የእውቀት ማዕከል', 'widgets' => 'የድር ውይይት መግብር', 'macros' => 'ማክሮዎች', 'fields' => 'ብጁ መስኮች', 'forms' => 'ቅጾች', 'csat' => 'የCSAT ዳሰሳዎች'],
++        'nav' => ['backoffice' => 'የኋላ ቢሮ', 'organization' => 'ድርጅት', 'people' => 'ሰዎች እና ሚናዎች', 'channels' => 'ቻናሎች', 'sla' => 'የSLA ፖሊሲዎች', 'automation' => 'አውቶሜሽን', 'hours' => 'የስራ ሰዓታት', 'workflow' => 'የስራ ፍሰት', 'kb' => 'የእውቀት ማዕከል', 'widgets' => 'የድር ውይይት መግብር', 'sms_channel' => 'SMS', 'sms_settings' => 'የSMS ቅንብሮች', 'macros' => 'ማክሮዎች', 'fields' => 'ብጁ መስኮች', 'forms' => 'ቅጾች', 'csat' => 'የCSAT ዳሰሳዎች'],
+         'execution' => ['title' => 'አፈጻጸም', 'title_line' => 'አፈጻጸም · :rule · :when', 'readnote' => 'በስልክ ሊነበብ የሚችል፦ ክስተቱ፣ ሁኔታዎቹ እና ውጤቶቹ። የደንብ አርታዒው ትልቅ ማያ ያስፈልጋል።', 'open_rule' => 'ደንብ ክፈት', 'open_ticket' => 'ትኬት #:number ክፈት', 'replay' => 'እንደ ደረቅ ሙከራ እንደገና አሂድ', 'actions_done' => ':done ከ:total እርምጃዎች ተከናውነዋል', 'n_failed' => ':n አልተሳኩም', 'retention' => 'ማቆያ :days ቀናት', 'facts_title' => 'ክስተት · የሁኔታ ውጤቶች', 'privileged_viewer' => 'ልዩ መብት ያለው ተመልካች · automation.rules.view', 'elided_viewer' => 'automation.rules.view የሌለው ተመልካች · SEC-03', 'execution_word' => 'አፈጻጸም', 'ticket_word' => 'ትኬት', 'rule_word' => 'ደንብ', 'revision' => 'ክለሳ :rev', 'guards_word' => 'ጠባቂዎች', 'guards_none' => 'ምንም አልተነካም · :limit_rules ደንቦች በክስተት · :actions ከ:limit_actions እርምጃዎች', 'conditions_title' => 'የሁኔታ ውጤቶች', 'evaluated' => 'የተገመገመ እሴት፦', 'same_elided' => 'ተመሳሳዩ አፈጻጸም፣ ተሸፍኖ', 'elision_note' => 'የመልእክት እውነታዎች ወደ [matched] / [keyword] ምልክቶች ተሸፍነዋል፤ ሌላው ሁሉ — ክስተቱ፣ ትኬቱ፣ ውጤቶቹ — ተመሳሳይ ነው። የቁልፍ ቃል ስብስቦች ስሱ ቅጦችን ሊይዙ ይችላሉ (SEC-03)።', 'outcomes_title' => 'የእርምጃ ውጤቶች', 'outcomes_sub' => 'በቅደም ተከተል · እያንዳንዱ ተመዝግቧል', 'done' => 'ተከናውኗል', 'failed' => 'አልተሳካም', 'skipped' => 'ተዘሏል', 'outcomes_law' => 'የእርምጃ መነጠል፦ ያልተሳካ እርምጃ ቀሪውን በጭራሽ አያቆምም (EC-13)። የወረፋ መጨናነቅ እርምጃዎችን ያዘገያል፣ ግምገማን በጭራሽ (FS-01)፤ የSLA ሰዓቶች ከአውቶሜሽን ወረፋ ነጻ ናቸው። የደንብ እርምጃዎች በትኬት የጊዜ መስመር ላይ የደንብ አገናኝ ያላቸው የስርዓት ክስተቶች ሆነው ይታያሉ (ሰነድ 06 FR-26)።'],
+         'hub' => ['title' => 'የስራ ፍሰት', 'summary' => ':rules ደንቦች · :policies የSLA ፖሊሲዎች · :forms ቅጾች · :macros ማክሮዎች', 'readonly_notice' => 'የደንብ አርታዒውንና የቅጽ ገንቢውን ለማርትዕ ቢያንስ 1024 ፒክሰል ስፋት ያለው ማያ ያስፈልጋል። እዚህ ሁሉም ነገር ሊነበብ ይችላል።', 'paused_banner' => 'ሁሉም የአውቶሜሽን ደንቦች ለዚህ የስራ ቦታ ቆመዋል (የR-04 ማብሪያ)። እንደገና እስኪበራ ድረስ ምንም አይሰራም።', 'sub_rules' => 'ደንቦች · :active ንቁ · የቦታ ቅደም ተከተል የአፈጻጸም ቅደም ተከተል ነው', 'sub_sla' => 'የመጀመሪያው ተዛማጅ ያሸንፋል · :n ነባሪውን የቀን መቁጠሪያ ይጠቅሳሉ', 'sub_hours' => ':n የቀን መቁጠሪያዎች · :tz', 'sub_macros' => 'የግል :personal · ቡድን :team · የተጋሩ :shared', 'sub_fields' => 'ቲኬት :ticket · ደንበኛ :customer · :retired ጡረታ የወጡ', 'sub_forms' => 'ቅጾች · :seeded የተዘሩ፣ :draft ረቂቅ', 'sub_csat' => 'ማቀዝቀዣ :cooldown ሰ · መስኮት :window ሰ', 'legend_title' => 'የተሳለው የኋላ ቢሮ ማሰሻ፣ የስራ ፍሰት ቡድኑ ቀጥታ — በዚህ ገጽ ላይ እውነተኛው ምንድን ነው', 'real' => 'እውነተኛ', 'drawn' => 'የተሳለ', 'legend_org' => 'ድርጅት — ወደ ሰነድ 11 ገጽ የሚወጣ አገናኝ (ሶስቱ የተሳሉ ወንድሞቹ ከP-NAV ጀምሮ ወደዚህ ይመለሳሉ)', 'legend_people' => 'ሰዎች እና ሚናዎች · ቻናሎች — ሰነዶች 03 / 05 ባለቤቶቻቸው ናቸው፤ ከዚህ አልተገናኙም', 'legend_kb' => 'የእውቀት ማዕከል — የሰነድ 10 አስተዳዳሪ (P8)', 'legend_workflow' => 'የስራ ፍሰት (ይህ ማዕከል) እና ሰባቱ ረድፎቹ፦ አውቶሜሽን · የSLA ፖሊሲዎች · የስራ ሰዓታት · ማክሮዎች · ብጁ መስኮች · ቅጾች · የCSAT ዳሰሳዎች — እያንዳንዱ የሰነድ 12 ገጽ ይህንኑ ተመሳሳይ ቅርፊት ይይዛል፣ ስለዚህ ምንም ማያ ከቡድኑ አልተነጠለም', 'legend_palette' => 'ቅርፊቱ አንድ የስራ ፍሰት መግቢያ አለው፦ የትእዛዝ ፓለት ረድፍ (P-NAV)።'],
+         'common' => ['save' => 'አስቀምጥ', 'save_draft' => 'እንደ ረቂቅ አስቀምጥ', 'cancel' => 'ሰርዝ', 'name' => 'ስም', 'description' => 'መግለጫ', 'active' => 'ንቁ', 'inactive' => 'ንቁ ያልሆነ', 'draft' => 'ረቂቅ', 'position' => 'ቦታ', 'move_up' => 'ወደ ላይ ውሰድ', 'move_down' => 'ወደ ታች ውሰድ', 'created' => 'ተፈጠረ', 'updated' => 'ተዘምኗል', 'never' => 'በጭራሽ', 'refused' => 'ለውጡ ውድቅ ተደርጓል፦ :detail', 'saved' => 'ተቀምጧል።', 'conflict' => 'ይህን ከከፈቱ በኋላ ሌላ ሰው ቀይሮታል። የእነሱን ስሪት ለማየት እንደገና ይጫኑ።', 'language_en' => 'እንግሊዝኛ', 'language_am' => 'አማርኛ', 'confirm_verb' => 'አረጋግጥ'],
+diff --git a/lang/en/kb.php b/lang/en/kb.php
+index 92d09c6..ca0916e 100644
+--- a/lang/en/kb.php
++++ b/lang/en/kb.php
+@@ -118,6 +118,8 @@
+         'nav_kb' => 'Knowledge base',
+         'nav_workflow' => 'Workflow',
+         'nav_widgets' => 'Web chat widget',
++        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14): the B6-S01 "Channels · ✉ SMS" slot
++        'nav_sms_settings' => 'SMS settings', // P-NAV-SMS: the B6-S01 "Settings · SMS" slot
+         'categories_title' => 'Categories',
+         'crumb_editing' => 'Editing',
+         'category_one' => 'Category',
+diff --git a/lang/en/widget.php b/lang/en/widget.php
+index fae39f9..40bb3cd 100644
+--- a/lang/en/widget.php
++++ b/lang/en/widget.php
+@@ -404,5 +404,7 @@
+         'nav_kb' => 'Knowledge base',
+         'nav_workflow' => 'Workflow',
+         'nav_widgets' => 'Web chat widget',
++        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14): the B6-S01 "Channels · ✉ SMS" slot
++        'nav_sms_settings' => 'SMS settings', // P-NAV-SMS: the B6-S01 "Settings · SMS" slot
+     ],
+ ];
+diff --git a/lang/en/workflow.php b/lang/en/workflow.php
+index bcc164e..7a6f75c 100644
+--- a/lang/en/workflow.php
++++ b/lang/en/workflow.php
+@@ -84,6 +84,8 @@
+             'workflow' => 'Workflow',
+             'kb' => 'Knowledge base',
+             'widgets' => 'Web chat widget', // P-NAV-WIDGETS (S13 Batch C) — the shared Backoffice row (Doc 13 §4.4)
++            'sms_channel' => 'SMS', // P-NAV-SMS (S14) — the shared Backoffice rows (Doc 14; B6-S01 slots)
++            'sms_settings' => 'SMS settings',
+             'macros' => 'Macros',
+             'fields' => 'Custom fields',
+             'forms' => 'Forms',
+diff --git a/resources/js/Components/Backoffice/BackofficeShell.vue b/resources/js/Components/Backoffice/BackofficeShell.vue
+index 6cdb47c..4847e27 100644
+--- a/resources/js/Components/Backoffice/BackofficeShell.vue
++++ b/resources/js/Components/Backoffice/BackofficeShell.vue
+@@ -7,7 +7,7 @@
+ // page states its READ posture (Doc 10 §9): nothing greyed, nothing blank.
+ defineProps<{
+     t: Record<string, string>;
+-    active: 'kb' | 'workflow' | 'organization' | 'widgets';
++    active: 'kb' | 'workflow' | 'organization' | 'widgets' | 'sms' | 'sms-settings';
+     title: string;
+     crumb?: { label: string; href?: string }[];
+     readNote?: string;
+@@ -57,6 +57,23 @@ defineProps<{
+                     data-testid="bo-nav-widgets"
+                     >{{ t.nav_widgets }}</a
+                 >
++                <!-- Doc 14 (S14 step 13, P-NAV-SMS): the two frozen slots B6-S01/B6-S06 draw — "Channels · ✉ SMS" and "Settings · SMS" ("an unlinked screen is the worse deviation") -->
++                <a
++                    href="/admin/sms"
++                    class="bo-nav-a"
++                    :class="{ on: active === 'sms' }"
++                    :aria-current="active === 'sms' ? 'page' : undefined"
++                    data-testid="bo-nav-sms"
++                    >{{ t.nav_sms_channel }}</a
++                >
++                <a
++                    href="/admin/sms/settings"
++                    class="bo-nav-a"
++                    :class="{ on: active === 'sms-settings' }"
++                    :aria-current="active === 'sms-settings' ? 'page' : undefined"
++                    data-testid="bo-nav-sms-settings"
++                    >{{ t.nav_sms_settings }}</a
++                >
+                 <!-- the Workflow group's sub-rows (Doc 12's pages render them; B9-S05 §E chrome) -->
+                 <div v-if="$slots['nav-sub']" class="bo-nav-sub"><slot name="nav-sub" /></div>
+             </nav>
+diff --git a/resources/js/Components/Workflow/WorkflowShell.vue b/resources/js/Components/Workflow/WorkflowShell.vue
+index f73a82a..3777974 100644
+--- a/resources/js/Components/Workflow/WorkflowShell.vue
++++ b/resources/js/Components/Workflow/WorkflowShell.vue
+@@ -37,6 +37,8 @@ const t = computed<Record<string, string>>(() => ({
+     nav_kb: c.nav?.kb ?? '',
+     nav_workflow: c.nav?.workflow ?? '',
+     nav_widgets: c.nav?.widgets ?? '', // P-NAV-WIDGETS (S13 Batch C): the shared shell's Doc 13 row needs its name here too
++    nav_sms_channel: c.nav?.sms_channel ?? '', // P-NAV-SMS (S14): the shared shell's Doc 14 rows need their names here too
++    nav_sms_settings: c.nav?.sms_settings ?? '',
+ }));
+ const crumb = computed(() => {
+     if (props.crumb) return props.crumb;

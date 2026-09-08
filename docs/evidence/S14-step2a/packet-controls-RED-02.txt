@@ -1,0 +1,45 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\ExpiredCardSmsMetaTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit customer_has_phone is TRUE for a customer with a phone IDENTITY[39m[90m… [39m [90m9.79s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Inbox\TimelineSmsRowsTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit an sms.sent event with a ticket_id appears on the ticket timelin[39m[90m…[39m [90m0.12s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\ExpiredCardSmsMetaTest[22m…  [41;1m AssertionFailedError [49;22m  
+[39;1m  The response is not a view.[39;22m
+
+  at [32mtests/Feature/Inbox/ExpiredCardSmsMetaTest.php[39m:[32m47[39m
+     43▕ 
+     44▕     $page = $this->actingAs($actor, 'staff')->get('https://localhost/inbox/thread/'.$conversation->identifier());
+     45▕     $page->assertOk();
+     46▕ 
+  ➜  47▕     $meta = $page->viewData('page')['props']['conversation'] ?? null;
+     48▕     expect($meta)->not->toBeNull()
+     49▕         ->and($meta['customer_has_phone'])->toBeTrue('the composer must read Doc 08\'s phone identity, never the deprecated mirror (D07-N3)')
+     50▕         ->and(array_key_exists('sms_available', $meta))->toBeTrue('the card needs to know whether a gateway exists (§8)');
+     51▕ });
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Inbox\TimelineSmsRowsTest[22m [90m>[39m it an sms.sent event wi…   
+[39;1m  the sms.* lifecycle row must reach the timeline (P-TIMELINE-SMS)
+Failed asserting that 0 is identical to 1.[39;22m
+
+  at [32mtests/Feature/Inbox/TimelineSmsRowsTest.php[39m:[32m47[39m
+     43▕     /** @var list<array{name: string, actor_type: string, actor_name: string|null, detail: array<string, mixed>}> $rows */
+     44▕     $rows = (array) $response->json('rows');
+     45▕     $sms = array_values(array_filter($rows, fn (array $r): bool => $r['name'] === 'sms.sent'));
+     46▕ 
+  ➜  47▕     expect(count($sms))->toBe(1, 'the sms.* lifecycle row must reach the timeline (P-TIMELINE-SMS)')
+     48▕         ->and($sms[0]['actor_type'])->toBe('system')
+     49▕         ->and($sms[0]['actor_name'])->toBeNull('an SMS row is class-only')
+     50▕         ->and($sms[0]['detail']['sms_message_id'] ?? null)->toBe($smsMessageId)
+     51▕         ->and($sms[0]['detail']['event'] ?? null)->toBe('ticket_resolved')
+
+  [33m1   [39m[39;1mtests/Feature/Inbox/TimelineSmsRowsTest.php[39;22m:[39;1m47[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (4 assertions)[39m
+  [90mDuration:[39m [39m9.98s[39m
+
+EXIT 1

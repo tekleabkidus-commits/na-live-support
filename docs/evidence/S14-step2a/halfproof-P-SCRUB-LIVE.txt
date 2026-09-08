@@ -1,0 +1,36 @@
+# HALF-PROOF P-SCRUB-LIVE — applied on the tree (951401a + the uncommitted 2a filing), controls run, then REVERTED. 2026-09-08T20:01:46Z
+applied
+
+## pint --test on the packet's PHP
+{"tool":"pint","result":"passed"}
+## phpstan on the packet's PHP
+{"tool":"phpstan","result":"passed","errors":0}
+
+## controls + the owning suites (in-container)
+  ✓ it plant → detect → remove: a revealed vault secret is scrubbed und… 9.21s  
+  ✓ it is bounded (≤ 32 values), refuses short values (< 12 chars are n… 0.06s  
+  ✓ it is cleared at exactly the TenantContext clear points — a value r… 0.07s  
+  ✓ it RIDER 1 control (P-RIDER1-FIX): a vault:// ref and an encrypter…  0.06s  
+  ✓ it SEC-08: every configured channel carries SecurityLogTap — null a… 0.07s  
+  ✓ it scrubs secret-shaped keys on the rendered sink and passes benign… 0.05s  
+  ✓ it scrubs the webhook auth headers in nested access-log shapes (ste… 0.04s  
+  ✓ it never scrubs identifier suffixes — token_id and key_id stay trac… 0.07s  
+  ✓ it SEC-08/C-14: every rendered record carries trace_id and tenant_i… 0.04s  
+  ✓ it a real refused request logs WITH a trace_id and WITHOUT the pres… 0.10s  
+  ✓ it AC-08: seeded credentials from every real flow are absent from t… 5.21s  
+  ✓ it SEC-03: near-miss controls survive to the sink — the scanner and… 0.06s  
+  ✓ it SEC-03: phone and email VALUES under innocent keys never reach t… 0.06s  
+  ✓ it SEC-03: phone and email VALUES inside the message string itself…  0.05s  
+  ✓ it SEC-03: benign context survives — UUIDs, timezone offsets, _id k… 0.04s  
+  ✓ it SEC-03: the four DB sinks — per-sink plant→detect→rollback contr… 0.15s  
+  ✓ it NFR-06: a bot-token-shaped VALUE under an innocent key never rea… 0.04s  
+  ✓ it NFR-06: a token inside the MESSAGE string is scrubbed — free tex… 0.03s  
+  ✓ it T-07: a Telegram file URL is scrubbed WHOLE — no api.telegram.or… 0.03s  
+  ✓ it AC-08/C-13: seeded credentials never serialize into jobs, outbox… 4.84s  
+  ✓ it AC-08: the events sink, after a real committed relay run, carrie… 5.12s  
+  ✓ it C-13 model pins: no Doc 02-minted credential column serializes o… 0.04s  
+  Tests:    22 passed (363 assertions)
+EXIT 0
+
+## reverted
+tree clean of the packet

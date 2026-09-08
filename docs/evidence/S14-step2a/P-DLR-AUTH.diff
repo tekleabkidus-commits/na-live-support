@@ -1,0 +1,332 @@
+diff --git a/app/Domain/Auth/Webhooks/WebhookReplayIgnored.php b/app/Domain/Auth/Webhooks/WebhookReplayIgnored.php
+new file mode 100644
+index 0000000..9e45b0d
+--- /dev/null
++++ b/app/Domain/Auth/Webhooks/WebhookReplayIgnored.php
+@@ -0,0 +1,38 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Domain\Auth\Webhooks;
++
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++use Illuminate\Support\Facades\Log;
++use RuntimeException;
++use Symfony\Component\HttpFoundation\Response;
++
++/**
++ * P-DLR-AUTH (Doc 14 R-D14-5; STOP-C amendment 1): a DETECTED replay on the
++ * `url_secret` surface. Thrown from MIDDLEWARE so the handler is never
++ * invoked (AC-07's "nothing processed" stays structural), it renders 202 —
++ * never a 403 an unsigned gateway could treat as delivery failure and retry
++ * forever. The metric names the category; no secret material is logged.
++ */
++final class WebhookReplayIgnored extends RuntimeException
++{
++    private function __construct()
++    {
++        parent::__construct('Webhook replay ignored');
++
++        Log::info('webhook replay ignored', ['security_metric' => 'webhook.replay_ignored']);
++    }
++
++    public static function withinWindow(): self
++    {
++        return new self;
++    }
++
++    public function render(Request $request): Response
++    {
++        return new JsonResponse(['replay' => 'ignored'], 202);
++    }
++}
+diff --git a/app/Http/Controllers/Sms/SmsDlrController.php b/app/Http/Controllers/Sms/SmsDlrController.php
+new file mode 100644
+index 0000000..f4b9098
+--- /dev/null
++++ b/app/Http/Controllers/Sms/SmsDlrController.php
+@@ -0,0 +1,34 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Http\Controllers\Sms;
++
++use App\Support\Tenancy\TenantContext;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++/**
++ * Doc 14 FR-13 / NFR-03 / EC-03 — the DLR ingress (P-DLR-AUTH's handler).
++ * ACK-only by design: the route mutates nothing; the raw payload is handed
++ * to ProcessDlrJob on the `sms-dlr` lane (Horizon amendment 1) where the
++ * driver's parseDlr, the precedence-safe state update, the raw-code
++ * retention and the events happen, each with its own audit entry. The 202
++ * carries the Doc 01 resolution facts (ids only) so the auth proofs read the
++ * same shape the probe answered. A `success`-only callback (GeezSMS) reaches
++ * `accepted` and nothing beyond (R-D14-1.5). The payload is never logged
++ * here (it carries the message text and the phone — SEC-02).
++ */
++final class SmsDlrController
++{
++    public function ingest(Request $request, TenantContext $context): JsonResponse
++    {
++        // step 7: ProcessDlrJob::dispatch(tenant, key id, raw body) on 'sms-dlr' (afterCommit, C-06)
++        return new JsonResponse([
++            'accepted' => true,
++            'resolved_tenant_id' => $context->tenantId(),
++            'resolution_source' => $context->source()?->value,
++            'trace_id' => $context->correlationId(),
++        ], 202);
++    }
++}
+diff --git a/app/Http/Middleware/SmsDlrKeyFromPath.php b/app/Http/Middleware/SmsDlrKeyFromPath.php
+new file mode 100644
+index 0000000..294026c
+--- /dev/null
++++ b/app/Http/Middleware/SmsDlrKeyFromPath.php
+@@ -0,0 +1,42 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Http\Middleware;
++
++use Closure;
++use Illuminate\Http\Request;
++use Symfony\Component\HttpFoundation\Response;
++
++/**
++ * Doc 14 FR-13 / SEC-01 (P-DLR-AUTH): the gateway key rides the DLR callback
++ * URL PATH, because an unsigned aggregator sends exactly one credential — the
++ * URL it was given per send (`callback`, vendor notes §9) — and cannot attach
++ * X-Tenant-Key. MIRRORED from Doc 05's TelegramWebhookKeyFromPath (the
++ * consume-or-mirror ruling: that class is Doc 05's by name and docblock).
++ *
++ * Copies the {gateway_key} route segment into the header ResolveTenant
++ * already reads, so the Doc 02 machinery (binder → throttle → secret → state)
++ * runs UNTOUCHED. Runs FIRST in the stack; a client-supplied X-Tenant-Key is
++ * overwritten by the path value whenever the segment is present (one
++ * credential, one source of truth). Header-borne calls with no segment (Doc
++ * 02's WebhookHmacTest) pass through unchanged.
++ */
++final class SmsDlrKeyFromPath
++{
++    public function handle(Request $request, Closure $next): Response
++    {
++        $gatewayKey = $request->route('gateway_key');
++
++        if (is_string($gatewayKey) && $gatewayKey !== '') {
++            $request->headers->set('X-Tenant-Key', $gatewayKey);
++        }
++
++        $response = $next($request);
++        if (! $response instanceof Response) {
++            throw new \UnexpectedValueException('middleware pipeline returned a non-Response');
++        }
++
++        return $response;
++    }
++}
+diff --git a/app/Http/Middleware/VerifyWebhookSecret.php b/app/Http/Middleware/VerifyWebhookSecret.php
+index 544145e..87b5f35 100644
+--- a/app/Http/Middleware/VerifyWebhookSecret.php
++++ b/app/Http/Middleware/VerifyWebhookSecret.php
+@@ -6,6 +6,7 @@
+ 
+ use App\Domain\Auth\Webhooks\ReplayGuard;
+ use App\Domain\Auth\Webhooks\WebhookRejected;
++use App\Domain\Auth\Webhooks\WebhookReplayIgnored;
+ use App\Models\WebhookCredential;
+ use Carbon\CarbonImmutable;
+ use Closure;
+@@ -16,7 +17,7 @@
+  * `webhook.auth` — the second credential on the inbound webhook surfaces
+  * (Doc 02 FR-23, FR-24, AC-07; step-11 rulings).
+  *
+- * Two MECHANISMS, named for what they verify, never for a channel (N-20 —
++ * Three MECHANISMS, named for what they verify, never for a channel (N-20 —
+  * the route file binds a mechanism and a header name to a surface; nothing
+  * here knows Telegram from an SMS gateway):
+  *
+@@ -29,6 +30,21 @@
+  *                   X-Webhook-Timestamp within ±300 s, X-Webhook-Nonce
+  *                   single-use (ReplayGuard). Doc 14's drivers adapt each
+  *                   gateway's native scheme onto this contract.
++ *   url_secret      P-DLR-AUTH (Doc 14 R-D14-5, countersigned S14 step 2a).
++ *                   For a gateway whose callback carries NO signature and NO
++ *                   header (the vendor's API allows only a URL — GeezSMS,
++ *                   vendor notes §9): a per-gateway callback secret rides the
++ *                   route segment `{dlr_secret}` and is compared as SHA-256
++ *                   digests via hash_equals against `header_secret_hash` —
++ *                   the same column and comparison secret_header uses. The
++ *                   defense on this surface is URL SECRECY OVER TLS plus
++ *                   FR-13's idempotency; the window is FR-24 conformance: a
++ *                   byte-identical body within ReplayGuard's window is a
++ *                   detected replay that answers 202 with the metric
++ *                   `webhook.replay_ignored` and processes NOTHING — never a
++ *                   403 a gateway could treat as failure. The replay-cache
++ *                   OUTAGE stays fail-CLOSED (A-1, unchanged). FAIL-CLOSED on
++ *                   configuration: a credential row without the hash → 403.
+  *
+  * THE SIGNATURE COVERS TIMESTAMP AND NONCE, not the body alone, and that is
+  * load-bearing: an HMAC over only the body would let an attacker replay a
+@@ -74,8 +90,9 @@ public function handle(Request $request, Closure $next, string $mechanism, strin
+         match ($mechanism) {
+             'secret_header' => $this->verifySecretHeader($request, $credential, $headerName),
+             'body_hmac' => $this->verifyBodyHmac($request, $credential),
++            'url_secret' => $this->verifyUrlSecret($request, $credential),
+             default => throw new \LogicException(sprintf(
+-                'Unknown webhook auth mechanism "%s". The set is secret_header|body_hmac; adding one is a Doc 02 change, not a route parameter.',
++                'Unknown webhook auth mechanism "%s". The set is secret_header|body_hmac|url_secret; adding one is a Doc 02 change, not a route parameter.',
+                 $mechanism,
+             )),
+         };
+@@ -170,6 +187,50 @@ private function verifyBodyHmac(Request $request, ?WebhookCredential $credential
+         }
+     }
+ 
++    /**
++     * P-DLR-AUTH: the route segment IS the credential. Check order mirrors
++     * secret_header (configured row → segment presence → digest compare); the
++     * replay control runs ONLY after the secret verifies, so an attacker
++     * without the secret cannot burn a gateway's replay entries.
++     */
++    private function verifyUrlSecret(Request $request, ?WebhookCredential $credential): void
++    {
++        $storedHash = $credential?->header_secret_hash;
++
++        if (! is_string($storedHash) || $storedHash === '') {
++            throw WebhookRejected::secretRejected('key_unconfigured');
++        }
++
++        $presented = $request->route('dlr_secret');
++
++        if (! is_string($presented) || $presented === '') {
++            throw WebhookRejected::secretRejected('secret_absent');
++        }
++
++        if (! hash_equals($storedHash, hash('sha256', $presented))) {
++            throw WebhookRejected::secretRejected('secret_mismatch');
++        }
++
++        $tenantId = $credential->getAttribute('tenant_id');
++
++        if (! is_string($tenantId)) {
++            throw new \LogicException('Webhook credential row carries no tenant id; RLS should make this impossible.');
++        }
++
++        try {
++            // The body's digest is the replay key: a byte-identical callback
++            // within the window is a replay; a NEW status for the same message
++            // is a new body and passes to FR-13's precedence-safe handler.
++            $firstUse = $this->replayGuard->firstUse($tenantId, 'body:'.hash('sha256', $request->getContent()));
++        } catch (\RedisException $e) {
++            throw WebhookRejected::replayCacheUnavailable();
++        }
++
++        if (! $firstUse) {
++            throw WebhookReplayIgnored::withinWindow();
++        }
++    }
++
+     private function credentialFor(Request $request): ?WebhookCredential
+     {
+         $keyId = $request->attributes->get(ResolveTenant::KEY_ID_ATTRIBUTE);
+diff --git a/bootstrap/app.php b/bootstrap/app.php
+index 0f644fa..4cbf49e 100644
+--- a/bootstrap/app.php
++++ b/bootstrap/app.php
+@@ -31,6 +31,8 @@
+             // Doc 05: copies the webhook URL's {bot_key} segment into the
+             // header ResolveTenant reads (Telegram cannot send X-Tenant-Key).
+             'telegram.webhook-key' => App\Http\Middleware\TelegramWebhookKeyFromPath::class,
++            // Doc 14 (P-DLR-AUTH): the SMS DLR callback's {gateway_key} segment → the same header, mirrored.
++            'sms.dlr-key' => App\Http\Middleware\SmsDlrKeyFromPath::class,
+             // Declares which audit action a mutating route emits, and verifies at runtime
+             // that it actually did. The `audit-coverage` gate reads these declarations.
+             'audit' => App\Http\Middleware\DeclareAuditAction::class,
+diff --git a/ci/audit-exempt-routes.php b/ci/audit-exempt-routes.php
+index dcdb777..c29a197 100644
+--- a/ci/audit-exempt-routes.php
++++ b/ci/audit-exempt-routes.php
+@@ -33,7 +33,8 @@
+      | docs/BUILD-STATUS.md as an inherited task rather than left to be noticed.
+      */
+     'foundation.webhook.telegram' => 'Doc 05 real webhook edge (S23 step 4): ACK-only by design — FR-02/NFR-02 forbid inline processing, so the route itself mutates nothing; every mutation happens in the queued pipeline behind it, each carrying its own audit entry (quarantine, revisions, connection lifecycle). The Doc 01 probe justification this line replaces is deleted per the S15 ruling.',
+-    'foundation.webhook.sms_dlr' => 'Doc 01 ingress probe: resolves and reports, mutates nothing. Doc 14 must remove this line when it adds a real handler.',
++    'foundation.webhook.sms_dlr' => 'Doc 14 real DLR ingress (S14 step 7, P-DLR-AUTH): ACK-only by design — FR-13/NFR-03 forbid inline processing, so the route itself mutates nothing; every mutation happens in the queued DLR pipeline behind it (ProcessDlrJob on the sms-dlr lane), each carrying its own audit entry (sms.dlr.applied / sms.dlr.contradiction / sms.dlr.unknown_provider_id). The Doc 01 probe justification this line replaces is deleted per the S15 ruling.',
++    'foundation.webhook.sms_dlr_signed' => 'Doc 14 real DLR ingress, the body_hmac surface for signing gateways (S14 step 7, P-DLR-AUTH): the same ACK-only door as foundation.webhook.sms_dlr.',
+ 
+     /*
+      | Doc 02 step 10: the widget probe's promised replacement (FR-21/FR-22).
+diff --git a/ci/permission-exempt-routes.php b/ci/permission-exempt-routes.php
+index 7d901fe..3605200 100644
+--- a/ci/permission-exempt-routes.php
++++ b/ci/permission-exempt-routes.php
+@@ -98,7 +98,8 @@
+     'foundation.staff.context' => 'Resolution probe: reports the authenticated requester\'s own context only; Doc 07 replaces the staff surface.',
+     'foundation.api.context' => 'Resolution probe on the machine-key surface: no staff principal exists to hold a permission.',
+     'foundation.webhook.telegram' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03c; Doc 05 S23 step 4 revisited): Telegram authenticates with the URL key + secret_token header, staff permissions structurally do not apply. Admin surfaces are separate routes mapped to telegram.* keys.',
+-    'foundation.webhook.sms_dlr' => 'Channel-key-authenticated ingress (Doc 01 FR-03e); staff permissions do not apply. Doc 14 revisits.',
++    'foundation.webhook.sms_dlr' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03e; Doc 14 S14 step 7, P-DLR-AUTH): the gateway authenticates with the URL key + the URL callback secret (url_secret), staff permissions structurally do not apply. Admin surfaces are separate routes mapped to sms.* keys.',
++    'foundation.webhook.sms_dlr_signed' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03e; Doc 14 S14 step 7, P-DLR-AUTH): the gateway authenticates with the URL key + FR-24 body_hmac headers, staff permissions structurally do not apply.',
+ 
+     /*
+      | Doc 02 step 10: the visitor surface (FR-21/FR-22, BR-06).
+diff --git a/routes/api.php b/routes/api.php
+index a5f5de2..305dab4 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -584,12 +584,33 @@
+             });
+     });
+ 
++    // Doc 14 FR-13 / SEC-01 (P-DLR-AUTH, S14 step 7): the Doc 01 DLR probe is
++    // REPLACED by the real handler on TWO auth surfaces, both behind the same
++    // Doc 02 stack (binder → throttle → secret → state). The {gateway_key}
++    // segment resolves the tenant (the sms.dlr-key shim); the ACK is 202 and
++    // every mutation happens in the queued DLR pipeline (sms-dlr lane).
++    //   url_secret — an UNSIGNED callback (GeezSMS): the per-gateway secret
++    //                rides {dlr_secret}; replay = 202 ignored; no secret → 403.
++    //   body_hmac  — a SIGNING gateway (the REFERENCE fixture, the sidecar):
++    //                FR-24's headers; the path key optional so Doc 02's
++    //                header-borne proof suites run unmodified.
+     Route::middleware([
++        'sms.dlr-key',
+         'tenant:sms_gateway_key',
+         'webhook.throttle',
+-        'webhook.auth:body_hmac',
++        'webhook.auth:url_secret',
+         'tenant.state:inbound',
+     ])
+-        ->post('webhooks/sms/dlr', [IngressProbeController::class, 'ingest'])
++        ->post('webhooks/sms/dlr/{gateway_key}/{dlr_secret}', [App\Http\Controllers\Sms\SmsDlrController::class, 'ingest'])
+         ->name('foundation.webhook.sms_dlr');
++
++    Route::middleware([
++        'sms.dlr-key',
++        'tenant:sms_gateway_key',
++        'webhook.throttle',
++        'webhook.auth:body_hmac',
++        'tenant.state:inbound',
++    ])
++        ->post('webhooks/sms/dlr/{gateway_key?}', [App\Http\Controllers\Sms\SmsDlrController::class, 'ingest'])
++        ->name('foundation.webhook.sms_dlr_signed');
+ });
+diff --git a/tests/Security/MiddlewareOrderTest.php b/tests/Security/MiddlewareOrderTest.php
+index afb0124..6e6c68e 100644
+--- a/tests/Security/MiddlewareOrderTest.php
++++ b/tests/Security/MiddlewareOrderTest.php
+@@ -218,7 +218,8 @@ function positionOf(array $positions, string $prefix): ?int
+     // would let the sorter hoist auth ahead of the (unlisted) binder — the
+     // step-9 bug, avoided the step-10 way (plain classes the sorter cannot
+     // see: ThrottleWebhookKey, VerifyWebhookSecret).
+-    foreach (['foundation.webhook.telegram', 'foundation.webhook.sms_dlr'] as $routeName) {
++    // P-DLR-AUTH (Doc 14, S14 step 7): the DLR ingress is TWO routes on the same stack — url_secret and body_hmac.
++    foreach (['foundation.webhook.telegram', 'foundation.webhook.sms_dlr', 'foundation.webhook.sms_dlr_signed'] as $routeName) {
+         $route = Route::getRoutes()->getByName($routeName);
+         expect($route)->not->toBeNull("route {$routeName} is not registered");
+ 

@@ -1,0 +1,35 @@
+# HALF-PROOF P-DLR-AUTH (second run — the test's own namespace slip fixed; the stub's nullable read fixed) — applied on 951401a + the uncommitted 2a filing, then REVERTED. 2026-09-08T20:08:50Z
+applied
+
+## pint --test (the packet's PHP)
+{"tool":"pint","result":"passed"}
+## phpstan on the packet's APP files (phpstan.neon paths: app, registries, ci, database, routes — tests are outside its paths; the MiddlewareOrderTest findings of the first run are that file's pre-existing shape)
+{"tool":"phpstan","result":"passed","errors":0}
+
+## the four controls + Doc 02's own WebhookHmacTest + MiddlewareOrderTest (in-container)
+  ✓ it control 1 — FAIL-CLOSED: a gateway whose credential row carries…  8.35s  
+  ✓ it control 2 — a wrong secret is refused with the same byte-identic… 0.07s  
+  ✓ it control 3 — a byte-identical replay within the window answers 20… 0.07s  
+  ✓ it control 4 (POSITIVE) — the right secret once: 202, the tenant re… 0.07s  
+  ✓ it accepts a correctly signed DLR (FR-24 — the positive control)     0.08s  
+  ✓ it refuses a wrong signature and a tampered body alike (FR-24)       0.08s  
+  ✓ it refuses a captured signature behind a fresh nonce — the HMAC cov… 0.08s  
+  ✓ it enforces the ±300 s window at its exact boundaries, with an inje… 0.09s  
+  ✓ it spends a nonce exactly once: the identical request replayed is r… 0.08s  
+  ✓ it never lets an unsigned caller burn a nonce out of the cache (spe… 0.08s  
+  ✓ it refuses unconfigured keys and absent headers with the same byte-… 0.11s  
+  ✓ it fails CLOSED on replay-cache outage while the Redis-free surface… 0.12s  
+  ✓ it nonce single-use survives the window boundary honestly: expiry i… 0.08s  
+  ✓ it orders tenant-resolve before tenant-state before permission on t… 0.06s  
+  ✓ it never enforces tenant state on a route that has not resolved a t… 0.06s  
+  ✓ it orders the EXECUTED bearer stack binder-first — the sorter, not…  0.07s  
+  ✓ it keeps the bearer surface stateless — no session, no cookies, no…  0.03s  
+  ✓ it orders the EXECUTED widget stack binder → CORS → guard → state (… 0.05s  
+  ✓ it keeps the widget surface sessionless — no session, no cookie enc… 0.03s  
+  ✓ it orders the EXECUTED webhook stacks binder → throttle → secret →…  0.09s  
+  ✓ it registers the permission alias to the RequirePermission middlewa… 0.03s  
+  Tests:    21 passed (863 assertions)
+EXIT 0
+
+## reverted
+tree clean of the packet

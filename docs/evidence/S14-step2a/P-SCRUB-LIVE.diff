@@ -1,0 +1,122 @@
+diff --git a/app/Support/Logging/ScrubSecrets.php b/app/Support/Logging/ScrubSecrets.php
+index 5aeb6bd..fd02e15 100644
+--- a/app/Support/Logging/ScrubSecrets.php
++++ b/app/Support/Logging/ScrubSecrets.php
+@@ -4,6 +4,7 @@
+ 
+ namespace App\Support\Logging;
+ 
++use App\Support\Secrets\LiveSecretValues;
+ use Monolog\LogRecord;
+ use Monolog\Processor\ProcessorInterface;
+ 
+@@ -181,6 +182,16 @@ private function scrub(array $values, int $depth): array
+     /** NFR-06 + SEC-03: redact secret/PII value shapes wherever they appear. */
+     private function scrubValue(string $value): string
+     {
++        // P-SCRUB-LIVE (Doc 14 STOP-G, countersigned): every secret VALUE revealed in
++        // this request/job (VaultInterim::reveal) is redacted as an exact substring
++        // BEFORE the shape patterns — the shape of a vendor token is unknowable, the
++        // value is not. Bounded, ≥ 12 chars, cleared at the TenantContext clear points.
++        foreach (LiveSecretValues::all() as $live) {
++            if (str_contains($value, $live)) {
++                $value = str_replace($live, self::REDACTED, $value);
++            }
++        }
++
+         $allowlist = $this->valueAllowlist();
+ 
+         foreach (self::VALUE_PATTERNS as $pattern) {
+diff --git a/app/Support/Secrets/LiveSecretValues.php b/app/Support/Secrets/LiveSecretValues.php
+new file mode 100644
+index 0000000..2f73a7d
+--- /dev/null
++++ b/app/Support/Secrets/LiveSecretValues.php
+@@ -0,0 +1,56 @@
++<?php
++
++declare(strict_types=1);
++
++namespace App\Support\Secrets;
++
++/**
++ * P-SCRUB-LIVE (Doc 02 SEC-08 / C-13; Doc 14 R-D14-1.6, STOP-G — the
++ * P-RIDER1-FIX shape generalized): the set of secret VALUES revealed in THIS
++ * request or job, so `ScrubSecrets` can redact a secret whose SHAPE no regex
++ * can name (a gateway token's format is vendor-private) wherever it lands —
++ * under any key, inside the message — the moment it exists in memory.
++ *
++ * Laws (the countersign conditions): BOUNDED (≤ 32 values — older entries
++ * fall away; a request revealing more secrets than that is itself the
++ * anomaly); values shorter than 12 characters are not registered (an
++ * exact-substring scrub on a short value would eat innocent text); CLEARED
++ * at exactly the TenantContext clear points (TenantContext::clear() calls
++ * clear() — the request's finally, the job middleware, RunsWithinTenant);
++ * NOT INSTANTIABLE and never serialized — a private constructor and a
++ * static set, so no object can carry the values into a job payload, a
++ * cache, or a log.
++ */
++final class LiveSecretValues
++{
++    public const MAX_VALUES = 32;
++
++    public const MIN_LENGTH = 12;
++
++    /** @var list<string> */
++    private static array $values = [];
++
++    private function __construct() {}
++
++    public static function register(string $plaintext): void
++    {
++        if (strlen($plaintext) < self::MIN_LENGTH || in_array($plaintext, self::$values, true)) {
++            return;
++        }
++        self::$values[] = $plaintext;
++        if (count(self::$values) > self::MAX_VALUES) {
++            self::$values = array_slice(self::$values, -self::MAX_VALUES);
++        }
++    }
++
++    /** @return list<string> */
++    public static function all(): array
++    {
++        return self::$values;
++    }
++
++    public static function clear(): void
++    {
++        self::$values = [];
++    }
++}
+diff --git a/app/Support/Secrets/VaultInterim.php b/app/Support/Secrets/VaultInterim.php
+index d897f6e..ad408d1 100644
+--- a/app/Support/Secrets/VaultInterim.php
++++ b/app/Support/Secrets/VaultInterim.php
+@@ -50,7 +50,12 @@ public function reveal(string $ref): ?string
+             return null;
+         }
+ 
+-        return $this->encrypter->decryptString($row->ciphertext);
++        $plaintext = $this->encrypter->decryptString($row->ciphertext);
++        // P-SCRUB-LIVE: from this instant the value is a known secret for the
++        // rest of the request/job — ScrubSecrets redacts it wherever it lands.
++        LiveSecretValues::register($plaintext);
++
++        return $plaintext;
+     }
+ 
+     /** Close a predecessor's overlap window: the row stays, retired (never deleted). */
+diff --git a/app/Support/Tenancy/TenantContext.php b/app/Support/Tenancy/TenantContext.php
+index def5b8b..66256c6 100644
+--- a/app/Support/Tenancy/TenantContext.php
++++ b/app/Support/Tenancy/TenantContext.php
+@@ -103,6 +103,8 @@ public function correlationId(): string
+ 
+     public function clear(): void
+     {
++        // P-SCRUB-LIVE (Doc 14, countersigned): the request/job's revealed secrets die with its tenant binding.
++        \App\Support\Secrets\LiveSecretValues::clear();
+         $this->tenantId = null;
+         $this->source = null;
+         $this->correlationId = null;
