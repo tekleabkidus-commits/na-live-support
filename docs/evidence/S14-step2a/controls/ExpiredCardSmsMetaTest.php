@@ -28,7 +28,7 @@ it('customer_has_phone is TRUE for a customer with a phone IDENTITY and a NULL m
 
     // the identity exists (Doc 08's shape); the deprecated mirror stays NULL on purpose
     DB::table('customer_identities')->insert([
-        'id' => (string) \Illuminate\Support\Str::uuid7(),
+        'id' => (string) Illuminate\Support\Str::uuid7(),
         'tenant_id' => $tenantId,
         'customer_id' => $ticket->customer_id,
         'channel' => 'phone',

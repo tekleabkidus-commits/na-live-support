@@ -71,4 +71,14 @@ return [
         'tenant_toggleable' => false,
         'owning_doc' => 'Doc13',
     ],
+    [
+        // Doc 14 (S14 step 2b) / Doc 16 FR-11's `flag.sms`: the module switch. OFF → every send is
+        // skipped with reason feature_disabled (A-67 pre-guard; N-19: hides, never destroys — no
+        // migration, no delete reads it). Doc 16 renders the card; Doc 14 registers it.
+        'key' => 'sms.enabled',
+        'label_i18n_key' => 'sms.feature.enabled',
+        'default' => true,
+        'tenant_toggleable' => true,
+        'owning_doc' => 'Doc14',
+    ],
 ];

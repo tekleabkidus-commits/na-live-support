@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|------------------------------------------------------------------------------
+| Doc 14 — SMS Notification Module strings (SESSION-14). Every user-visible SMS
+| string is a key here (N-03, C-08); en + am from birth. The chip words are the
+| §9 state vocabulary (NFR-04: `expired` reads "Sent · unconfirmed" — never a
+| guessed delivery). Machine-authored Amharic joins the R-14 queue.
+|------------------------------------------------------------------------------
+*/
+
+return [
+    'chip' => [
+        'queued' => 'Queued',
+        'held' => 'Held — quiet hours',
+        'sending' => 'Sending',
+        'sent' => 'Sent',
+        'delivered' => 'Delivered',
+        'undelivered' => 'Undelivered',
+        'expired' => 'Sent · unconfirmed',
+        'skipped' => 'Skipped',
+        'failed' => 'Failed',
+    ],
+    'feature' => [
+        'enabled' => 'SMS notifications',
+    ],
+    'notify' => [
+        'cost_threshold' => 'SMS spend crossed the monthly threshold',
+        'gateway_health' => 'An SMS gateway changed health',
+        'staff_security' => 'Security notifications for my account',
+    ],
+    'module' => [
+        'channels_title' => 'SMS',
+        'settings_title' => 'SMS settings',
+        'off_until_gateway' => 'SMS is off until a gateway exists.',
+    ],
+];

@@ -268,4 +268,29 @@ return [
         'layer_model' => 'user',
         'owning_doc' => 'Doc12',
     ],
+    [
+        // Doc 14 FR-19: the monthly SMS spend crossed the tenant's threshold (sms.cost.threshold) — Doc 16 delivers.
+        'category_key' => 'notify.sms.cost_threshold',
+        'label_i18n_key' => 'sms.notify.cost_threshold',
+        'default_channels' => ['in_app', 'email'],
+        'layer_model' => 'tenant',
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // Doc 14 FR-09 / FS-01 / FS-03: a gateway's health changed (circuit trip, missing-DLR rate) — "the alert names the gateway and error class".
+        'category_key' => 'notify.sms.gateway_health',
+        'label_i18n_key' => 'sms.notify.gateway_health',
+        'default_channels' => ['in_app', 'email'],
+        'layer_model' => 'tenant',
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // Doc 14 FR-01 security_notification: the STAFF category Doc 02's account events ride; the `sms` channel is
+        // legal here but its staff phone + opt-in column are Doc 16's ([D16]) — until then in_app only.
+        'category_key' => 'notify.security.staff_sms',
+        'label_i18n_key' => 'sms.notify.staff_security',
+        'default_channels' => ['in_app'],
+        'layer_model' => 'user',
+        'owning_doc' => 'Doc14',
+    ],
 ];

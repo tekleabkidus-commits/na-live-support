@@ -1117,4 +1117,267 @@ return [
         'tenant_editable' => false,
         'owning_doc' => 'Doc13',
     ],
+
+    // ── Doc 14 — SMS Notification Module (S14 step 2b; the STOP-H list, approved at eabe8ff) ──
+    [
+        // FR-16: the quiet-hours window in the TENANT timezone; the registry's own worked example made real.
+        'key' => 'sms.quiet_hours',
+        'type' => 'json',
+        'default' => ['start' => '21:00', 'end' => '08:00'],
+        'validation' => 'required|array',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-16: OPTIONAL link to a Doc 12 business calendar — when set, the closed hours come from HoursContract (consumed, never re-implemented).
+        'key' => 'sms.quiet_hours.calendar_id',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|max:64',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-19: the monthly SEGMENT quota through Doc 01's meter (P-QUOTA-SMS: Quota::SmsSegmentsPerMonth reads this key); platform-only.
+        'key' => 'sms.quota.segments',
+        'type' => 'int',
+        'default' => 50000,
+        'validation' => 'required|integer|min:0',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17: the per-tenant monthly broadcast cap (launches counted in the tenant month).
+        'key' => 'sms.broadcast.monthly_cap',
+        'type' => 'int',
+        'default' => 4,
+        'validation' => 'required|integer|min:0',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17: the platform ceiling the tenant cap can never exceed.
+        'key' => 'sms.broadcast.platform_ceiling',
+        'type' => 'int',
+        'default' => 30,
+        'validation' => 'required|integer|min:0',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-19: the monthly spend alert threshold {amount, currency}; delivered through the notification registry (Doc 16 renders).
+        'key' => 'sms.cost.threshold',
+        'type' => 'json',
+        'default' => ['amount' => 0, 'currency' => 'ETB'],
+        'validation' => 'required|array',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // §14: informational tenant-currency conversion for cost display (empty = the rate card's currency only).
+        'key' => 'sms.cost.display_currency',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|size:3',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // §14: the informational conversion rate (rate-card currency → display currency), a string decimal (the registry has no float type).
+        'key' => 'sms.cost.display_rate',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|numeric|min:0',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-08: no route matches → the tenant default gateway, or an explicit no_route skip.
+        'key' => 'sms.route.no_match',
+        'type' => 'string',
+        'default' => 'default_gateway',
+        'validation' => 'required|in:default_gateway,skip',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-08: the tenant default gateway id used when no route matches and the policy is default_gateway.
+        'key' => 'sms.default_gateway_id',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|uuid',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-03: "same event + ticket + phone within 10 min" — the document's figure; platform-only.
+        'key' => 'sms.duplicate_window_minutes',
+        'type' => 'int',
+        'default' => 10,
+        'validation' => 'required|integer|min:1|max:1440',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-15 / §14: the STOP-word lists per language, seeded en + am; the Amharic word is byte-exact from the document (StopWordByteExactTest).
+        'key' => 'sms.stop_words',
+        'type' => 'json',
+        'default' => ['en' => ['STOP'], 'am' => ['ተወው']],
+        'validation' => 'required|array',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-15 (STOP-Q 3): send the optout_confirmation template once where telco rules require it (R-04's per-market knob).
+        'key' => 'sms.optout.confirmation_required',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-07 / B7-S17: the tenant's default sender ID (per-gateway and per-country overrides live on the gateway).
+        'key' => 'sms.sender_id',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|max:20',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // B6-S16 "Hold all sends" — the Doc 14 door Doc 16 renders: a pause that HOLDS (never drops) every send (A-67 pre-guard).
+        'key' => 'sms.hold_all_sends',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-12: no DLR after this many hours from sent_at → expired ("sent — delivery unconfirmed"); platform-only.
+        'key' => 'sms.expired_after_hours',
+        'type' => 'int',
+        'default' => 48,
+        'validation' => 'required|integer|min:1|max:168',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // EC-12: a message queued with no viable route is bounded by this TTL, then failed:no_route_available honestly; platform-only.
+        'key' => 'sms.queued_ttl_hours',
+        'type' => 'int',
+        'default' => 24,
+        'validation' => 'required|integer|min:1|max:168',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // T-04 / BR-05: the fraction of a gateway bucket reserved for the transactional lane (a string decimal — no float type).
+        'key' => 'sms.lane.reserve_fraction',
+        'type' => 'string',
+        'default' => '0.2',
+        'validation' => 'required|numeric|min:0|max:0.9',
+        'tenant_editable' => false,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // SEC-05: the tenant's configured short-link domain — {{link}} resolves ONLY to platform URLs on it (empty = links refused at publish).
+        'key' => 'sms.link.domain',
+        'type' => 'string',
+        'default' => '',
+        'validation' => 'nullable|string|max:253',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `ticket_created` (§21 seed: ON).
+        'key' => 'sms.events.ticket_created.enabled',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `ticket_assigned` (§21 seed: off).
+        'key' => 'sms.events.ticket_assigned.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `ticket_updated` (§21 seed: off).
+        'key' => 'sms.events.ticket_updated.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `ticket_resolved` (§21 seed: ON).
+        'key' => 'sms.events.ticket_resolved.enabled',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `ticket_closed` (§21 seed: off).
+        'key' => 'sms.events.ticket_closed.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `security_notification` (§21 seed: off).
+        'key' => 'sms.events.security_notification.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `verification_code` (§21 seed: off).
+        'key' => 'sms.events.verification_code.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `service_announcement` (§21 seed: off).
+        'key' => 'sms.events.service_announcement.enabled',
+        'type' => 'bool',
+        'default' => false,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `window_reengagement` (§21 seed: ON).
+        'key' => 'sms.events.window_reengagement.enabled',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-01: the per-tenant toggle for `offline_form_confirmation` (§21 seed: ON).
+        'key' => 'sms.events.offline_form_confirmation.enabled',
+        'type' => 'bool',
+        'default' => true,
+        'validation' => 'required|boolean',
+        'tenant_editable' => true,
+        'owning_doc' => 'Doc14',
+    ],
 ];

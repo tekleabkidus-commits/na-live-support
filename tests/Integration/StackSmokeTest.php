@@ -41,6 +41,7 @@ const QUEUE_FAMILIES = [
     'telegram-in', 'telegram-out', 'webchat-in', 'webchat-out', 'media',
     'ai', 'sms', 'automation', 'reports', 'outbox-relay', 'audit',
     'mail', // ADR 0007 — Doc 02 FS-02's auth-email family
+    'sms-reengagement', 'sms-broadcast', 'sms-dlr', // Doc 14 HORIZON FAMILY AMENDMENT 1 (S14 step 2b): the three new SMS supervisors beside `sms`
 ];
 
 /** True if host:port accepts a TCP connection within the timeout. */

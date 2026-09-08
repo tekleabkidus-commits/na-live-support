@@ -1,0 +1,173 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Isolation\SmsGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per SMS table and privilege i[39m[90m…[39m [90m8.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01 / N-05: every SMS table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.05s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit condition 3 (SEC-01 / C-13): a plaintext or token-shaped credent[39m[90m…[39m [90m0.10s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit immutable by grant: a version body UPDATE, a gateway driver / is[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the CHECKs bite: a staff opt-out without a reason, a restoration[39m[90m…[39m [90m0.04s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the clock facts are the database's: sent_at / delivered_at / ter[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Conversations\FailureScenariosTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFS-01: outage accumulates in queued with the lane intact, health go[39m[90m…[39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-01: the health signal is transition-only — a second outage failu[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02: storage outage → text unaffected, media held "attachment pen[39m[90m…[39m [90m2.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-02: a storage outage outlasting x3 goes terminal failed with the[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-03: a media backlog cannot slow text — jobs land on the isolated[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFS-03: the isolation is supervisor physics — every queue family has[39m[90m…[39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\FeatureRegistryTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit enumerates every registered flag with the full schema Doc 16 ren[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves a registered flag to its default for the bound tenant[39m[90m   [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws on an unregistered flag — shadow flags cannot ship[39m[90m        [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit throws MissingTenantContext when no tenant is bound — a flag dec[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit scopes flag decisions per tenant: activating for tenant A change[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit never lets a registered flag key appear in a migration (N-19: fl[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Foundation\SettingsEngineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit returns the registered default when a tenant has no override[39m[90m     [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit returns the override once written, and the default again after r[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses to read or write an unregistered key (FR-07)[39m[90m             [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit refuses a tenant-surface write to a platform-owned setting[39m[90m       [39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit validates against the registered rule[39m[90m                            [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit audits every change old to new (FR-07)[39m[90m                           [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encrypts an encrypted-string at rest and never exposes it in bul[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps settings isolated between tenants[39m[90m                          [39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit detects a concurrent write, audits both, and signals the loser ([39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit falls back to the database when Redis is unreachable, and never[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit encodes and decodes every registered type[39m[90m                        [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Rbac\CatalogSnapshotTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit registers EXACTLY the 111 keys Doc 03 §4.1 enumerates PLUS the v[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit marks high-risk exactly where §4.1 writes "(high)" plus ai.provi[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit pins the scope dimension of every key: 47 scoped (46 per the §4.[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit keeps the four Doc 02-era entries under their exact registered n[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit resolves every label and description i18n key in BOTH launch lan[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit groups every key under one of the fourteen §4.1 modules, each wi[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit treats an unknown key as a programming error, never a verdict (B[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\ChipTruthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery state maps to exactly one chip and the double check exists fo[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mexpired reads "sent · unconfirmed" in the gray tone — never a check, never success green[39m
+  [32;1m✓[39;22m[90m [39m[90mthe mapper takes a STATE — there is no door that accepts a carrier word (sabotage (c): success → delivered has no path)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\CredentialRefTest[39m
+  [32;1m✓[39;22m[90m [39m[90ma vault ref under the sms namespace is accepted and round-trips unc[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90manything that is not a vault ref under sms is REFUSED — a token-shaped value, a bare word, another namespace, an empty string[39m
+  [32;1m✓[39;22m[90m [39m[90mthe ref never serializes to anything but itself and carries no plaintext accessor[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\GuardTruthTableTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FR-03 truth table — every branch, every order interaction, exact skip reasons[39m
+  [32;1m✓[39;22m[90m [39m[90mevery decision carries an ordered guard_log naming each check evalu[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe guard is pure: the same input evaluates to the same decision and reads no clock[39m
+  [32;1m✓[39;22m[90m [39m[90mthe exception sets are the document's and nothing more[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\SegmenterCorpusTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery corpus entry segments exactly as the fixture states[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe corpus names the six mandated classes: GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script (EC-09)[39m
+  [32;1m✓[39;22m[90m [39m[90mone non-GSM character forces UCS-2 (the sabotage (j) control: Amharic counted as GSM-7 is a red)[39m
+  [32;1m✓[39;22m[90m [39m[90msegment boundaries are reported for the editor's inline markers and lie on the per-segment stride[39m
+  [32;1m✓[39;22m[90m [39m[90mUS-03: the Amharic counter warns at the 71st character — 70 is one segment, 71 is two[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\StateMachineMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe pipeline transition matrix — every legal edge, every illegal ed[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90msent NEVER rolls back — no edge leaves sent except delivered, undelivered, expired[39m
+  [32;1m✓[39;22m[90m [39m[90mthe DLR precedence matrix (FR-13) — idempotent, out-of-order safe, contradiction retained[39m
+  [32;1m✓[39;22m[90m [39m[90mthe GeezSMS profile's [39m[37msuccess[39m[90m maps to acceptance and NOTHING beyond (R-D14-1.5) — never delivered[39m
+  [32;1m✓[39;22m[90m [39m[90mexpiry is a DB-time fact computed from sent_at + the setting, never from a wall clock[39m
+  [32;1m✓[39;22m[90m [39m[90mthe backing values are the column values and the event identifiers — frozen[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\StopWordByteExactTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe seed carries the document's Amharic stop-word byte-for-byte[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno normalization, transliteration or trimming is applied to the wor[39m[90m…[39m [90m0.01s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [32;1m✓[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, st[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.04s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SmsGrantPhysicsTest[22m [90m>[39m it condition 3 (SEC-01 / C-…   
+[39;1m  a planted credential [vault://widget/x/v1] must die on the CHECK
+Failed asserting that two strings are identical.
+  [39;22m[31m-'23514'[39m[39;1m
+  [39;22m[32m+'25P02'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/SmsGrantPhysicsTest.php[39m:[32m116[39m
+    112▕             DB::table('sms_gateways')->insert(['id' => (string) Str::uuid7(), 'tenant_id' => $tenantId, 'name' => 'x', 'driver' => 'http_generic', 'credential_ref' => $planted]);
+    113▕         } catch (QueryException $e) {
+    114▕             $caught = smsSqlState($e);
+    115▕         }
+  ➜ 116▕         expect($caught)->toBe('23514', "a planted credential [{$planted}] must die on the CHECK");
+    117▕     }
+    118▕ 
+    119▕     $caught = null;
+    120▕     try {
+
+  [33m1   [39m[39;1mtests/Isolation/SmsGrantPhysicsTest.php[39;22m:[39;1m116[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SmsGrantPhysicsTest[22m [90m>[39m it immutable by grant: a ve…   
+[39;1m  gateway driver: must die 42501
+Failed asserting that two strings are identical.
+  [39;22m[31m-'42501'[39m[39;1m
+  [39;22m[32m+'25P02'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/SmsGrantPhysicsTest.php[39m:[32m159[39m
+    155▕             $attempt();
+    156▕         } catch (QueryException $e) {
+    157▕             $caught = smsSqlState($e);
+    158▕         }
+  ➜ 159▕         expect($caught)->toBe('42501', "{$label}: must die 42501");
+    160▕     }
+    161▕ });
+    162▕ 
+    163▕ it('the CHECKs bite: a staff opt-out without a reason, a restoration without its reason, a bad route prefix, an unknown state/event/lane — 23514; BR-02 as physics: a broadcast on a non-announcement template is refused by the trigger', function (): void {
+
+  [33m1   [39m[39;1mtests/Isolation/SmsGrantPhysicsTest.php[39;22m:[39;1m159[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SmsGrantPhysicsTest[22m [90m>[39m it the CHECKs bite: a staff…   
+[39;1m  route prefix without plus: must die 23514
+Failed asserting that two strings are identical.
+  [39;22m[31m-'23514'[39m[39;1m
+  [39;22m[32m+'25P02'[39m[39;1m
+  [39;22m
+
+  at [32mtests/Isolation/SmsGrantPhysicsTest.php[39m:[32m183[39m
+    179▕             $attempt();
+    180▕         } catch (QueryException $e) {
+    181▕             $caught = smsSqlState($e);
+    182▕         }
+  ➜ 183▕         expect($caught)->toBe('23514', "{$label}: must die 23514");
+    184▕     }
+    185▕ 
+    186▕     // the restoration triple must move together
+    187▕     $optoutId = (string) Str::uuid7();
+
+  [33m1   [39m[39;1mtests/Isolation/SmsGrantPhysicsTest.php[39;22m:[39;1m183[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Isolation\SmsGrantPhysicsTest[22m [90m>[39m it the cloc… [41;1m QueryException [49;22m  
+[39;1m  SQLSTATE[25P02]: In failed sql transaction: 7 ERROR:  current transaction is aborted, commands ignored until end of transaction block (Connection: pgsql, Host: postgres, Port: 5432, Database: na_live_support_test, SQL: update "sms_broadcasts" set "state" = sending where "id" = 01a082ce-f42b-70cb-84e0-d35e6fa78faa)[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Database/Connection.php[39m:[32m626[39m
+    622▕             $statement = $this->getPdo()->prepare($query);
+    623▕ 
+    624▕             $this->bindValues($statement, $this->prepareBindings($bindings));
+    625▕ 
+  ➜ 626▕             $statement->execute();
+    627▕ 
+    628▕             $this->recordsHaveBeenModified(
+    629▕                 ($count = $statement->rowCount()) > 0
+    630▕             );
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Isolation/SmsGrantPhysicsTest.php[39;22m:[39;1m253[39;22m
+
+
+  [90mTests:[39m    [31;1m4 failed[39;22m[90m,[39m[39m [39m[32;1m58 passed[39;22m[90m (1135 assertions)[39m
+  [90mDuration:[39m [39m13.68s[39m
+
+EXIT 2

@@ -1840,4 +1840,230 @@ return [
         'required_fields' => ['conversation_id', 'previous_identity_id', 'asserted_identity_id'],
         'owning_doc' => 'Doc13',
     ],
+    // ── Doc 14 — SMS Notification Module (S14 step 2b): every template/gateway/route/opt-out/broadcast mutation.
+    // HIGH-VISIBILITY entries (SEC-04, FR-20) carry their reason/totals in required_fields — the registry's convention ([D17] makes it data).
+    [
+        // FR-04
+        'action_key' => 'sms.template.created',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id', 'event', 'language'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-04
+        'action_key' => 'sms.template.updated',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-04: a new version + the pointer flip
+        'action_key' => 'sms.template.published',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id', 'version'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-04 instant rollback (a NEW row)
+        'action_key' => 'sms.template.rolled_back',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id', 'version', 'rolled_back_to'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // soft delete (sms.templates.delete)
+        'action_key' => 'sms.template.deleted',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-05 test-send (sandbox-tagged; the number is never carried)
+        'action_key' => 'sms.template.test_sent',
+        'entity' => 'sms_template',
+        'actor_types' => ['staff'],
+        'required_fields' => ['template_id', 'is_test'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-07 (the credential VALUE and its ref never ride the row)
+        'action_key' => 'sms.gateway.created',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['staff'],
+        'required_fields' => ['gateway_id', 'driver'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-07
+        'action_key' => 'sms.gateway.updated',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['staff'],
+        'required_fields' => ['gateway_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // SEC-01 write-only re-entry — HIGH-VISIBILITY by convention; no value, no ref
+        'action_key' => 'sms.gateway.credential_replaced',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['staff'],
+        'required_fields' => ['gateway_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // SEC-04 manual circuit reset — HIGH-VISIBILITY (reason required)
+        'action_key' => 'sms.gateway.circuit_reset',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['staff'],
+        'required_fields' => ['gateway_id', 'reason'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-09 the breaker\'s own transitions
+        'action_key' => 'sms.gateway.circuit_changed',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['system'],
+        'required_fields' => ['gateway_id', 'circuit_state'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // soft delete
+        'action_key' => 'sms.gateway.deleted',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['staff'],
+        'required_fields' => ['gateway_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-08
+        'action_key' => 'sms.route.created',
+        'entity' => 'sms_route',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route_id', 'country_prefix'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-08 / §9 reorder
+        'action_key' => 'sms.route.updated',
+        'entity' => 'sms_route',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-08 (never deleted)
+        'action_key' => 'sms.route.deactivated',
+        'entity' => 'sms_route',
+        'actor_types' => ['staff'],
+        'required_fields' => ['route_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-14: staff manual (reason), inbound STOP (system), api
+        'action_key' => 'sms.optout.added',
+        'entity' => 'sms_optout',
+        'actor_types' => ['staff', 'system', 'customer'],
+        'required_fields' => ['optout_id', 'source'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-14 / SEC-04 opt-in restoration — HIGH-VISIBILITY (reason required)
+        'action_key' => 'sms.optout.restored',
+        'entity' => 'sms_optout',
+        'actor_types' => ['staff'],
+        'required_fields' => ['optout_id', 'reason'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // SEC-04 CSV export (customers.export-class)
+        'action_key' => 'sms.optout.exported',
+        'entity' => 'sms_optout',
+        'actor_types' => ['staff'],
+        'required_fields' => ['row_count'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // §8 CSV import
+        'action_key' => 'sms.optout.imported',
+        'entity' => 'sms_optout',
+        'actor_types' => ['staff'],
+        'required_fields' => ['row_count'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17
+        'action_key' => 'sms.broadcast.created',
+        'entity' => 'sms_broadcast',
+        'actor_types' => ['staff'],
+        'required_fields' => ['broadcast_id', 'template_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17
+        'action_key' => 'sms.broadcast.updated',
+        'entity' => 'sms_broadcast',
+        'actor_types' => ['staff'],
+        'required_fields' => ['broadcast_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17 / A-64 — HIGH-VISIBILITY (the two keys together)
+        'action_key' => 'sms.broadcast.launched',
+        'entity' => 'sms_broadcast',
+        'actor_types' => ['staff'],
+        'required_fields' => ['broadcast_id', 'audience_count', 'typed_confirmation_given'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-17 cancel stops the un-sent remainder
+        'action_key' => 'sms.broadcast.canceled',
+        'entity' => 'sms_broadcast',
+        'actor_types' => ['staff'],
+        'required_fields' => ['broadcast_id', 'remaining'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-16 held-message release-now (sms.send)
+        'action_key' => 'sms.message.released',
+        'entity' => 'sms_message',
+        'actor_types' => ['staff'],
+        'required_fields' => ['sms_message_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // FR-13 a DLR moved the row
+        'action_key' => 'sms.dlr.applied',
+        'entity' => 'sms_message',
+        'actor_types' => ['system'],
+        'required_fields' => ['sms_message_id', 'status'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // EC-04 retained + flagged
+        'action_key' => 'sms.dlr.contradiction',
+        'entity' => 'sms_message',
+        'actor_types' => ['system'],
+        'required_fields' => ['sms_message_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // EC-03 logged, dropped, counted
+        'action_key' => 'sms.dlr.unknown_provider_id',
+        'entity' => 'sms_gateway',
+        'actor_types' => ['system'],
+        'required_fields' => ['gateway_id'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
+        // B6-S16 the hold-all-sends door (a pause, never a drop)
+        'action_key' => 'sms.hold_all.changed',
+        'entity' => 'sms_settings',
+        'actor_types' => ['staff'],
+        'required_fields' => ['hold_all_sends'],
+        'owning_doc' => 'Doc14',
+    ],
 ];
