@@ -1,0 +1,28 @@
+{
+  "doc": "Doc14",
+  "spec": "FR-01 / FR-04 / §14 / §21 — the seeded templates: every TEMPLATE event (the ten sendable + optout_confirmation) in both launch languages, REAL Ethiopic never lorem, each body using only its event's allowed variables (FR-04). The §21 four (ticket_created, ticket_resolved, window_reengagement, offline_form_confirmation) are ON by the settings seed; the rest are templates only, off. quiet_hours_policy: exempt for verification_code / security_notification (FR-04) and for optout_confirmation (it answers the STOP just sent); hold otherwise. Every string synthetic; every Amharic body machine-authored → the R-14 queue.",
+  "entries": [
+    {"event": "ticket_created", "language": "en", "name": "Ticket created", "quiet_hours_policy": "hold", "body": "{{brand.name}}: we received your request. Ticket {{ticket.number}} is open and an agent will be with you shortly."},
+    {"event": "ticket_created", "language": "am", "name": "ትኬት ተከፍቷል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ጥያቄዎን ተቀብለናል። ትኬት {{ticket.number}} ተከፍቷል፤ ወኪል በቅርቡ ያገኝዎታል።"},
+    {"event": "ticket_assigned", "language": "en", "name": "Agent assigned", "quiet_hours_policy": "hold", "body": "{{brand.name}}: an agent now has your case, ticket {{ticket.number}}."},
+    {"event": "ticket_assigned", "language": "am", "name": "ወኪል ተመድቧል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ትኬት {{ticket.number}} ለወኪል ተመድቧል።"},
+    {"event": "ticket_updated", "language": "en", "name": "Reply waiting", "quiet_hours_policy": "hold", "body": "{{brand.name}}: there is a new reply on ticket {{ticket.number}}. Please check your support chat."},
+    {"event": "ticket_updated", "language": "am", "name": "መልስ ይጠብቅዎታል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ በትኬት {{ticket.number}} ላይ አዲስ መልስ አለ። እባክዎ የድጋፍ ውይይትዎን ይመልከቱ።"},
+    {"event": "ticket_resolved", "language": "en", "name": "Ticket resolved", "quiet_hours_policy": "hold", "body": "{{brand.name}}: ticket {{ticket.number}} is resolved. Thank you, {{customer.name}}. Reply STOP to opt out."},
+    {"event": "ticket_resolved", "language": "am", "name": "ትኬት ተፈትቷል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ትኬት {{ticket.number}} ተፈትቷል። እናመሰግናለን {{customer.name}}። ለማቆም ተወው ብለው ይላኩ።"},
+    {"event": "ticket_closed", "language": "en", "name": "Ticket closed", "quiet_hours_policy": "hold", "body": "{{brand.name}}: ticket {{ticket.number}} is now closed. Write to us again any time."},
+    {"event": "ticket_closed", "language": "am", "name": "ትኬት ተዘግቷል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ትኬት {{ticket.number}} ተዘግቷል። በማንኛውም ጊዜ እንደገና ይጻፉልን።"},
+    {"event": "security_notification", "language": "en", "name": "Security notice", "quiet_hours_policy": "exempt", "body": "{{brand.name}} security: there was a change on your staff account. If this was not you, sign in and review your sessions."},
+    {"event": "security_notification", "language": "am", "name": "የደህንነት ማሳወቂያ", "quiet_hours_policy": "exempt", "body": "{{brand.name}} ደህንነት፦ በሠራተኛ መለያዎ ላይ ለውጥ ተደርጓል። እርስዎ ካልሆኑ ይግቡና ክፍለ ጊዜዎችዎን ይመልከቱ።"},
+    {"event": "verification_code", "language": "en", "name": "Verification code", "quiet_hours_policy": "exempt", "body": "{{brand.name}}: your code is {{code}}. It expires in 10 minutes. Never share it."},
+    {"event": "verification_code", "language": "am", "name": "የማረጋገጫ ኮድ", "quiet_hours_policy": "exempt", "body": "{{brand.name}}፦ ኮድዎ {{code}} ነው። በ10 ደቂቃ ውስጥ ያበቃል። ለማንም አያጋሩት።"},
+    {"event": "service_announcement", "language": "en", "name": "Service announcement", "quiet_hours_policy": "hold", "body": "{{brand.name}}: scheduled maintenance tonight from 01:00 to 03:00. Support stays reachable by phone."},
+    {"event": "service_announcement", "language": "am", "name": "የአገልግሎት ማስታወቂያ", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ዛሬ ማታ ከ01:00 እስከ 03:00 የታቀደ ጥገና አለ። ድጋፍ በስልክ ይቀጥላል።"},
+    {"event": "window_reengagement", "language": "en", "name": "Reply-window re-engagement", "quiet_hours_policy": "hold", "body": "{{brand.name}}: we could not reach you on Telegram about ticket {{ticket.number}}. Please write to us there so we can continue."},
+    {"event": "window_reengagement", "language": "am", "name": "የመልስ መስኮት ዳግም-ተሳትፎ", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ ስለ ትኬት {{ticket.number}} በቴሌግራም ልናገኝዎ አልቻልንም። እንድንቀጥል እባክዎ እዚያ ይጻፉልን።"},
+    {"event": "offline_form_confirmation", "language": "en", "name": "Offline form received", "quiet_hours_policy": "hold", "body": "{{brand.name}}: we got your message. Ticket {{ticket.number}} is open and we will text you the moment someone starts on it."},
+    {"event": "offline_form_confirmation", "language": "am", "name": "ከመስመር ውጭ ቅጽ ተቀብለናል", "quiet_hours_policy": "hold", "body": "{{brand.name}}፦ መልእክትዎን ተቀብለናል። ትኬት {{ticket.number}} ተከፍቷል፤ ሰው እንደጀመረ ወዲያው እንጽፍልዎታለን።"},
+    {"event": "optout_confirmation", "language": "en", "name": "Opt-out confirmed", "quiet_hours_policy": "exempt", "body": "{{brand.name}}: you will not receive further SMS from us. This is the last one."},
+    {"event": "optout_confirmation", "language": "am", "name": "መውጣት ተረጋግጧል", "quiet_hours_policy": "exempt", "body": "{{brand.name}}፦ ከእኛ ተጨማሪ SMS አይደርስዎትም። ይህ የመጨረሻው ነው።"}
+  ]
+}

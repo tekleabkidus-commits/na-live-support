@@ -54,6 +54,23 @@ Route::middleware([
     Route::get('widgets', [$screens, 'index'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.index');
     Route::get('widgets/{widgetId}/edit', [$screens, 'editor'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.editor');
     Route::get('widgets/{widgetId}/preview', [$screens, 'preview'])->middleware(['permission:webchat.widgets.view', App\Http\Middleware\WidgetFrameSurface::class.':self'])->name('widgets.screens.preview');
+    // Doc 14 FR-04 / FR-05 / §8 (S14 step 3): the SMS templates' JSON doors. Reads under
+    // `sms.templates.view`; create/edit/delete under their own keys (Doc 03 §4.1's eight, STOP-A);
+    // every mutation carries its registered audit key. Template CONTENT is `template_body` —
+    // never `body` (BR-01; the sms-no-free-text gate sweeps these routes).
+    Route::prefix('sms/api/templates')->name('sms.templates.')->group(function (): void {
+        $t = App\Http\Controllers\Sms\SmsTemplatesController::class;
+        Route::get('/', [$t, 'index'])->middleware('permission:sms.templates.view')->name('index');
+        Route::post('/', [$t, 'store'])->middleware(['permission:sms.templates.create', 'audit:sms.template.created'])->name('store');
+        Route::get('{templateId}', [$t, 'show'])->middleware('permission:sms.templates.view')->name('show');
+        Route::patch('{templateId}', [$t, 'update'])->middleware(['permission:sms.templates.edit', 'audit:sms.template.updated'])->name('update');
+        Route::post('{templateId}/validate', [$t, 'validateDraft'])->middleware('permission:sms.templates.edit')->name('validate');
+        Route::post('{templateId}/publish', [$t, 'publish'])->middleware(['permission:sms.templates.edit', 'audit:sms.template.published'])->name('publish');
+        Route::post('{templateId}/rollback', [$t, 'rollback'])->middleware(['permission:sms.templates.edit', 'audit:sms.template.rolled_back'])->name('rollback');
+        Route::post('{templateId}/test-send', [$t, 'testSend'])->middleware(['permission:sms.templates.edit', 'audit:sms.template.test_sent'])->name('test_send');
+        Route::delete('{templateId}', [$t, 'destroy'])->middleware(['permission:sms.templates.delete', 'audit:sms.template.deleted'])->name('destroy');
+    });
+
     Route::prefix('widgets/api')->name('widgets.')->group(function (): void {
         $c = App\Http\Controllers\Admin\WidgetDesignerController::class;
         Route::get('/', [$c, 'index'])->middleware('permission:webchat.widgets.view')->name('index');

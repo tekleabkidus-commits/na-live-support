@@ -1,0 +1,176 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\RenderingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders the ticket-bound vocabulary through Doc 12's resolver, b[39m[90m…[39m [90m8.95s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: an unresolved variable → skip_send by default (nothing le[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: {{link}} resolves ONLY to a signed platform short URL on[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 / C-08: resolveForSend walks customer language → tenant defa[39m[90m…[39m [90m0.09s[39m  
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Feature\Sms\TemplateLifecycleTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit creates a template (head + v1 live), publishes v2, rolls back to[39m[90m…[39m [90m0.78s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit one template per event per language (FR-01); the list groups by[39m[90m… [39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permission split: view cannot create or publish; create cann[39m[90m…[39m [90m0.22s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TemplateSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds 22 templates (11 events × en + am), real Ethiopic in every[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the console command seeds one tenant inside its own binding[39m[90m      [39m [90m0.18s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TemplateValidationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a variable the event does not provide is refused at creat[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-10 / SEC-05: an arbitrary URL in a template fails publish — h[39m[90m…[39m [90m0.19s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an unknown event, an empty body and an over-long body are refuse[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TestSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit queues a sandbox-tagged row for a fixture number and refuses a n[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\EstimateVsAccrualParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe corpus: estimate == accrual exactly (no variables), through the one segmenter and the one cost arithmetic[39m
+  [32;1m✓[39;22m[90m [39m[90mtemplate bodies with variables: the sample-value estimate is within ONE segment of the accrual on realistic rendered values (NFR-06)[39m
+  [32;1m✓[39;22m[90m [39m[90mcost arithmetic is decimal-string exact (never a float) and the rate card refuses a malformed price or currency[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [32;1m✓[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, st[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.03s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Sms\TemplateLifecycleTest[22m [90m>[39m it creates a template (…   
+[39;1m  Expected response status code [200] but received 500.
+Failed asserting that 500 is identical to 200.
+
+The following exception occurred during the last request:
+
+TypeError: preg_match(): Argument #2 ($subject) must be of type string, Illuminate\Database\Query\Expression given in /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php:1616
+Stack trace:
+#0 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php(1616): preg_match('/^(\\d{4})-(\\d{1...', Object(Illuminate\Database\Query\Expression))
+#1 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php(1590): Illuminate\Database\Eloquent\Model->isStandardDateFormat(Object(Illuminate\Database\Query\Expression))
+#2 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php(1627): Illuminate\Database\Eloquent\Model->asDateTime(Object(Illuminate\Database\Query\Expression))
+#3 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/HasAttributes.php(1097): Illuminate\Database\Eloquent\Model->fromDateTime(Object(Illuminate\Database\Query\Expression))
+#4 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(686): Illuminate\Database\Eloquent\Model->setAttribute('deleted_at', Object(Illuminate\Database\Query\Expression))
+#5 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(725): Illuminate\Database\Eloquent\Model->fill(Array)
+#6 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.php(185): Illuminate\Database\Eloquent\Model->{closure:Illuminate\Database\Eloquent\Model::forceFill():725}()
+#7 /app/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(725): Illuminate\Database\Eloquent\Model::unguarded(Object(Closure))
+#8 /app/app/Domain/Sms/Templates/TemplateWriter.php(128): Illuminate\Database\Eloquent\Model->forceFill(Array)
+#9 /app/vendor/laravel/framework/src/Illuminate/Database/Concerns/ManagesTransactions.php(35): App\Domain\Sms\Templates\TemplateWriter->{closure:App\Domain\Sms\Templates\TemplateWriter::delete():127}(Object(Illuminate\Database\PostgresConnection))
+#10 /app/vendor/laravel/framework/src/Illuminate/Database/DatabaseManager.php(502): Illuminate\Database\Connection->transaction(Object(Closure))
+#11 /app/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(364): Illuminate\Database\DatabaseManager->__call('transaction', Array)
+#12 /app/app/Domain/Sms/Templates/TemplateWriter.php(127): Illuminate\Support\Facades\Facade::__callStatic('transaction', Array)
+#13 /app/app/Http/Controllers/Sms/SmsTemplatesController.php(169): App\Domain\Sms\Templates\TemplateWriter->delete(Object(App\Models\SmsTemplate), '01a082df-fe97-7...')
+#14 /app/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\Http\Controllers\Sms\SmsTemplatesController->destroy(Object(Illuminate\Http\Request), '01a082df-fed2-7...')
+#15 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(App\Http\Controllers\Sms\SmsTemplatesController), 'destroy')
+#16 /app/vendor/laravel/framework/src/Illuminate/Routing/Route.php(216): Illuminate\Routing\Route->runController()
+#17 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate\Routing\Route->run()
+#18 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Routing\Router->{closure:Illuminate\Routing\Router::runRouteWithinStack():821}(Object(Illuminate\Http\Request))
+#19 /app/app/Http/Middleware/DeclareAuditAction.php(51): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#20 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\DeclareAuditAction->handle(Object(Illuminate\Http\Request), Object(Closure), 'sms.template.de...')
+#21 /app/app/Http/Middleware/RequirePermission.php(88): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#22 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequirePermission->handle(Object(Illuminate\Http\Request), Object(Closure), 'sms.templates.d...')
+#23 /app/app/Http/Middleware/EnforceTenantState.php(73): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#24 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTenantState->handle(Object(Illuminate\Http\Request), Object(Closure), 'staff')
+#25 /app/app/Http/Middleware/ResolveTenant.php(90): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#26 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ResolveTenant->handle(Object(Illuminate\Http\Request), Object(Closure), 'staff_session')
+#27 /app/app/Http/Middleware/EnforceTwoFactorForRole.php(62): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#28 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceTwoFactorForRole->handle(Object(Illuminate\Http\Request), Object(Closure))
+#29 /app/app/Http/Middleware/EnforcePasswordExpiry.php(88): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#30 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforcePasswordExpiry->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 /app/app/Http/Middleware/ApplyUserLocale.php(87): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#32 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\ApplyUserLocale->handle(Object(Illuminate\Http\Request), Object(Closure))
+#33 /app/app/Http/Middleware/EnforceSessionLifetime.php(113): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#34 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\EnforceSessionLifetime->handle(Object(Illuminate\Http\Request), Object(Closure))
+#35 /app/app/Http/Middleware/SecurityHeaders.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#36 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\SecurityHeaders->handle(Object(Illuminate\Http\Request), Object(Closure))
+#37 /app/app/Http/Middleware/VerifyTenantHint.php(85): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#38 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\VerifyTenantHint->handle(Object(Illuminate\Http\Request), Object(Closure))
+#39 /app/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#40 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Routing\Middleware\SubstituteBindings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#41 /app/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(63): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#42 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Auth\Middleware\Authenticate->handle(Object(Illuminate\Http\Request), Object(Closure), 'staff')
+#43 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#44 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestForgery->handle(Object(Illuminate\Http\Request), Object(Closure))
+#45 /app/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#46 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\View\Middleware\ShareErrorsFromSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#47 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#48 /app/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\Session\Middleware\StartSession->handleStatefulRequest(Object(Illuminate\Http\Request), Object(Illuminate\Session\Store), Object(Closure))
+#49 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Session\Middleware\StartSession->handle(Object(Illuminate\Http\Request), Object(Closure))
+#50 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#51 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse->handle(Object(Illuminate\Http\Request), Object(Closure))
+#52 /app/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#53 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Cookie\Middleware\EncryptCookies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#54 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#55 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#56 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#57 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\Routing\Router->runRoute(Object(Illuminate\Http\Request), Object(Illuminate\Routing\Route))
+#58 /app/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#59 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#60 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\Foundation\Http\Kernel->{closure:Illuminate\Foundation\Http\Kernel::dispatchToRouter():197}(Object(Illuminate\Http\Request))
+#61 /app/vendor/inertiajs/inertia-laravel/src/Middleware/EnsureGetOnRedirect.php(19): Illuminate\Pipeline\Pipeline->{closure:Illuminate\Pipeline\Pipeline::prepareDestination():178}(Object(Illuminate\Http\Request))
+#62 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Inertia\Middleware\EnsureGetOnRedirect->handle(Object(Illuminate\Http\Request), Object(Closure))
+#63 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#64 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#65 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull->handle(Object(Illuminate\Http\Request), Object(Closure))
+#66 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#67 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\Foundation\Http\Middleware\TransformsRequest->handle(Object(Illuminate\Http\Request), Object(Closure))
+#68 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\TrimStrings->handle(Object(Illuminate\Http\Request), Object(Closure))
+#69 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#70 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePostSize->handle(Object(Illuminate\Http\Request), Object(Closure))
+#71 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#72 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance->handle(Object(Illuminate\Http\Request), Object(Closure))
+#73 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#74 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\HandleCors->handle(Object(Illuminate\Http\Request), Object(Closure))
+#75 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#76 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\TrustProxies->handle(Object(Illuminate\Http\Request), Object(Closure))
+#77 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#78 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks->handle(Object(Illuminate\Http\Request), Object(Closure))
+#79 /app/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#80 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\Http\Middleware\ValidatePathEncoding->handle(Object(Illuminate\Http\Request), Object(Closure))
+#81 /app/app/Http/Middleware/RequireSecureTransport.php(54): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#82 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App\Http\Middleware\RequireSecureTransport->handle(Object(Illuminate\Http\Request), Object(Closure))
+#83 /app/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\Pipeline\Pipeline->{closure:{closure:Illuminate\Pipeline\Pipeline::carry():194}:195}(Object(Illuminate\Http\Request))
+#84 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#85 /app/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#86 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(638): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#87 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(604): Illuminate\Foundation\Testing\TestCase->call('DELETE', 'https://localho...', Array, Array, Array, Array, '[]')
+#88 /app/vendor/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php(501): Illuminate\Foundation\Testing\TestCase->json('DELETE', 'https://localho...', Array, Array, 0)
+#89 /app/tests/Feature/Sms/SmsSupport.php(35): Illuminate\Foundation\Testing\TestCase->deleteJson('https://localho...', Array)
+#90 /app/tests/Feature/Sms/TemplateLifecycleTest.php(47): smsApi(Object(App\Models\User), 'DELETE', '/templates/01a0...')
+#91 /app/vendor/pestphp/pest/src/Factories/TestCaseMethodFactory.php(177): P\Tests\Feature\Sms\TemplateLifecycleTest->{closure:/app/tests/Feature/Sms/TemplateLifecycleTest.php:17}()
+#92 [internal function]: P\Tests\Feature\Sms\TemplateLifecycleTest->{closure:Pest\Factories\TestCaseMethodFactory::getClosure():167}()
+#93 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): call_user_func_array(Object(Closure), Array)
+#94 /app/vendor/pestphp/pest/src/Support/ExceptionTrace.php(26): P\Tests\Feature\Sms\TemplateLifecycleTest->{closure:Pest\Concerns\Testable::__callClosure():581}()
+#95 /app/vendor/pestphp/pest/src/Concerns/Testable.php(581): Pest\Support\ExceptionTrace::ensure(Object(Closure))
+#96 /app/vendor/pestphp/pest/src/Concerns/Testable.php(403): P\Tests\Feature\Sms\TemplateLifecycleTest->__callClosure(Object(Closure), Array)
+#97 /app/vendor/pestphp/pest/src/Factories/TestCaseFactory.php(178) : eval()'d code(17): P\Tests\Feature\Sms\TemplateLifecycleTest->__runTest(Object(Closure))
+#98 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1318): P\Tests\Feature\Sms\TemplateLifecycleTest->__pest_evaluable_it_creates_a_template__head___v1_live___publishes_v2__rolls_back_to_v1_as_a_NEW_v3__updates_the_head__and_soft_deletes_—_the_history_append_only()
+#99 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(1355): PHPUnit\Framework\TestCase->invokeTestMethod('__pest_evaluabl...', Array)
+#100 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(521): PHPUnit\Framework\TestCase->runTest()
+#101 /app/vendor/phpunit/phpunit/src/Framework/TestRunner/TestRunner.php(99): PHPUnit\Framework\TestCase->runBare()
+#102 /app/vendor/phpunit/phpunit/src/Framework/TestCase.php(361): PHPUnit\Framework\TestRunner->run(Object(P\Tests\Feature\Sms\TemplateLifecycleTest))
+#103 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestCase->run()
+#104 /app/vendor/phpunit/phpunit/src/Framework/TestSuite.php(374): PHPUnit\Framework\TestSuite->run()
+#105 /app/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(64): PHPUnit\Framework\TestSuite->run()
+#106 /app/vendor/phpunit/phpunit/src/TextUI/Application.php(229): PHPUnit\TextUI\TestRunner->run(Object(PHPUnit\TextUI\Configuration\Configuration), Object(PHPUnit\Runner\ResultCache\DefaultResultCache), Object(PHPUnit\Framework\TestSuite))
+#107 /app/vendor/pestphp/pest/src/Kernel.php(117): PHPUnit\TextUI\Application->run(Array)
+#108 /app/vendor/pestphp/pest/bin/pest(207): Pest\Kernel->handle(Array, Array)
+#109 /app/vendor/pestphp/pest/bin/pest(215): {closure:/app/vendor/pestphp/pest/bin/pest:21}()
+#110 /app/vendor/bin/pest(119): include('/app/vendor/pes...')
+#111 {main}
+
+----------------------------------------------------------------------------------
+
+preg_match(): Argument #2 ($subject) must be of type string, Illuminate\Database\Query\Expression given[39;22m
+
+  at [32mtests/Feature/Sms/TemplateLifecycleTest.php[39m:[32m47[39m
+     43▕ 
+     44▕     smsApi($user, 'PATCH', '/templates/'.$id, ['name' => 'Resolved (v2 copy)', 'quiet_hours_policy' => 'skip', 'on_missing' => 'fallback_text', 'fallback_text' => 'Your ticket is resolved.'])
+     45▕         ->assertOk()->assertJsonPath('name', 'Resolved (v2 copy)')->assertJsonPath('quiet_hours_policy', 'skip')->assertJsonPath('on_missing', 'fallback_text');
+     46▕ 
+  ➜  47▕     smsApi($user, 'DELETE', '/templates/'.$id)->assertOk()->assertJsonPath('deleted', true);
+     48▕     expect(DB::table('sms_templates')->where('id', $id)->value('deleted_at'))->not->toBeNull()
+     49▕         ->and(DB::table('sms_template_versions')->where('template_id', $id)->count())->toBe(3, 'the versions stay');
+     50▕     smsApi($user, 'GET', '/templates/'.$id)->assertNotFound();
+     51▕
+
+
+  [90mTests:[39m    [31;1m1 failed[39;22m[90m,[39m[39m [39m[32;1m18 passed[39;22m[90m (288 assertions)[39m
+  [90mDuration:[39m [39m11.61s[39m
+
+EXIT 1

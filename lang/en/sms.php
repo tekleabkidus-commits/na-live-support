@@ -36,4 +36,15 @@ return [
         'settings_title' => 'SMS settings',
         'off_until_gateway' => 'SMS is off until a gateway exists.',
     ],
+    'refused' => [
+        'unknown_event' => 'That is not a template event.',
+        'body_too_long' => 'The template is empty or over the 1000-character ceiling.',
+        'arbitrary_url' => 'A template cannot carry a URL — use {{link}}; links only resolve to the platform’s own pages (SEC-05).',
+        'variable_not_allowed' => 'This event does not provide one of the variables used.',
+        'link_domain_unset' => '{{link}} needs the short-link domain (SMS settings) before it can publish.',
+        'duplicate_template' => 'One template per event per language.',
+        'template_not_found' => 'No such template.',
+        'version_not_found' => 'No such version.',
+        'fixture_phone_required' => 'Outside production a test-send only targets a +251-90000xxxx fixture number.',
+    ],
 ];
