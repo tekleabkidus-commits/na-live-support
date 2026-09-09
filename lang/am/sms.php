@@ -35,6 +35,12 @@ return [
         'off_until_gateway' => 'መግቢያ እስኪኖር ድረስ SMS ጠፍቷል።',
     ],
     'refused' => [
+        'gateway_not_found' => 'ያ መግቢያ እዚህ የለም።',
+        'prefix_invalid' => 'የአገር ቅድመ ቁጥር E.164 ነው፦ + እና እስከ አስራ አምስት አሃዞች።',
+        'fixture_refused' => 'የናሙና መግቢያ በምርት ውስጥ በጭራሽ አይኖርም።',
+        'unknown_driver' => 'አሽከርካሪው http_generic ወይም smpp_sidecar ነው።',
+        'config_secret_key' => 'ምስክርነት በካርታው ውስጥ አይጓዝም — እንደ ቫልት ማጣቀሻ ይቀመጣል።',
+        'config_invalid' => 'የመግቢያው ካርታ ያልተሟላ ወይም የተሳሳተ ነው።',
         'unknown_event' => 'ይህ የአብነት ክስተት አይደለም።',
         'body_too_long' => 'አብነቱ ባዶ ነው ወይም ከ1000 ቁምፊ ገደብ በላይ ነው።',
         'arbitrary_url' => 'አብነት URL ሊይዝ አይችልም — {{link}} ይጠቀሙ፤ አገናኞች ወደ መድረኩ ገጾች ብቻ ይፈታሉ (SEC-05)።',

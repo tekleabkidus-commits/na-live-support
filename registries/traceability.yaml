@@ -2715,15 +2715,15 @@ entries:
     justification: >-
       S14 step 1: the full transition matrix (every legal and illegal edge), sent never rolls back, the FR-13 DLR precedence matrix incl. EC-04 (contradiction retained + flagged), duplicates and out-of-order idempotent, the GeezSMS `success` → acceptance only (R-D14-1.5), the 48 h expiry as a DB-time comparison — as a PURE unit. PARTIAL: the table half (sms_messages, step 2b), the wire-driven matrix (DlrIngestionTest, step 7) and the zero-inferred-delivered DOM gate (sms-no-inferred-delivered.spec, step 12).
   - ac_ref: "Doc14 AC-03"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Sms/FailoverTest.php
+    type: automated
     tier: integration
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      S14: NOT YET BUILT — the routing trie (longest prefix, EC-01 shadowing warnings), failover chains, the circuit trip/half-open/close cycle and the EC-12 no-viable-route ladder land at step 4 (RoutingTrieTest, FailoverTest, CircuitBreakerTest) and step 7 (ExpiredSweepTest TTL leg); the row flips when they land. Recorded honestly as unbuilt, never as covered.
+      S14 step 4: the routing trie (tests/Unit/Sms/RoutingTrieTest.php — longest prefix wins regardless of table order, EC-01 "+2519 shadows +251" overlap pairs), the seeded chain + the no-match ladder (default_gateway | skip) + the "test a number" door + the FS-01 auth-expiry ladder (real 401s from the mock reference profile → gateway-level → trip → out of every chain at the NEXT resolve, audited once) in FailoverTest; the breaker's trip / half-open (injected clock, ≤ 30 s) / close / re-open / probe sweep / manual reset with reason in tests/Feature/Sms/CircuitBreakerTest.php. PARTIAL: the per-message fallback walk (step 5, PipelineFailoverTest) and the queued-TTL expiry leg of the EC-12 ladder (step 7, ExpiredSweepTest).
   - ac_ref: "Doc14 AC-04"
     suite_path: tests/Unit/Sms/SegmenterCorpusTest.php
     type: automated
@@ -2765,15 +2765,15 @@ entries:
     justification: >-
       S14: NOT YET RUN — the SS-04 lane-isolation drill (transactional p95 delta ≤ 5 % during a broadcast) runs at step 10 at a stated dev-scale N (SmsLaneIsolationDrillTest; the 8,000-recipient scale is [D19]); a discharging run is labelled battery-run, indicative.
   - ac_ref: "Doc14 AC-08"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Sms/HttpGenericOnboardingTest.php
+    type: automated
     tier: integration
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      S14: NOT YET BUILT — the http_generic zero-code onboarding of the mock aggregator (HttpGenericOnboardingTest) and the sidecar contract suite incl. restart transparency against the mock sidecar (SidecarContractTest) land at step 4. The FIXTURE's two profiles already stand (652977c); a fixture result is never proof of the [OA] live rows.
+      S14 step 4: the GeezSMS FIXTURE profile onboarded by its config MAPPING alone — the test asserts zero files under app/Domain/Sms/Gateways/Drivers/ (and GatewayConfig) name the vendor; a real send reaches the mock container through the egress proxy as a POST form (digits phone, msg, callback); `success` parses to ACCEPTED only (R-D14-1.5); the vendor cap and template marker refused before a byte leaves; FR-11 classification over the wire against the reference profile. The sidecar half — mTLS required at the handshake, /send, /health, restart transparency (retryable gap, next attempt lands) — in tests/Feature/Sms/SidecarContractTest.php against docker/mocks/smpp-sidecar; T-02's shape pinned in tests/Contract/Sms/DriverContractTest.php. PARTIAL: DLR ingress by the mapping over the wire (step 7, DlrIngestionTest). A fixture result is never proof of the [OA] live rows.
   - ac_ref: "Doc14 AC-09"
     suite_path: manual
     type: manual
@@ -2793,4 +2793,4 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      S14 step 1: the vault-ref-only value object (a plaintext or token-shaped credential is REFUSED; no reveal accessor) — the model half of SEC-01. PARTIAL: the credential write-only round-trip (SmsCredentialWriteOnlyTest, step 4), phone masking in logs (SmsPhoneMaskingTest, step 5) and the {{link}} domain restriction (TemplateValidationTest, step 3).
+      S14 step 1: the vault-ref-only value object (a plaintext or token-shaped credential is REFUSED; no reveal accessor) — the model half of SEC-01. Step 3: the {{link}} domain restriction (tests/Feature/Sms/TemplateValidationTest.php). Step 4: the credential write-only round-trip (tests/Security/SmsCredentialWriteOnlyTest.php — the value lands in the vault as a vault://sms/ ref only, never on the row, in the audit, the mapping or any response; the DLR credentials minted through Doc 02's own doors; replace = a new ref with the predecessor retired; a secret key inside the mapping refused before any row) and the driver's log discipline (tests/Security/SmsEgressGuardTest.php — plant → detect → remove: no body, token, full phone or callback URL). PARTIAL: phone masking across the pipeline's log lines (SmsPhoneMaskingTest, step 5).

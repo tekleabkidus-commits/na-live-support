@@ -37,6 +37,12 @@ return [
         'off_until_gateway' => 'SMS is off until a gateway exists.',
     ],
     'refused' => [
+        'gateway_not_found' => 'That gateway does not exist here.',
+        'prefix_invalid' => 'A country prefix is E.164: + and up to fifteen digits.',
+        'fixture_refused' => 'A fixture gateway never exists in production.',
+        'unknown_driver' => 'The driver is http_generic or smpp_sidecar.',
+        'config_secret_key' => 'A credential never rides the mapping — it is stored as a vault reference.',
+        'config_invalid' => 'The gateway mapping is incomplete or malformed.',
         'unknown_event' => 'That is not a template event.',
         'body_too_long' => 'The template is empty or over the 1000-character ceiling.',
         'arbitrary_url' => 'A template cannot carry a URL — use {{link}}; links only resolve to the platform’s own pages (SEC-05).',

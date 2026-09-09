@@ -19,3 +19,6 @@
 # rides this proxy; the fixtures-only guard polices WHAT leaves, this file
 # polices WHERE it may go.
 ^api\.addisassistant\.com$
+# Doc 14 (S14 step 4, R-D14-1.6, ADR 0008): the GeezSMS aggregator — the gateway of record; every
+# send rides this proxy (the mock-sms FIXTURE stands in locally; a live call needs a vault-held token).
+^api\.geezsms\.com$

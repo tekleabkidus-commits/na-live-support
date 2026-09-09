@@ -71,6 +71,30 @@ Route::middleware([
         Route::delete('{templateId}', [$t, 'destroy'])->middleware(['permission:sms.templates.delete', 'audit:sms.template.deleted'])->name('destroy');
     });
 
+    // Doc 14 FR-07 / FR-08 / FR-09 (S14 step 4): the gateway + routing doors. Reads under
+    // `sms.gateways.view`; every mutation under `sms.gateways.manage` (high) with its audit key
+    // (STOP-A: circuit reset and the rate card write ride the manage key; the rate card READ is
+    // reports.view-gated inside the summary, SEC-06).
+    Route::prefix('sms/api/gateways')->name('sms.gateways.')->group(function (): void {
+        $g = App\Http\Controllers\Sms\SmsGatewaysController::class;
+        Route::get('/', [$g, 'index'])->middleware('permission:sms.gateways.view')->name('index');
+        Route::post('/', [$g, 'store'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.created'])->name('store');
+        Route::post('resolve', [$g, 'resolve'])->middleware('permission:sms.gateways.view')->name('resolve');
+        Route::get('{gatewayId}', [$g, 'show'])->middleware('permission:sms.gateways.view')->name('show');
+        Route::patch('{gatewayId}', [$g, 'update'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.updated'])->name('update');
+        Route::post('{gatewayId}/credential', [$g, 'replaceCredential'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.credential_replaced'])->name('credential');
+        Route::post('{gatewayId}/dlr/rotate', [$g, 'rotateDlr'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.updated'])->name('dlr_rotate');
+        Route::post('{gatewayId}/circuit/reset', [$g, 'resetCircuit'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.circuit_reset'])->name('circuit_reset');
+        Route::delete('{gatewayId}', [$g, 'destroy'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.deleted'])->name('destroy');
+    });
+    Route::prefix('sms/api/routes')->name('sms.routes.')->group(function (): void {
+        $g = App\Http\Controllers\Sms\SmsGatewaysController::class;
+        Route::post('/', [$g, 'storeRoute'])->middleware(['permission:sms.gateways.manage', 'audit:sms.route.created'])->name('store');
+        Route::post('reorder', [$g, 'reorderRoutes'])->middleware(['permission:sms.gateways.manage', 'audit:sms.route.updated'])->name('reorder');
+        Route::patch('{routeId}', [$g, 'updateRoute'])->middleware(['permission:sms.gateways.manage', 'audit:sms.route.updated'])->name('update');
+        Route::post('{routeId}/deactivate', [$g, 'deactivateRoute'])->middleware(['permission:sms.gateways.manage', 'audit:sms.route.deactivated'])->name('deactivate');
+    });
+
     Route::prefix('widgets/api')->name('widgets.')->group(function (): void {
         $c = App\Http\Controllers\Admin\WidgetDesignerController::class;
         Route::get('/', [$c, 'index'])->middleware('permission:webchat.widgets.view')->name('index');

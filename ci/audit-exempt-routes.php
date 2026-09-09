@@ -160,4 +160,7 @@ return [
     // Doc 14 FR-05 (S14 step 3): the editor's live validation — the SAME code publish runs, computing the draft's
     // analysis (variables, encoding, segments) and WRITING NOTHING; the publish door beside it carries sms.template.published.
     'sms.templates.validate' => 'Doc 14 FR-05: a POST that reads — validates a draft template body the way publish will and writes nothing (the widgets.config.validate shape).',
+    // Doc 14 §8 "test a number" (S14 step 4): the routing resolver explains the exact chain a number would take
+    // (matched prefix, hops, shadowing warnings) and WRITES NOTHING; the route doors beside it carry sms.route.*.
+    'sms.gateways.resolve' => 'Doc 14 FR-08 / §8: a POST that reads — resolves a phone number to its route chain the way a send will and writes nothing (the sms.templates.validate shape).',
 ];

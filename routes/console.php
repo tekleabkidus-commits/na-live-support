@@ -99,3 +99,7 @@ Schedule::command('ai:embed-ticket-summaries')->dailyAt('02:40')->timezone('UTC'
 Schedule::command('kb:chunks-prune')->dailyAt('03:40')->timezone('UTC'); // Doc 10 T-01 (SCHEMA AMENDMENT 4, STOP-A): superseded generations pruned under the PLATFORM role — app never deletes // Doc 09 T-05: nightly resolved-ticket summary embeddings (Copilot similar tickets)
 Schedule::command('ai:supervisor-hourly')->hourlyAt(5)->timezone('UTC'); // Doc 09 FR-17: anomaly scan + sentiment watch
 Schedule::command('ai:supervisor-daily')->dailyAt('04:10')->timezone('UTC'); // Doc 09 FR-17: qa_prescore sample + daily digest
+
+// Doc 14 FR-09 / NFR-05 (S14 step 4): the circuit-breaker probe — open circuits past their cooldown
+// (DB time from circuit_opened_at) go half_open and are probed; a deadline sweep, not a poll.
+Schedule::command('sms:circuit-probe')->everyMinute()->withoutOverlapping();

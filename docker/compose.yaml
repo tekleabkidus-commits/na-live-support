@@ -14,6 +14,7 @@ networks:
 
 volumes:
   postgres-data:
+  smpp-certs:   # Doc 14 T-03 (S14 step 4): the mock sidecar's mTLS material, read by the app (FIXTURE keys, public by construction)
   redis-durable-data:
   meilisearch-data:
   minio-data:
@@ -29,6 +30,8 @@ x-app-image: &app-image
     # The image ships no .env (hygiene); the dev stack mounts the project's
     # one read-only so artisan/tests see the same env the services got.
     - ../.env:/app/.env:ro
+    # Doc 14 T-03 (S14 step 4): the SMPP sidecar's mTLS material (CA + the client cert the sidecar requires of us).
+    - smpp-certs:/certs-smpp:ro
   networks: [na-net]
   depends_on:
     postgres:
@@ -255,10 +258,29 @@ services:
       context: ./mocks
       args: { SERVICE: sms }
     image: na-live-support/mock-sms:dev
-    environment: { PORT: 8082 }
+    # NODE_TLS_REJECT_UNAUTHORIZED=0: the FIXTURE's DLR callbacks reach https://app, whose chain is the
+    # image-baked dev CA the mock image does not trust — a fixture posting to a fixture (S14 step 4).
+    environment: { PORT: 8082, NODE_TLS_REJECT_UNAUTHORIZED: "0" }
     networks: [na-net]
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8082/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  # Doc 14 T-03 / FR-10 / AC-08 (S14 step 4): the SMPP sidecar's CONTRACT half as a FIXTURE — private
+  # HTTPS + mTLS (certs minted into the shared volume at start), POST /send, GET /health, signed DLRs
+  # back, POST /_restart for the restart-transparency leg. The real bind + packaging are [D18].
+  mock-smpp-sidecar:
+    build:
+      context: ./mocks/smpp-sidecar
+    image: na-live-support/mock-smpp-sidecar:dev
+    environment: { PORT: 8443, CERT_DIR: /certs-smpp, NODE_TLS_REJECT_UNAUTHORIZED: "0" }
+    volumes:
+      - smpp-certs:/certs-smpp
+    networks: [na-net]
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /certs-smpp/client.crt"]
       interval: 10s
       timeout: 3s
       retries: 6
