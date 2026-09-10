@@ -37,6 +37,10 @@ return [
         'off_until_gateway' => 'SMS is off until a gateway exists.',
     ],
     'refused' => [
+        'window_not_expired' => 'The reply window is still open — reply in the conversation instead. SMS re-engagement is for expired windows only.',
+        'event_disabled' => 'The ticket-updated SMS event is switched off for this workspace.',
+        'no_phone' => 'This customer has no phone number on file.',
+        'duplicate' => 'The same SMS went out for this ticket inside the duplicate window.',
         'gateway_not_found' => 'That gateway does not exist here.',
         'prefix_invalid' => 'A country prefix is E.164: + and up to fifteen digits.',
         'fixture_refused' => 'A fixture gateway never exists in production.',

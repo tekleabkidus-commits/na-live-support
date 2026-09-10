@@ -1,0 +1,133 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\FakeAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m8.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\MinimalAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\SecondAdapterZeroCoreEditsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the second adapter implements ONLY the base contract — the m[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole inbound pipeline works on the second adapter uncha[39m[90m…[39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the whole outbound pipeline works on the second adapter unch[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mSS-02: the capability envelope binds the core, not conditionals — a[39m[90m…[39m [90m0.07s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\TelegramAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AdapterConformance\WebchatAdapterConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mnormalization maps every contract field[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe key is stable for identical payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mdedupe keys differ across distinct payloads[39m[90m                         [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mnormalization is pure per item and never reorders[39m[90m                   [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mchannel timestamp survives as metadata[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90man adapter cannot emit an internal note[39m[90m                             [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend success reports state sent[39m[90m                                     [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90merror classification matches the frozen table[39m[90m                       [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcapability matrix gates every operation[39m[90m                             [39m [90m0.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mhealth answers with the contract shape[39m[90m                              [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90msend paths accept only deliverable payloads[39m[90m                         [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\AiEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-21: the ai.* family is CLOSED at seven (six + the approved rule-[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mQ7/SEC-06: every ai.* payload is identifiers + closed categories —[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-21: every ai.* event is actually PRODUCED by Doc 09 code (a cata[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mai.decision.logged is SAMPLED by a registered platform setting (FR-[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every Doc 09 fixture entry matches the catalog — event ex[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to an App\Jobs\Ai durab[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\ExternalContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit fixtures/automation/doc16-notify-contract.json + doc14-sms-reque[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit fixtures/automation/doc12-events.json (Doc 12's NON-ticket durab[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Automation\MacroPaletteContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B12-S03: personal lists FIRST, fuzzy matches letters anywhere, o[39m[90m…[39m [90m0.23s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B12-S03: INSERT NEVER SENDS — the palette classes hold NO send c[39m[90m…[39m [90m0.10s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\CustomerEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 08 durable con[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe rollup consumer is registered for the customer merge family — t[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\DualRenderConformanceTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit one schema, three renders, ONE submission shape: widget-path, di[39m[90m…[39m [90m0.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 language resolution is ONE chain for both renderers: custome[39m[90m…[39m [90m0.08s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Forms\FormPreChatContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05: the two-field pre-chat publishes in both variants; requi[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit B3-S05 offline shape: name + phone + what-happened submits as a[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-04: every seeded form's widget payload is ≤ 30 KB, and the v[39m[90m…[39m [90m0.16s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\InboxEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry matches the catalog — event exists, s[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every event the registry maps to a Doc 07 durable con[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe health consumer is registered for channel.health.changed — the[39m[90m… [39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\KbEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-12/FR-13: the kb.* family in the catalog is EXACTLY the six t[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit ADR 0011: every kb.* event a Doc 10 job consumes durably carries[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Routing\SupervisorSeamContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §8: QueueTableRow::row() answers EXACTLY the doc15-queue-table-r[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §8/FR-15: PullInDialog::payload() answers EXACTLY the doc15-pull[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §8/BR-03: DragReassign::context() answers EXACTLY the doc15-drag[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-16/§8: RescueAlerts::rows() answers EXACTLY the doc07-rescue-[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C06: the force-status door the doc07-force-status contract cites[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit C07/[D16]: the broadcast contract fixture stands (P-C5 — cited,[39m[90m… [39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\RoutingEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe routing family is exactly EIGHTEEN events (FR-19; grown only by[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mcompleteness: every routing-family event has a contract entry in EV[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mfidelity: every fixture entry names a real catalog relationship, re[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mDoc 11's own durable consumers are contracted: the availability con[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Sla\SlaChipContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-11: shape, step states, pause reason and most-urgent selectio[39m[90m…[39m [90m0.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\Sms\DriverContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit T-02: the contract has exactly four methods and both drivers imp[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-01: RenderedMessage carries text under ONE name — no body/htm[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the registry resolves the two registered driver keys and refuses[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\TicketEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 completeness: every ticket.* event has a contract entry in E[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mNFR-06 fidelity: every fixture entry names a real relationship, rea[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mT-09: the named minimum — Docs 12, 15 and 17 each hold a non-trivia[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Contract\WebchatEventConsumerContractsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mA-45: every consumer the catalog declares for Doc 13 is registered[39m[90m… [39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m89 passed[39;22m[90m (2174 assertions)[39m
+  [90mDuration:[39m [39m12.49s[39m
+
+EXIT 0

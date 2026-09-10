@@ -2027,6 +2027,14 @@ return [
         'owning_doc' => 'Doc14',
     ],
     [
+        // FR-02 the two manual send doors (S14 step 5): one key, the payload names the event
+        'action_key' => 'sms.message.manually_queued',
+        'entity' => 'sms_message',
+        'actor_types' => ['staff'],
+        'required_fields' => ['ticket_id', 'event'],
+        'owning_doc' => 'Doc14',
+    ],
+    [
         // FR-16 held-message release-now (sms.send)
         'action_key' => 'sms.message.released',
         'entity' => 'sms_message',

@@ -1,0 +1,31 @@
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/FormBuilder.vue
+  50:5  warning  Prop "usage_labels" is not in camelCase    vue/prop-name-casing
+  63:5  warning  Prop "field_types" is not in camelCase     vue/prop-name-casing
+  64:5  warning  Prop "custom_fields" is not in camelCase   vue/prop-name-casing
+  74:5  warning  Prop "render_strings" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Forms.vue
+  26:5  warning  Prop "usage_labels" is not in camelCase  vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/Macros.vue
+  34:5  warning  Prop "sample_tickets" is not in camelCase  vue/prop-name-casing
+  37:5  warning  Prop "user_id" is not in camelCase         vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/resources/js/Pages/Workflow/RuleEditor.vue
+  55:5  warning  Prop "action_types" is not in camelCase   vue/prop-name-casing
+  56:5  warning  Prop "ai_tasks" is not in camelCase       vue/prop-name-casing
+  57:5  warning  Prop "keyword_sets" is not in camelCase   vue/prop-name-casing
+  70:5  warning  Prop "recent_events" is not in camelCase  vue/prop-name-casing
+  71:5  warning  Prop "rule_count" is not in camelCase     vue/prop-name-casing
+
+/home/kidus/projects/na-live-support/tests/Browser/designer-widgets.spec.ts
+  205:42  warning  Replace `(r)·=>·r.url().includes('/admin/widgets/api/')·&&·r.request().method()·===·'PATCH'` with `⏎········(r)·=>·r.url().includes('/admin/widgets/api/')·&&·r.request().method()·===·'PATCH',⏎····`  prettier/prettier
+  215:64  warning  Replace `/\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js/` with `⏎········/\/w\/[a-z0-9]{12}\.[a-f0-9]{64}\.js/,⏎····`                                                                                            prettier/prettier
+
+✖ 42 problems (0 errors, 42 warnings)
+  0 errors and 15 warnings potentially fixable with the `--fix` option.
+
+npx vue-tsc --noEmit
+npx tsc --noEmit -p widget/tsconfig.json
+LINT EXIT 0

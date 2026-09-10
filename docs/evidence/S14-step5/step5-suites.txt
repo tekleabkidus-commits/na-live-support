@@ -1,0 +1,48 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Support\DueSetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit due() answers at-or-before the CALLER's clock only — a future m[39m[90m…[39m [90m10.88s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cancel removes; re-schedule moves the score; kinds are isolated[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rebuild restores from column truth at the exact deadline — a los[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit members parse round-trip (the id half may itself carry pipes-fre[39m[90m…[39m [90m0.03s[39m  
+  [dev-hardware-indicative] NFR-01 event-to-queued (≤ 2 s p95; n=6 in-shape) p50  15.612 ms   p99  25.524 ms   max  25.524 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 queued-to-sent (≤ 5 s p95; n=6 in-shape, shaping waits included) p50 268.536 ms   p99 295.783 ms   max 295.783 ms   budget(p99) 5000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\PipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit event → queued → sent: the row walks the machine against the rea[39m[90m…[39m [90m0.42s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a skipped guard leaves an honest row: an opted-out customer enqu[39m[90m…[39m [90m0.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01 in-shape (dev scale, hand-rolled n, figures labelled): ev[39m[90m…[39m [90m1.20s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\LiveGuardsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: the phone identity unlinked between queue and send → skip[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02 mirror: an opt-out recorded between queue and send → skipp[39m[90m…[39m [90m0.60s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DuplicateWindowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: the second identical send inside the window skips as dupl[39m[90m…[39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\ManualDoorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reengage: 403 without sms.send; 422 while the window is open; 20[39m[90m…[39m [90m0.74s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: the FR-01 off-by-default toggle refuses first; toggled o[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an unknown ticket answers the 404 pattern, never an existence or[39m[90m…[39m [90m0.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\VerificationCodeDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the fixture caller sends a code: rendered at enqueue with the ve[39m[90m…[39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: the door refuses anything but a 4–10 digit platform code,[39m[90m…[39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\HoldAllSendsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit hold on → held row + sms.held(release_at null) + a DueSet candid[39m[90m…[39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the live guard holds too: a hold flipped on AFTER enqueue holds[39m[90m… [39m [90m0.53s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsPhoneMaskingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B4-S08 byte-exact: the drawn receipt form is "+251 91 ••• 4417"[39m[90m… [39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit plant → detect: after a full pipeline run, no captured log recor[39m[90m…[39m [90m0.63s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [32;1m✓[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, st[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.05s[39m  
+
+  [90mTests:[39m    [32;1m22 passed[39;22m[90m (136 assertions)[39m
+  [90mDuration:[39m [39m19.11s[39m
+
+PEST EXIT 0

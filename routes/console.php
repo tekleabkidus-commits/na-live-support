@@ -103,3 +103,6 @@ Schedule::command('ai:supervisor-daily')->dailyAt('04:10')->timezone('UTC'); // 
 // Doc 14 FR-09 / NFR-05 (S14 step 4): the circuit-breaker probe — open circuits past their cooldown
 // (DB time from circuit_opened_at) go half_open and are probed; a deadline sweep, not a poll.
 Schedule::command('sms:circuit-probe')->everyMinute()->withoutOverlapping();
+// Doc 14 FR-16 half (S14 step 5; A-65): the held-release sweep — DueSet
+// candidates re-verified against the row + the live setting; held, never dropped.
+Schedule::command('sms:release-held')->everyMinute()->withoutOverlapping();

@@ -9,6 +9,7 @@ use App\Models\SmsGateway;
 use App\Models\SmsRoute;
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
+use App\Support\Events\EventPublisher;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,6 +24,7 @@ final class RouteWriter
     public function __construct(
         private readonly RoutingTable $table,
         private readonly AuditLogger $audit,
+        private readonly EventPublisher $events,
     ) {}
 
     /**
@@ -43,7 +45,7 @@ final class RouteWriter
                 'sender_id_override' => $senderOverride,
                 'active' => true,
             ]);
-            $this->table->invalidate();
+            $this->publishRoutesChanged($this->table->invalidate());
             $this->audit->record('sms.route.created', 'sms_route', $route->identifier(), AuditActor::Staff, ['route_id' => $route->identifier(), 'country_prefix' => $prefix], $actorId);
 
             return $route->refresh();
@@ -69,7 +71,7 @@ final class RouteWriter
 
         return DB::transaction(function () use ($route, $attributes, $actorId): SmsRoute {
             $route->forceFill(array_intersect_key($attributes, array_flip(['country_prefix', 'primary_gateway_id', 'fallback_gateway_ids', 'sender_id_override'])))->save();
-            $this->table->invalidate();
+            $this->publishRoutesChanged($this->table->invalidate());
             $this->audit->record('sms.route.updated', 'sms_route', $route->identifier(), AuditActor::Staff, ['route_id' => $route->identifier()], $actorId);
 
             return $route->refresh();
@@ -87,7 +89,7 @@ final class RouteWriter
             foreach ($orderedRouteIds as $index => $routeId) {
                 SmsRoute::query()->where('id', $routeId)->update(['position' => $index + 1]);
             }
-            $this->table->invalidate();
+            $this->publishRoutesChanged($this->table->invalidate());
             $this->audit->record('sms.route.updated', 'sms_route', null, AuditActor::Staff, ['route_id' => 'reorder', 'count' => count($orderedRouteIds)], $actorId);
         });
     }
@@ -96,7 +98,7 @@ final class RouteWriter
     {
         return DB::transaction(function () use ($route, $actorId): SmsRoute {
             $route->forceFill(['active' => false])->save();
-            $this->table->invalidate();
+            $this->publishRoutesChanged($this->table->invalidate());
             $this->audit->record('sms.route.deactivated', 'sms_route', $route->identifier(), AuditActor::Staff, ['route_id' => $route->identifier()], $actorId);
 
             return $route->refresh();
@@ -118,5 +120,14 @@ final class RouteWriter
                 throw new GatewayRefused('gateway_not_found', 'a route names a gateway that does not exist in this tenant', ['gateway_id' => $id]);
             }
         }
+    }
+
+    /** C-07: the trie's documented invalidation event — the version rides the payload. */
+    private function publishRoutesChanged(string $routesVersion): void
+    {
+        $this->events->publish('sms.routes.changed', [
+            'tenant_id' => app(\App\Support\Tenancy\TenantContext::class)->tenantId(),
+            'routes_version' => $routesVersion,
+        ]);
     }
 }

@@ -11,6 +11,7 @@ use App\Domain\Sms\Routing\RoutingTable;
 use App\Models\SmsGateway;
 use App\Support\Audit\AuditActor;
 use App\Support\Audit\AuditLogger;
+use App\Support\Events\EventPublisher;
 use App\Support\Tenancy\TenantContext;
 use DateTimeImmutable;
 use Illuminate\Contracts\Redis\Factory as RedisFactory;
@@ -47,6 +48,7 @@ final class CircuitBreaker
         private readonly DriverRegistry $drivers,
         private readonly GatewayCredentials $credentials,
         private readonly RoutingTable $table,
+        private readonly EventPublisher $events,
     ) {}
 
     /** A gateway-level failure: count it; trip on the threshold. Returns true when the circuit opened now. */
@@ -68,7 +70,10 @@ final class CircuitBreaker
             return true;
         }
         if ($gateway->circuit_state === 'closed' && $count >= 2 && $gateway->health === 'healthy') {
-            DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['health' => 'degraded', 'updated_at' => DB::raw('clock_timestamp()')]);
+            DB::transaction(function () use ($gateway): void {
+                DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['health' => 'degraded', 'updated_at' => DB::raw('clock_timestamp()')]);
+                $this->publishHealthChanged($gateway, 'healthy', 'degraded', $gateway->circuit_state);
+            });
         }
 
         return false;
@@ -81,7 +86,10 @@ final class CircuitBreaker
         if ($gateway->circuit_state === 'half_open') {
             $this->transition($gateway, 'closed', 'healthy', 'probe_succeeded');
         } elseif ($gateway->health === 'degraded' && $gateway->circuit_state === 'closed') {
-            DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['health' => 'healthy', 'updated_at' => DB::raw('clock_timestamp()')]);
+            DB::transaction(function () use ($gateway): void {
+                DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['health' => 'healthy', 'updated_at' => DB::raw('clock_timestamp()')]);
+                $this->publishHealthChanged($gateway, 'degraded', 'healthy', $gateway->circuit_state);
+            });
         }
     }
 
@@ -129,6 +137,9 @@ final class CircuitBreaker
         DB::transaction(function () use ($gateway, $actorId, $reason): void {
             DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['circuit_state' => 'closed', 'health' => 'healthy', 'updated_at' => DB::raw('clock_timestamp()')]);
             $this->audit->record('sms.gateway.circuit_reset', 'sms_gateway', $gateway->identifier(), AuditActor::Staff, ['gateway_id' => $gateway->identifier(), 'reason' => $reason], $actorId);
+            if ($gateway->health !== 'healthy') {
+                $this->publishHealthChanged($gateway, $gateway->health, 'healthy', 'closed');
+            }
         });
         $this->table->invalidate();
     }
@@ -145,10 +156,25 @@ final class CircuitBreaker
         DB::transaction(function () use ($gateway, $state, $health, $reason): void {
             DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['circuit_state' => $state, 'health' => $health, 'updated_at' => DB::raw('clock_timestamp()')]);
             $this->audit->record('sms.gateway.circuit_changed', 'sms_gateway', $gateway->identifier(), AuditActor::System, ['gateway_id' => $gateway->identifier(), 'circuit_state' => $state, 'reason' => $reason]);
+            if ($gateway->health !== $health) {
+                $this->publishHealthChanged($gateway, $gateway->health, $health, $state);
+            }
         });
         $this->table->invalidate(); // the next resolve on every worker sees the new viability
         // FS-01: the alert names the gateway and the error class (the notification category delivers from step 5).
         Log::warning('sms gateway circuit changed', ['gateway_id' => $gateway->identifier(), 'circuit_state' => $state, 'health' => $health, 'reason' => $reason, 'metric' => 'sms.gateway.circuit_changed']);
+    }
+
+    /** The A-22 shape: TRANSITION-ONLY — the callers guard on an actual health change. */
+    private function publishHealthChanged(SmsGateway $gateway, string $old, string $new, string $circuitState): void
+    {
+        $this->events->publish('sms.gateway.health_changed', [
+            'tenant_id' => $gateway->tenant_id,
+            'gateway_id' => $gateway->identifier(),
+            'old_health' => $old,
+            'new_health' => $new,
+            'circuit_state' => $circuitState,
+        ]);
     }
 
     private function failuresKey(string $gatewayId): string

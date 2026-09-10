@@ -598,6 +598,12 @@ Route::middleware([
     // 404-pattern PAGE with "search instead", never an existence oracle.
     Route::get('t/{ticketId}', [App\Http\Controllers\Inbox\WorkspaceController::class, 'openTicket'])
         ->middleware('permission:tickets.view')->name('inbox.deeplink.ticket');
+    // Doc 14 FR-02 (S14 step 5): the two MANUAL send doors — an event and a
+    // ticket, never a text field (BR-01; the closed SendRequest shape).
+    Route::post('t/{ticketId}/sms/reengage', [App\Http\Controllers\Sms\SmsSendController::class, 'reengage'])
+        ->middleware(['permission:sms.send', 'audit:sms.message.manually_queued'])->name('inbox.sms.reengage');
+    Route::post('t/{ticketId}/sms/notify', [App\Http\Controllers\Sms\SmsSendController::class, 'notify'])
+        ->middleware(['permission:sms.send', 'audit:sms.message.manually_queued'])->name('inbox.sms.notify');
     Route::get('c/{conversationId}', [App\Http\Controllers\Inbox\WorkspaceController::class, 'openConversation'])
         ->middleware('permission:tickets.view')->name('inbox.deeplink.conversation');
     // Read markers (SCHEMA AMENDMENT 1): a per-user workspace-STATE write —

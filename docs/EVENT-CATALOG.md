@@ -12,7 +12,7 @@ will notice; a consumer can see what it is entitled to receive.
 missing key AND one with an extra key — the second is how PII leaks into an event stream
 that is retained for 13 months (SEC-07, NFR-07).
 
-153 event(s).
+170 event(s).
 
 ## `agent.status_changed`
 
@@ -1021,6 +1021,159 @@ Doc 12 FR-10: a stage crossed its warning threshold. due_at is the COMPUTED inst
 - **Payload:** `tenant_id`, `ticket_id`, `instance_id`, `stage`, `due_at`, `late_fired`
 - **Producers:** Doc12/Sla
 - **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/Automation, Doc15/Reporting
+
+## `sms.broadcast.canceled`
+
+Doc 14 FR-17: a broadcast was canceled mid-flight; already-sent rows stand, the rest never send.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `broadcast_id`, `total`, `sent`, `skipped`, `failed`, `cost_accrued`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `sms.broadcast.completed`
+
+Doc 14 FR-17: a broadcast finished; the completion figures are the preview's truth check (AC-06).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `broadcast_id`, `total`, `sent`, `skipped`, `failed`, `cost_accrued`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `sms.broadcast.progress`
+
+Doc 14 FR-17: broadcast progress — once per CHUNK, never per recipient.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `broadcast_id`, `total`, `sent`, `skipped`, `failed`, `cost_accrued`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `sms.broadcast.started`
+
+Doc 14 FR-17: a broadcast launched (step 10). `actor_id` nullable.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `broadcast_id`, `total`, `sent`, `skipped`, `failed`, `cost_accrued`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc16/Notifications, Doc17/Audit
+
+## `sms.cost.threshold`
+
+Doc 14 FR-19: monthly SMS spend crossed the tenant threshold — once per tenant-month on the FIRST crossing.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `month`, `spend`, `threshold`, `currency`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc16/Notifications, Doc15/Reporting, Doc17/Audit
+
+## `sms.delivered`
+
+Doc 14 FR-13: a real DLR proved delivery — the only source of the double check (N-06 of chips: no inferred delivered).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.expired`
+
+Doc 14 FR-12/EC-03: no DLR arrived within `sms.expired_after_hours` — the honest terminal ("sent · unconfirmed").
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.failed`
+
+Doc 14 FR-11: the send failed terminally. `reason` carries the fail reason enum.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.gateway.health_changed`
+
+Doc 14 FR-09: a gateway health TRANSITION (the A-22 shape: never re-emitted for an unchanged health). Feeds notify.sms.gateway_health.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `gateway_id`, `old_health`, `new_health`, `circuit_state`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc16/Notifications, Doc15/Reporting, Doc17/Audit
+
+## `sms.held`
+
+Doc 14 FR-12/FR-16: an SMS row entered `held` (hold-all-sends, or quiet hours from step 9). `reason` carries the hold reason; `release_at` the computed release instant (null for hold-all-sends).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`, `release_at`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.optout.added`
+
+Doc 14 FR-14: an opt-out was recorded (source: stop_word|staff|import). NO phone in the payload; `actor_id` nullable.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `optout_id`, `source`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `sms.optout.removed`
+
+Doc 14 FR-14: an opt-out was restored (opt-in), reason required at the door; high-visibility audit.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `optout_id`, `source`, `actor_id`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc15/Reporting, Doc17/Audit
+
+## `sms.queued`
+
+Doc 14 FR-12: an SMS row entered `queued` (the guard said proceed). `reason` null.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.routes.changed`
+
+Doc 14 / C-07: the routing table changed — the in-memory prefix trie's documented invalidation event (SCHEMA AMENDMENT 8 item 4). NOT an FR-20 event; feeds no report.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `routes_version`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc14/Sms, Doc17/Audit
+
+## `sms.sent`
+
+Doc 14 FR-12: the gateway ACCEPTED the message (never a delivery claim — R-D14-1.5). `reason` null.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.skipped`
+
+Doc 14 FR-03: a guard skipped the send. `reason` carries the skip reason enum (opted_out, blocked, rg_flagged, …).
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
+
+## `sms.undelivered`
+
+Doc 14 FR-13: the gateway reported non-delivery.
+
+- **Schema version:** 1
+- **Payload:** `tenant_id`, `sms_message_id`, `event`, `ticket_id`, `customer_id`, `gateway_id`, `lane`, `template_version_id`, `reason`
+- **Producers:** Doc14/Sms
+- **Consumers:** Doc07/Inbox, Doc15/Reporting, Doc17/Audit
 
 ## `telegram.bot_blocked`
 
