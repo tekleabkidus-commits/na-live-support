@@ -165,6 +165,19 @@ final class CircuitBreaker
         Log::warning('sms gateway circuit changed', ['gateway_id' => $gateway->identifier(), 'circuit_state' => $state, 'health' => $health, 'reason' => $reason, 'metric' => 'sms.gateway.circuit_changed']);
     }
 
+    /** The missing-DLR-rate signal (FR-09's quiet half): a healthy gateway degrades TRANSITION-ONLY; an already-degraded or open one is left as it stands. */
+    public function degradeForMissingDlr(SmsGateway $gateway, float $rate): void
+    {
+        if ($gateway->health !== 'healthy' || $gateway->circuit_state !== 'closed') {
+            return;
+        }
+        DB::transaction(function () use ($gateway, $rate): void {
+            DB::table('sms_gateways')->where('id', $gateway->getKey())->update(['health' => 'degraded', 'updated_at' => DB::raw('clock_timestamp()')]);
+            $this->audit->record('sms.gateway.circuit_changed', 'sms_gateway', $gateway->identifier(), AuditActor::System, ['gateway_id' => $gateway->identifier(), 'circuit_state' => $gateway->circuit_state, 'reason' => sprintf('missing_dlr_rate:%.3f', $rate)]);
+            $this->publishHealthChanged($gateway, 'healthy', 'degraded', $gateway->circuit_state);
+        });
+    }
+
     /** The A-22 shape: TRANSITION-ONLY — the callers guard on an actual health change. */
     private function publishHealthChanged(SmsGateway $gateway, string $old, string $new, string $circuitState): void
     {

@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use App\Domain\Auth\Webhooks\ReplayGuard;
 use App\Domain\Auth\Webhooks\WebhookRejected;
+use App\Domain\Auth\Webhooks\WebhookReplayIgnored;
 use App\Models\WebhookCredential;
 use Carbon\CarbonImmutable;
 use Closure;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * `webhook.auth` — the second credential on the inbound webhook surfaces
  * (Doc 02 FR-23, FR-24, AC-07; step-11 rulings).
  *
- * Two MECHANISMS, named for what they verify, never for a channel (N-20 —
+ * Three MECHANISMS, named for what they verify, never for a channel (N-20 —
  * the route file binds a mechanism and a header name to a surface; nothing
  * here knows Telegram from an SMS gateway):
  *
@@ -29,6 +30,21 @@ use Symfony\Component\HttpFoundation\Response;
  *                   X-Webhook-Timestamp within ±300 s, X-Webhook-Nonce
  *                   single-use (ReplayGuard). Doc 14's drivers adapt each
  *                   gateway's native scheme onto this contract.
+ *   url_secret      P-DLR-AUTH (Doc 14 R-D14-5, countersigned S14 step 2a).
+ *                   For a gateway whose callback carries NO signature and NO
+ *                   header (the vendor's API allows only a URL — GeezSMS,
+ *                   vendor notes §9): a per-gateway callback secret rides the
+ *                   route segment `{dlr_secret}` and is compared as SHA-256
+ *                   digests via hash_equals against `header_secret_hash` —
+ *                   the same column and comparison secret_header uses. The
+ *                   defense on this surface is URL SECRECY OVER TLS plus
+ *                   FR-13's idempotency; the window is FR-24 conformance: a
+ *                   byte-identical body within ReplayGuard's window is a
+ *                   detected replay that answers 202 with the metric
+ *                   `webhook.replay_ignored` and processes NOTHING — never a
+ *                   403 a gateway could treat as failure. The replay-cache
+ *                   OUTAGE stays fail-CLOSED (A-1, unchanged). FAIL-CLOSED on
+ *                   configuration: a credential row without the hash → 403.
  *
  * THE SIGNATURE COVERS TIMESTAMP AND NONCE, not the body alone, and that is
  * load-bearing: an HMAC over only the body would let an attacker replay a
@@ -74,8 +90,9 @@ final class VerifyWebhookSecret
         match ($mechanism) {
             'secret_header' => $this->verifySecretHeader($request, $credential, $headerName),
             'body_hmac' => $this->verifyBodyHmac($request, $credential),
+            'url_secret' => $this->verifyUrlSecret($request, $credential),
             default => throw new \LogicException(sprintf(
-                'Unknown webhook auth mechanism "%s". The set is secret_header|body_hmac; adding one is a Doc 02 change, not a route parameter.',
+                'Unknown webhook auth mechanism "%s". The set is secret_header|body_hmac|url_secret; adding one is a Doc 02 change, not a route parameter.',
                 $mechanism,
             )),
         };
@@ -167,6 +184,50 @@ final class VerifyWebhookSecret
 
         if (! $firstUse) {
             throw WebhookRejected::secretRejected('nonce_replayed');
+        }
+    }
+
+    /**
+     * P-DLR-AUTH: the route segment IS the credential. Check order mirrors
+     * secret_header (configured row → segment presence → digest compare); the
+     * replay control runs ONLY after the secret verifies, so an attacker
+     * without the secret cannot burn a gateway's replay entries.
+     */
+    private function verifyUrlSecret(Request $request, ?WebhookCredential $credential): void
+    {
+        $storedHash = $credential?->header_secret_hash;
+
+        if (! is_string($storedHash) || $storedHash === '') {
+            throw WebhookRejected::secretRejected('key_unconfigured');
+        }
+
+        $presented = $request->route('dlr_secret');
+
+        if (! is_string($presented) || $presented === '') {
+            throw WebhookRejected::secretRejected('secret_absent');
+        }
+
+        if (! hash_equals($storedHash, hash('sha256', $presented))) {
+            throw WebhookRejected::secretRejected('secret_mismatch');
+        }
+
+        $tenantId = $credential->getAttribute('tenant_id');
+
+        if (! is_string($tenantId)) {
+            throw new \LogicException('Webhook credential row carries no tenant id; RLS should make this impossible.');
+        }
+
+        try {
+            // The body's digest is the replay key: a byte-identical callback
+            // within the window is a replay; a NEW status for the same message
+            // is a new body and passes to FR-13's precedence-safe handler.
+            $firstUse = $this->replayGuard->firstUse($tenantId, 'body:'.hash('sha256', $request->getContent()));
+        } catch (\RedisException $e) {
+            throw WebhookRejected::replayCacheUnavailable();
+        }
+
+        if (! $firstUse) {
+            throw WebhookReplayIgnored::withinWindow();
         }
     }
 

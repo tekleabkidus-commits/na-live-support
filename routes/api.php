@@ -584,12 +584,33 @@ Route::group([], function (): void {
             });
     });
 
+    // Doc 14 FR-13 / SEC-01 (P-DLR-AUTH, S14 step 7): the Doc 01 DLR probe is
+    // REPLACED by the real handler on TWO auth surfaces, both behind the same
+    // Doc 02 stack (binder → throttle → secret → state). The {gateway_key}
+    // segment resolves the tenant (the sms.dlr-key shim); the ACK is 202 and
+    // every mutation happens in the queued DLR pipeline (sms-dlr lane).
+    //   url_secret — an UNSIGNED callback (GeezSMS): the per-gateway secret
+    //                rides {dlr_secret}; replay = 202 ignored; no secret → 403.
+    //   body_hmac  — a SIGNING gateway (the REFERENCE fixture, the sidecar):
+    //                FR-24's headers; the path key optional so Doc 02's
+    //                header-borne proof suites run unmodified.
     Route::middleware([
+        'sms.dlr-key',
+        'tenant:sms_gateway_key',
+        'webhook.throttle',
+        'webhook.auth:url_secret',
+        'tenant.state:inbound',
+    ])
+        ->post('webhooks/sms/dlr/{gateway_key}/{dlr_secret}', [App\Http\Controllers\Sms\SmsDlrController::class, 'ingest'])
+        ->name('foundation.webhook.sms_dlr');
+
+    Route::middleware([
+        'sms.dlr-key',
         'tenant:sms_gateway_key',
         'webhook.throttle',
         'webhook.auth:body_hmac',
         'tenant.state:inbound',
     ])
-        ->post('webhooks/sms/dlr', [IngressProbeController::class, 'ingest'])
-        ->name('foundation.webhook.sms_dlr');
+        ->post('webhooks/sms/dlr/{gateway_key?}', [App\Http\Controllers\Sms\SmsDlrController::class, 'ingest'])
+        ->name('foundation.webhook.sms_dlr_signed');
 });

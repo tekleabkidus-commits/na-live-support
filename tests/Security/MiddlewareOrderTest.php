@@ -218,7 +218,8 @@ it('orders the EXECUTED webhook stacks binder → throttle → secret → state,
     // would let the sorter hoist auth ahead of the (unlisted) binder — the
     // step-9 bug, avoided the step-10 way (plain classes the sorter cannot
     // see: ThrottleWebhookKey, VerifyWebhookSecret).
-    foreach (['foundation.webhook.telegram', 'foundation.webhook.sms_dlr'] as $routeName) {
+    // P-DLR-AUTH (Doc 14, S14 step 7): the DLR ingress is TWO routes on the same stack — url_secret and body_hmac.
+    foreach (['foundation.webhook.telegram', 'foundation.webhook.sms_dlr', 'foundation.webhook.sms_dlr_signed'] as $routeName) {
         $route = Route::getRoutes()->getByName($routeName);
         expect($route)->not->toBeNull("route {$routeName} is not registered");
 

@@ -50,7 +50,12 @@ final class VaultInterim
             return null;
         }
 
-        return $this->encrypter->decryptString($row->ciphertext);
+        $plaintext = $this->encrypter->decryptString($row->ciphertext);
+        // P-SCRUB-LIVE: from this instant the value is a known secret for the
+        // rest of the request/job — ScrubSecrets redacts it wherever it lands.
+        LiveSecretValues::register($plaintext);
+
+        return $plaintext;
     }
 
     /** Close a predecessor's overlap window: the row stays, retired (never deleted). */

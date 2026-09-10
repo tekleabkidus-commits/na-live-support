@@ -1,0 +1,33 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DlrAuthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit control 1 — FAIL-CLOSED: a gateway whose credential row carries[39m[90m… [39m [90m8.28s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 2 — a wrong secret is refused with the same byte-identic[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 3 — a byte-identical replay within the window answers 20[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 4 (POSITIVE) — the right secret once: 202, the tenant re[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\LiveSecretValuesScrubTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit plant → detect → remove: a revealed vault secret is scrubbed und[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is bounded (≤ 32 values), refuses short values (< 12 chars are n[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is cleared at exactly the TenantContext clear points — a value r[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit condition (countersign, 2026-09-08): LiveSecretValues::all() has[39m[90m…[39m [90m0.04s[39m  
+  [dev-hardware-indicative] NFR-03 DLR wire-to-state (≤ 1 s; n=1 in-shape) p50  32.343 ms   p99  32.343 ms   max  32.343 ms   budget(p99) 1000.0 ms   WITHIN
+  [dev-hardware-indicative] DLR burst N=30 same-row (dev-scale; §12's 200/s is [D19]) p50   6.821 ms   p99   6.821 ms   max 204.644 ms   budget(p99) 1000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DlrIngestionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the WIRE pass: the vendor-shaped callback hits the real url_secr[39m[90m…[39m [90m0.75s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08 driven: delivered applies once (event + stamp + audit), a d[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: an unknown provider id is logged, dropped, counted — and[39m[90m… [39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a dev-scale burst (N=30, stated) applies cleanly — every receipt[39m[90m…[39m [90m0.78s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\ExpiredSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit sent + 48 h → expired with the honest wording; a premature membe[39m[90m…[39m [90m0.64s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit queued + 24 h → failed:no_route_available (EC-12's ladder half);[39m[90m…[39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\MissingDlrRateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit over-threshold silence degrades the gateway once (transition-onl[39m[90m…[39m [90m2.17s[39m  
+
+  [90mTests:[39m    [32;1m15 passed[39;22m[90m (100 assertions)[39m
+  [90mDuration:[39m [39m14.50s[39m
+
+PEST EXIT 0

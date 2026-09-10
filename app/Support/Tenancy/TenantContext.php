@@ -103,6 +103,8 @@ final class TenantContext
 
     public function clear(): void
     {
+        // P-SCRUB-LIVE (Doc 14, countersigned): the request/job's revealed secrets die with its tenant binding.
+        \App\Support\Secrets\LiveSecretValues::clear();
         $this->tenantId = null;
         $this->source = null;
         $this->correlationId = null;

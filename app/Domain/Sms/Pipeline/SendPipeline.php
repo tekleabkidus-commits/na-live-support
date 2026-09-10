@@ -252,6 +252,12 @@ final class SendPipeline
             $this->lifecycle->publish('sms.sent', $row);
         });
         $this->breaker->recordSuccess($gateway->refresh());
+        // A-65: the 48 h expiry candidate at the COLUMN's own stamp; the queued-TTL member is spent
+        $row->refresh();
+        if ($row->sent_at !== null) {
+            $this->timers->schedule('sms_expiry', DueSet::member($row->tenant_id, $row->identifier()), (int) $row->sent_at->format('Uu') + $this->expiredAfterHours() * 3600 * 1_000_000);
+        }
+        $this->timers->cancel('sms_queued_ttl', DueSet::member($row->tenant_id, $row->identifier()));
         Log::info('sms sent', ['sms_message_id' => $row->identifier(), 'gateway_id' => $gateway->identifier(), 'segments' => $row->segments, 'to_masked' => PhoneMask::forLog($row->phone)]);
     }
 
@@ -291,6 +297,13 @@ final class SendPipeline
             $hop['sender_id'],
             $this->credentials->callbackUrl($gateway, $signing),
         );
+    }
+
+    private function expiredAfterHours(): int
+    {
+        $hours = app(\App\Support\Settings\SettingsRepository::class)->get('sms.expired_after_hours');
+
+        return is_int($hours) ? $hours : 48;
     }
 
     private function transition(SmsMessage $row, SmsDeliveryState $to): void

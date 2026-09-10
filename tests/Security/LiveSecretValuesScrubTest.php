@@ -98,3 +98,24 @@ it('is cleared at exactly the TenantContext clear points — a value revealed in
     app(TenantContext::class)->clear();
     expect(LiveSecretValues::all())->toBe([]);
 });
+
+it('condition (countersign, 2026-09-08): LiveSecretValues::all() has exactly ONE app caller — ScrubSecrets; the scanner is proven on a positive control', function (): void {
+    $scan = static function (string $haystack): bool {
+        return preg_match('/LiveSecretValues::all\s*\(/', $haystack) === 1;
+    };
+
+    $callers = [];
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path('app'), FilesystemIterator::SKIP_DOTS));
+    foreach ($iterator as $file) {
+        if (! $file instanceof SplFileInfo || $file->getExtension() !== 'php' || str_ends_with($file->getFilename(), 'LiveSecretValues.php')) {
+            continue;
+        }
+        if ($scan((string) file_get_contents($file->getPathname()))) {
+            $callers[] = str_replace(base_path().'/', '', $file->getPathname());
+        }
+    }
+    expect($callers)->toBe(['app/Support/Logging/ScrubSecrets.php']);
+
+    // the POSITIVE control: the same scanner DOES see a call when one exists
+    expect($scan('<?php $x = \App\Support\Secrets\LiveSecretValues::all();'))->toBeTrue();
+});

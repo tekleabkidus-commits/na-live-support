@@ -98,6 +98,9 @@ final class EnqueueSms
     {
         $this->lifecycle->publish('sms.queued', $row, causationId: $causationId);
         SendSmsJob::dispatch($row->identifier(), $row->lane);
+        // A-65: the 24 h queued-TTL candidate (EC-12's ladder half; the step-7 sweep re-verifies)
+        $ttlHours = app(\App\Support\Settings\SettingsRepository::class)->get('sms.queued_ttl_hours');
+        $this->timers->schedule('sms_queued_ttl', DueSet::member($row->tenant_id, $row->identifier()), (int) ((microtime(true) + (is_int($ttlHours) ? $ttlHours : 24) * 3600) * 1_000_000));
 
         return EnqueueResult::queued($row->identifier());
     }

@@ -31,6 +31,8 @@ return Application::configure(basePath: dirname(__DIR__))
             // Doc 05: copies the webhook URL's {bot_key} segment into the
             // header ResolveTenant reads (Telegram cannot send X-Tenant-Key).
             'telegram.webhook-key' => App\Http\Middleware\TelegramWebhookKeyFromPath::class,
+            // Doc 14 (P-DLR-AUTH): the SMS DLR callback's {gateway_key} segment → the same header, mirrored.
+            'sms.dlr-key' => App\Http\Middleware\SmsDlrKeyFromPath::class,
             // Declares which audit action a mutating route emits, and verifies at runtime
             // that it actually did. The `audit-coverage` gate reads these declarations.
             'audit' => App\Http\Middleware\DeclareAuditAction::class,

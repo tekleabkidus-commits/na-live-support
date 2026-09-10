@@ -106,3 +106,8 @@ Schedule::command('sms:circuit-probe')->everyMinute()->withoutOverlapping();
 // Doc 14 FR-16 half (S14 step 5; A-65): the held-release sweep — DueSet
 // candidates re-verified against the row + the live setting; held, never dropped.
 Schedule::command('sms:release-held')->everyMinute()->withoutOverlapping();
+// Doc 14 step 7 (A-65's other two kinds): the honest terminals — expiry and the queued TTL.
+Schedule::command('sms:sweep-expired')->everyMinute()->withoutOverlapping();
+Schedule::command('sms:sweep-queued-ttl')->everyMinute()->withoutOverlapping();
+// FR-09's quiet half: the hourly missing-DLR-rate health signal.
+Schedule::command('sms:missing-dlr-rate')->hourly()->withoutOverlapping();

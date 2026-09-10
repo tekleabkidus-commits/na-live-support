@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Logging;
 
+use App\Support\Secrets\LiveSecretValues;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 
@@ -181,6 +182,16 @@ final class ScrubSecrets implements ProcessorInterface
     /** NFR-06 + SEC-03: redact secret/PII value shapes wherever they appear. */
     private function scrubValue(string $value): string
     {
+        // P-SCRUB-LIVE (Doc 14 STOP-G, countersigned): every secret VALUE revealed in
+        // this request/job (VaultInterim::reveal) is redacted as an exact substring
+        // BEFORE the shape patterns — the shape of a vendor token is unknowable, the
+        // value is not. Bounded, ≥ 12 chars, cleared at the TenantContext clear points.
+        foreach (LiveSecretValues::all() as $live) {
+            if (str_contains($value, $live)) {
+                $value = str_replace($live, self::REDACTED, $value);
+            }
+        }
+
         $allowlist = $this->valueAllowlist();
 
         foreach (self::VALUE_PATTERNS as $pattern) {
