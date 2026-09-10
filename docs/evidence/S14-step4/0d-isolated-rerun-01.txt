@@ -1,0 +1,29 @@
+  [dev-hardware-indicative] NFR-01 cached map + checks   p50   0.210 ms   p99   8.773 ms   max  18.311 ms   budget(p99) 0.3 ms   OVER
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+   FAIL  Tests\Performance\RbacBudgetsTest
+  ⨯ it meets NFR-01 indicatively: cached check ≤0.3 ms p99, cold rebuil… 8.40s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Performance\RbacBudgetsTest > it meets NFR-01 indicatively:…   
+  NFR-01 cached map + checks: p99 8.773 ms exceeds the asserted 5x regression ceiling of 1.500 ms (spec budget 0.3 ms; p50 0.210 ms, max 18.311 ms). This is a 5x ceiling, so a failure is either a real order-of-magnitude regression or a machine under heavy load — compare p50 against the spec budget to tell which.
+Failed asserting that 8.772913 is equal to 1.5 or is less than 1.5.
+
+  at tests/Pest.php:940
+    936▕ {
+    937▕     $ceiling = assertedBudget($specBudgetMs);
+    938▕     $strict = getenv('PERF_BUDGETS_ENFORCE') === '1';
+    939▕ 
+  ➜ 940▕     expect($stats['p99'])->toBeLessThanOrEqual($ceiling, sprintf(
+    941▕         '%s: p99 %.3f ms exceeds the asserted %s of %.3f ms (spec budget %.1f ms; p50 %.3f ms, max %.3f ms). '
+    942▕         .'%s',
+    943▕         $name,
+    944▕         $stats['p99'],
+
+  1   tests/Pest.php:940
+  2   tests/Performance/RbacBudgetsTest.php:45
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 8.47s
+
+EXIT 1
