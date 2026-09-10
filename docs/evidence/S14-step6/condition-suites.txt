@@ -1,0 +1,28 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Tickets\ResolveRequirementsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a bare resolve with no public reply and no note is refused[39m[90m… [39m [90m10.92s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an explicit resolution note satisfies the substance requirem[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: a prior public staff reply satisfies the requirement with no[39m[90m…[39m [90m0.17s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: an AI public reply is substance too — the definition is FR-2[39m[90m…[39m [90m0.18s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-06: with tickets.resolve.requires_reply off, a bare resolve is a[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mFR-07/T-03: entering resolved arms the auto-close timer at EXACTLY[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mticket.resolved / ticket.closed / ticket.reopened ride EVERY door o[39m[90m…[39m [90m0.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Automation\ExternalArmsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit every FR-03 action type is BOUND — the step-4 unbuilt_action pos[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit webhook_out: names a destination BY ID from the allowlist, queue[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-13 drill: a failing target retries with backoff up to EXACTLY[39m[90m…[39m [90m0.26s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: resolves users + role members from row truth, requires a[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit send_sms_template: a TEMPLATE REFERENCE only — the request event[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit suppress: sets the marketing-suppression flag on the ticket's cu[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit run_ai_task: catalog-bound to the three names — chatbot_turn is[39m[90m… [39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Widget\WidgetOfflineFormTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-15: the offline form lands a REAL offline-tagged ticket (sour[39m[90m…[39m [90m0.46s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-15 refusals are inline and neutral: a missing required answer[39m[90m…[39m [90m0.21s[39m  
+
+  [90mTests:[39m    [32;1m16 passed[39;22m[90m (145 assertions)[39m
+  [90mDuration:[39m [39m14.69s[39m
+
+EXIT 0

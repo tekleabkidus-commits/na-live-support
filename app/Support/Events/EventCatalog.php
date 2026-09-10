@@ -551,7 +551,7 @@ final class EventCatalog
             // it; the subject does not, being staff- or AI-authored free text.
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'customer_id', 'source', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/CreateTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups', 'Doc08/SearchIndexer', 'Doc09/GenerateTicketSubject', 'Doc13/PreChat'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc08/Rollups', 'Doc08/SearchIndexer', 'Doc09/GenerateTicketSubject', 'Doc13/PreChat', 'Doc14/Sms'],
             'description' => 'A ticket was created through one of FR-12/13/14\'s doors or FR-11\'s handoff; `source` says which. Routing (Doc 11) and the SLA clock (Doc 12) start from here.',
         ],
         'ticket.subject_changed' => [
@@ -568,7 +568,7 @@ final class EventCatalog
             // FR-15 names this payload exactly: "{old, new, by}".
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'old_assignee_id', 'new_assignee_id', 'by'],
             'producers' => ['Doc06/AssignTicket'],
-            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit', 'Doc08/SearchIndexer', 'Doc13/QueuePositionPush'],
+            'consumers' => ['Doc07/Inbox', 'Doc11/Routing', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc16/Notifications', 'Doc17/Audit', 'Doc08/SearchIndexer', 'Doc13/QueuePositionPush', 'Doc14/Sms'],
             'description' => 'FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS the unassign that returns it to Doc 11\'s queue.',
         ],
         'ticket.priority_changed' => [
@@ -633,7 +633,7 @@ final class EventCatalog
             'schema_version' => 1,
             'payload' => ['tenant_id', 'ticket_id', 'conversation_id', 'actor_type', 'actor_id'],
             'producers' => ['Doc06/TicketTransitionService'],
-            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit'],
+            'consumers' => ['Doc07/Inbox', 'Doc12/SlaAutomation', 'Doc15/Reporting', 'Doc17/Audit', 'Doc14/Sms'],
             'description' => 'FR-07: a ticket entered `closed` — the auto-close sweep in the ordinary case (actor_type=system). The FR-08 reopen window runs from the closed_at this transition stamped.',
         ],
         'ticket.reopened' => [

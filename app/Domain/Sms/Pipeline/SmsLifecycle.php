@@ -17,7 +17,7 @@ final class SmsLifecycle
 {
     public function __construct(private readonly EventPublisher $events) {}
 
-    public function publish(string $name, SmsMessage $row, ?string $reason = null, ?string $releaseAt = null): string
+    public function publish(string $name, SmsMessage $row, ?string $reason = null, ?string $releaseAt = null, ?string $causationId = null): string
     {
         $payload = [
             'tenant_id' => $row->tenant_id,
@@ -34,6 +34,6 @@ final class SmsLifecycle
             $payload['release_at'] = $releaseAt;
         }
 
-        return $this->events->publish($name, $payload);
+        return $this->events->publish($name, $payload, $causationId);
     }
 }

@@ -46,7 +46,8 @@ final class EnqueueSms
         private readonly Segmenter $segmenter,
     ) {}
 
-    public function enqueue(SendRequest $request): EnqueueResult
+    /** @param  ?string  $causationId  the consumed event that caused this send (C-09's idempotency trace for consumers) */
+    public function enqueue(SendRequest $request, ?string $causationId = null): EnqueueResult
     {
         if (DB::transactionLevel() === 0) {
             throw new \LogicException('EnqueueSms runs inside the caller\'s transaction (Doc 01 T-03) — wrap the operation in DB::transaction().');
@@ -87,25 +88,25 @@ final class EnqueueSms
         $row->save();
 
         return match ($decision->outcome) {
-            GuardOutcome::Proceed => $this->queued($row, $request),
-            GuardOutcome::Hold => $this->held($row, $decision->reason === null ? 'hold_all_sends' : $decision->reason->value),
-            GuardOutcome::Skip => $this->skipped($row, $decision->reason === null ? 'unknown' : $decision->reason->value),
+            GuardOutcome::Proceed => $this->queued($row, $causationId),
+            GuardOutcome::Hold => $this->held($row, $decision->reason === null ? 'hold_all_sends' : $decision->reason->value, $causationId),
+            GuardOutcome::Skip => $this->skipped($row, $decision->reason === null ? 'unknown' : $decision->reason->value, $causationId),
         };
     }
 
-    private function queued(SmsMessage $row, SendRequest $request): EnqueueResult
+    private function queued(SmsMessage $row, ?string $causationId): EnqueueResult
     {
-        $this->lifecycle->publish('sms.queued', $row);
+        $this->lifecycle->publish('sms.queued', $row, causationId: $causationId);
         SendSmsJob::dispatch($row->identifier(), $row->lane);
 
         return EnqueueResult::queued($row->identifier());
     }
 
-    private function held(SmsMessage $row, string $reason): EnqueueResult
+    private function held(SmsMessage $row, string $reason, ?string $causationId = null): EnqueueResult
     {
         // hold-all-sends has no computable release instant (release_at null);
         // the quiet-hours release instant is step 9's QuietHoursWindow.
-        $this->lifecycle->publish('sms.held', $row, $reason, null);
+        $this->lifecycle->publish('sms.held', $row, $reason, null, $causationId);
         $this->timers->schedule(
             'sms_hold_release',
             DueSet::member($row->tenant_id, $row->identifier()),
@@ -133,9 +134,9 @@ final class EnqueueSms
         $row->segments = $segmentation->segments;
     }
 
-    private function skipped(SmsMessage $row, string $reason): EnqueueResult
+    private function skipped(SmsMessage $row, string $reason, ?string $causationId = null): EnqueueResult
     {
-        $this->lifecycle->publish('sms.skipped', $row, $reason);
+        $this->lifecycle->publish('sms.skipped', $row, $reason, null, $causationId);
 
         return EnqueueResult::skipped($row->identifier(), $reason);
     }

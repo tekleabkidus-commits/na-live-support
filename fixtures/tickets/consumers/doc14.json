@@ -1,10 +1,43 @@
 {
   "doc": "Doc14",
-  "spec": "Doc 06 NFR-06/T-09 \u2014 consumer contract (S22 step 8)",
-  "note": "The keys this document's consumers DEPEND ON, per event. A producer removing or renaming any `reads` key breaks this document; a schema_version bump here must be reconciled deliberately. Curated pre-consumer by Doc 06 (the producing session); the consuming session tightens it when it builds.",
+  "spec": "Doc 06 NFR-06/T-09 — consumer contract (S22 step 8)",
+  "note": "The keys this document's consumers DEPEND ON, per ticket.* event (this harness is Doc 06's — ticket events only; the four non-ticket contracts are pinned in tests/Contract/SmsEventConsumerContractsTest.php). Tightened at S14 step 6 (CONSUMER AMENDMENT 1 landed): every entry is an IMPLEMENTED consumer (A-45); reads are exactly what the code touches — payload customer_id is a SEC-07 cross-check against the re-fetched ticket row, truth wins.",
   "entries": [
     {
       "event": "ticket.resolved",
+      "consumer": "Doc14/Sms",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "actor_type"
+      ]
+    },
+    {
+      "event": "ticket.created",
+      "consumer": "Doc14/Sms",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id",
+        "customer_id",
+        "source"
+      ]
+    },
+    {
+      "event": "ticket.assigned",
+      "consumer": "Doc14/Sms",
+      "schema_version": 1,
+      "reads": [
+        "tenant_id",
+        "ticket_id",
+        "conversation_id"
+      ]
+    },
+    {
+      "event": "ticket.closed",
       "consumer": "Doc14/Sms",
       "schema_version": 1,
       "reads": [

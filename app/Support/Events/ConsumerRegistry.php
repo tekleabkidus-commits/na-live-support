@@ -79,7 +79,7 @@ final class ConsumerRegistry
         //    customer resolves from the ticket ROW (the RollupConsumer
         //    precedent), never the payload.
         // S09 step 11: Doc 06 FR-03's generation half — GenerateTicketSubject through SubjectWriter::generated() (Doc 06's own door).
-        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class, \App\Jobs\Webchat\PreChatConsumer::class],
+        'ticket.created' => [ListProjectorConsumer::class, RollupConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Ai\GenerateTicketSubject::class, \App\Jobs\Routing\TicketCreatedRouter::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class, \App\Jobs\Webchat\PreChatConsumer::class, \App\Jobs\Sms\Consumers\TicketCreatedSms::class],
         // Doc 11 (S11 step 5): the five FR-07 trigger routers (TicketCreated/Transferred/Unassigned,
         // AssigneeDeactivated, TicketReopened) join DELIBERATELY — durable, idempotent on event_id.
         // Doc 11 (S11 step 4): AssignmentStatsConsumer joins the four assignment-shaped ticket
@@ -122,7 +122,7 @@ final class ConsumerRegistry
         //    field definitions at provisioning — the KB seeder shape (fixture doc12.json; the
         //    ReopenConsumerDrillTest + OrganizationSeederTest pins move in THIS commit).
         'tenant.provisioned' => [\App\Jobs\Kb\KnowledgeBaseSeederConsumer::class, \App\Jobs\Fields\CustomerFieldSeederConsumer::class],
-        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Webchat\QueuePositionPush::class],
+        'ticket.assigned' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\TicketUnassignedRouter::class, \App\Jobs\Routing\AvailabilityConsumer::class, \App\Jobs\Webchat\QueuePositionPush::class, \App\Jobs\Sms\Consumers\TicketAssignedSms::class],
         'ticket.assignee_deactivated' => [ListProjectorConsumer::class, \App\Jobs\Customers\CustomerSearchIndexer::class, \App\Jobs\Routing\AssignmentStatsConsumer::class, \App\Jobs\Routing\AssigneeDeactivatedRouter::class],
         'ticket.priority_changed' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sla\SlaLifecycleConsumer::class],
         'ticket.subject_changed' => [ListProjectorConsumer::class],
@@ -141,9 +141,9 @@ final class ConsumerRegistry
         //    contract fixture fixtures/tickets/consumers/doc09.json; the
         //    ReopenConsumerDrillTest pin moves in THIS commit.
         'ticket.reopened' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Routing\TicketReopenedRouter::class, \App\Jobs\Routing\RescueConsumer::class],   // S11 step 9: EC-08 courtesy hold
-        'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Csat\CsatArmConsumer::class],
+        'ticket.resolved' => [ListProjectorConsumer::class, \App\Jobs\Ai\AiOutcomeEnrichmentConsumer::class, \App\Jobs\Csat\CsatArmConsumer::class, \App\Jobs\Sms\Consumers\TicketResolvedSms::class],
         'ai.resolved' => [\App\Jobs\Csat\CsatArmConsumer::class],
-        'ticket.closed' => [ListProjectorConsumer::class],
+        'ticket.closed' => [ListProjectorConsumer::class, \App\Jobs\Sms\Consumers\TicketClosedSms::class],
         'ticket.follower_added' => [ListProjectorConsumer::class],
         'ticket.follower_removed' => [ListProjectorConsumer::class],
         'telegram.window.closing' => [ListProjectorConsumer::class, \App\Jobs\Automation\AutomationEventConsumer::class],
@@ -154,7 +154,15 @@ final class ConsumerRegistry
         //    events). Idempotent on event_id by the executions (rule, event) unique;
         //    read-slices conform to fixtures/tickets/consumers/doc12.json (tightened
         //    this commit); drill: AutomationConsumerDrillTest, same commit.
-        'customer.rg_flag.set' => [\App\Jobs\Automation\AutomationEventConsumer::class],
+        'customer.rg_flag.set' => [\App\Jobs\Automation\AutomationEventConsumer::class, \App\Jobs\Sms\Consumers\RgFlagSmsSuppression::class],
+
+        // ── Doc 14 (S14 step 6; CONSUMER AMENDMENT 1 as filed — ADR 0011, A-45):
+        //    the declared SMS consumers, each through the ONE EnqueueSms door,
+        //    idempotent on event_id by causation; doc14.json tightened in THIS
+        //    commit; the ReopenConsumerDrillTest pin moves in THIS commit too.
+        'customer.rg_flag.cleared' => [\App\Jobs\Sms\Consumers\RgFlagSmsSuppression::class],
+        'customer.suppression.set' => [\App\Jobs\Sms\Consumers\SuppressionSetSms::class],
+        'automation.sms.requested' => [\App\Jobs\Sms\Consumers\AutomationSmsRequested::class],
         // ── Doc 12 FR-09/FR-10 (S12 step 6): SlaLifecycleConsumer joins the seven
         //    state events DELIBERATELY (arming, EC-02 re-arm, clears, pauses,
         //    EC-03 retarget, the window-unreachable pause); sla.warned/breached

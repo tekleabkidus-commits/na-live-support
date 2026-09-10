@@ -1317,7 +1317,7 @@ FR-15: a ticket changed hands, including to nobody — a null new_assignee_id IS
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `old_assignee_id`, `new_assignee_id`, `by`
 - **Producers:** Doc06/AssignTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit, Doc08/SearchIndexer, Doc13/QueuePositionPush
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc16/Notifications, Doc17/Audit, Doc08/SearchIndexer, Doc13/QueuePositionPush, Doc14/Sms
 
 ## `ticket.assignee_deactivated`
 
@@ -1344,7 +1344,7 @@ FR-07: a ticket entered `closed` — the auto-close sweep in the ordinary case (
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `actor_type`, `actor_id`
 - **Producers:** Doc06/TicketTransitionService
-- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit
+- **Consumers:** Doc07/Inbox, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc14/Sms
 
 ## `ticket.created`
 
@@ -1353,7 +1353,7 @@ A ticket was created through one of FR-12/13/14's doors or FR-11's handoff; `sou
 - **Schema version:** 1
 - **Payload:** `tenant_id`, `ticket_id`, `conversation_id`, `customer_id`, `source`, `actor_type`, `actor_id`
 - **Producers:** Doc06/CreateTicket
-- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups, Doc08/SearchIndexer, Doc09/GenerateTicketSubject, Doc13/PreChat
+- **Consumers:** Doc07/Inbox, Doc11/Routing, Doc12/SlaAutomation, Doc15/Reporting, Doc17/Audit, Doc08/Rollups, Doc08/SearchIndexer, Doc09/GenerateTicketSubject, Doc13/PreChat, Doc14/Sms
 
 ## `ticket.deescalated`
 
