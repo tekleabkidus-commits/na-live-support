@@ -33,6 +33,20 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-14 (Doc 14) — B✓ FIX-FIRST: CI STAGE 2 RED DIAGNOSED FROM THE RUN'S OWN LOG AND FIXED BY PLACEMENT (rule 15; commit = this section's SHA; STOP for the owner's push + ONE look on this SHA)
+
+**The verdict recorded (runs read once by the owner, numeric ids beside the numbers):** #330 = 34576330554 (aaf19f7) · #331 = 34576332910 (d826679) · #332 = 34576336610 (6189731) · #333 = 34576343618 (6edceba) — all four: Stage 1 green, **Stage 2 (unit) RED exit 2**, Stages 3/3b/4 skipped. Absent at #329 (4697715): the red entered with Batch B.
+
+**Cause, established at the source (`ci-stage2-RED-01.txt` — the #333 Stage-2 job log excerpt AND the local reproduction in Stage 2's exact shape, `./vendor/bin/pest --testsuite=Unit` on the host with no stack, captured BEFORE any change):** `tests/Unit/Support/DueSetTest.php` — 4 failed / 55 passed, exit 2, every failure `SQLSTATE[08006] could not translate host name "postgres"`. The advisor's reading verified with one precision: the suite's `uses(TestCase)` boots the app and the FIRST wall is `TestCase::migrateOnce()` reaching for POSTGRES (Redis would be the second); Stage 2 runs with php + composer and NO services BY DESIGN (the D-4 comment in ci.yml), and tests/Unit is app-less by design — the step-5 placement of a stack-backed suite there was the defect. The local battery never saw it because the container resolves every host.
+
+**The fix — PLACEMENT, exactly as the ruling frames the honest form (never a skip, never a Redis stub in a unit test, never an allowlist):** `git mv tests/Unit/Support/DueSetTest.php → tests/Feature/Support/DueSetTest.php` (the tier that owns a live stack; the per-file `uses(TestCase)` line dropped — the Feature tier boots it; the placement reason written into the suite header); the plan's §8 suites line and the §3 step-9 proof cell corrected in this commit. **GREEN in Stage 2's exact shape (`ci-stage2-fixed-01.txt`): 55 passed (1640 assertions), EXIT 0.** The moved suite green in its own tier (4 passed, 13 assertions, in-container). Doc 14 set + gates + lint at this commit as ordered.
+
+**Nightly #23 = 34574211209 (golden-live, on 4697715), read ONCE and classified:** `frankenphp app module: start: failed to initialize workers: too many consecutive failures: worker public/frankenphp-worker.php has not reached frankenphp_handle_request()` at the stack bring-up — **the RECORDED nightly class** (the FrankenPHP worker-init shape carried since Doc 10); one ledger line, not Doc 14's, no new finding.
+
+**The three flagged items, as ruled (standing regardless of this fix):** (1) unknown template_ref ACCEPTED as the logged, counted drop — the CORRECTION OF RECORD filed under CONSUMER AMENDMENT 1 in ANSWERS, `unknown_template_ref` reserved in the CHECK, **D12-N2 named** (the rule execution log has no path to learn Doc 14's outcome — Doc 12/15's window); (2) EVENT-FAMILY AMENDMENT 1 at step 5 CONFIRMED; (3) **the FS-03/FR-09 missing-DLR figures: THRESHOLD 0.5 and MIN_SAMPLE 10 are ACCEPTED platform constants for v1 — they become platform settings through a FILED registry entry (never a code edit) if an operator ever needs to tune them** (this sentence is the ruled FS-03 row line; the close-out table repeats it).
+
+**On a green look at this SHA (Stages 1–3b green; Stage 4 = 0 failed with flakies on recorded ledger lines only): this run becomes the B✓ verdict of record and BATCH C IS RELEASED without a further ruling (steps 8 → 9 → 10 → 11 with P-QUOTA-SMS as countersigned → C✓). A red look returns to the advisor first.**
+
 ## SESSION-14 (Doc 14) — BATCH B CHECKPOINT (B✓): the full battery + gates + lint on 6189731's tree (commit = this section's SHA; STOP for owner grounding)
 
 **Power (R-D13-6):** BAT1 2026-09-10 19:51Z: BatteryStatus 1 (discharging), 20% — the Pest battery began on AC (the 0d leg green in it), the browser battery and the closes ran into the discharge; timing figures labelled.

@@ -5,13 +5,17 @@ declare(strict_types=1);
 use App\Support\Timers\DueSet;
 use Illuminate\Support\Facades\Redis;
 
-uses(Tests\TestCase::class); // the kernel talks to redis-durable — this file boots the app (the Unit dir default is app-less)
-
 /*
 | A-65 — the platform timer kernel's laws: candidates only (due() answers by
 | the caller's OWN clock, at-or-before), a canceled member is gone, a lost
 | ZSET rebuilds from column truth at the exact deadline (delayed, never
 | premature), members parse round-trip, and kinds are isolated ZSETs.
+|
+| PLACEMENT (the B✓ fix-first ruling, 2026-09-11): the kernel talks to
+| redis-durable, so this suite lives in the tier that owns a live stack —
+| tests/Unit is app-less BY DESIGN and CI's Stage 2 runs with no services
+| (runs #330–#333 red on exactly this file booting the app there). Never a
+| skip, never a Redis stub in a unit test.
 */
 
 function dueSetKernel(): DueSet
