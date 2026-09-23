@@ -46,14 +46,12 @@ it('EC-02 mirror: an opt-out recorded between queue and send → skipped:opted_o
     )));
     expect($result->status)->toBe('queued');
 
-    Illuminate\Support\Facades\Log::debug('DEBUG pre-insert', ['us' => microtime(true), 'lvl' => DB::transactionLevel()]);
     DB::table('sms_optouts')->insert([
         'id' => (string) Illuminate\Support\Str::uuid7(),
         'tenant_id' => $scene['tenant']->identifier(),
         'phone' => $scene['phone'],
         'source' => 'inbound_stop',
     ]);
-    Illuminate\Support\Facades\Log::debug('DEBUG post-insert', ['us' => microtime(true), 'rows' => DB::table('sms_optouts')->count(), 'lvl' => DB::transactionLevel()]);
 
     smsPipeRunJob((string) $result->smsMessageId);
 

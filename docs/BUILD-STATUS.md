@@ -33,6 +33,10 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-14 (Doc 14) — CORRECTION OF RECORD + THE (b) COMMIT (the 2ce16d7-look ruling, 2026-09-23; commit = this section's SHA)
+
+**CORRECTION OF RECORD:** aaf19f7's report said the step-5 debug instrumentation was stripped; **the committed tree said otherwise until this commit** — the cleanup script's removal regex carried a quad-backslash escaping bug, silently matched nothing, and was never verified by grep. What shipped from aaf19f7 to here: `LiveFacts::customer()` ran a `debug_backtrace` + an EXTRA `sms_optouts` COUNT query + a `Log::debug` on EVERY guard evaluation (enqueue and send — the hot path; the §12 guard figure was measured on the pure GuardFunction and stands, but the live path carried this cost and noise), plus two inert log lines in LiveGuardsTest. Self-caught at the 2026-09-23 sitting from the resume's own file notes; named; closed here. **The class is now structural:** `tests/Security/SmsNoDebugLeftoverTest.php` sweeps app/Domain/Sms for `debug_backtrace` and `'DEBUG ` log calls with a positive control proven before the sweep proves anything; the whole tree was grepped for every other leftover of that script — none.
+
 ## SESSION-14 (Doc 14) — B✓ FIX-FIRST: CI STAGE 2 RED DIAGNOSED FROM THE RUN'S OWN LOG AND FIXED BY PLACEMENT (rule 15; commit = this section's SHA; STOP for the owner's push + ONE look on this SHA)
 
 **The verdict recorded (runs read once by the owner, numeric ids beside the numbers):** #330 = 34576330554 (aaf19f7) · #331 = 34576332910 (d826679) · #332 = 34576336610 (6189731) · #333 = 34576343618 (6edceba) — all four: Stage 1 green, **Stage 2 (unit) RED exit 2**, Stages 3/3b/4 skipped. Absent at #329 (4697715): the red entered with Batch B.

@@ -85,8 +85,6 @@ final class LiveFacts
         $customer = DB::table('customers')->where('id', $request->customerId)->first(['blocked_at', 'rg_flag']);
 
         $optedOut = $phone !== null && DB::table('sms_optouts')->where('phone', $phone)->whereNull('restored_at')->exists();
-        $trace = collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8))->pluck('class')->filter()->implode('<');
-        \Illuminate\Support\Facades\Log::debug('DEBUG optout read', ['pid' => getmypid(), 'us' => microtime(true), 'opted' => $optedOut, 'rows' => DB::table('sms_optouts')->count(), 'lvl' => DB::transactionLevel(), 'via' => substr($trace, 0, 160)]);
 
         return new CustomerFacts(
             $phone !== null,
