@@ -33,6 +33,18 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-14 — P-CAL-DATE LANDED AS RE-COUNTERSIGNED, SHAPE (i) (a Doc 12 TEST-ONLY packet under the 2026-09-23 countersign; commit = this section's SHA; STOP for the owner's push of BOTH commits + ONE look on this SHA)
+
+**The annual red, closed:** ci run 34600583062 on 2ce16d7 — Stage 3's one failure was `tests/Feature/Hours/CalendarTest.php:182` on Fri 2026-09-11, the very day the test's OWN fixture seeds as a recurring holiday (line 89, Enkutatash). **The RED capture is that CI log itself (no clock seam exists to reproduce it locally — the countersign records this): the run's log line, verbatim: expected `'08:00'`, actual `'00:00'`** (the open half; the expectation chain stopped there — close follows the recorded closed shape `'24:00'`, the Saturday finding). Independence was accepted on source (the failing path touches no Doc 14 file; the worktree leg waived by ruling).
+
+**The diff (ONE file, tests/Feature/Hours/CalendarTest.php, +17/−2):** the S13 P-CAL-WEEKDAY date branch gains the today-IS-the-holiday case — the holiday's month-day DERIVED from the snapshot the test itself paints (never a literal), the holiday branch winning over the weekend branch, expecting the closed shape CI recorded. The three projection expectation lines are the flagged edit; every other assertion in the test is byte-untouched. **Stated plainly: the new branch cannot execute until the next 11 September — today's run exercises the existing branches.** GREEN today: Doc 12 hours + SLA suites 20 passed (90 assertions) EXIT 0 unmodified beyond the packet file; the Doc 14 set 117 passed (1,275) EXIT 0; lint EXIT 0; gates 17/17 (`docs/evidence/S14-look-2ce16d7/`).
+
+**D12-N3 (named for Doc 12's window):** `windowFor` has no instant/clock seam (`isOpen`/`nextOpen` take one), so this leg's holiday branch executes one day a year; a seam is a Doc 12-core reopener, not built here. Shape (ii) was not authorized.
+
+**The nightly ledger line (ruling (c)):** #35 = 35834092923 read once — the SAME FrankenPHP worker-init class; **12 consecutive reds on 2ce16d7, same class** — carried as a named finding for Doc 18's window.
+
+**On a green look at this SHA (Stages 1–3b; Stage 4 = 0 failed on the Playwright line, flakies on recorded ledger lines only): that run is the B✓ verdict of record and BATCH C starts under the standing block with no further ruling.**
+
 ## SESSION-14 (Doc 14) — CORRECTION OF RECORD + THE (b) COMMIT (the 2ce16d7-look ruling, 2026-09-23; commit = this section's SHA)
 
 **CORRECTION OF RECORD:** aaf19f7's report said the step-5 debug instrumentation was stripped; **the committed tree said otherwise until this commit** — the cleanup script's removal regex carried a quad-backslash escaping bug, silently matched nothing, and was never verified by grep. What shipped from aaf19f7 to here: `LiveFacts::customer()` ran a `debug_backtrace` + an EXTRA `sms_optouts` COUNT query + a `Log::debug` on EVERY guard evaluation (enqueue and send — the hot path; the §12 guard figure was measured on the pure GuardFunction and stands, but the live path carried this cost and noise), plus two inert log lines in LiveGuardsTest. Self-caught at the 2026-09-23 sitting from the resume's own file notes; named; closed here. **The class is now structural:** `tests/Security/SmsNoDebugLeftoverTest.php` sweeps app/Domain/Sms for `debug_backtrace` and `'DEBUG ` log calls with a positive control proven before the sweep proves anything; the whole tree was grepped for every other leftover of that script — none.

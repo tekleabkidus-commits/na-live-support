@@ -178,9 +178,24 @@ it('P-A53 REAL source: a painted calendar drives windowFor/isOpen/nextOpen/shift
             $weekHoldsHoliday = true;
         }
     }
+    // P-CAL-DATE (re-countersigned 2026-09-23, shape (i) — the annual red of run 34600583062):
+    // when TODAY is the fixture's own seeded recurring holiday (its month-day read from the
+    // snapshot the test itself painted, never a literal), the HOLIDAY branch wins over the
+    // weekend branch and expects the closed shape CI recorded on Fri 2026-09-11 — the run's
+    // own log line, verbatim: expected '08:00', actual '00:00' (open; the expectation chain
+    // stopped there — close follows the recorded closed shape '24:00', the Saturday finding).
+    // This branch cannot execute again until the next 11 September; today's run exercises the
+    // branches below it. The three expectation lines are the flagged edit; everything else in
+    // this test is byte-untouched. windowFor has no instant/clock seam (D12-N3 — Doc 12's window).
+    $seededHolidayMonthDays = array_map(
+        static fn (array $h): string => (new DateTimeImmutable($h['date']))->format('m-d'),
+        array_values(array_filter($writer->snapshot($calendarId)['holidays'], static fn (array $h): bool => $h['recurring'])),
+    );
+    $isHolidayToday = in_array($todayAddis->format('m-d'), $seededHolidayMonthDays, true);
+
     $window = $hours->windowFor(null);
-    expect($window['open'])->toBe($isWeekend ? '00:00' : '08:00', 'projected on '.$todayAddis->format('D Y-m-d'))
-        ->and($window['close'])->toBe($isWeekend ? '24:00' : '17:00', 'projected on '.$todayAddis->format('D Y-m-d'))
+    expect($window['open'])->toBe($isHolidayToday ? '00:00' : ($isWeekend ? '00:00' : '08:00'), 'projected on '.$todayAddis->format('D Y-m-d'))
+        ->and($window['close'])->toBe($isHolidayToday ? '24:00' : ($isWeekend ? '24:00' : '17:00'), 'projected on '.$todayAddis->format('D Y-m-d'))
         ->and($window['days'])->toBe($weekHoldsHoliday ? [1, 2, 3, 4] : [1, 2, 3, 4, 5], 'projected on '.$todayAddis->format('D Y-m-d'));
 
     // Wed 2026-09-02: 10:00 Addis = 07:00Z open; 18:00 Addis = 15:00Z closed.
