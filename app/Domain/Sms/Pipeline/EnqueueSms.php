@@ -107,14 +107,19 @@ final class EnqueueSms
 
     private function held(SmsMessage $row, string $reason, ?string $causationId = null): EnqueueResult
     {
-        // hold-all-sends has no computable release instant (release_at null);
-        // the quiet-hours release instant is step 9's QuietHoursWindow.
-        $this->lifecycle->publish('sms.held', $row, $reason, null, $causationId);
-        $this->timers->schedule(
-            'sms_hold_release',
-            DueSet::member($row->tenant_id, $row->identifier()),
-            (int) ((microtime(true) + self::HOLD_RECHECK_SECONDS) * 1_000_000),
-        );
+        // hold-all-sends has no computable release instant (release_at null; a 60 s
+        // re-check candidate); a quiet-hours hold carries the window's own release
+        // instant and its candidate is scheduled AT that instant — the sweep still
+        // RECOMPUTES against the setting at release (EC-05).
+        $releaseAt = null;
+        $scoreMicros = (int) ((microtime(true) + self::HOLD_RECHECK_SECONDS) * 1_000_000);
+        if ($reason === 'quiet_hours') {
+            $release = app(\App\Domain\Sms\QuietHours\QuietHoursWindow::class)->releaseInstant(new \DateTimeImmutable);
+            $releaseAt = $release->format(DATE_ATOM);
+            $scoreMicros = (int) $release->format('Uu');
+        }
+        $this->lifecycle->publish('sms.held', $row, $reason, $releaseAt, $causationId);
+        $this->timers->schedule('sms_hold_release', DueSet::member($row->tenant_id, $row->identifier()), $scoreMicros);
 
         return EnqueueResult::held($row->identifier(), $reason);
     }

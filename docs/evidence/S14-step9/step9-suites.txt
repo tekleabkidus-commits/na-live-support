@@ -1,0 +1,26 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\QuietHoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit inside the window a hold-policy template HOLDS with the release[39m[90m… [39m [90m9.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: verification_code and security_notification are exempt by[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the tenant timezone decides: the same wall instant is quiet in A[39m[90m…[39m [90m0.27s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05, injected clock: a SHRUNK window releases early-but-in-win[39m[90m…[39m [90m0.33s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the release-now door (sms.send, audited) outruns the window; the[39m[90m…[39m [90m0.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\CalendarLinkedQuietHoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit calendar-linked: quiet = the painted calendar's closed hours; re[39m[90m…[39m [90m0.51s[39m  
+  [dev-hardware-indicative] held-release sweep, N=120 (dev scale; the 10k ≤ 60 s figure is [D19]) p50 1014.502 ms   p99 1014.502 ms   max 1014.502 ms   budget(p99) 60000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\HeldReleaseSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N=120 (dev scale, stated): one sweep releases them all with the[39m[90m… [39m [90m3.94s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Support\DueSetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit due() answers at-or-before the CALLER's clock only — a future me[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cancel removes; re-schedule moves the score; kinds are isolated[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rebuild restores from column truth at the exact deadline — a los[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit members parse round-trip (the id half may itself carry pipes-fre[39m[90m…[39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m11 passed[39;22m[90m (180 assertions)[39m
+  [90mDuration:[39m [39m15.46s[39m
+
+PEST EXIT 0

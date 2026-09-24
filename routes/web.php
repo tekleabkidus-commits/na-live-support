@@ -90,6 +90,13 @@ Route::middleware([
 
     // Doc 14 FR-14 (S14 step 8): the opt-out manager (§8) — masked list, staff add
     // with reason, high-visibility restore, CSV import; export is customers.export.
+    // Doc 14 FR-16 (S14 step 9): the held view's data door + release-now.
+    Route::prefix('sms/api/held')->name('sms.held.')->group(function (): void {
+        $h = App\Http\Controllers\Sms\SmsHeldController::class;
+        Route::get('/', [$h, 'index'])->middleware('permission:sms.send')->name('index');
+        Route::post('{smsMessageId}/release', [$h, 'release'])->middleware(['permission:sms.send', 'audit:sms.message.released'])->name('release');
+    });
+
     Route::prefix('sms/api/optouts')->name('sms.optouts.')->group(function (): void {
         $o = App\Http\Controllers\Sms\SmsOptOutsController::class;
         Route::get('/', [$o, 'index'])->middleware('permission:sms.optout.manage')->name('index');

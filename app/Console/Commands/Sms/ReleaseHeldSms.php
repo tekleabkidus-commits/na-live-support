@@ -19,14 +19,16 @@ use Illuminate\Support\Facades\DB;
 /**
  * The held-release sweep (A-65's first consumer; the DueSet law throughout):
  * every due `sms_hold_release` candidate is RE-VERIFIED against the row and
- * the live setting inside its own tenant transaction — the ZSET never decides.
- * Hold still on → re-schedule (held, never dropped). Hold lifted → the row
- * goes held→queued through the machine, `sms.queued` publishes, and the job
- * dispatches on the row's own lane. A stale member (row gone, or no longer
- * held) drops harmlessly.
- *
- * Step 5 scope: hold-all-sends only. Step 9 adds the quiet-hours release
- * instant (recomputed against the SETTING AT RELEASE — EC-05) and the spread.
+ * the LIVE settings inside its own tenant transaction — the ZSET never
+ * decides. The ladder at each candidate: hold-all still on → re-schedule
+ * (+60 s; held, never dropped) · quiet hours NOW, RECOMPUTED against the
+ * setting at release (EC-05: a shrunk window releases early-but-in-window,
+ * never mid-night; a grown one holds longer) → re-schedule at the newly
+ * computed release instant · clear → held→queued through the machine,
+ * `sms.queued` publishes, and the job dispatches on the row's own lane WITH
+ * JITTER (a 0–59 s delay) so a mass release spreads inside a minute and the
+ * token bucket shapes the rest (§12's 10k ≤ 60 s at dev scale). A stale
+ * member drops harmlessly.
  */
 final class ReleaseHeldSms extends Command
 {
@@ -45,8 +47,8 @@ final class ReleaseHeldSms extends Command
         foreach ($timers->due('sms_hold_release', $nowMicros) as $member) {
             [$tenantId, $smsMessageId] = DueSet::parseMember($member);
 
-            $outcome = $this->withinTenant($tenantId, function () use ($smsMessageId, $machine): string {
-                return DB::transaction(function () use ($smsMessageId, $machine): string {
+            $outcome = $this->withinTenant($tenantId, function () use ($smsMessageId, $machine, $nowMicros): string|int {
+                return DB::transaction(function () use ($smsMessageId, $machine, $nowMicros): string|int {
                     $row = SmsMessage::query()->find($smsMessageId);
                     if ($row === null || $row->state !== 'held') {
                         return 'stale'; // the DB re-check is the authority; a stale member drops
@@ -54,17 +56,23 @@ final class ReleaseHeldSms extends Command
                     if ((bool) app(SettingsRepository::class)->get('sms.hold_all_sends')) {
                         return 'still_held';
                     }
+                    // EC-05: quiet hours RECOMPUTED against the setting AT RELEASE
+                    $at = \DateTimeImmutable::createFromFormat('U.u', sprintf('%.6F', $nowMicros / 1_000_000)) ?: new \DateTimeImmutable;
+                    $window = app(\App\Domain\Sms\QuietHours\QuietHoursWindow::class);
+                    if ($window->inQuietHours($at)) {
+                        return (int) $window->releaseInstant($at)->format('Uu'); // still night by TODAY's setting: the new instant
+                    }
                     $row->state = $machine->transition(SmsDeliveryState::Held, SmsDeliveryState::Queued)->value;
                     $row->save();
                     app(SmsLifecycle::class)->publish('sms.queued', $row);
-                    SendSmsJob::dispatch($row->identifier(), $row->lane);
+                    SendSmsJob::dispatch($row->identifier(), $row->lane)->delay(random_int(0, 59)); // the jitter spread
 
                     return 'released';
                 });
             });
 
-            if ($outcome === 'still_held') {
-                $timers->schedule('sms_hold_release', $member, $nowMicros + EnqueueSms::HOLD_RECHECK_SECONDS * 1_000_000);
+            if ($outcome === 'still_held' || is_int($outcome)) {
+                $timers->schedule('sms_hold_release', $member, is_int($outcome) ? max($outcome, $nowMicros + 1_000_000) : $nowMicros + EnqueueSms::HOLD_RECHECK_SECONDS * 1_000_000);
                 $rescheduled++;
 
                 continue;

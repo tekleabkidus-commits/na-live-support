@@ -13,6 +13,7 @@ use App\Domain\Sms\Guards\ModuleFacts;
 use App\Domain\Sms\Guards\QuietHoursPolicy;
 use App\Domain\Sms\Guards\TemplateFacts;
 use App\Domain\Sms\OptOut\OptOutRegistry;
+use App\Domain\Sms\QuietHours\QuietHoursWindow;
 use App\Models\SmsTemplate;
 use App\Support\Settings\SettingsRepository;
 use Illuminate\Support\Facades\DB;
@@ -24,10 +25,9 @@ use Laravel\Pennant\Feature;
  * skip, not a stale send). Everything here is a read; the pure GuardFunction
  * stays the only decider (T-06).
  *
- * Quiet hours: `inQuietHours` is FALSE until step 9 lands `QuietHoursWindow`
- * (FR-16 with the tenant timezone and the optional Doc 12 calendar) — the
- * guard's quiet-hours branch is built and proven pure (step 1) and inert in
- * the live path until its own step, stated in the step-5 record.
+ * Quiet hours are LIVE since step 9: `QuietHoursWindow` evaluates the
+ * tenant-timezone window (or the linked calendar's closed hours) at the same
+ * DB instant the guard reasons about.
  */
 final class LiveFacts
 {
@@ -36,6 +36,7 @@ final class LiveFacts
         private readonly MarketingSuppression $suppression,
         private readonly GatewayAvailability $gateways,
         private readonly OptOutRegistry $optouts,
+        private readonly QuietHoursWindow $quietHours,
     ) {}
 
     /** The customer's phone identity (type=phone, E.164), or null (no identity = nothing to send to). */
@@ -64,15 +65,17 @@ final class LiveFacts
     /** @param  ?string  $excludeSmsMessageId  the row being SENT — its own enqueue is never its duplicate */
     public function input(SendRequest $request, ?string $phone, ?string $excludeSmsMessageId = null): GuardInput
     {
+        $now = $this->dbNow();
+
         return new GuardInput(
             $request->event,
             $this->customer($request, $phone),
             $this->template($request->event),
             $this->module(),
-            $this->dbNow(),
+            $now,
             $this->lastSameSendAt($request, $phone, $excludeSmsMessageId),
             $this->duplicateWindowMinutes(),
-            false, // quiet-hours evaluation lands at step 9 (QuietHoursWindow); see the class doc
+            $this->quietHours->inQuietHours($now), // FR-16 live (step 9): the tenant-timezone window, or the calendar's closed hours
         );
     }
 

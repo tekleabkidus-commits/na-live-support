@@ -107,11 +107,18 @@ final class SendPipeline
         }
 
         if ($decision->outcome === GuardOutcome::Hold) {
-            DB::transaction(function () use ($row, $decision): void {
+            $releaseAt = null;
+            $scoreMicros = (int) ((microtime(true) + EnqueueSms::HOLD_RECHECK_SECONDS) * 1_000_000);
+            if ($decision->reason?->value === 'quiet_hours') {
+                $release = app(\App\Domain\Sms\QuietHours\QuietHoursWindow::class)->releaseInstant(new \DateTimeImmutable);
+                $releaseAt = $release->format(DATE_ATOM);
+                $scoreMicros = (int) $release->format('Uu');
+            }
+            DB::transaction(function () use ($row, $decision, $releaseAt): void {
                 $this->transition($row, SmsDeliveryState::Held);
-                $this->lifecycle->publish('sms.held', $row, $decision->reason?->value, null);
+                $this->lifecycle->publish('sms.held', $row, $decision->reason?->value, $releaseAt);
             });
-            $this->timers->schedule('sms_hold_release', DueSet::member($row->tenant_id, $row->identifier()), (int) ((microtime(true) + EnqueueSms::HOLD_RECHECK_SECONDS) * 1_000_000));
+            $this->timers->schedule('sms_hold_release', DueSet::member($row->tenant_id, $row->identifier()), $scoreMicros);
 
             return 0;
         }
