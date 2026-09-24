@@ -68,12 +68,11 @@ final class QuotaMeter
         }
 
         try {
-            $bucket = intdiv(time(), $window) * $window;
-            $suffix = sprintf('quota:%s:%d', $quota->value, $bucket);
+            [$suffix, $ttl] = $this->bucket($quota, $window);
 
             // TTL twice the window: the counter must outlive its window long enough for
             // quota:reconcile to persist it (FS-05), not so long that dead windows pile up.
-            $counted = $this->cache->increment($suffix, $amount, $window * 2, 'quota.window_expired');
+            $counted = $this->cache->increment($suffix, $amount, $ttl, 'quota.window_expired');
 
             if ($counted > $limit) {
                 $this->cache->decrement($suffix, $amount);
@@ -81,7 +80,7 @@ final class QuotaMeter
                 throw QuotaExceeded::forQuota($quota, $limit);
             }
 
-            $this->warnOnFirstCrossing($quota, $counted, $limit, $suffix, $window);
+            $this->warnOnFirstCrossing($quota, $counted, $limit, $suffix, $ttl);
         } catch (QuotaExceeded $e) {
             throw $e;
         } catch (Throwable $e) {
@@ -115,18 +114,13 @@ final class QuotaMeter
             return ['used' => $used, 'limit' => $limit * $quota->limitUnitMultiplier()];
         }
 
-        $bucket = intdiv(time(), $window) * $window;
+        [$suffix, $ttl] = $this->bucket($quota, $window);
         // increment-by-ZERO, not get(): the cache client's get() is FAIL-SOFT
         // on a dead connection (null, no throw — proven by probe at S09
         // step 8), while the add/increment path THROWS — and "outage
         // propagates" is this method's contract. Same key, same TTL as
         // allow(); a zero increment creates nothing allow() would not.
-        $counted = $this->cache->increment(
-            sprintf('quota:%s:%d', $quota->value, $bucket),
-            0,
-            $window * 2,
-            'quota.window_expired',
-        );
+        $counted = $this->cache->increment($suffix, 0, $ttl, 'quota.window_expired');
 
         return ['used' => $counted, 'limit' => $limit];
     }
@@ -184,14 +178,40 @@ final class QuotaMeter
         return $default;
     }
 
-    private function warnOnFirstCrossing(Quota $quota, int $counted, int $limit, string $suffix, int $window): void
+    /**
+     * The counter's cache suffix and TTL for a windowed quota. The four foundation
+     * quotas: the wall-clock epoch bucket (`intdiv(time(), window)`) with TTL twice the
+     * window — byte-identical to the pre-P-QUOTA-SMS behaviour. A calendar-month quota
+     * (P-QUOTA-SMS): the tenant-local `YYYY-MM` read from DB time (C-11 — the month
+     * boundary is a tenant fact, never an app-clock guess) with a 35-day TTL.
+     *
+     * @return array{0: string, 1: int}
+     */
+    private function bucket(Quota $quota, int $window): array
+    {
+        if ($quota->isCalendarMonth()) {
+            /** @var object{m: string} $row */
+            $row = DB::selectOne(
+                "SELECT to_char(clock_timestamp() AT TIME ZONE (SELECT timezone_name FROM tenants WHERE id = ?), 'YYYY-MM') AS m",
+                [$this->context->tenantId()],
+            );
+
+            return [sprintf('quota:%s:%s', $quota->value, $row->m), $quota->calendarMonthTtlSeconds()];
+        }
+
+        $bucket = intdiv(time(), $window) * $window;
+
+        return [sprintf('quota:%s:%d', $quota->value, $bucket), $window * 2];
+    }
+
+    private function warnOnFirstCrossing(Quota $quota, int $counted, int $limit, string $suffix, int $ttl): void
     {
         if ($counted < (int) ceil($limit * self::WARN_FRACTION)) {
             return;
         }
 
         // increment() as an atomic once-guard: only the first crosser sees 1.
-        if ($this->cache->increment($suffix.':warned', 1, $window * 2, 'quota.window_expired') === 1) {
+        if ($this->cache->increment($suffix.':warned', 1, $ttl, 'quota.window_expired') === 1) {
             Log::warning('tenant quota at 80 percent', [
                 'quota' => $quota->value,
                 'counted' => $counted,

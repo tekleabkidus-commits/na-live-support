@@ -37,6 +37,8 @@ it('a chunk at the quota wall pauses the broadcast (paused_quota, nothing sent);
     // the wall REFUSES: bind a gate that says no
     app()->bind(BroadcastQuotaGate::class, fn () => new class extends BroadcastQuotaGate
     {
+        public function __construct() {}
+
         public function allows(): bool
         {
             return false;
@@ -50,7 +52,7 @@ it('a chunk at the quota wall pauses the broadcast (paused_quota, nothing sent);
 
     // headroom RETURNS: the default gate allows; a resuming chunk (the scheduler re-dispatches a paused broadcast — dispatched here by hand) completes it
     app()->forgetInstance(BroadcastQuotaGate::class);
-    app()->bind(BroadcastQuotaGate::class, fn () => new BroadcastQuotaGate);
+    app()->bind(BroadcastQuotaGate::class, fn () => new BroadcastQuotaGate(app(App\Support\Quota\QuotaMeter::class)));
     DB::table('sms_broadcasts')->where('id', $broadcast->identifier())->update(['state' => 'sending']); // the resume transition (paused_quota → sending)
     $run();
 

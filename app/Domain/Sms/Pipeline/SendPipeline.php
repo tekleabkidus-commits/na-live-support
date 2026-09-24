@@ -58,6 +58,7 @@ final class SendPipeline
         private readonly CircuitBreaker $breaker,
         private readonly SmsDeliveryStateMachine $machine,
         private readonly DueSet $timers,
+        private readonly \App\Domain\Sms\Cost\CostMeter $cost,
     ) {}
 
     /** @return int 0 = done; N > 0 = release and retry in N seconds */
@@ -288,8 +289,12 @@ final class SendPipeline
             $this->lifecycle->publish('sms.sent', $row);
         });
         $this->breaker->recordSuccess($gateway->refresh());
-        // A-65: the 48 h expiry candidate at the COLUMN's own stamp; the queued-TTL member is spent
+        // FR-19/FR-20: count the accrual into the monthly quota + check the spend threshold (fixture/test rows excluded here)
         $row->refresh();
+        if (! $row->is_test && $row->segments !== null && $row->cost_currency !== null) {
+            $this->cost->recordSent($row->segments, $row->cost_currency);
+        }
+        // A-65: the 48 h expiry candidate at the COLUMN's own stamp; the queued-TTL member is spent
         if ($row->sent_at !== null) {
             $this->timers->schedule('sms_expiry', DueSet::member($row->tenant_id, $row->identifier()), (int) $row->sent_at->format('Uu') + $this->expiredAfterHours() * 3600 * 1_000_000);
         }

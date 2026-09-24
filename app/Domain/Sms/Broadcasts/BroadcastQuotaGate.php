@@ -24,8 +24,18 @@ class BroadcastQuotaGate
      * (stated in the step-10 record — the schema's `paused_quota` state and
      * the seam exist, the meter case does not yet).
      */
+    public function __construct(private readonly \App\Support\Quota\QuotaMeter $meter) {}
+
     public function allows(): bool
     {
-        return true;
+        try {
+            $headroom = $this->meter->headroom(\App\Support\Quota\Quota::SmsSegmentsPerMonth);
+        } catch (\Throwable) {
+            return true; // a metering outage never blocks an in-flight broadcast (the send path is not a gate)
+        }
+        $remaining = $headroom['limit'] - $headroom['used'];
+
+        // BR-05: broadcasts stop before the last 5% so transactional sends keep their headroom
+        return $remaining > (int) ceil($headroom['limit'] * self::TRANSACTIONAL_RESERVE_FRACTION);
     }
 }

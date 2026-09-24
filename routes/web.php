@@ -90,6 +90,10 @@ Route::middleware([
 
     // Doc 14 FR-14 (S14 step 8): the opt-out manager (§8) — masked list, staff add
     // with reason, high-visibility restore, CSV import; export is customers.export.
+    // Doc 14 FR-19/FR-20 (S14 step 11): the SMS report feed — reports.view (SEC-06).
+    Route::get('sms/api/reports/summary', [App\Http\Controllers\Sms\SmsReportsController::class, 'summary'])
+        ->middleware('permission:reports.view')->name('sms.reports.summary');
+
     // Doc 14 FR-17/FR-18 (S14 step 10): broadcasts — draft/edit on sms.send +
     // sms.templates.view; the LAUNCH door alone carries A-64's HIGH pair.
     Route::prefix('sms/api/broadcasts')->name('sms.broadcasts.')->group(function (): void {
