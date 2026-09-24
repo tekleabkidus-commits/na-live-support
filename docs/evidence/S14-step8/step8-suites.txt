@@ -1,0 +1,24 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\OptOutAbsolutenessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: EVERY FR-01 event to an opted-out customer skips as opte[39m[90m…[39m [90m11.38s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the single carve-out, proven once: with the market knob ON, ONE[39m[90m… [39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit with the knob OFF (the default), an opt-out sends nothing at all[39m[90m [39m [90m0.34s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\StopParsingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit en: " STOP \n" from the wire opts the sender out (whitespace tri[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit am: the document's own bytes ride the wire and land byte-identic[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the capability gate: the GeezSMS profile (no inbound_stop in its[39m[90m…[39m [90m0.30s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\OptOutRestorationAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit add → restore(reason) → the audit + event trail with ids only; t[39m[90m…[39m [90m0.86s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit import: rows land as source api, idempotent against live opt-out[39m[90m…[39m [90m0.52s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsMoNoConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-15 truth table: STOP mints ONE optout row and nothing conversa[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no inbound-SMS route reaches a conversation controller: the rout[39m[90m…[39m [90m0.03s[39m  
+
+  [90mTests:[39m    [32;1m10 passed[39;22m[90m (79 assertions)[39m
+  [90mDuration:[39m [39m15.72s[39m
+
+PEST EXIT 0

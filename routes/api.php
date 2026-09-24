@@ -613,4 +613,18 @@ Route::group([], function (): void {
     ])
         ->post('webhooks/sms/dlr/{gateway_key?}', [App\Http\Controllers\Sms\SmsDlrController::class, 'ingest'])
         ->name('foundation.webhook.sms_dlr_signed');
+
+    // Doc 14 FR-15 (S14 step 8): the MO door — SMS is notification-only (N-15),
+    // so this PARSES for STOP and mints NOTHING else; same auth stack as the DLR
+    // door; capability-gated inbound_stop; non-STOP = counted drop.
+    Route::middleware([
+        'sms.dlr-key',
+        'tenant:sms_gateway_key',
+        'webhook.throttle',
+        'webhook.auth:url_secret',
+        'tenant.state:inbound',
+        'audit:sms.optout.added',
+    ])
+        ->post('webhooks/sms/mo/{gateway_key}/{dlr_secret}', [App\Http\Controllers\Sms\SmsMoController::class, 'ingest'])
+        ->name('foundation.webhook.sms_mo');
 });

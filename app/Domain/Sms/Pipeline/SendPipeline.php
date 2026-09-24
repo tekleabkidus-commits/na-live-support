@@ -74,6 +74,14 @@ final class SendPipeline
             $this->transition($row, SmsDeliveryState::Queued);
         }
 
+        // STOP-Q 3 / FR-15's single carve-out: the optout_confirmation row (a template-only
+        // event, structurally not a SendableEvent) was rendered AT INSERT by OptOutRegistry
+        // and goes to the phone that JUST opted out — the opted-out guard cannot apply to it
+        // ONCE, so it routes and sends directly. Everything else about it is ordinary.
+        if ($row->event === 'optout_confirmation') {
+            return $row->rendered_body === null ? 0 : $this->routeAndSend($row);
+        }
+
         $event = SendableEvent::from($row->event);
 
         if (($verdict = $this->liveGuard($row, $event)) !== null) {

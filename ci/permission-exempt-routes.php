@@ -100,6 +100,7 @@ return [
     'foundation.webhook.telegram' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03c; Doc 05 S23 step 4 revisited): Telegram authenticates with the URL key + secret_token header, staff permissions structurally do not apply. Admin surfaces are separate routes mapped to telegram.* keys.',
     'foundation.webhook.sms_dlr' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03e; Doc 14 S14 step 7, P-DLR-AUTH): the gateway authenticates with the URL key + the URL callback secret (url_secret), staff permissions structurally do not apply. Admin surfaces are separate routes mapped to sms.* keys.',
     'foundation.webhook.sms_dlr_signed' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03e; Doc 14 S14 step 7, P-DLR-AUTH): the gateway authenticates with the URL key + FR-24 body_hmac headers, staff permissions structurally do not apply.',
+    'foundation.webhook.sms_mo' => 'Channel-key-authenticated machine ingress (Doc 01 FR-03e; Doc 14 S14 step 8, FR-15): the gateway posts inbound STOP words with the URL key + callback secret; staff permissions structurally do not apply; the door parses and mints nothing else (N-15).',
 
     /*
      | Doc 02 step 10: the visitor surface (FR-21/FR-22, BR-06).

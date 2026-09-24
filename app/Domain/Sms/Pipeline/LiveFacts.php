@@ -12,6 +12,7 @@ use App\Domain\Sms\Guards\GuardInput;
 use App\Domain\Sms\Guards\ModuleFacts;
 use App\Domain\Sms\Guards\QuietHoursPolicy;
 use App\Domain\Sms\Guards\TemplateFacts;
+use App\Domain\Sms\OptOut\OptOutRegistry;
 use App\Models\SmsTemplate;
 use App\Support\Settings\SettingsRepository;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,7 @@ final class LiveFacts
         private readonly SettingsRepository $settings,
         private readonly MarketingSuppression $suppression,
         private readonly GatewayAvailability $gateways,
+        private readonly OptOutRegistry $optouts,
     ) {}
 
     /** The customer's phone identity (type=phone, E.164), or null (no identity = nothing to send to). */
@@ -77,14 +79,17 @@ final class LiveFacts
     private function customer(SendRequest $request, ?string $phone): CustomerFacts
     {
         if ($request->customerId === null) {
-            // The OTP door: no customer row exists to be opted out, blocked or flagged (BR-06).
-            return new CustomerFacts($phone !== null, false, false, false, false);
+            // The OTP door: no customer row exists to be blocked or flagged (BR-06) —
+            // but the opt-out REGISTRY is PHONE-keyed and N-16 is absolute: it reads
+            // for every send, customer or not (the AC-05 suite caught the first draft
+            // hardcoding false here).
+            return new CustomerFacts($phone !== null, $phone !== null && $this->optouts->isOptedOut($phone), false, false, false);
         }
 
         /** @var object{blocked_at: ?string, rg_flag: bool}|null $customer */
         $customer = DB::table('customers')->where('id', $request->customerId)->first(['blocked_at', 'rg_flag']);
 
-        $optedOut = $phone !== null && DB::table('sms_optouts')->where('phone', $phone)->whereNull('restored_at')->exists();
+        $optedOut = $phone !== null && $this->optouts->isOptedOut($phone); // FR-14: THE registry read (N-16)
 
         return new CustomerFacts(
             $phone !== null,

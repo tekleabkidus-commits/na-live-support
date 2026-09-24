@@ -87,6 +87,17 @@ Route::middleware([
         Route::post('{gatewayId}/circuit/reset', [$g, 'resetCircuit'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.circuit_reset'])->name('circuit_reset');
         Route::delete('{gatewayId}', [$g, 'destroy'])->middleware(['permission:sms.gateways.manage', 'audit:sms.gateway.deleted'])->name('destroy');
     });
+
+    // Doc 14 FR-14 (S14 step 8): the opt-out manager (§8) — masked list, staff add
+    // with reason, high-visibility restore, CSV import; export is customers.export.
+    Route::prefix('sms/api/optouts')->name('sms.optouts.')->group(function (): void {
+        $o = App\Http\Controllers\Sms\SmsOptOutsController::class;
+        Route::get('/', [$o, 'index'])->middleware('permission:sms.optout.manage')->name('index');
+        Route::post('/', [$o, 'store'])->middleware(['permission:sms.optout.manage', 'audit:sms.optout.added'])->name('store');
+        Route::post('{optoutId}/restore', [$o, 'restore'])->middleware(['permission:sms.optout.manage', 'audit:sms.optout.restored'])->name('restore');
+        Route::get('export', [$o, 'export'])->middleware('permission:customers.export')->name('export');
+        Route::post('import', [$o, 'import'])->middleware(['permission:sms.optout.manage', 'audit:sms.optout.imported'])->name('import');
+    });
     Route::prefix('sms/api/routes')->name('sms.routes.')->group(function (): void {
         $g = App\Http\Controllers\Sms\SmsGatewaysController::class;
         Route::post('/', [$g, 'storeRoute'])->middleware(['permission:sms.gateways.manage', 'audit:sms.route.created'])->name('store');
