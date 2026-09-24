@@ -13,7 +13,7 @@ COMPOSE := docker compose --profile embeddings -f docker/compose.yaml -f docker/
 #   make soak SET=S21-step0
 SET ?= manual
 
-.PHONY: up down fresh reload test soak capture perf gates lint browser shell logs status
+.PHONY: up down fresh reload test soak capture perf sms-lane-drill gates lint browser shell logs status
 
 ## bring the whole stack up (builds images on first run)
 # --renew-anon-volumes: the dev override pins vendor/ and friends to
@@ -89,6 +89,10 @@ capture:
 	CAPTURE_SET=$(SET) bash ci/capture.sh $(LABEL) $(CMD)
 
 ## AC-07 latency budgets, STRICT spec assertions, dev-hardware-indicative (Doc 01 §12)
+## Doc 14 AC-07/SS-04 lane-isolation drill (dev scale; the 8,000-recipient run is [D19]; battery-run labels apply)
+sms-lane-drill:
+	$(COMPOSE) exec -T app ./vendor/bin/pest tests/Performance/SmsLaneIsolationDrillTest.php
+
 perf:
 	$(COMPOSE) exec -e PERF_BUDGETS_ENFORCE=1 app ./vendor/bin/pest --testsuite=Performance
 

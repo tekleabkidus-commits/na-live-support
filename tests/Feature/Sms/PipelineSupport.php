@@ -32,6 +32,13 @@ function smsPipeScene(array $permissions = ['sms.send', 'tickets.view'], string 
     $user = ticketActor($permissions, 'Fixture SMS Send Role');
     bindTenant($tenant);
 
+    // Quiet hours went LIVE at step 9: pin a window that does NOT cover "now" so every
+    // clock-independent pipeline test stays deterministic regardless of the wall clock
+    // (QuietHoursTest sets its own COVERING window). The default 21:00–08:00 would hold
+    // sends during Addis night otherwise.
+    $nowAddis = new DateTimeImmutable('now', new DateTimeZone('Africa/Addis_Ababa'));
+    app(App\Support\Settings\SettingsRepository::class)->set('sms.quiet_hours', ['start' => $nowAddis->modify('+3 hours')->format('H:i'), 'end' => $nowAddis->modify('+4 hours')->format('H:i')]);
+
     app(LinkIdentity::class)->link($ticket->customer_id, 'phone', $phone, $user->identifier());
     app(TemplateSeeder::class)->seed('00000000-0000-7000-8000-0000000000aa');
     app(FixtureGatewaySeeder::class)->seed('00000000-0000-7000-8000-0000000000aa');

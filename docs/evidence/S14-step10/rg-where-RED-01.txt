@@ -1,0 +1,46 @@
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [39;41;1m FAIL [39;49;22m[39m Tests\Security\SmsBroadcastRgExclusionTest[39m
+  [31;1m⨯[39;22m[90m [39m[90mit SEC-03 structural: the compiled audience SQL carries the rg_fla[39m[90m…[39m [90m11.03s[39m  
+  [31;1m⨯[39;22m[90m [39m[90mit the audience requires a phone identity and excludes suppressed r[39m[90m…[39m [90m0.47s[39m  
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SmsBroadcastRgExclusio[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Sms\Broadcasts\AudienceQuery] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SmsBroadcastRgExclusionTest.php[39;22m:[39;1m29[39;22m
+
+  [31m────────────────────────────────────────────────────────────────────────────[39m  
+  [41;1m FAILED [49;22m [1mTests\Security\SmsBroadcastRgExclusio[22m… [41;1m BindingResolutionException [49;22m  
+[39;1m  Target class [App\Domain\Sms\Broadcasts\AudienceQuery] does not exist.[39;22m
+
+  at [32mvendor/laravel/framework/src/Illuminate/Container/Container.php[39m:[32m1144[39m
+    1140▕             }
+    1141▕         }
+    1142▕ 
+    1143▕         try {
+  ➜ 1144▕             $reflector = new ReflectionClass($concrete);
+    1145▕         } catch (ReflectionException $e) {
+    1146▕             throw new BindingResolutionException("Target class [$concrete] does not exist.", 0, $e);
+    1147▕         }
+    1148▕
+
+      [2m+6 vendor frames [22m
+  [33m7   [39m[39;1mtests/Security/SmsBroadcastRgExclusionTest.php[39;22m:[39;1m53[39;22m
+
+
+  [90mTests:[39m    [31;1m2 failed[39;22m[90m (0 assertions)[39m
+  [90mDuration:[39m [39m11.58s[39m
+
+EXIT 2

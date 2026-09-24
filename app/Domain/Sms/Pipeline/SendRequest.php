@@ -31,6 +31,7 @@ final readonly class SendRequest
         public ?string $conversationId = null,
         public ?string $phoneE164Override = null,
         public ?string $code = null,
+        public ?string $broadcastId = null,
     ) {
         if ($code !== null && preg_match('/^\d{4,10}$/', $code) !== 1) {
             throw new \InvalidArgumentException('a verification code is 4–10 digits minted by the platform (BR-06) — nothing else rides this field');

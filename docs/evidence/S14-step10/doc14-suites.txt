@@ -1,0 +1,262 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\ChipTruthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery state maps to exactly one chip and the double check exists for delivered ONLY[39m
+  [32;1m✓[39;22m[90m [39m[90mexpired reads "sent · unconfirmed" in the gray tone — never a check, never success green[39m
+  [32;1m✓[39;22m[90m [39m[90mthe mapper takes a STATE — there is no door that accepts a carrier word (sabotage (c): success → delivered has no path)[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\CredentialRefTest[39m
+  [32;1m✓[39;22m[90m [39m[90ma vault ref under the sms namespace is accepted and round-trips unc[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90manything that is not a vault ref under sms is REFUSED — a token-shaped value, a bare word, another namespace, an empty string[39m
+  [32;1m✓[39;22m[90m [39m[90mthe ref never serializes to anything but itself and carries no plaintext accessor[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\EstimateVsAccrualParityTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe corpus: estimate == accrual exactly (no variables), through the[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mtemplate bodies with variables: the sample-value estimate is within ONE segment of the accrual on realistic rendered values (NFR-06)[39m
+  [32;1m✓[39;22m[90m [39m[90mcost arithmetic is decimal-string exact (never a float) and the rate card refuses a malformed price or currency[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\GuardTruthTableTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe FR-03 truth table — every branch, every order interaction, exac[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mevery decision carries an ordered guard_log naming each check evaluated, in FR-03 order[39m
+  [32;1m✓[39;22m[90m [39m[90mthe guard is pure: the same input evaluates to the same decision and reads no clock[39m
+  [32;1m✓[39;22m[90m [39m[90mthe exception sets are the document's and nothing more[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\RoutingTrieTest[39m
+  [32;1m✓[39;22m[90m [39m[90mlongest prefix wins: +2519 beats +251 for a 2519… number; +251 stil[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90msabotage (g) control: insertion ORDER never changes the answer — the longer prefix wins whether inserted first or last[39m
+  [32;1m✓[39;22m[90m [39m[90mEC-01 / §9: overlaps name every (shadowing, shadowed) pair — "+2519 shadows +251"[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\SegmenterCorpusTest[39m
+  [32;1m✓[39;22m[90m [39m[90mevery corpus entry segments exactly as the fixture states[39m[90m           [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mthe corpus names the six mandated classes: GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script (EC-09)[39m
+  [32;1m✓[39;22m[90m [39m[90mone non-GSM character forces UCS-2 (the sabotage (j) control: Amharic counted as GSM-7 is a red)[39m
+  [32;1m✓[39;22m[90m [39m[90msegment boundaries are reported for the editor's inline markers and lie on the per-segment stride[39m
+  [32;1m✓[39;22m[90m [39m[90mUS-03: the Amharic counter warns at the 71st character — 70 is one segment, 71 is two[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\StateMachineMatrixTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe pipeline transition matrix — every legal edge, every illegal ed[39m[90m…[39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90msent NEVER rolls back — no edge leaves sent except delivered, undelivered, expired[39m
+  [32;1m✓[39;22m[90m [39m[90mthe DLR precedence matrix (FR-13) — idempotent, out-of-order safe, contradiction retained[39m
+  [32;1m✓[39;22m[90m [39m[90mthe GeezSMS profile's [39m[37msuccess[39m[90m maps to acceptance and NOTHING beyond (R-D14-1.5) — never delivered[39m
+  [32;1m✓[39;22m[90m [39m[90mexpiry is a DB-time fact computed from sent_at + the setting, never from a wall clock[39m
+  [32;1m✓[39;22m[90m [39m[90mthe backing values are the column values and the event identifiers — frozen[39m
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Unit\Sms\StopWordByteExactTest[39m
+  [32;1m✓[39;22m[90m [39m[90mthe seed carries the document's Amharic stop-word byte-for-byte[39m[90m     [39m [90m0.01s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno normalization, transliteration or trimming is applied to the word (a one-byte change is detected)[39m
+S08 backfill: 0 unconsolidated shared-identity pair(s) recorded in customer_identity_conflicts.
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Support\DueSetTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit due() answers at-or-before the CALLER's clock only — a future m[39m[90m…[39m [90m10.02s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cancel removes; re-schedule moves the score; kinds are isolated[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit rebuild restores from column truth at the exact deadline — a los[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit members parse round-trip (the id half may itself carry pipes-fre[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\BroadcastLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-06 end to end: draft pins v1, preview = the query, a republis[39m[90m…[39m [90m1.13s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit cancel stops the un-sent remainder COLD: a launch whose chunk ne[39m[90m…[39m [90m0.44s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-02 + the caps: a non-announcement template is refused; the ty[39m[90m…[39m [90m1.74s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\BroadcastLiveGuardsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-07: an opt-out landing after LAUNCH but before the chunk runs[39m[90m…[39m [90m0.54s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\BroadcastQuotaPauseTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit a chunk at the quota wall pauses the broadcast (paused_quota, no[39m[90m…[39m [90m0.59s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\CalendarLinkedQuietHoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit calendar-linked: quiet = the painted calendar's closed hours; re[39m[90m…[39m [90m0.51s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\CircuitBreakerTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-09 / NFR-05: five gateway-level failures trip the circuit (op[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the reference profile's health probe closes a half-open circuit[39m[90m… [39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\ConsumersTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit ticket.resolved → one queued row through the door; a re-drive of[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the per-event toggle is checked FIRST: ticket.assigned (off by §[39m[90m…[39m [90m0.62s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit automation.sms.requested: the template_ref names an FR-01 key →[39m[90m… [39m [90m0.49s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit customer.suppression.set skips the customer's HELD non-essential[39m[90m…[39m [90m0.45s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit customer.rg_flag.set skips held non-essential rows as rg_flagged[39m[90m…[39m [90m0.50s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DlrAuthTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit control 1 — FAIL-CLOSED: a gateway whose credential row carries[39m[90m… [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 2 — a wrong secret is refused with the same byte-identic[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 3 — a byte-identical replay within the window answers 20[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit control 4 (POSITIVE) — the right secret once: 202, the tenant re[39m[90m…[39m [90m0.06s[39m  
+  [dev-hardware-indicative] NFR-03 DLR wire-to-state (≤ 1 s; n=1 in-shape) p50  15.990 ms   p99  15.990 ms   max  15.990 ms   budget(p99) 1000.0 ms   WITHIN
+  [dev-hardware-indicative] DLR burst N=30 same-row (dev-scale; §12's 200/s is [D19]) p50   4.094 ms   p99   4.094 ms   max 122.825 ms   budget(p99) 1000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DlrIngestionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the WIRE pass: the vendor-shaped callback hits the real url_secr[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit T-08 driven: delivered applies once (event + stamp + audit), a d[39m[90m…[39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-03: an unknown provider id is logged, dropped, counted — and[39m[90m… [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a dev-scale burst (N=30, stated) applies cleanly — every receipt[39m[90m…[39m [90m0.51s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\DuplicateWindowTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-10: the second identical send inside the window skips as dupl[39m[90m…[39m [90m0.48s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\ExpiredSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit sent + 48 h → expired with the honest wording; a premature membe[39m[90m…[39m [90m0.84s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit queued + 24 h → failed:no_route_available (EC-12's ladder half);[39m[90m…[39m [90m0.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\FailoverTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit resolves the seeded +251 route (GeezSMS primary, reference fallb[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FS-01 auth-expiry ladder: five REAL 401s through the mock (a rot[39m[90m…[39m [90m0.15s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\GatewayWriterTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-06: the rate card is reports.view-gated in the read; the per[39m[90m…[39m [90m0.24s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the fixture seeder: two FIXTURE profiles + the +251 route (GeezS[39m[90m…[39m [90m0.12s[39m  
+  [dev-hardware-indicative] held-release sweep, N=120 (dev scale; the 10k ≤ 60 s figure is [D19]) p50 940.934 ms   p99 940.934 ms   max 940.934 ms   budget(p99) 60000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\HeldReleaseSweepTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N=120 (dev scale, stated): one sweep releases them all with the[39m[90m… [39m [90m3.42s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\HoldAllSendsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit hold on → held row + sms.held(release_at null) + a DueSet candid[39m[90m…[39m [90m0.31s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the live guard holds too: a hold flipped on AFTER enqueue holds[39m[90m… [39m [90m0.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\HttpGenericOnboardingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-08: no code names the vendor — the mapping is the whole onboa[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the GeezSMS profile is onboarded by mapping: a send reaches the[39m[90m… [39m [90m0.11s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit R-D14-1.5: the profile's [39m[37msuccess[39m[90m parses to ACCEPTED and nothing[39m[90m… [39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the vendor cap (§12) and the template marker (§7) are refused BE[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-11 classification over the wire: the REFERENCE profile — 401[39m[90m… [39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\LiveGuardsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit EC-02: the phone identity unlinked between queue and send → skip[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-02 mirror: an opt-out recorded between queue and send → skipp[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\ManualDoorsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit reengage: 403 without sms.send; 422 while the window is open; 20[39m[90m…[39m [90m0.60s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit notify: the FR-01 off-by-default toggle refuses first; toggled o[39m[90m…[39m [90m0.52s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an unknown ticket answers the 404 pattern, never an existence or[39m[90m…[39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\MissingDlrRateTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit over-threshold silence degrades the gateway once (transition-onl[39m[90m…[39m [90m2.21s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\OfflineFormConfirmationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit source=offline_form → the offline_form_confirmation row (not tic[39m[90m…[39m [90m0.39s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the confirmation renders and sends through the pipeline like any[39m[90m…[39m [90m0.67s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\OptOutAbsolutenessTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-05: EVERY FR-01 event to an opted-out customer skips as opted[39m[90m…[39m [90m0.72s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the single carve-out, proven once: with the market knob ON, ONE[39m[90m… [39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit with the knob OFF (the default), an opt-out sends nothing at all[39m[90m [39m [90m0.44s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\OptOutRestorationAuditTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit add → restore(reason) → the audit + event trail with ids only; t[39m[90m…[39m [90m0.50s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit import: rows land as source api, idempotent against live opt-out[39m[90m…[39m [90m0.43s[39m  
+  [dev-hardware-indicative] NFR-01 event-to-queued (≤ 2 s p95; n=6 in-shape) p50  19.058 ms   p99  27.951 ms   max  27.951 ms   budget(p99) 2000.0 ms   WITHIN
+  [dev-hardware-indicative] NFR-01 queued-to-sent (≤ 5 s p95; n=6 in-shape, shaping waits included) p50  44.935 ms   p99 324.652 ms   max 324.652 ms   budget(p99) 5000.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\PipelineTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit event → queued → sent: the row walks the machine against the rea[39m[90m…[39m [90m0.40s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit a skipped guard leaves an honest row: an opted-out customer enqu[39m[90m…[39m [90m0.29s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit NFR-01 in-shape (dev scale, hand-rolled n, figures labelled): ev[39m[90m…[39m [90m1.12s[39m  
+
+  [30;43;1m WARN [39;49;22m[39m Tests\Feature\Sms\QuietHoursTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit inside the window a hold-policy template HOLDS with the release[39m[90m… [39m [90m0.54s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-04: verification_code and security_notification are exempt by[39m[90m…[39m [90m0.54s[39m  
+  [33;1m-[39;22m[90m [39m[90mit the tenant timezone decides: the same wall instant is quiet in A[39m[90m…[39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit EC-05, injected clock: a SHRUNK window releases early-but-in-win[39m[90m…[39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the release-now door (sms.send, audited) outruns the window; the[39m[90m…[39m [90m0.63s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\RenderingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit renders the ticket-bound vocabulary through Doc 12's resolver, b[39m[90m…[39m [90m0.12s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit FR-06: an unresolved variable → skip_send by default (nothing le[39m[90m…[39m [90m0.08s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-05: {{link}} resolves ONLY to a signed platform short URL on[39m[90m…[39m [90m0.09s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §14 / C-08: resolveForSend walks customer language → tenant defa[39m[90m…[39m [90m0.09s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\SidecarContractTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mTLS: a call without our client certificate never reaches HTTP;[39m[90m… [39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit restart transparency (T-03 / FS-02): the gap is retryable, not f[39m[90m…[39m [90m1.62s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\StopParsingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit en: " STOP \n" from the wire opts the sender out (whitespace tri[39m[90m…[39m [90m0.51s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit am: the document's own bytes ride the wire and land byte-identic[39m[90m…[39m [90m0.56s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the capability gate: the GeezSMS profile (no inbound_stop in its[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TemplateLifecycleTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates a template (head + v1 live), publishes v2, rolls back to[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit one template per event per language (FR-01); the list groups by[39m[90m… [39m [90m0.21s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the permission split: view cannot create or publish; create cann[39m[90m…[39m [90m0.27s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TemplateSeedTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit seeds 22 templates (11 events × en + am), real Ethiopic in every[39m[90m…[39m [90m0.25s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the console command seeds one tenant inside its own binding[39m[90m      [39m [90m0.37s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TemplateValidationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit FR-05: a variable the event does not provide is refused at creat[39m[90m…[39m [90m0.14s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit AC-10 / SEC-05: an arbitrary URL in a template fails publish — h[39m[90m…[39m [90m0.16s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an unknown event, an empty body and an over-long body are refuse[39m[90m…[39m [90m0.14s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TestSendTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit queues a sandbox-tagged row for a fixture number and refuses a n[39m[90m…[39m [90m0.13s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\TokenBucketTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit drift pin: the mirrored Lua is byte-identical to TelegramRateLim[39m[90m…[39m [90m0.03s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit conformance: a 5/s gateway allows a burst up to capacity, refuse[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-05: the broadcast lane passes BOTH buckets — the reserve frac[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Sms\VerificationCodeDoorTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit the fixture caller sends a code: rendered at enqueue with the ve[39m[90m…[39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit BR-06: the door refuses anything but a 4–10 digit platform code,[39m[90m…[39m [90m0.43s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsNoFreeTextTest[39m
+  [32;1m✓[39;22m[90m [39m[90mno class in the SMS namespaces accepts a free-text field (BR-01, st[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mno route named sms.* (or *.sms.*) binds a controller parameter or a[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mPOSITIVE CONTROL — a request that smuggles a [39m[37mbody[39m[90m is caught by the[39m[90m… [39m [90m0.05s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsCredentialWriteOnlyTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit creates an http_generic gateway: the mapping stored, the credent[39m[90m…[39m [90m0.15s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit SEC-01 write-only: replacing the credential mints a NEW ref and[39m[90m… [39m [90m0.25s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsEgressGuardTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit a non-allowlisted host is refused BY THE PROXY — the control is[39m[90m… [39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit plant → detect → remove: the driver logs status + class + the MA[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit an empty egress proxy refuses to send — never direct egress (ADR[39m[90m…[39m [90m0.03s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsPhoneMaskingTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit B4-S08 byte-exact: the drawn receipt form is "+251 91 ••• 4417"[39m[90m… [39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit plant → detect: after a full pipeline run, no captured log recor[39m[90m…[39m [90m0.41s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsMoNoConversationTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit N-15 truth table: STOP mints ONE optout row and nothing conversa[39m[90m…[39m [90m0.48s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit no inbound-SMS route reaches a conversation controller: the rout[39m[90m…[39m [90m0.04s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsBroadcastRgExclusionTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit SEC-03 structural: the compiled audience SQL carries the rg_flag[39m[90m…[39m [90m0.41s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the audience requires a phone identity and excludes suppressed r[39m[90m…[39m [90m0.47s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\LiveSecretValuesScrubTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit plant → detect → remove: a revealed vault secret is scrubbed und[39m[90m…[39m [90m0.06s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is bounded (≤ 32 values), refuses short values (< 12 chars are n[39m[90m…[39m [90m0.04s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit is cleared at exactly the TenantContext clear points — a value r[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit condition (countersign, 2026-09-08): LiveSecretValues::all() has[39m[90m…[39m [90m0.06s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Security\SmsNoDebugLeftoverTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit no debug_backtrace and no "DEBUG " log call exists under app/Dom[39m[90m…[39m [90m0.05s[39m  
+  [dev-hardware-indicative] sms guard function (§12 ≤ 1 ms) p50   0.001 ms   p99   0.002 ms   max   0.044 ms   budget(p99) 1.0 ms   WITHIN
+  [dev-hardware-indicative] sms route resolution, built table (§12 ≤ 0.5 ms) p50   0.001 ms   p99   0.001 ms   max   0.061 ms   budget(p99) 0.5 ms   WITHIN
+  [dev-hardware-indicative] sms resolve() incl. C-07 version read (reported, no §12 figure) p50   0.314 ms   p99   1.602 ms   max   5.382 ms   budget(p99) 0.5 ms   OVER
+  [dev-hardware-indicative] sms render arithmetic (§12 ≤ 5 ms) p50   0.007 ms   p99   0.020 ms   max   0.146 ms   budget(p99) 5.0 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\SmsBudgetsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit §12: the guard function evaluates in ≤ 1 ms[39m[90m                      [39m [90m0.07s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12: route resolution over the seeded table (+251 / +2519 / +254[39m[90m…[39m [90m0.97s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit §12: render arithmetic (substitution + segmentation of a two-seg[39m[90m…[39m [90m0.04s[39m  
+  [dev-hardware-indicative] SS-04 lane drill: transactional p95 196.3 → 198.2 ms under a broadcast (Δ 1.0%; N=40+12 dev scale, [D19] at 8,000) p50  56.049 ms   p99 198.179 ms   max 213.694 ms   budget(p99) 206.1 ms   WITHIN
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Performance\SmsLaneIsolationDrillTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit AC-07 dev-scale (N=40 broadcast sends interleaved with 12 transa[39m[90m…[39m [90m6.12s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Isolation\SmsGrantPhysicsTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit R-19b/ADR-0003: the app denied set per SMS table and privilege i[39m[90m…[39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit N-01 / N-05: every SMS table is FORCED RLS with tenant_isolation[39m[90m…[39m [90m0.10s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit condition 3 (SEC-01 / C-13): a plaintext or token-shaped credent[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit immutable by grant: a version body UPDATE, a gateway driver / is[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the CHECKs bite: a staff opt-out without a reason, a restoration[39m[90m…[39m [90m0.05s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit the clock facts are the database's: sent_at / delivered_at / ter[39m[90m…[39m [90m0.06s[39m  
+
+  [90mTests:[39m    [33;1m1 skipped[39;22m[90m,[39m[39m [39m[32;1m141 passed[39;22m[90m (1598 assertions)[39m
+  [90mDuration:[39m [39m57.07s[39m
+
+PEST EXIT 0

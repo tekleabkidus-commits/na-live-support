@@ -66,6 +66,7 @@ final class EnqueueSms
             'customer_id' => $request->customerId,
             'ticket_id' => $request->ticketId,
             'conversation_id' => $request->conversationId,
+            'broadcast_id' => $request->broadcastId,
             'event' => $request->event->value,
             'language' => $language,
             'phone' => $phone,

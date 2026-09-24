@@ -37,6 +37,13 @@ return [
         'off_until_gateway' => 'SMS is off until a gateway exists.',
     ],
     'refused' => [
+        'broadcast_template_refused' => 'Only a service announcement template can be broadcast.',
+        'broadcast_template_unpublished' => 'Publish the template before pinning it to a broadcast.',
+        'broadcast_not_editable' => 'Only a draft or scheduled broadcast can be edited.',
+        'broadcast_not_launchable' => 'This broadcast has already launched, finished or been canceled.',
+        'broadcast_not_cancelable' => 'Only a scheduled, sending or paused broadcast can be canceled.',
+        'broadcast_confirmation_required' => 'Type the broadcast name to confirm sending to an audience this large.',
+        'broadcast_monthly_cap' => 'The monthly broadcast cap for this workspace has been reached.',
         'window_not_expired' => 'The reply window is still open — reply in the conversation instead. SMS re-engagement is for expired windows only.',
         'event_disabled' => 'The ticket-updated SMS event is switched off for this workspace.',
         'no_phone' => 'This customer has no phone number on file.',

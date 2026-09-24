@@ -35,6 +35,13 @@ return [
         'off_until_gateway' => 'መግቢያ እስኪኖር ድረስ SMS ጠፍቷል።',
     ],
     'refused' => [
+        'broadcast_template_refused' => 'የአገልግሎት ማስታወቂያ አብነት ብቻ ሊሰራጭ ይችላል።',
+        'broadcast_template_unpublished' => 'ወደ ስርጭት ከመሰካቱ በፊት አብነቱን ያትሙ።',
+        'broadcast_not_editable' => 'ረቂቅ ወይም የታቀደ ስርጭት ብቻ ሊስተካከል ይችላል።',
+        'broadcast_not_launchable' => 'ይህ ስርጭት አስቀድሞ ተጀምሯል፣ ተጠናቋል ወይም ተሰርዟል።',
+        'broadcast_not_cancelable' => 'የታቀደ፣ በመላክ ላይ ያለ ወይም የቆመ ስርጭት ብቻ ሊሰረዝ ይችላል።',
+        'broadcast_confirmation_required' => 'ለዚህን ያህል ሰፊ ታዳሚ ለመላክ የስርጭቱን ስም ተይበው ያረጋግጡ።',
+        'broadcast_monthly_cap' => 'የዚህ የስራ ቦታ ወርሃዊ የስርጭት ገደብ ደርሷል።',
         'window_not_expired' => 'የመልስ መስኮቱ ገና ክፍት ነው — በውይይቱ ውስጥ ይመልሱ። የSMS መልሶ-መጠራት ለተዘጋ መስኮት ብቻ ነው።',
         'event_disabled' => 'የቲኬት-ዝማኔ SMS ክስተት ለዚህ የስራ ቦታ ጠፍቷል።',
         'no_phone' => 'ለዚህ ደንበኛ የስልክ ቁጥር አልተመዘገበም።',

@@ -24,6 +24,7 @@ require_once __DIR__.'/PipelineSupport.php';
 it('hold on → held row + sms.held(release_at null) + a DueSet candidate; the sweep keeps it while the hold stands and releases it when the hold lifts', function (): void {
     $scene = smsPipeScene();
     Queue::fake();
+    app(SettingsRepository::class)->set('sms.quiet_hours', ['start' => '00:00', 'end' => '00:00']); // zero-width → never quiet (this suite is about hold-all, not FR-16)
     app(SettingsRepository::class)->set('sms.hold_all_sends', true);
 
     $result = DB::transaction(fn () => app(EnqueueSms::class)->enqueue(new SendRequest(
@@ -65,6 +66,7 @@ it('the live guard holds too: a hold flipped on AFTER enqueue holds at the job �
     $scene = smsPipeScene();
     Queue::fake();
 
+    app(SettingsRepository::class)->set('sms.quiet_hours', ['start' => '00:00', 'end' => '00:00']);
     $result = DB::transaction(fn () => app(EnqueueSms::class)->enqueue(new SendRequest(
         SendableEvent::TicketResolved, $scene['ticket']->customer_id, $scene['ticket']->identifier(),
     )));

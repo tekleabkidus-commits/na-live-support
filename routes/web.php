@@ -90,6 +90,19 @@ Route::middleware([
 
     // Doc 14 FR-14 (S14 step 8): the opt-out manager (§8) — masked list, staff add
     // with reason, high-visibility restore, CSV import; export is customers.export.
+    // Doc 14 FR-17/FR-18 (S14 step 10): broadcasts — draft/edit on sms.send +
+    // sms.templates.view; the LAUNCH door alone carries A-64's HIGH pair.
+    Route::prefix('sms/api/broadcasts')->name('sms.broadcasts.')->group(function (): void {
+        $b = App\Http\Controllers\Sms\SmsBroadcastsController::class;
+        Route::get('/', [$b, 'index'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('index');
+        Route::get('{broadcastId}', [$b, 'show'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('show');
+        Route::get('{broadcastId}/preview', [$b, 'preview'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('preview');
+        Route::post('/', [$b, 'store'])->middleware(['permission:sms.send', 'permission:sms.templates.view', 'audit:sms.broadcast.created'])->name('store');
+        Route::patch('{broadcastId}', [$b, 'update'])->middleware(['permission:sms.send', 'permission:sms.templates.view', 'audit:sms.broadcast.updated'])->name('update');
+        Route::post('{broadcastId}/launch', [$b, 'launch'])->middleware(['permission:sms.send', 'permission:sms.gateways.manage', 'audit:sms.broadcast.launched'])->name('launch');
+        Route::post('{broadcastId}/cancel', [$b, 'cancel'])->middleware(['permission:sms.send', 'audit:sms.broadcast.canceled'])->name('cancel');
+    });
+
     // Doc 14 FR-16 (S14 step 9): the held view's data door + release-now.
     Route::prefix('sms/api/held')->name('sms.held.')->group(function (): void {
         $h = App\Http\Controllers\Sms\SmsHeldController::class;

@@ -139,7 +139,9 @@ final class SendPipeline
             return null; // the OTP door rendered at enqueue (the code never rides a queue payload)
         }
 
-        $resolved = $this->templates->resolveForSend($row->event, $row->language);
+        $resolved = $row->broadcast_id !== null
+            ? $this->pinnedResolution($row)                  // AC-06/EC-06: a broadcast renders ITS PIN, never the live pointer
+            : $this->templates->resolveForSend($row->event, $row->language);
         if ($resolved === null) {
             DB::transaction(function () use ($row): void {
                 $row->fail_reason = 'no_template';
@@ -178,6 +180,25 @@ final class SendPipeline
         $row->save();
 
         return null;
+    }
+
+    /** @return array{template: \App\Models\SmsTemplate, version: \App\Models\SmsTemplateVersion, language: string, fallback_from: ?string}|null */
+    private function pinnedResolution(SmsMessage $row): ?array
+    {
+        /** @var \App\Models\SmsBroadcast|null $broadcast */
+        $broadcast = \App\Models\SmsBroadcast::query()->find($row->broadcast_id);
+        if ($broadcast === null) {
+            return null;
+        }
+        /** @var \App\Models\SmsTemplate|null $template */
+        $template = \App\Models\SmsTemplate::query()->find($broadcast->template_id);
+        /** @var \App\Models\SmsTemplateVersion|null $version */
+        $version = \App\Models\SmsTemplateVersion::query()->find($broadcast->template_version_id);
+        if ($template === null || $version === null) {
+            return null;
+        }
+
+        return ['template' => $template, 'version' => $version, 'language' => $template->language, 'fallback_from' => null];
     }
 
     private function routeAndSend(SmsMessage $row): int
