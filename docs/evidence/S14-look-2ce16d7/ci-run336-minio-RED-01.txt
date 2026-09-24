@@ -1,0 +1,29 @@
+=== run #336 = 35916450403 on 6490248 — Stage 3 job 107370643993, Stage 3b job 107370644106: the failing step + error line (both identical), from the jobs' own logs:
+2026-09-23T20:35:23.7568573Z ##[group]Run docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+2026-09-23T20:35:25.0231688Z  minio Error pull access denied for minio/minio, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+2026-09-23T20:35:25.0298316Z Error response from daemon: pull access denied for minio/minio, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+2026-09-23T20:35:25.0335515Z ##[error]Process completed with exit code 1.
+
+=== Stage 3b's missing ci-soak artifact is a SYMPTOM (the upload step ran after the bring-up died):
+2026-09-23T20:35:04.3863748Z ##[error]No files were found with the provided path: docs/evidence/ci-soak/. No artifacts will be uploaded.
+
+=== reproduced locally 2026-09-24 (the dev box, no change made):
+$ docker pull minio/minio:latest
+Error response from daemon: pull access denied for minio/minio, repository does not exist or may require 'docker login'
+$ docker pull minio/minio@sha256:14cea493d9a3... (the cached known-good digest)
+Error response from daemon: pull access denied for minio/minio, repository does not exist or may require 'docker login' — the denial is REPO-WIDE: a Docker Hub digest pin cannot fix this
+$ docker pull quay.io/minio/minio:latest
+Status: Downloaded newer image for quay.io/minio/minio:latest — MinIO's own quay registry serves
+
+=== the pin candidate, proven 2026-09-24 (no change landed):
+minio/minio:latest (cached 2025-09-07) == quay.io/minio/minio:latest — the IDENTICAL build:
+  minio version RELEASE.2025-09-07T16-13-09Z (commit-id=07c3a429bfed433e49018cb0f78a52145d4bedeb) — both images
+  RepoDigests: ["minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e",
+                "quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e"]
+  docker manifest inspect quay.io/minio/minio@sha256:14cea493... → served (the pin is pullable)
+  docker pull minio/minio@sha256:14cea493... → pull access denied (the Docker Hub denial is REPO-WIDE; no Hub pin can work)
+=== P-MINIO-REGISTRY cache-free proof (2026-09-24): every cached minio image removed first (docker image rm — 'NO minio image cached'), then:
+ Image quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e Pulling 
+ Container na-live-support-minio-1 Healthy 
+container runs the PINNED reference: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+bucket provision (CI's own command): Bucket created successfully `local/na-live-support`.
