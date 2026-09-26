@@ -12,6 +12,7 @@ use App\Models\SmsBroadcast;
 use App\Models\User;
 use App\Support\Problem\ErrorCode;
 use App\Support\Problem\ProblemDetails;
+use App\Support\Rbac\CapabilityMapProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -30,6 +31,7 @@ final class SmsBroadcastsController extends Controller
     public function __construct(
         private readonly BroadcastWriter $writer,
         private readonly AudienceQuery $audience,
+        private readonly CapabilityMapProvider $verdicts,
     ) {}
 
     public function index(Request $request): JsonResponse
@@ -49,6 +51,9 @@ final class SmsBroadcastsController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        if (($deny = $this->requireSecondary($request, 'sms.templates.view')) !== null) {
+            return $deny;
+        }
         $input = $this->input($request, [
             'name' => ['required', 'string', 'min:3', 'max:120'],
             'template_id' => ['required', 'uuid'],
@@ -100,9 +105,12 @@ final class SmsBroadcastsController extends Controller
         ]);
     }
 
-    /** A-64: the HIGH door — the route carries BOTH keys. */
+    /** A-64: the route carries sms.gateways.manage (the HIGH key); the controller adds the sms.send half. */
     public function launch(Request $request, string $broadcastId): JsonResponse
     {
+        if (($deny = $this->requireSecondary($request, 'sms.send')) !== null) {
+            return $deny;
+        }
         $broadcast = $this->broadcast($broadcastId);
         $input = $this->input($request, ['typed_confirmation' => ['sometimes', 'nullable', 'string', 'max:120']]);
         if ($input instanceof JsonResponse) {
@@ -123,6 +131,17 @@ final class SmsBroadcastsController extends Controller
         } catch (TemplateRefused $e) {
             return $this->refused($e);
         }
+    }
+
+    /** The second key of a compound gate (the route declares the first); 403 in the house shape. */
+    private function requireSecondary(Request $request, string $permission): ?JsonResponse
+    {
+        $user = $request->user();
+        if ($user instanceof User && $this->verdicts->mapFor($user)->allows($permission)) {
+            return null;
+        }
+
+        return ProblemDetails::response(ErrorCode::Forbidden, 403, 'forbidden', errors: ['permission' => [$permission]]);
     }
 
     /** @return array<string, mixed> */

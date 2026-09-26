@@ -97,13 +97,18 @@ Route::middleware([
     // Doc 14 FR-17/FR-18 (S14 step 10): broadcasts — draft/edit on sms.send +
     // sms.templates.view; the LAUNCH door alone carries A-64's HIGH pair.
     Route::prefix('sms/api/broadcasts')->name('sms.broadcasts.')->group(function (): void {
+        // ONE declared permission per route (the house middleware + RouteCoverageSweep are single-key);
+        // the SECOND key of a compound gate is enforced in the controller via CapabilityMapProvider.
+        // Draft/view/edit → sms.send (the SMS capability; the controller also requires sms.templates.view
+        // to pick a template). LAUNCH → sms.gateways.manage (A-64's HIGH key a Team Leader lacks; the
+        // controller additionally requires sms.send). Cancel → sms.send.
         $b = App\Http\Controllers\Sms\SmsBroadcastsController::class;
-        Route::get('/', [$b, 'index'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('index');
-        Route::get('{broadcastId}', [$b, 'show'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('show');
-        Route::get('{broadcastId}/preview', [$b, 'preview'])->middleware(['permission:sms.send', 'permission:sms.templates.view'])->name('preview');
-        Route::post('/', [$b, 'store'])->middleware(['permission:sms.send', 'permission:sms.templates.view', 'audit:sms.broadcast.created'])->name('store');
-        Route::patch('{broadcastId}', [$b, 'update'])->middleware(['permission:sms.send', 'permission:sms.templates.view', 'audit:sms.broadcast.updated'])->name('update');
-        Route::post('{broadcastId}/launch', [$b, 'launch'])->middleware(['permission:sms.send', 'permission:sms.gateways.manage', 'audit:sms.broadcast.launched'])->name('launch');
+        Route::get('/', [$b, 'index'])->middleware('permission:sms.send')->name('index');
+        Route::get('{broadcastId}', [$b, 'show'])->middleware('permission:sms.send')->name('show');
+        Route::get('{broadcastId}/preview', [$b, 'preview'])->middleware('permission:sms.send')->name('preview');
+        Route::post('/', [$b, 'store'])->middleware(['permission:sms.send', 'audit:sms.broadcast.created'])->name('store');
+        Route::patch('{broadcastId}', [$b, 'update'])->middleware(['permission:sms.send', 'audit:sms.broadcast.updated'])->name('update');
+        Route::post('{broadcastId}/launch', [$b, 'launch'])->middleware(['permission:sms.gateways.manage', 'audit:sms.broadcast.launched'])->name('launch');
         Route::post('{broadcastId}/cancel', [$b, 'cancel'])->middleware(['permission:sms.send', 'audit:sms.broadcast.canceled'])->name('cancel');
     });
 
