@@ -33,6 +33,14 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-14 (Doc 14) — BATCH C CHECKPOINT (C✓, R-D14-7): full battery + gates + lint, then CONTINUE (commit = this section's SHA; no stop, no CI look — R-D14-7 clause 2)
+
+**Power (R-D13-6):** BAT1 2026-09-26 14:18Z: BatteryStatus 1 (discharging), 74% — the batteries ran across AC and battery; figures indicative.
+
+**FULL Pest battery (`battery-pest.txt`): 2081 passed / 13 skipped / 0 FAILED (53,351 assertions, 706 s) EXIT 0** — fully green. (A first battery run had shown two reds: the RouteCoverageSweep catching two stacked `permission:` middlewares on the broadcast doors — a REAL defect, fixed at cause in `bc3b049` (one declared key per route, the A-64 compound gate enforced controller-side); and `Feature/Inbox/TicketActionDoorsTest` assignees-directory, which passed isolated and did NOT recur on the clean run — a Doc 07 flake, zero inbox files touched.) **FULL browser battery (fresh seed, harness overlay, CI's Stage-4 shape): 452 passed / 1 skipped / 0 FAILED (39.7 m single-worker) EXIT 0** — the recorded ledger flakies (inbox-ticket-panel:334, widget-csat:7) did not recur. **Gates 17/17 PASS. Lint EXIT 0.**
+
+**Batch C stands (steps 8 → 11):** 8 (2eb9198) opt-out + STOP + restoration + CSV · 9 (487592b) quiet hours + hold + release, with the honest fix to the clock-dependent scene · 10 (dd41588) broadcasts, RG-WHERE-first · 11 (212c962) cost/quotas/threshold/report feed + P-QUOTA-SMS as countersigned · + bc3b049 the broadcast-route permission fix. Per R-D14-7 clause 2 the B✓ CI verdict is carried to the close and this checkpoint CONTINUES without a CI look. **Proceeding to Batch D (steps 12 → 13 → 14).**
+
 ## SESSION-14 (Doc 14) — STEP 11: COST + QUOTAS + THRESHOLDS + THE REPORT FEED (P-QUOTA-SMS LANDED as countersigned; Batch C under R-D14-7; commit = this section's SHA)
 
 **P-QUOTA-SMS landed (countersigned 2026-09-08, diff as filed, `git apply` clean):** `Quota::SmsSegmentsPerMonth` keyed by `sms.quota.segments`, bucketed by the TENANT-LOCAL calendar month from DB time (`to_char(clock_timestamp() AT TIME ZONE tz, 'YYYY-MM')`, C-11 — a calendar month is not `intdiv(time(), window)`); the four foundation quotas keep their intdiv wall-clock bucket BYTE-IDENTICAL (the parked `QuotaSmsMonthlyTest` moved into the battery pins it). **The countersign conditions: Doc 01 `Foundation/QuotaTest` + Doc 09 `Ai/QuotaEnforcementTest` GREEN UNMODIFIED (15 passed, `quota-condition.txt`); the intdiv pin proven.**
