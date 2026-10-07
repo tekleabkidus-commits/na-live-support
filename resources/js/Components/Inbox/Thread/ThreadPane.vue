@@ -87,6 +87,7 @@ const windowState = ref<'open' | 'closing' | 'expired' | 'none'>('none');
 const connectionState = ref('active');
 const connectionAccount = ref('');
 const customerHasPhone = ref(false);
+const smsAvailable = ref(false); // P-EXPIRED-CARD (Doc 14 §8): no gateway → phone-guidance-only
 const blockedByUser = ref(false);
 const lightbox = ref<Record<string, unknown> | null>(null);
 const history = ref<{
@@ -180,6 +181,7 @@ async function load(anchor?: string): Promise<void> {
         reply_window_state?: string;
         reply_window_expires_at?: string | null;
         customer_has_phone?: boolean;
+        sms_available?: boolean; // P-EXPIRED-CARD (Doc 14)
         blocked_by_user?: boolean;
         connection_state?: string;
         connection_account?: string;
@@ -191,6 +193,7 @@ async function load(anchor?: string): Promise<void> {
     // the composer's paused/blocked/expired cards resolve from the server's
     // conversationMeta — no seam props remain.
     customerHasPhone.value = conversationMeta.customer_has_phone ?? false;
+    smsAvailable.value = conversationMeta.sms_available ?? false;
     blockedByUser.value = conversationMeta.blocked_by_user ?? false;
     connectionState.value = conversationMeta.connection_state ?? 'active';
     connectionAccount.value = conversationMeta.connection_account ?? '';
@@ -670,8 +673,8 @@ onMounted(async () => {
             @open-rescue="emit('open-rescue')"
         />
         <ComposerPane
-            ref="composerRef"
             v-if="!composerReplaced"
+            ref="composerRef"
             :conversation-id="conversationId"
             :channel="channel"
             :customer-name="customerName"
@@ -682,6 +685,7 @@ onMounted(async () => {
             :connection-state="connectionState"
             :connection-account="connectionAccount"
             :customer-has-phone="customerHasPhone"
+            :sms-available="smsAvailable"
             :blocked-by-user="blockedByUser"
             :channel-unreachable="latestTicket?.channel_unreachable === true"
             :t="composerT"

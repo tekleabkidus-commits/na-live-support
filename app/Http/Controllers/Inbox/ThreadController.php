@@ -403,8 +403,18 @@ final class ThreadController extends Controller
             ? DB::table('telegram_business_connections')->where('connection_id', $conversation->getAttribute('business_connection_id'))->first(['state', 'account_name'])
             : null;
 
-        /** @var object{display_name: string|null, phone: string|null}|null $customer */
-        $customer = DB::table('customers')->where('id', $conversation->getAttribute('customer_id'))->first(['display_name', 'phone']);
+        /** @var object{display_name: string|null}|null $customer */
+        $customer = DB::table('customers')->where('id', $conversation->getAttribute('customer_id'))->first(['display_name']);
+
+        // P-EXPIRED-CARD (Doc 14, countersigned; D07-N3): phone presence is Doc 08's
+        // phone IDENTITY — the SAME predicate Doc 14's guard reads — never the
+        // deprecated `customers.phone` mirror (S08 deprecation). The card and the
+        // guard can therefore never disagree.
+        $customerHasPhone = $conversation->getAttribute('customer_id') !== null
+            && DB::table('customer_identities')
+                ->where('customer_id', $conversation->getAttribute('customer_id'))
+                ->where('type', 'phone')
+                ->exists();
 
         return [
             'id' => $conversation->identifier(),
@@ -413,7 +423,9 @@ final class ThreadController extends Controller
             'reply_window_state' => $conversation->getAttribute('reply_window_state'),
             'reply_window_expires_at' => $conversation->getAttribute('reply_window_expires_at'),
             'customer_display_name' => $customer->display_name ?? null,
-            'customer_has_phone' => ($customer->phone ?? null) !== null,
+            'customer_has_phone' => $customerHasPhone,
+            // §8: "SMS is off until a gateway exists" — the card degrades to phone-guidance-only.
+            'sms_available' => app(\App\Domain\Sms\Gateways\GatewayAvailability::class)->exists(),
             // Doc 04 reason mapping: the latest outbound's delivery_error is
             // the blocked_by_user signal (DeliveryFailureReason::BlockedByUser).
             'blocked_by_user' => $this->latestBlockedByUser($conversation->identifier()),

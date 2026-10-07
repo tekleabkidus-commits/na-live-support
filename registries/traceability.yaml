@@ -2713,7 +2713,7 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      S14 step 1: the full transition matrix (every legal and illegal edge), sent never rolls back, the FR-13 DLR precedence matrix incl. EC-04 (contradiction retained + flagged), duplicates and out-of-order idempotent, the GeezSMS `success` → acceptance only (R-D14-1.5), the 48 h expiry as a DB-time comparison — as a PURE unit. PARTIAL: the table half (sms_messages, step 2b), the wire-driven matrix (DlrIngestionTest, step 7) and the zero-inferred-delivered DOM gate (sms-no-inferred-delivered.spec, step 12).
+      S14 step 1: the full transition matrix (every legal and illegal edge), sent never rolls back, the FR-13 DLR precedence matrix incl. EC-04 (contradiction retained + flagged), duplicates and out-of-order idempotent, the GeezSMS `success` → acceptance only (R-D14-1.5), the 48 h expiry as a DB-time comparison — as a PURE unit. The owed halves all landed: the table half (step 2b), the wire-driven matrix (tests/Feature/Sms/DlrIngestionTest.php, step 7), and the zero-inferred-delivered DOM gate (tests/Browser/sms-no-inferred-delivered.spec.ts, step 12: a sent-only row never shows the double check or data-sms-state="delivered"; expired reads "Sent · unconfirmed"). Status stays for the close-out's self-audit flip.
   - ac_ref: "Doc14 AC-03"
     suite_path: tests/Feature/Sms/FailoverTest.php
     type: automated
@@ -2775,15 +2775,15 @@ entries:
     justification: >-
       S14 step 4: the GeezSMS FIXTURE profile onboarded by its config MAPPING alone — the test asserts zero files under app/Domain/Sms/Gateways/Drivers/ (and GatewayConfig) name the vendor; a real send reaches the mock container through the egress proxy as a POST form (digits phone, msg, callback); `success` parses to ACCEPTED only (R-D14-1.5); the vendor cap and template marker refused before a byte leaves; FR-11 classification over the wire against the reference profile. The sidecar half — mTLS required at the handshake, /send, /health, restart transparency (retryable gap, next attempt lands) — in tests/Feature/Sms/SidecarContractTest.php against docker/mocks/smpp-sidecar; T-02's shape pinned in tests/Contract/Sms/DriverContractTest.php. PARTIAL: DLR ingress by the mapping over the wire (step 7, DlrIngestionTest). A fixture result is never proof of the [OA] live rows.
   - ac_ref: "Doc14 AC-09"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Browser/inbox-sms-timeline.spec.ts
+    type: automated
     tier: browser
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14: NOT YET BUILT — the timeline integration (Doc 07 fixture) lands at step 12 under P-TIMELINE-SMS (tests/Browser/inbox-sms-timeline.spec.ts). The chip-truth unit half is proven at step 1 (tests/Unit/Sms/ChipTruthTest.php: the double check exists for `delivered` only).
+      S14 step 12 (P-TIMELINE-SMS): US-02 on the real Doc 07 timeline — sent renders the single check + masked phone, a REAL DLR (markDelivered) moves the chip to the delivered double check; the B12-S02 menu case (Copy text + the why-line, no Edit/Delete). The server control is tests/Feature/Inbox/TimelineSmsRowsTest.php (sms.* rows reach the door, class-only actor, no phone/body in detail) and the facts-shape pin is tests/Feature/Sms/SmsTimelineFactsShapeTest.php (EXACTLY {state, phone_masked, event, lane} — the countersign condition). The chip-truth unit half from step 1 stands (tests/Unit/Sms/ChipTruthTest.php); the zero-inferred-delivered DOM gate is tests/Browser/sms-no-inferred-delivered.spec.ts.
   - ac_ref: "Doc14 AC-10"
     suite_path: tests/Unit/Sms/CredentialRefTest.php
     type: automated

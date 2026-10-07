@@ -6,14 +6,41 @@
 // expander serves the rest of the log on demand ("Show N earlier events").
 import { ref, watch } from 'vue';
 
+type SmsFacts = { state: string; phone_masked: string; event: string; lane: string };
 type TimelineRow = {
     id: string;
     name: string;
     occurred_at: string;
     actor_type: string;
     actor_name: string | null;
-    detail: Record<string, string | null | undefined>;
+    detail: Record<string, string | null | undefined> & { sms?: SmsFacts };
 };
+// P-TIMELINE-SMS (Doc 14 §9 / NFR-04 / B12-S02, countersigned): the SMS row's chip
+// reads the row's LIVE state — queued ◷ · held ☾ · sent ✓ · delivered ✓✓ (a real
+// DLR only) · undelivered/failed ! · expired "sent · unconfirmed". The menu case is
+// the drawn one: no Edit, no Delete, Copy text — "SMS cannot recall or change a
+// sent message". Nothing is greyed out; the channel simply does not offer it.
+const smsGlyph: Record<string, string> = {
+    queued: '◷',
+    held: '☾',
+    sending: '◷',
+    sent: '✓',
+    delivered: '✓✓',
+    undelivered: '!',
+    failed: '!',
+    skipped: '!',
+    expired: '✓',
+};
+function smsChipKey(state: string): string {
+    return `sms_chip_${state}`;
+}
+function copySmsText(row: TimelineRow): void {
+    const facts = row.detail.sms;
+    if (!facts) return;
+    void navigator.clipboard?.writeText(
+        `${props.t[smsChipKey(facts.state)] ?? facts.state} · ${facts.phone_masked}`,
+    );
+}
 
 const props = defineProps<{
     ticketId: string | null;
@@ -221,6 +248,43 @@ function showEarlier(): void {
                 <span v-if="detailLine(row) !== ''" :style="{ color: 'var(--ds-text-secondary)' }">
                     · {{ detailLine(row) }}</span
                 >
+                <!-- P-TIMELINE-SMS (Doc 14 §9/NFR-04/US-02): the SMS row's LIVE chip. The
+                     glyph is state-driven — ✓✓ (delivered) ONLY on a real DLR; expired reads
+                     "sent · unconfirmed" (a check, never the double). data-sms-state is the
+                     zero-inferred-delivered DOM gate's hook. -->
+                <span
+                    v-if="row.detail.sms"
+                    class="ml-1 inline-flex items-center gap-1 rounded px-1.5 text-[11px]"
+                    :style="{ background: 'var(--ds-inset-bg)', color: 'var(--ds-text-secondary)' }"
+                    data-testid="sms-chip"
+                    :data-sms-state="row.detail.sms.state"
+                >
+                    <span aria-hidden="true" class="font-mono">{{
+                        smsGlyph[row.detail.sms.state] ?? ''
+                    }}</span>
+                    <span>{{ t[smsChipKey(row.detail.sms.state)] ?? row.detail.sms.state }}</span>
+                    <span :style="{ color: 'var(--ds-text-muted)' }"
+                        >· {{ row.detail.sms.phone_masked }}</span
+                    >
+                </span>
+                <!-- B12-S02: the SMS entry's menu — Copy text only; no Edit, no Delete,
+                     nothing greyed (the channel simply does not offer recall). -->
+                <span
+                    v-if="row.detail.sms"
+                    class="ml-1 inline-flex items-center gap-1"
+                    :data-sms-menu="row.detail.sms.state"
+                >
+                    <button
+                        type="button"
+                        class="text-[11px] underline"
+                        :style="{ color: 'var(--ds-text-secondary)' }"
+                        data-testid="sms-menu-copy"
+                        @click="copySmsText(row)"
+                    >
+                        {{ t.sms_menu_copy }}
+                    </button>
+                    <span class="sr-only" data-testid="sms-menu-why">{{ t.sms_menu_why }}</span>
+                </span>
                 <button
                     v-if="row.name === 'ticket.routed' && typeof row.detail.record_id === 'string'"
                     type="button"

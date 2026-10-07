@@ -46,6 +46,7 @@ const props = defineProps<{
     connectionState: string; // active | paused | revoked (Doc 05 seam)
     connectionAccount: string;
     customerHasPhone: boolean;
+    smsAvailable?: boolean; // P-EXPIRED-CARD (Doc 14 §8)
     blockedByUser: boolean;
     channelUnreachable?: boolean;
     voiceFlag: boolean;
@@ -75,6 +76,47 @@ const reopenPrompt = ref(false);
 const pendingThen = ref<string | null>(null);
 const transitionFailure = ref<{ to: string; detail: string } | null>(null);
 const typingBy = ref<string | null>(null); // FR-16 collision strip
+// P-EXPIRED-CARD (Doc 14 FR-02 / US-02 / EC-10, countersigned): the drawn
+// "Send SMS re-engagement" button fires Doc 14's door — an EVENT + ids, never
+// text — and renders the server's answer INSIDE the card: queued (the chip),
+// duplicate ("already sent N min ago"), skipped{reason}, or the §8 degrade.
+type SmsCardState =
+    | { kind: 'queued' }
+    | { kind: 'duplicate'; minutes: number }
+    | { kind: 'skipped'; reason: string }
+    | { kind: 'error' };
+const smsState = ref<SmsCardState | null>(null);
+const smsSending = ref(false);
+async function sendReengagementSms(): Promise<void> {
+    if (smsSending.value) return;
+    smsSending.value = true;
+    try {
+        const response = await fetch(`/inbox/thread/${props.conversationId}/sms/reengage`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': xsrf(),
+            },
+            body: JSON.stringify({ event: 'window_reengagement' }),
+        });
+        const body = (await response.json()) as {
+            outcome?: string;
+            reason?: string;
+            minutes_ago?: number;
+        };
+        if (response.ok && body.outcome === 'queued') smsState.value = { kind: 'queued' };
+        else if (body.reason === 'duplicate')
+            smsState.value = { kind: 'duplicate', minutes: body.minutes_ago ?? 0 };
+        else if (body.outcome === 'skipped')
+            smsState.value = { kind: 'skipped', reason: body.reason ?? '' };
+        else smsState.value = { kind: 'error' };
+    } catch {
+        smsState.value = { kind: 'error' };
+    } finally {
+        smsSending.value = false;
+    }
+}
 const raceBy = ref<string | null>(null); // FR-16 send race
 const raceConfirmOpen = ref(false);
 
@@ -515,15 +557,74 @@ onMounted(() => {
             <p class="mt-1 text-xs" :style="{ color: 'var(--ds-text-secondary)' }">
                 {{ t.expired_hint }}
             </p>
-            <button
-                v-if="customerHasPhone"
-                type="button"
-                data-testid="expired-sms"
-                class="mt-2 rounded-md border px-2 py-1 text-xs"
-                :style="{ borderColor: 'var(--ds-border-strong)', color: 'var(--ds-text-primary)' }"
+            <!-- P-EXPIRED-CARD (Doc 14): the drawn affordance (B1-S02) with the door behind it -->
+            <template v-if="customerHasPhone && smsAvailable !== false">
+                <button
+                    type="button"
+                    data-testid="expired-sms"
+                    class="mt-2 rounded-md border px-2 py-1 text-xs"
+                    :style="{
+                        borderColor: 'var(--ds-border-strong)',
+                        color: 'var(--ds-text-primary)',
+                    }"
+                    :disabled="smsSending || smsState?.kind === 'queued'"
+                    @click="sendReengagementSms"
+                >
+                    {{ t.expired_sms }}
+                </button>
+                <p class="mt-1 text-xs" :style="{ color: 'var(--ds-text-muted)' }">
+                    {{ t.expired_sms_notification_only }}
+                </p>
+                <p
+                    v-if="smsState?.kind === 'queued'"
+                    data-testid="expired-sms-queued"
+                    class="mt-1 text-xs"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    role="status"
+                >
+                    {{ t.expired_sms_queued }}
+                </p>
+                <p
+                    v-else-if="smsState?.kind === 'duplicate'"
+                    data-testid="expired-sms-duplicate"
+                    class="mt-1 text-xs"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    role="status"
+                >
+                    {{
+                        (t.expired_sms_duplicate ?? '').replace(
+                            ':minutes',
+                            String(smsState.minutes),
+                        )
+                    }}
+                </p>
+                <p
+                    v-else-if="smsState?.kind === 'skipped'"
+                    data-testid="expired-sms-skipped"
+                    class="mt-1 text-xs"
+                    :style="{ color: 'var(--ds-text-secondary)' }"
+                    role="status"
+                >
+                    {{ (t.expired_sms_skipped ?? '').replace(':reason', smsState.reason) }}
+                </p>
+                <p
+                    v-else-if="smsState?.kind === 'error'"
+                    data-testid="expired-sms-error"
+                    class="mt-1 text-xs"
+                    :style="{ color: 'var(--ds-danger-fg)' }"
+                    role="status"
+                >
+                    {{ t.expired_sms_error }}
+                </p>
+            </template>
+            <p
+                v-else-if="customerHasPhone"
+                data-testid="expired-sms-unavailable"
+                class="mt-2 text-xs"
+                :style="{ color: 'var(--ds-text-muted)' }"
             >
-                {{ t.expired_sms }}
-            </button>
+                {{ t.expired_sms_unavailable }}
+            </p>
             <p
                 v-else
                 data-testid="expired-no-phone"

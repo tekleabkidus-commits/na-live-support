@@ -41,10 +41,11 @@ it('customer_has_phone is TRUE for a customer with a phone IDENTITY and a NULL m
     ]);
     DB::table('customers')->where('id', $ticket->customer_id)->update(['phone' => null]);
 
-    $page = $this->actingAs($actor, 'staff')->get('https://localhost/inbox/thread/'.$conversation->identifier());
+    $page = $this->actingAs($actor, 'staff')->getJson('https://localhost/inbox/thread/'.$conversation->identifier());
     $page->assertOk();
 
-    $meta = $page->viewData('page')['props']['conversation'] ?? null;
+    // ThreadController@show is a JSON door (not an Inertia page): the meta rides `conversation`
+    $meta = $page->json('conversation');
     expect($meta)->not->toBeNull()
         ->and($meta['customer_has_phone'])->toBeTrue('the composer must read Doc 08\'s phone identity, never the deprecated mirror (D07-N3)')
         ->and(array_key_exists('sms_available', $meta))->toBeTrue('the card needs to know whether a gateway exists (§8)');

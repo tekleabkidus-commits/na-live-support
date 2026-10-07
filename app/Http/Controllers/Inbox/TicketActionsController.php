@@ -184,8 +184,13 @@ final class TicketActionsController extends Controller
         }
 
         $all = $request->query('all') === '1';
+        // P-TIMELINE-SMS (Doc 14 FR-12 / AC-09, countersigned): the eight sms.* lifecycle
+        // events carrying this ticket_id are timeline rows too (Doc 06's "SMS sends related
+        // to a ticket appear as system events with live state"). An explicit name list —
+        // never `sms.%` — so the opt-out/health/broadcast/cost events stay off the timeline.
+        $smsLifecycle = ['sms.queued', 'sms.held', 'sms.sent', 'sms.delivered', 'sms.undelivered', 'sms.failed', 'sms.skipped', 'sms.expired'];
         $base = \Illuminate\Support\Facades\DB::table('events')
-            ->where('name', 'like', 'ticket.%')
+            ->where(fn (\Illuminate\Database\Query\Builder $q) => $q->where('name', 'like', 'ticket.%')->orWhereIn('name', $smsLifecycle))
             ->where('payload->ticket_id', $ticket->identifier());
         $total = (clone $base)->count();
         /** @var list<object{id: string, name: string, payload: string, occurred_at: string}> $rows */
@@ -195,7 +200,8 @@ final class TicketActionsController extends Controller
 
         // S11 step 11b (STOP-G, the packet's named lines): ticket.routed carries record_id (the
         // expandable fetches the record by id through its own SEC-02 door), ticket.waiting its queue/position.
-        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path', 'record_id', 'queue', 'position'];
+        // P-TIMELINE-SMS: the SMS keys are ids and enums (SEC-02 — never a phone, never a body).
+        $detailKeys = ['old_status', 'new_status', 'old_assignee_id', 'new_assignee_id', 'by', 'old_priority', 'new_priority', 'subject_source', 'source', 'reason', 'path', 'record_id', 'queue', 'position', 'sms_message_id', 'event', 'lane', 'template_version_id'];
         $decoded = array_map(function (object $row) use ($detailKeys): array {
             /** @var array<string, mixed> $payload */
             $payload = json_decode($row->payload, true, 8, JSON_THROW_ON_ERROR);
@@ -224,10 +230,25 @@ final class TicketActionsController extends Controller
             ? []
             : \Illuminate\Support\Facades\DB::table('users')->whereIn('id', array_keys($ids))->pluck('name', 'id')->all();
 
+        // P-TIMELINE-SMS: the row's LIVE state and the DRAWN masked phone (+251 91 ••• 4417),
+        // read from sms_messages by id through Doc 14's timeline facts door — so a later DLR
+        // updates the chip (US-02 "delivered turns green") and the full number never crosses.
+        $smsIds = [];
+        foreach ($decoded as $row) {
+            if (is_string($row['detail']['sms_message_id'] ?? null)) {
+                $smsIds[] = $row['detail']['sms_message_id'];
+            }
+        }
+        /** @var array<string, array{state: string, phone_masked: string, event: string, lane: string}> $smsFacts */
+        $smsFacts = $smsIds === [] ? [] : app(\App\Domain\Sms\Timeline\SmsTimelineFacts::class)->forMessageIds($smsIds);
+
         return new JsonResponse([
             'total' => $total,
-            'rows' => array_map(function (array $row) use ($names): array {
+            'rows' => array_map(function (array $row) use ($names, $smsFacts): array {
                 $detail = $row['detail'];
+                if (is_string($detail['sms_message_id'] ?? null) && isset($smsFacts[$detail['sms_message_id']])) {
+                    $detail['sms'] = $smsFacts[$detail['sms_message_id']];
+                }
                 $detail['old_assignee_name'] = is_string($detail['old_assignee_id'] ?? null) ? ($names[$detail['old_assignee_id']] ?? null) : null;
                 $detail['new_assignee_name'] = is_string($detail['new_assignee_id'] ?? null) ? ($names[$detail['new_assignee_id']] ?? null) : null;
                 unset($detail['old_assignee_id'], $detail['new_assignee_id']);

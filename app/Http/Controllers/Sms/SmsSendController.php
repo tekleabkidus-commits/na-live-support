@@ -41,6 +41,52 @@ final class SmsSendController extends Controller
         private readonly AuditLogger $audit,
     ) {}
 
+    /**
+     * The composer's conversation-keyed door (P-EXPIRED-CARD): resolve the
+     * conversation's OPEN ticket and re-engage, answering the composer's own
+     * contract shape ({outcome, reason, minutes_ago}) — the inline card reads
+     * it directly. `sms.send`; the window must be `expired` (Doc 05's column).
+     */
+    public function reengageConversation(Request $request, string $conversationId): JsonResponse
+    {
+        /** @var object{open_ticket_id: ?string, reply_window_state: ?string, customer_id: ?string}|null $conv */
+        $conv = DB::table('conversations')->where('id', $conversationId)->first(['open_ticket_id', 'reply_window_state', 'customer_id']);
+        if ($conv === null || ! is_string($conv->open_ticket_id)) {
+            throw new NotFoundHttpException; // C-10: no open ticket to re-engage
+        }
+        if ($conv->reply_window_state !== 'expired') {
+            return new JsonResponse(['outcome' => 'skipped', 'reason' => 'window_not_expired'], 422);
+        }
+
+        /** @var EnqueueResult $result */
+        $result = DB::transaction(fn (): EnqueueResult => $this->enqueue->enqueue(new SendRequest(
+            SendableEvent::WindowReengagement, $conv->customer_id, $conv->open_ticket_id, $conversationId,
+        )));
+
+        /** @var User $user */
+        $user = $request->user();
+        if ($result->smsMessageId !== null) {
+            $this->audit->record('sms.message.manually_queued', 'sms_message', $result->smsMessageId, AuditActor::Staff, ['ticket_id' => $conv->open_ticket_id, 'event' => 'window_reengagement', 'status' => $result->status], $user->identifier());
+        } else {
+            $request->attributes->set('audit.noop', true);
+        }
+
+        if ($result->status === 'skipped' && $result->reason === 'duplicate') {
+            $lastQueuedAt = DB::table('sms_messages')->where('event', 'window_reengagement')->where('ticket_id', $conv->open_ticket_id)->where('state', '!=', 'skipped')->orderByDesc('queued_at')->value('queued_at');
+            $minutes = is_string($lastQueuedAt) ? (int) floor((time() - strtotime($lastQueuedAt)) / 60) : 0;
+
+            return new JsonResponse(['outcome' => 'skipped', 'reason' => 'duplicate', 'minutes_ago' => $minutes], 200);
+        }
+        if ($result->status === 'refused_no_phone') {
+            return new JsonResponse(['outcome' => 'skipped', 'reason' => 'no_phone'], 422);
+        }
+        if ($result->status === 'skipped') {
+            return new JsonResponse(['outcome' => 'skipped', 'reason' => $result->reason], 200);
+        }
+
+        return new JsonResponse(['outcome' => $result->status, 'sms_message_id' => $result->smsMessageId], 201);
+    }
+
     public function reengage(Request $request, string $ticketId): JsonResponse
     {
         $ticket = $this->ticket($ticketId);

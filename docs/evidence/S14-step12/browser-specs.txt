@@ -1,0 +1,12 @@
+
+Running 8 tests using 1 worker
+
+[1/8] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:76:1 › one click queues the re-engagement SMS (the queued line appears)
+[2/8] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:86:1 › EC-10: with a re-engagement already sent inside the window, a click says "already sent N min ago"
+[3/8] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:100:1 › §8: no gateway -> the card degrades to phone-guidance-only (no send button)
+[4/8] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:109:1 › no phone on file -> the card is absent (the drawn absence)
+[5/8] [chromium] › tests/Browser/inbox-sms-timeline.spec.ts:68:1 › US-02: a sent row shows the masked phone and a single check; after a real DLR it turns to the double-check (delivered)
+[6/8] [chromium] › tests/Browser/inbox-sms-timeline.spec.ts:88:1 › B12-S02: the SMS entry offers Copy text and no Edit/Delete — the why-line explains the channel offers no recall
+[7/8] [chromium] › tests/Browser/sms-no-inferred-delivered.spec.ts:43:1 › a sent-only SMS row shows the single check and its live state — never the double-check, never data-sms-state=delivered (the DOM gate)
+[8/8] [chromium] › tests/Browser/sms-no-inferred-delivered.spec.ts:72:1 › an expired (DLR-less) row reads "sent · unconfirmed" with a SINGLE check — the honest terminal, never a delivery
+  8 passed (39.7s)

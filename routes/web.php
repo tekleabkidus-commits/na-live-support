@@ -640,6 +640,8 @@ Route::middleware([
         ->middleware('permission:tickets.view')->name('inbox.deeplink.ticket');
     // Doc 14 FR-02 (S14 step 5): the two MANUAL send doors — an event and a
     // ticket, never a text field (BR-01; the closed SendRequest shape).
+    Route::post('thread/{conversationId}/sms/reengage', [App\Http\Controllers\Sms\SmsSendController::class, 'reengageConversation'])
+        ->middleware(['permission:sms.send', 'audit:sms.message.manually_queued'])->name('inbox.sms.reengage_conversation');
     Route::post('t/{ticketId}/sms/reengage', [App\Http\Controllers\Sms\SmsSendController::class, 'reengage'])
         ->middleware(['permission:sms.send', 'audit:sms.message.manually_queued'])->name('inbox.sms.reengage');
     Route::post('t/{ticketId}/sms/notify', [App\Http\Controllers\Sms\SmsSendController::class, 'notify'])
