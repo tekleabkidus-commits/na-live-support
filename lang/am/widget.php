@@ -397,5 +397,7 @@ return [
         'nav_kb' => 'የእውቀት መሠረት',
         'nav_workflow' => 'የስራ ፍሰት',
         'nav_widgets' => 'የድር ውይይት መግብር',
+        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14) — R-14 queue
+        'nav_sms_settings' => 'የSMS ቅንብሮች', // P-NAV-SMS — R-14 queue
     ],
 ];

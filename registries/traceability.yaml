@@ -2733,7 +2733,7 @@ entries:
     owner: platform-engineering
     status: partial
     justification: >-
-      S14 step 1: the encoding & segmentation corpus (fixtures/sms/encoding-corpus.json — GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script) under A-66 (160/153, 70/67); the sabotage (j) control (one Ethiopic character forces UCS-2). PARTIAL: editor-estimate vs accrual parity (EstimateVsAccrualParityTest step 3, CostAccrualTest step 11) and rate-card currency rendering (sms-templates.spec, step 13).
+      S14 step 1: the encoding & segmentation corpus (fixtures/sms/encoding-corpus.json — GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script) under A-66 (160/153, 70/67); the sabotage (j) control (one Ethiopic character forces UCS-2). The owed halves all landed: editor-estimate vs accrual parity (EstimateVsAccrualParityTest step 3, CostAccrualTest step 11) and rate-card currency rendering (tests/Browser/sms-templates.spec.ts, step 13 — the per-gateway cost row with its card's own currency; the editor's live UCS-2 flip asserted in-browser). Status stays for the close-out's self-audit flip.
   - ac_ref: "Doc14 AC-05"
     suite_path: manual
     type: manual

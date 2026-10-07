@@ -404,5 +404,7 @@ return [
         'nav_kb' => 'Knowledge base',
         'nav_workflow' => 'Workflow',
         'nav_widgets' => 'Web chat widget',
+        'nav_sms_channel' => 'SMS', // P-NAV-SMS (Doc 14, S14): the B6-S01 "Channels · ✉ SMS" slot
+        'nav_sms_settings' => 'SMS settings', // P-NAV-SMS: the B6-S01 "Settings · SMS" slot
     ],
 ];

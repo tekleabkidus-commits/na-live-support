@@ -84,6 +84,8 @@ return [
             'workflow' => 'Workflow',
             'kb' => 'Knowledge base',
             'widgets' => 'Web chat widget', // P-NAV-WIDGETS (S13 Batch C) — the shared Backoffice row (Doc 13 §4.4)
+            'sms_channel' => 'SMS', // P-NAV-SMS (S14) — the shared Backoffice rows (Doc 14; B6-S01 slots)
+            'sms_settings' => 'SMS settings',
             'macros' => 'Macros',
             'fields' => 'Custom fields',
             'forms' => 'Forms',

@@ -52,6 +52,13 @@ final class PageCapabilities
         // Doc 13 §4.4 (S13 step 11): the Widget Designer — reads under view, every editor control under configure.
         'Admin/Widgets/Index' => ['webchat.widgets.view', 'webchat.widgets.configure'],
         'Admin/Widgets/Editor' => ['webchat.widgets.view', 'webchat.widgets.configure'],
+        // Doc 14 (S14 step 13): the SMS pages — each page's buttons gate on the STOP-A keys it carries.
+        'Admin/Sms/Templates' => ['sms.templates.view', 'sms.templates.create', 'sms.templates.edit', 'sms.templates.delete'],
+        'Admin/Sms/Gateways' => ['sms.gateways.view', 'sms.gateways.manage', 'reports.view'],
+        'Admin/Sms/Queue' => ['sms.send'],
+        'Admin/Sms/OptOuts' => ['sms.optout.manage', 'customers.export'],
+        'Admin/Sms/Broadcasts' => ['sms.send', 'sms.templates.view', 'sms.gateways.manage'],
+        'Admin/Sms/Settings' => ['settings.view', 'settings.edit'],
         'Conversations/DeadLetters' => [
             'tickets.reply',
         ],

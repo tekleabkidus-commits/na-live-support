@@ -7,7 +7,7 @@
 // page states its READ posture (Doc 10 §9): nothing greyed, nothing blank.
 defineProps<{
     t: Record<string, string>;
-    active: 'kb' | 'workflow' | 'organization' | 'widgets';
+    active: 'kb' | 'workflow' | 'organization' | 'widgets' | 'sms' | 'sms-settings';
     title: string;
     crumb?: { label: string; href?: string }[];
     readNote?: string;
@@ -56,6 +56,23 @@ defineProps<{
                     :aria-current="active === 'widgets' ? 'page' : undefined"
                     data-testid="bo-nav-widgets"
                     >{{ t.nav_widgets }}</a
+                >
+                <!-- Doc 14 (S14 step 13, P-NAV-SMS): the two frozen slots B6-S01/B6-S06 draw — "Channels · ✉ SMS" and "Settings · SMS" ("an unlinked screen is the worse deviation") -->
+                <a
+                    href="/admin/sms"
+                    class="bo-nav-a"
+                    :class="{ on: active === 'sms' }"
+                    :aria-current="active === 'sms' ? 'page' : undefined"
+                    data-testid="bo-nav-sms"
+                    >{{ t.nav_sms_channel }}</a
+                >
+                <a
+                    href="/admin/sms/settings"
+                    class="bo-nav-a"
+                    :class="{ on: active === 'sms-settings' }"
+                    :aria-current="active === 'sms-settings' ? 'page' : undefined"
+                    data-testid="bo-nav-sms-settings"
+                    >{{ t.nav_sms_settings }}</a
                 >
                 <!-- the Workflow group's sub-rows (Doc 12's pages render them; B9-S05 §E chrome) -->
                 <div v-if="$slots['nav-sub']" class="bo-nav-sub"><slot name="nav-sub" /></div>

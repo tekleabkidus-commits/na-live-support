@@ -54,6 +54,20 @@ Route::middleware([
     Route::get('widgets', [$screens, 'index'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.index');
     Route::get('widgets/{widgetId}/edit', [$screens, 'editor'])->middleware('permission:webchat.widgets.view')->name('widgets.screens.editor');
     Route::get('widgets/{widgetId}/preview', [$screens, 'preview'])->middleware(['permission:webchat.widgets.view', App\Http\Middleware\WidgetFrameSurface::class.':self'])->name('widgets.screens.preview');
+
+    // Doc 14 §8/§9/§13/§14 (S14 step 13, [B14-batch]): the SMS Backoffice PAGES, read-gated
+    // by the STOP-A keys; every mutation rides the step-3…11 JSON doors above. The P-NAV-SMS
+    // "Channels · SMS" row lands on /admin/sms, which IS the templates screen's address
+    // (no invented hub): a redirect keeps the drawn slot linked without a seventh screen.
+    $sms = App\Http\Controllers\Sms\SmsScreensController::class;
+    Route::get('sms', static fn () => redirect('/admin/sms/templates'))->middleware('permission:sms.templates.view')->name('sms.screens.home');
+    Route::get('sms/templates', [$sms, 'templates'])->middleware('permission:sms.templates.view')->name('sms.screens.templates');
+    Route::get('sms/gateways', [$sms, 'gateways'])->middleware('permission:sms.gateways.view')->name('sms.screens.gateways');
+    Route::get('sms/queue', [$sms, 'queue'])->middleware('permission:sms.send')->name('sms.screens.queue');
+    Route::get('sms/optouts', [$sms, 'optouts'])->middleware('permission:sms.optout.manage')->name('sms.screens.optouts');
+    Route::get('sms/broadcasts', [$sms, 'broadcasts'])->middleware('permission:sms.send')->name('sms.screens.broadcasts');
+    Route::get('sms/settings', [$sms, 'settings'])->middleware('permission:settings.view')->name('sms.screens.settings');
+    Route::post('sms/settings', [$sms, 'updateSettings'])->middleware(['permission:settings.edit', 'audit:tenant.setting_changed'])->name('sms.screens.settings.update');
     // Doc 14 FR-04 / FR-05 / §8 (S14 step 3): the SMS templates' JSON doors. Reads under
     // `sms.templates.view`; create/edit/delete under their own keys (Doc 03 §4.1's eight, STOP-A);
     // every mutation carries its registered audit key. Template CONTENT is `template_body` —
