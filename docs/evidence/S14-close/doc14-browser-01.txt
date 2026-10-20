@@ -1,0 +1,40 @@
+
+Running 36 tests using 1 worker
+
+[1/36] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:76:1 › one click queues the re-engagement SMS (the queued line appears)
+[2/36] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:86:1 › EC-10: with a re-engagement already sent inside the window, a click says "already sent N min ago"
+[3/36] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:100:1 › §8: no gateway -> the card degrades to phone-guidance-only (no send button)
+[4/36] [chromium] › tests/Browser/inbox-expired-sms.spec.ts:109:1 › no phone on file -> the card is absent (the drawn absence)
+[5/36] [chromium] › tests/Browser/inbox-sms-timeline.spec.ts:68:1 › US-02: a sent row shows the masked phone and a single check; after a real DLR it turns to the double-check (delivered)
+[6/36] [chromium] › tests/Browser/inbox-sms-timeline.spec.ts:88:1 › B12-S02: the SMS entry offers Copy text and no Edit/Delete — the why-line explains the channel offers no recall
+[7/36] [chromium] › tests/Browser/sms-broadcasts.spec.ts:28:5 › the builder: pin → live count → cost preview → guards; BR-01 no free-text — light, axe-clean
+[8/36] [chromium] › tests/Browser/sms-broadcasts.spec.ts:28:5 › the builder: pin → live count → cost preview → guards; BR-01 no free-text — dark, axe-clean
+[9/36] [chromium] › tests/Browser/sms-broadcasts.spec.ts:57:1 › launch opens the progress drawer with the counters and the cancel door
+[10/36] [chromium] › tests/Browser/sms-broadcasts.spec.ts:79:1 › the am leg: the broadcasts screen renders in Amharic
+[11/36] [chromium] › tests/Browser/sms-gateways.spec.ts:27:5 › cards, the write-only credential line, the routing table and the resolver chain — light, axe-clean
+[12/36] [chromium] › tests/Browser/sms-gateways.spec.ts:27:5 › cards, the write-only credential line, the routing table and the resolver chain — dark, axe-clean
+[13/36] [chromium] › tests/Browser/sms-gateways.spec.ts:63:1 › the am leg: the gateways screen renders in Amharic
+[14/36] [chromium] › tests/Browser/sms-no-inferred-delivered.spec.ts:43:1 › a sent-only SMS row shows the single check and its live state — never the double-check, never data-sms-state=delivered (the DOM gate)
+[15/36] [chromium] › tests/Browser/sms-no-inferred-delivered.spec.ts:72:1 › an expired (DLR-less) row reads "sent · unconfirmed" with a SINGLE check — the honest terminal, never a delivery
+[16/36] [chromium] › tests/Browser/sms-optouts.spec.ts:31:9 › the masked list, search and the export door — light-1440, axe-clean
+[17/36] [chromium] › tests/Browser/sms-optouts.spec.ts:31:9 › the masked list, search and the export door — light-375, axe-clean
+[18/36] [chromium] › tests/Browser/sms-optouts.spec.ts:31:9 › the masked list, search and the export door — dark-1440, axe-clean
+[19/36] [chromium] › tests/Browser/sms-optouts.spec.ts:31:9 › the masked list, search and the export door — dark-375, axe-clean
+[20/36] [chromium] › tests/Browser/sms-optouts.spec.ts:50:1 › add-with-reason lands a masked row; restore demands the high-visibility confirm with a reason
+[21/36] [chromium] › tests/Browser/sms-optouts.spec.ts:73:1 › the am leg: the opt-out manager renders in Amharic
+[22/36] [chromium] › tests/Browser/sms-queue.spec.ts:30:9 › the log rows, masking and the held view — light-1440, axe-clean
+[23/36] [chromium] › tests/Browser/sms-queue.spec.ts:30:9 › the log rows, masking and the held view — light-375, axe-clean
+[24/36] [chromium] › tests/Browser/sms-queue.spec.ts:30:9 › the log rows, masking and the held view — dark-1440, axe-clean
+[25/36] [chromium] › tests/Browser/sms-queue.spec.ts:30:9 › the log rows, masking and the held view — dark-375, axe-clean
+[26/36] [chromium] › tests/Browser/sms-queue.spec.ts:52:1 › the state filter re-enters through the server: failed shows only failed rows
+[27/36] [chromium] › tests/Browser/sms-queue.spec.ts:66:1 › the am leg: the queue renders in Amharic
+[28/36] [chromium] › tests/Browser/sms-settings.spec.ts:34:9 › the checklist, quiet hours, toggles, quotas + the P-NAV-SMS shell rows — light-1440, axe-clean
+[29/36] [chromium] › tests/Browser/sms-settings.spec.ts:34:9 › the checklist, quiet hours, toggles, quotas + the P-NAV-SMS shell rows — light-375, axe-clean
+[30/36] [chromium] › tests/Browser/sms-settings.spec.ts:34:9 › the checklist, quiet hours, toggles, quotas + the P-NAV-SMS shell rows — dark-1440, axe-clean
+[31/36] [chromium] › tests/Browser/sms-settings.spec.ts:34:9 › the checklist, quiet hours, toggles, quotas + the P-NAV-SMS shell rows — dark-375, axe-clean
+[32/36] [chromium] › tests/Browser/sms-settings.spec.ts:70:1 › an event toggle writes through the settings door and announces saved
+[33/36] [chromium] › tests/Browser/sms-settings.spec.ts:86:1 › the am leg: the settings screen renders in Amharic
+[34/36] [chromium] › tests/Browser/sms-templates.spec.ts:29:5 › the list, the editor's live counter + UCS-2 announcement, the palette and the inline refusal — light, axe-clean
+[35/36] [chromium] › tests/Browser/sms-templates.spec.ts:29:5 › the list, the editor's live counter + UCS-2 announcement, the palette and the inline refusal — dark, axe-clean
+[36/36] [chromium] › tests/Browser/sms-templates.spec.ts:74:1 › the am leg: the list and editor render in Amharic
+  36 passed (2.1m)

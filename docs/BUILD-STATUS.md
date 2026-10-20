@@ -19,7 +19,7 @@ project actually stands. A row is only `DONE` when its acceptance criteria have 
 | 11 | Departments, Teams, Queues & Routing | **CLOSED AND ACCEPTED — advisor acceptance at docs/S11-ACCEPTANCE.md (1dc3620); verdict of record CI run 33440243050 on 6492dc9, all stages green. Final register 87 DONE / 3 PARTIAL [D19] / 0 NOT DONE, recounted from rows** | S11 | 10 PLANNED traceability rows (Doc11 AC-01…AC-10, status partial, each naming its flipping step) | canonical DOC 11 SUITES command in the plan §8 |
 | 12 | Automation, SLA, Forms & Custom Fields | **CLOSED AND ACCEPTED — advisor acceptance at docs/S12-ACCEPTANCE.md (f037bc8); final CI verdict of record run 33641590086 GREEN on a86d022, all seven stages. Final register 97 ids: 88 DONE / 9 PARTIAL-with-bucket / 0 NOT DONE, recounted from rows; ledger 10/10; closing set 12/12; core edits 7-for-7 countersigned-before-landing + P-CLS/P-NAV landed under countersign; riders 1-5 + event-family amendments 1-2 confirmed. Was: BUILT — S12 close-out below (close 121a10b, final tree a86d022).** | S12 | 9 PLANNED traceability rows (AC-01…AC-09, flipping per step) | canonical DOC 12 SUITES command in the plan §8 |
 | 13 | Web Chat Widget | **CLOSED AND ACCEPTED — advisor acceptance at docs/S13-ACCEPTANCE.md (this row's commit); verdicts of record: Batch C run 33990000043 (f72da6d), 13b run 34155857302, 13c run 34180127974 (#320), all green on Doc 13's own terms (S10 Option-A), billing annotation none. Final registers recounted from rows by the advisor: 96 ids 72 DONE / 24 PARTIAL / 0 NOT DONE (every PARTIAL bucketed); 75 frames 69 PROVEN / 4 PARTIAL / 1 BUILT / 1 NOT BUILT; ledger 12/12; closing set 15/15; ten core-edit packets under countersign, P-STREAM refused, zero landed-then-escalated. Named findings carried by owner window (D07-N1/N2, D09-N1/N2 + risk row, F-13b-5/6, the AC-03 soak class, F-C4); Doc 13's own: two 0i-class sightings (threshold 3-in-10). Detail below.** |
-| 14 | SMS Notification Module | **OPEN — SESSION-14 in progress (step 0 landed; plan proposed). R-D14-1: NO gateway sandbox exists anywhere; GeezSMS is the gateway of record, BUILT NOW as an `http_generic` mapping; the rows only a real gateway can prove ride the [OA] bucket (unblocker = GeezSMS credentials + a public callback URL — the same origin as row 0b); everything else is proven for real against `docker/mocks/sms` named as a FIXTURE (two profiles, 652977c), never called the gateway** | S14 | — | was "NOT STARTED — needs Ethiopian gateway sandbox" since S0; flips to BUILT at close-out, CLOSED/ACCEPTED at acceptance (R-D14-4.16) |
+| 14 | SMS Notification Module | **BUILT — S14 close-out below (steps 1–14, four batches, commits `54a1cb2`…the close SHA). Final 90-id self-audit: 64 DONE / 26 PARTIAL / 0 NOT DONE — every PARTIAL in a pre-agreed bucket BY NAME ([OA]/[B14-batch]/[D15]/[D16]/[D17]/[D18]/[D19]); sabotage ledger 14/14; the [D14] closing set 16/16 dispositioned; six countersigned core-edit packets landed (P-DLR-AUTH, P-SCRUB-LIVE, P-EXPIRED-CARD, P-TIMELINE-SMS, P-NAV-SMS, P-QUOTA-SMS) + the three filed amendments. R-D14-1 stands: GeezSMS is the gateway of record as an `http_generic` mapping; the rows only a real gateway can prove ride [OA] (unblocker = GeezSMS credentials + a public callback URL); everything else proven against `docker/mocks/sms` named as a FIXTURE, never called the gateway. The full local browser battery is WAIVED by R-D14-8 (it restarts the owner's PC) — CI Stage 4 on the close SHA is its verdict-bearer** | S14 | AC-01…AC-06, AC-08…AC-10 covered; AC-07 PARTIAL [D19] (dev-scale drill in scope, 8,000 at L2 is Doc 19's) | was "NOT STARTED — needs Ethiopian gateway sandbox" since S0; CLOSED/ACCEPTED at acceptance (R-D14-4.16) |
 | 15 | Reporting, Analytics & Dashboards | NOT STARTED | — | — | |
 | 16 | White-Label, Settings & Feature Flags | NOT STARTED | — | — | |
 | 17 | Audit Logging & Compliance | NOT STARTED | — | — | |
@@ -32,6 +32,173 @@ SESSION-03 launch ran in concurrent sessions; `ba014d9` contains cross-verified
 mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 assertions,
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
+
+## SESSION-14 (Doc 14) — CLOSE-OUT (step 14; R-D14-7 as amended by R-D14-8; commit = this section's SHA; STOPPED for owner review + grounding)
+
+**Power (R-D13-6):** BAT1 2026-10-20 at the close battery: BatteryStatus 1 (discharging), 73% — figures indicative; the wall-power timing legs' on-AC verdicts stand from the step-13 sitting (161/0) and D✓.
+
+**R-D14-8 AT THE CLOSE, restated:** the full LOCAL browser battery is WAIVED (it repeatedly restarted the owner's PC) — its figure here is **NOT TAKEN — R-D14-8**, never "green". The verdict-bearer is **CI Stage 4 on THIS SHA — the ONE CI look** (owner pushes; billing annotation first; a Stage 4 red is fixed at cause with ONLY the failing spec re-run locally; a red in another document's file carries the Option-A proof). The LOCAL browser proof below is Doc 14's OWN nine specs on the fresh CI shape.
+
+### Final self-audit — every Doc 14 id (90: **64 DONE / 26 PARTIAL / 0 NOT DONE**; every PARTIAL in a pre-agreed §6 bucket BY NAME; suites per the plan §9 table of record)
+
+| Id | Status | Proof (executed suites) |
+|---|---|---|
+| FR-01 | DONE | EventCatalogTest (the fixed ten + optout_confirmation CHECK; per-tenant toggles; one template/language unique) |
+| FR-02 | DONE | ConsumersTest · ManualDoorsTest · SmsNoFreeTextTest (every producer a closed SendRequest) |
+| FR-03 | DONE | GuardTruthTableTest (ordered six + A-67 pre-guards, RED first) |
+| FR-04 | DONE | TemplateLifecycleTest (draft→publish→rollback, versions, active) |
+| FR-05 | DONE | SegmenterCorpusTest · TemplateValidationTest · sms-templates.spec (the step-13 editor: live counter, UCS-2 announce, palette) |
+| FR-06 | DONE | RenderingTest (on_missing, no blank send) |
+| FR-07 | PARTIAL **[OA]** | GatewayWriterTest · SmsCredentialWriteOnlyTest; the LIVE send leg needs GeezSMS credentials |
+| FR-08 | DONE | RoutingTrieTest (longest prefix, the +251 seed, no_match setting) |
+| FR-09 | DONE | FailoverTest · CircuitBreakerTest (once per fallback, loop-bounded, breaker fed) |
+| FR-10 | PARTIAL **[D18]** | SidecarContractTest (the CONTRACT half incl. mTLS + restart transparency); packaging + the real bind are Doc 18's |
+| FR-11 | PARTIAL **[OA]** | PipelineTest (classification, backoff, ×4 audited rounds); the live leg [OA] |
+| FR-12 | DONE | StateMachineMatrixTest · inbox-sms-timeline.spec (P-TIMELINE-SMS; the live chip) |
+| FR-13 | PARTIAL **[OA]** | DlrIngestionTest (mapping-parsed, precedence-safe, raw retained); the REAL carrier vocabulary beyond `success` [OA] (R-D14-1.5) |
+| FR-14 | DONE | OptOutAbsolutenessTest · OptOutRestorationAuditTest (+ table physics) |
+| FR-15 | PARTIAL **[OA]** | StopParsingTest (per-language, configurable, optout_confirmation); inbound STOP from a REAL gateway [OA] (no MO documented) |
+| FR-16 | DONE | QuietHoursTest · CalendarLinkedQuietHoursTest · HeldReleaseSweepTest (tenant timezone; EC-05 both directions; the settings screen) |
+| FR-17 | DONE | BroadcastLifecycleTest · SmsBroadcastRgExclusionTest (the audience is a QUERY; typed confirm; cap) |
+| FR-18 | DONE | BroadcastLiveGuardsTest · BroadcastQuotaPauseTest (500/chunk, live guards per recipient, progress, cancel-cold) |
+| FR-19 | DONE | CostAccrualTest · QuotaSmsMonthlyTest · CostThresholdTest (P-QUOTA-SMS; FS-04 forward-only) |
+| FR-20 | PARTIAL **[D15]** | SmsEventConsumerContractsTest + OutboxPayloadMinimizationTest (all 17 producers live, closed payloads); the REPORT CONSUMPTION is Doc 15's |
+| NFR-01 | PARTIAL **[D19]** | SmsBudgetsTest (event→queued ≤ 2 s, queued→sent ≤ 5 s, in-shape dev-scale, wall-power leg green on AC); L2 is Doc 19's |
+| NFR-02 | PARTIAL **[D19]** | TokenBucketTest · SmsLaneIsolationDrillTest (four lanes, mirrored Lua, the reserve); 50 msgs/s is Doc 19's |
+| NFR-03 | PARTIAL **[D19]** | DlrIngestionTest (≤ 1 s dev-scale; the N=30 duplicate burst); 200/s is Doc 19's |
+| NFR-04 | DONE | ChipTruthTest · sms-no-inferred-delivered.spec (the DOM gate; `expired` = "Sent · unconfirmed") |
+| NFR-05 | DONE | CircuitBreakerTest (≤ 30 s from trip, injected clock) · ExpiredSweepTest |
+| NFR-06 | DONE | EstimateVsAccrualParityTest · CostAccrualTest (editor estimate within one segment of the accrual, on the corpus) |
+| US-01 | DONE | ConsumersTest + StopParsingTest (resolved → SMS → STOP → permanent skip, the journey) |
+| US-02 | DONE | inbox-expired-sms.spec + inbox-sms-timeline.spec (P-EXPIRED-CARD + the chip truth) |
+| US-03 | PARTIAL **[B14-batch]** | sms-templates.spec am leg (the editor works in Amharic: counter, UCS-2 flip, publish); the frame-fidelity half awaits the Docs 14+17 design track |
+| US-04 | PARTIAL **[OA]/[D15]** | FailoverTest + CircuitBreakerTest (the midnight failover ON THE FIXTURE); the production night [OA]; the morning digest [D15] |
+| US-05 | PARTIAL **[OA]/[D15]** | ReportFeedTest (the spend feed per gateway); invoice reconciliation [OA]; the rendered report [D15] |
+| US-06 | DONE | SmsBroadcastRgExclusionTest + GuardTruthTableTest (RG never reached; skips on the books) |
+| US-07 | PARTIAL **[D19]** | BroadcastLifecycleTest + sms-broadcasts.spec (capped rate, live progress, cancel); 8,000 at scale is Doc 19's |
+| BR-01 | DONE | SmsNoFreeTextTest · SmsMoNoConversationTest (+ the `sms-no-free-text` CI gate) — notification-only by PHYSICS (N-15) |
+| BR-02 | DONE | BroadcastLifecycleTest (a non-announcement template refused; the DB CHECK behind the writer) |
+| BR-03 | DONE | OptOutAbsolutenessTest (absolute incl. security — N-16; the sabotage b case) |
+| BR-04 | DONE | RoutingTrieTest (per-country tables; the +251 seed) |
+| BR-05 | DONE | TokenBucketTest · the lane drill (lanes + the 5 % transactional reserve) |
+| BR-06 | DONE | VerificationCodeDoorTest (+ NoVerifiedAffordanceTest green) — OTP plumbing only, NO verify concept (N-06 adjacency) |
+| BR-07 | DONE | CostAccrualTest · sms-broadcasts.spec (estimates + the preview text from the acting query) |
+| T-01 | DONE | SmsGrantPhysicsTest (SCHEMA AMENDMENT 8: seven tables, full R-19b, app-DENIED columns, DB-time triggers) |
+| T-02 | DONE | DriverContractTest · HttpGenericOnboardingTest (config-mapped; zero code for a new aggregator) |
+| T-03 | PARTIAL **[D18]** | SidecarContractTest (private HTTP + mTLS against the mock); the real bind/packaging [D18] |
+| T-04 | DONE | TokenBucketTest · FailureScenariosTest (the four supervisors by filed amendment) |
+| T-05 | DONE | DueSetTest · HeldReleaseSweepTest (the A-65 kernel: candidates-only, column truth, never-early) |
+| T-06 | DONE | GuardTruthTableTest (pure; ≤ 1 ms in SmsBudgetsTest) |
+| T-07 | DONE | BroadcastLiveGuardsTest (500/chunk; live guards per chunk) |
+| T-08 | DONE | the §8 contract-suite set (matrix, truth table, routing fixtures, encoding corpus, STOP per language, chunking, the sidecar mock) |
+| SEC-01 | DONE | SmsCredentialWriteOnlyTest · DlrAuthTest (vault refs; write-only; P-DLR-AUTH fail-closed + replay 202) |
+| SEC-02 | DONE | SmsPhoneMaskingTest (the B4-S08 drawn form byte-exact) + OutboxPayloadMinimizationTest (events carry ids only) |
+| SEC-03 | DONE | SmsBroadcastRgExclusionTest (the launcher's LIVE scope; the RG WHERE structural — RED capture on file) |
+| SEC-04 | DONE | OptOutRestorationAuditTest · CircuitBreakerTest audit leg · ScreensTest (export gating `customers.export`) |
+| SEC-05 | DONE | TemplateValidationTest AC-10 (an arbitrary URL never publishes; `{{link}}` resolves platform pages only) |
+| SEC-06 | DONE | SmsRateCardGateTest (rate cards + spend under `reports.view`, both ways) |
+| EC-01 | DONE | RoutingTrieTest (longest prefix; overlap warning) |
+| EC-02 | DONE | LiveGuardsTest (guards AGAIN at send, against real Doc 08 facts) |
+| EC-03 | DONE | DlrIngestionTest (unknown provider_id logged, dropped, counted) |
+| EC-04 | PARTIAL **[D15]** | StateMachineMatrixTest · DlrIngestionTest (precedence holds delivered; contradiction retained + FLAGGED in raw_dlrs); the gateway-quality REPORT is Doc 15's |
+| EC-05 | DONE | QuietHoursTest (release recomputed against the setting AT RELEASE, both directions, injected clock) |
+| EC-06 | DONE | BroadcastLifecycleTest · sms-broadcasts.spec (the pin + the republish notice; repin deliberate) |
+| EC-07 | DONE | BroadcastLiveGuardsTest (STOP mid-run: later chunks skip; timestamps ordered) |
+| EC-08 | PARTIAL **[OA]** | FailoverTest (the fixture 0006 leg: non-retryable surfaced with the override hint); a REAL sender-ID rejection [OA] |
+| EC-09 | DONE | SegmenterCorpusTest (the rare-script edge → UCS-2) |
+| EC-10 | DONE | DuplicateWindowTest · inbox-expired-sms.spec ("already sent N min ago" inline) |
+| EC-11 | DONE | BroadcastQuotaPauseTest (paused_quota → resume; the 5 % reserve; re-proven on the REAL meter) |
+| EC-12 | DONE | ExpiredSweepTest (the 24 h TTL → failed:no_route_available) · CircuitBreakerTest (drain on recovery) |
+| FS-01 | DONE | FailoverTest (fixture 0007: auth expiry → non-retryable → trip → fallback → the alert names gateway + class) |
+| FS-02 | PARTIAL **[D18]** | SidecarContractTest (crash-loop → health down → failover → recovery); the RUNBOOK is Doc 18's |
+| FS-03 | DONE | MissingDlrRateTest (THRESHOLD 0.5 / MIN_SAMPLE 10, stated constants) · ExpiredSweepTest ("Sent · unconfirmed") |
+| FS-04 | DONE | CostAccrualTest (threshold + pre-publish divergence; the forward-only correction — the original accrual never rewritten) |
+| FS-05 | DONE | TokenBucketTest (bucket loss → half-capacity rebuild, ramp) |
+| SS-01 | PARTIAL **[OA]** | inbox-sms-timeline.spec (the Doc 05 loop with truthful chips, locally); the production loop [OA] |
+| SS-02 | PARTIAL **[OA]/[D15]** | ReportFeedTest (the month-end feed); reconciliation [OA]; the ROI report [D15] |
+| SS-03 | PARTIAL **[OA]** | FailoverTest (degrade → carry → self-heal ON THE FIXTURE); the production midnight [OA] |
+| SS-04 | PARTIAL **[D19]** | SmsLaneIsolationDrillTest (dev-scale N=40+12, Δ −4.7 % ≤ 5 %, live opt-out skips); 8,000 is Doc 19's |
+| AC-01 | DONE | GuardTruthTableTest (+ LiveGuardsTest + OptOutAbsolutenessTest — the live halves) |
+| AC-02 | DONE | StateMachineMatrixTest · DlrIngestionTest · sms-no-inferred-delivered.spec (all halves landed) |
+| AC-03 | DONE | RoutingTrieTest · FailoverTest · CircuitBreakerTest · ExpiredSweepTest |
+| AC-04 | DONE | SegmenterCorpusTest · EstimateVsAccrualParityTest · CostAccrualTest · sms-templates.spec (currency rendering) |
+| AC-05 | DONE | StopParsingTest · OptOutAbsolutenessTest · OptOutRestorationAuditTest · BroadcastLiveGuardsTest |
+| AC-06 | DONE | BroadcastLifecycleTest + SmsBroadcastRgExclusionTest + BroadcastQuotaPauseTest |
+| AC-07 | PARTIAL **[D19]** | SmsLaneIsolationDrillTest (measured, within budget, dev-scale labelled); the 8,000/L2 figure is Doc 19's |
+| AC-08 | DONE | HttpGenericOnboardingTest (zero-code onboarding asserted) · SidecarContractTest (incl. restart) |
+| AC-09 | DONE | inbox-sms-timeline.spec (the Doc 07 fixture; live chips) + TimelineSmsRowsTest + SmsTimelineFactsShapeTest |
+| AC-10 | DONE | SmsCredentialWriteOnlyTest · SmsPhoneMaskingTest · TemplateValidationTest |
+| R-01 | PARTIAL **[OA]** | the AC-03/FS-03 suites (fallback routing, circuits, the missing-DLR signal, sidecar isolation); the live half [OA] |
+| R-02 | PARTIAL **[D15]** | sms-templates.spec (the plain-words encoding education: badge, counter, segment rules) + QuotaSmsMonthlyTest; ROI visibility [D15] |
+| R-03 | DONE | BroadcastLifecycleTest (non-announcement refused) + SmsNoFreeTextTest (the documented answer to "can we just…" is the walls) |
+| R-04 | PARTIAL **[OA]/[D18]** | RoutingTrieTest (sender overrides) · StopParsingTest (configurable words) · QuietHoursTest; the per-market checklist's live half [OA]/[D18] |
+| R-05 | PARTIAL **[D18]** | SmsGrantPhysicsTest (append-only sourcing legs) + OptOutRestorationAuditTest; the backup tier [D18] |
+
+### Sabotage ledger — 14/14 (plan §7; floor ten, fourteen named; control shape stated per row — CAPTURE = a red run on file; IN-TEST = the suite's own planted positive control; NEGATIVE CASE = the falsification enumerated as a failing input inside the suite)
+
+| # | Falsification | Red by | Control shape |
+|---|---|---|---|
+| a | a free-text send path (`body` on SendRequest) | SmsNoFreeTextTest + the `sms-no-free-text` gate | IN-TEST planted control (the sweep proven on a plant) + the step-1 RED capture (`S14-step1/units-RED-01.txt`) |
+| b | opt-out bypass (`security_notification` to an opted-out phone) | OptOutAbsolutenessTest AC-05 | NEGATIVE CASE (the bypass IS the suite's asserted refusal; step-8 record) |
+| c | inferred `delivered` (`success → delivered`) | DlrIngestionTest + sms-no-inferred-delivered.spec | CAPTURE (`S14-step2a/packet-controls-RED-01/02.txt` — the parked controls red without the packets) + the DOM gate's sent-only leg |
+| d | `sent` rolled back by a late DLR | StateMachineMatrixTest T-08 | NEGATIVE CASE (every illegal edge enumerated; step-1 RED capture covers the suite's birth) |
+| e | the RG WHERE removed from the audience query | SmsBroadcastRgExclusionTest SEC-03 | **CAPTURE** (`S14-step10/rg-where-RED-01.txt` — written and run RED before AudienceQuery existed) |
+| f | a credential stored plaintext / the token in a log line | SmsCredentialWriteOnlyTest + SmsGrantPhysicsTest (23514) + the P-SCRUB-LIVE control | IN-TEST planted controls (the scrubber plant→detect→remove; the grant physics ATTEMPTS the write) |
+| g | longest-prefix replaced by first-match | RoutingTrieTest EC-01 | NEGATIVE CASE (the shadowing fixtures decide it) |
+| h | the quiet-hours hold skipped for a non-exempt template | QuietHoursTest AC-01 | NEGATIVE CASE (hold-policy asserted with the release instant; the covering-window leg) |
+| i | the duplicate window dropped | DuplicateWindowTest EC-10 | NEGATIVE CASE (the second send inside 10 min must come back `skipped:duplicate`) |
+| j | UCS-2 detection disabled + ተወው altered by one byte | SegmenterCorpusTest NFR-06/AC-04 + StopWordByteExactTest | NEGATIVE CASE (one Ethiopic character forces UCS-2 on the corpus; the byte-exact seed pin) + step-1 RED capture |
+| k | an arbitrary URL in a template published | TemplateValidationTest AC-10 | **CAPTURE** (`S14-step3/sabotage-k-RED-01.txt` + `-restored-01.txt`) |
+| l | a broadcast continuing past cancel | BroadcastLifecycleTest AC-06 | NEGATIVE CASE (cancel stops the un-sent remainder cold; the chunk re-reads the broadcast) |
+| m | the circuit never tripping (threshold ∞) | CircuitBreakerTest AC-03 | NEGATIVE CASE (the trip threshold asserted on an injected clock) |
+| n | a DLR accepted with the gateway secret absent | DlrAuthTest (P-DLR-AUTH fail-closed) | CAPTURE (`S14-step2a/halfproof-P-DLR-AUTH.txt` + `packet-controls-RED` — the control red before the packet landed) |
+
+### The [D14] closing set — 16/16 dispositioned (plan §5; every row re-located BY TEXT and flipped/annotated IN THIS COMMIT unless noted)
+
+Rows 1 (Doc 13 FR-15), 2 (Doc 13 US-03), 3 (Doc 12 SS-01), 4 (Doc 08 FR-15's [D14] half), 5 (Doc 05 FR-23), 6 (Doc 05 SS-03) — **FLIPPED DONE** with their suites named on the rows. Rows 7 (Doc 05 AC-04) and 8 (Doc 05 R-03) — **the SMS half FLIPPED**, the other halves stay as filed. Row 9 (Doc 05 BR-02) — **ANNOTATED** (the FR-01 catalog + BR-01's structural wall). Row 10 — **ANNOTATED both places** (`docs/evidence/S13-design/register.md` row 31 + the frame-mapping class-1 note: the receipt's SMS line is TRUE). Rows 11/12 (Doc 02 DLR ingress prose ×3 + the `webhook_credentials` write path) — **ANNOTATED** (P-DLR-AUTH landed, probe replaced, exemptions rewritten; A-1 NOT triggered, its revisit condition stands; `GatewayCredentials::mint` through Doc 02's doors). Row 13 (A-42's re-derivation) — discharged at step 2a (**A-63 filed**). Row 14 (the five declared consumers) — discharged at step 6 (durable consumers, one commit). Row 15 (the undeclared half + the `sms.*` family) — discharged via the two filed amendments (2a/5/6; the CONSUMER AMENDMENT 1 correction of record at B✓). Row 16 (the top-table row) — **FLIPPED to BUILT** in this commit.
+
+### Core-edit enumeration (plan §11 — everything outside Doc 14's own namespaces, each under its instrument)
+
+| Files touched | Instrument |
+|---|---|
+| `app/Http/Middleware/` webhook auth (`url_secret`), the DLR probe route replacement + exemption rewrites, `MiddlewareOrderTest` growth | **P-DLR-AUTH** (countersigned 2026-09-08, landed step 7) |
+| `LiveSecretValues` + `ScrubSecrets` exact-value scrub + the VaultInterim reveal caller | **P-SCRUB-LIVE** (countersigned, landed step 7; conditions proven: ONE caller, bounded set, non-serializable, cleared at context clear) |
+| `app/Http/Controllers/Inbox/ThreadController.php` (identity-based phone predicate), `resources/js/Components/Inbox/Thread/{ComposerPane,ThreadPane}.vue`, `lang/{en,am}/inbox.php` composer keys, `routes/web.php` reengage route | **P-EXPIRED-CARD** (countersigned, landed step 12) |
+| `app/Http/Controllers/Inbox/TicketActionsController.php` (the sms.* name filter + facts merge), `resources/js/Components/Inbox/TicketTimeline.vue`, `lang/{en,am}/inbox.php` ticket_panel keys | **P-TIMELINE-SMS** (countersigned, landed step 12; `SmsTimelineFacts` itself is Doc 14-owned) |
+| `resources/js/Components/Backoffice/BackofficeShell.vue`, `resources/js/Components/Workflow/WorkflowShell.vue`, `lang/{en,am}/{kb,widget,workflow}.php` nav keys | **P-NAV-SMS** (countersigned, landed step 13) |
+| `app/Support/Quota/*` (`Quota::SmsSegmentsPerMonth` + the monthly windowKey seam) | **P-QUOTA-SMS** (countersigned, landed step 11; Doc 01/09 condition suites green unmodified) |
+| the `sms.*` event family (17), the consumer amendment, the four Horizon supervisors, the `NoPollingLoopTest` allowlist growth | the three FILED AMENDMENTS (2a/5/6/9) |
+| `app/Support/Timers/DueSet.php` (NEW shared kernel, no existing file touched; `tests/Feature/Support/DueSetTest.php` after the B✓ placement ruling) | A-65 (ruled) |
+| `app/Support/Rbac/PageCapabilities.php` (+6 manifest rows for the SMS pages) | the manifest IS the designed per-page registration surface (the S13 Widgets precedent added its rows the same way); enumerated here for the record — no behavior outside the new pages |
+| `tests/Feature/Inbox/{ExpiredCardSmsMetaTest,TimelineSmsRowsTest}.php` | the packets' own parked controls, MOVED from docs/evidence into the battery at step 12 |
+| `database/seeders/SmsBrowserSeeder.php` + `tests/Browser/support/{sms-seed,sms-screens}.ts` + `app/Console/Commands/Sms/FixtureExpiredCard.php` | TEST-ONLY fixtures (environment-guarded; fixture phones only) |
+
+### The [OA] rows, plainly (unblocker: GeezSMS credentials + a public callback URL — the owner's; then the short owner-assisted addendum session, R-D14-1.7, staging token first)
+
+FR-07 / FR-11 (the live send leg) · FR-13 (the real callback vocabulary beyond `success`) · FR-15 (a real inbound STOP) · EC-08 (a real sender-ID rejection) · SS-02 + US-05 (invoice reconciliation) · SS-03 + US-04 (the production midnight failover) · R-01 / R-04 (the live halves + the per-market checklist) · §21's real-gateway onboarding proof. **FR-10's live SMPP bind is [D18], not [OA]** (verified against the text at plan time). Nothing in this set blocks acceptance of the fixture-proven build; each row names exactly what only a real gateway can prove.
+
+### R-14 queue (machine-authored Amharic, native review owed)
+
+**274 strings queued this session:** 249 in `lang/am/sms.php` (207 of them the step-13 `screens` section) + 19 S14 keys in `lang/am/inbox.php` (`sms_chip_*`, `sms_menu_*`, `expired_sms_*`) + 6 nav keys across `lang/am/{kb,widget,workflow}.php` (P-NAV-SMS). Every key machine-authored and flagged for native review by the standing R-14 process; none carries money/policy wording beyond the drawn copy.
+
+### Design record
+
+`docs/evidence/S14-design/deviations.md` FILED at the close (D14-D01 — the two class-2 glyph fills ✓✓/☾ per STOP-N, implemented at step 12, the FILING honestly late; D14-D02 — the STOP-E expired-card copy alignment, no prior Doc 07 filing found to cite; the [B14-batch] fidelity PARTIAL stated). Hex extraction re-run before the first screen: 148 tokens PASS.
+
+### Registry deltas at the close (this commit)
+
+`traceability`: Doc14 AC-01…AC-06, AC-08, AC-10 → **covered** (AC-09 covered since step 12); AC-07 → **partial [D19]** with the dev-scale figure on the row. `docs/evidence/S13-design/register.md` row 31 annotated. No permission/setting/notification/gate/flag changes at the close (all landed in their steps; gates 17/17 cross-check green after the flips).
+
+### The close battery (this tree; R-D14-8 shape)
+
+**FULL Pest battery (`docs/evidence/S14-close/battery-pest-01.txt`): 2089 passed / 0 FAILED / 13 skipped (54,323 assertions, 813 s) EXIT 0 — fully green, no 0d row needed this run** (the D✓ sighting's RbacBudgets red did not recur; the 13 skips are the recorded classes, the wall-power legs' on-AC verdicts standing from step 13). **Doc 14 browser set (`doc14-browser-01.txt`): 36 passed / 0 failed (2.1 m)** — the nine specs (six screens + three inbox), single worker, fresh CI shape. **The full local browser battery: NOT TAKEN — R-D14-8** (CI Stage 4 on this SHA is the verdict-bearer). **Gates (`gates-01.txt`): 17/17 PASS. Lint (`lint-01.txt`): EXIT 0.** BAT1 across the close legs: discharging 73 % → 44 %.
+
+### STOPPED FOR OWNER REVIEW + GROUNDING — owner items
+
+1. **Push this SHA; ONE CI look** (billing annotation first; the Playwright summary line, not the job colour). Stage 4 is the full browser battery's verdict of record (R-D14-8). Any red: fix-first at cause, only the failing spec re-run locally, Option-A proof for other documents' files.
+2. The [OA] unblockers when ready: GeezSMS credentials + the public callback URL → the R-D14-1.7 addendum session (staging token first, 0c).
+3. The R-14 native-review queue grew by 274 Amharic strings.
+4. Acceptance (CLOSED/ACCEPTED, R-D14-4.16) is the owner's call after the CI look.
 
 ## SESSION-14 (Doc 14) — BATCH D CHECKPOINT (D✓, R-D14-7 as amended by R-D14-8): Pest battery + Doc 14 browser set + gates + lint, then CONTINUE to the close-out (commit = this section's SHA)
 
@@ -430,7 +597,7 @@ this note. All subsequent S19 work is single-session.
 | FR-12 | PARTIAL [D09] naming P-STREAM | queue card (EC-06), CSAT star row, agent-joined line PROVEN (`widget-queue`, `widget-csat`, 8b); the token-batched STREAMING render has no server half — P-STREAM refused (class-1 conflict with N-07 filed) |
 | FR-13 | DONE | the handoff bubble + queue card live through the AI path (8b), `widget.handoff.connecting` |
 | FR-14 | DONE | `widget-proactive.spec` + `widget-acceptance.spec` cross-rule cooldown (AC-06) |
-| FR-15 | PARTIAL [D14] | `WidgetOfflineFormTest` + F09/F10 + F11 (step 12); the SMS half is Doc 14's |
+| FR-15 | **DONE — the [D14] SMS half FLIPPED at the S14 close:** the offline form's SMS confirmation is REAL (`offline_form_confirmation` on the closed payload's source, `tests/Feature/Sms/OfflineFormConfirmationTest.php`, S14 step 6) | `WidgetOfflineFormTest` + F09/F10 + F11 (step 12); was: "the SMS half is Doc 14's" |
 | FR-16 | PARTIAL [OA-voice] | `WidgetMediaTest`, `widget-composer.spec` G05–G10, the scan wake-up (`MediaStatePush`); the voice recorder does NOT ship — the row is absent under the flag; the flag-on state is not built |
 | FR-17 | DONE | `widget-notify.spec` (BR-03) + step 12 I02/I03; EC-09's harness half |
 | FR-18 | DONE | `widget-acceptance.spec` two tabs one socket + hand-over (9b) |
@@ -448,7 +615,7 @@ this note. All subsequent S19 work is single-session.
 | NFR-06 | DONE | `widget-loader.spec` (a dead key leaves the page intact) + `widget-hostile-host.spec` |
 | US-01 | DONE | the journey (`widget-thread`, `widget-queue`, am) |
 | US-02 | DONE | F12 continuity |
-| US-03 | PARTIAL [D14] | F09/F10; the SMS half |
+| US-03 | **DONE — the [D14] SMS half FLIPPED at the S14 close:** the 3 AM journey ends in a real SMS row (offline form → ticket → `offline_form_confirmation` queued; `OfflineFormConfirmationTest`, S14 step 6) | F09/F10; was: "the SMS half" |
 | US-04 | DONE | `designer-widgets.spec` (publish → history → rollback) |
 | US-05 | DONE | `WidgetHealthTest` + J07/J08 |
 | US-06 | DONE | J06 (the drawn snippet since RIDER 2) |
@@ -853,7 +1020,7 @@ this note. All subsequent S19 work is single-session.
 
 **PROVEN (evidence `docs/evidence/S13-step9/`):** `browser-full-01.txt` **74 passed / 4 failed** across widget + widget-375 (19 specs × 2) — the four = E03/E04 + E07 on both projects, OWED on P-KB-VIEWED, left RED on purpose (never gated, never weakened); `browser-continuity-01.txt` F12 **2 passed** (home → /deposit → /payments: the same conversation, the session refreshed as the SAME visitor — 201 then 200, 200); `server-02.txt` **49 passed (447 assertions)** (Feature/Widget incl. the new `WidgetConfigFormsTest`, Webchat, the origin layers, SignedIdentity, NoVerifiedAffordance, the Help + pre-chat contracts, the consumer contracts); `gates-01.txt` **16/16**; `lint-01.txt` **exit 0**; budget: loader **3106 B gz**, core **22323 B gz**, help 1.5 KB + forms 1.4 KB lazy.
 
-**FRAME-MAPPING ROWS:** E01 (browse: Popular, Categories, the pinned footer) PROVEN · E02 (search as you type, highlighted, Amharic-capable) PROVEN · E03/E04 (reader + feedback + footer wording) BUILT, OWED on P-KB-VIEWED · E06/K05 (index down, chat still works) PROVEN · E07 (language fallback notice) BUILT, OWED on P-KB-VIEWED · F01/F02 (anonymous, no ghost profile) PROVEN (8a's no-ghost + this) · F03 (optional: skip) PROVEN · F04 (required blocks, no tab bar, inline refusal naming the field) PROVEN · F05 (conflict silent) PROVEN server-side (5b), the visitor never told · F06 (Signed in as, never "verified") PROVEN · F08 (bot on after hours: the thread stays) BUILT (gate logic), the after-hours AI leg rides the chatbot fixture [D19/OA] · F09/F10 (offline form + receipt, masked phone, no tab bar) PROVEN · F11 (17:59 → 18:00, no cliff) NOT proven (a clock fixture; step 12) · F12 (three pages, one conversation) PROVEN · F13 (site logged in as someone else: nothing visible, a staff note) PROVEN server-side (SignedIdentityTest EC-04) · H01 (fires on /deposit with the page-specific message) PROVEN · H02 (dismissed once = gone on that page, across a reload) PROVEN · H03 (one per cooldown across rules) BUILT, the cross-rule proof rides 9b · H04 (never over a keyboard: deferred while a field has focus) PROVEN · K06 (below-matrix no-mount) PROVEN at step 7. **Class-1 notes:** the `alias` identity mode (8b); the offline receipt's SMS line is copy only until Doc 14 sends ([D14]).
+**FRAME-MAPPING ROWS:** E01 (browse: Popular, Categories, the pinned footer) PROVEN · E02 (search as you type, highlighted, Amharic-capable) PROVEN · E03/E04 (reader + feedback + footer wording) BUILT, OWED on P-KB-VIEWED · E06/K05 (index down, chat still works) PROVEN · E07 (language fallback notice) BUILT, OWED on P-KB-VIEWED · F01/F02 (anonymous, no ghost profile) PROVEN (8a's no-ghost + this) · F03 (optional: skip) PROVEN · F04 (required blocks, no tab bar, inline refusal naming the field) PROVEN · F05 (conflict silent) PROVEN server-side (5b), the visitor never told · F06 (Signed in as, never "verified") PROVEN · F08 (bot on after hours: the thread stays) BUILT (gate logic), the after-hours AI leg rides the chatbot fixture [D19/OA] · F09/F10 (offline form + receipt, masked phone, no tab bar) PROVEN · F11 (17:59 → 18:00, no cliff) NOT proven (a clock fixture; step 12) · F12 (three pages, one conversation) PROVEN · F13 (site logged in as someone else: nothing visible, a staff note) PROVEN server-side (SignedIdentityTest EC-04) · H01 (fires on /deposit with the page-specific message) PROVEN · H02 (dismissed once = gone on that page, across a reload) PROVEN · H03 (one per cooldown across rules) BUILT, the cross-rule proof rides 9b · H04 (never over a keyboard: deferred while a field has focus) PROVEN · K06 (below-matrix no-mount) PROVEN at step 7. **Class-1 notes:** the `alias` identity mode (8b); the offline receipt's SMS line is copy only until Doc 14 sends ([D14]) — **DISCHARGED at the S14 close: the line is TRUE — Doc 14 SENDS (`offline_form_confirmation` on the closed payload's source, `OfflineFormConfirmationTest`, S14 step 6).**
 
 ## SESSION-13 (Doc 13) — STEP 8b: THE TRANSPORT AND THE REST OF THE PANEL — the socket, leadership, notifications, the cache, degradation, theme; the queue/CSAT/agent-joined proofs LIVE; sabotages (h)(i)(j) (T-04, NFR-02, NFR-03, FR-08, FR-12, FR-13, FR-17, BR-03, EC-06, EC-09, FS-01/02/04, AC-08, SS-01 drill shape; commit = this section's SHA)
 
@@ -1119,7 +1286,7 @@ this note. All subsequent S19 work is single-session.
 | FS-03 | DONE | Feature/Automation/EngineOrderTest.php |  |
 | FS-04 | DONE | Feature/Forms/TelegramFlowTest.php |  |
 | FS-05 | DONE | Property/AutomationGuardCapsTest.php | articulated at step 7 from executed proofs: caps bound the blast (AutomationGuardCapsTest), the pause switch (EngineOrderTest/ScheduleSweepTest R-04 legs), the log scopes the radius (LogElisionTest), dry-run prevents (DryRunParityTest) |
-| SS-01 | PARTIAL [D14] | — | the J5 composition's Doc 12 legs are landed suites (form v2 publish, routing rule, seeded content); the SMS-template leg is Doc 14's ([D14]) — the journey is stated, not walked |
+| SS-01 | **DONE — the [D14] SMS-template leg FLIPPED at the S14 close:** `automation.sms.requested` is WALKED by a durable consumer — the template_ref names an FR-01 key, renders and queues through the ONE door (`tests/Feature/Sms/ConsumersTest.php`, S14 step 6) | — | the J5 composition's Doc 12 legs are landed suites (form v2 publish, routing rule, seeded content); was: "the journey is stated, not walked" |
 | SS-02 | DONE | Feature/Sla/SnapshotImmutabilityTest.php, Isolation/SlaGrantPhysicsTest.php |  |
 | SS-03 | DONE | Feature/Forms/TelegramFlowTest.php, Feature/Forms/SubmissionSnapshotTest.php |  |
 | SS-04 | DONE | — | the rules list is position-ordered, named, with matched counts and the edited-active indicator (ScreensTest, Playwright J2); the revision-history DIFF render is the surface's [B12-batch] fidelity item — **FLIPPED at SESSION-F1 (was: PARTIAL [B12-batch]):** the rules list and the rule editor redrawn to the frozen B9-S05/S06 record (`docs/evidence/F1-B12/register.md` E01–E09, F01–F11; the revision-history DIFF render lives on the editor's save/activate flow and the form history — F08/K06); proofs `b12-specs-08` + `workflow-screens` green unmodified; deviations D01–D06, D19, D27 filed |
@@ -2393,7 +2560,7 @@ dev-hardware-indicative caveat's exact content — the formal profile is
 | FR-12 | DONE | MergeFlowTest + MergeCollisionTest (re-point; linked_work via Doc 06's sanctioned path) |
 | FR-13 | DONE | MergeUndoTest (AC-03 byte-identical restore; 30 d window) |
 | FR-14 | DONE — **[D09] CLOSED at S09 step 7 (`98a6c27`)** | storage + excerpt-ref + visibility (RgVisibilityTest/RgStorageTest); the `source=ai` PRODUCER = Doc 09's RgOverride through RgFlagService::set (actor NULL by the CHECK, excerpt mandatory) — RgOverrideTest + RgDistressAuditTest (50 dialogs) |
-| FR-15 | **PARTIAL [D14] — the [D11] HALF FLIPPED at the S11 close: RG-queue routing REAL since S11 step 5 (RgIntake/RgFinalityTest; BR-02 final); the [D12] HALF FLIPPED at the S12 close: the marketing-suppression flag (RIDER 5 C, `MarketingSuppression` reader contract), the rule-driven `suppress` action (system audit + `customer.suppression.set`), and Doc 12's send-SMS-template arm refusing RG-flagged/suppressed customers (ExternalArmsTest) — "Doc 12 suppresses promotional automations" REAL; the [D14] SMS half stays worded** | contracts via event payloads; automation suppression stays Doc 12's, SMS suppression Doc 14's seam; clear=perm+reason + forever-history built (RgStorageTest) |
+| FR-15 | **PARTIAL [D14] — the [D11] HALF FLIPPED at the S11 close: RG-queue routing REAL since S11 step 5 (RgIntake/RgFinalityTest; BR-02 final); the [D12] HALF FLIPPED at the S12 close: the marketing-suppression flag (RIDER 5 C, `MarketingSuppression` reader contract), the rule-driven `suppress` action (system audit + `customer.suppression.set`), and Doc 12's send-SMS-template arm refusing RG-flagged/suppressed customers (ExternalArmsTest) — "Doc 12 suppresses promotional automations" REAL; **the [D14] SMS half FLIPPED at the S14 close:** the RG flag + marketing suppression are LIVE SMS guards — RG-flagged/suppressed customers refuse non-essential SMS in the ordered truth table (`tests/Unit/Sms/GuardTruthTableTest.php` RG legs, S14 step 1) and the `customer.rg_flag.set` / `customer.suppression.set` consumers skip HELD non-essential rows (`RgFlagSmsSuppression`, `ConsumersTest`, S14 step 6)** | contracts via event payloads; automation suppression stays Doc 12's, SMS suppression Doc 14's seam; clear=perm+reason + forever-history built (RgStorageTest) |
 | FR-16 | DONE | BettingFieldsTest + DuplicateHintScopeTest (staff-collected label; hint = counts) |
 | FR-17 | DONE | CustomerNotesTest (one pinned; N-04 structural undeliverability) |
 | FR-18 | DONE | BlockingCascadeTest AC-06 (cascade + guard both; A-39 unblock) |
@@ -5142,7 +5309,7 @@ partial and EC-06 undriven — those five rows below carry their s12 closure.
 | FR-20 | Token buckets per bot/chat; adaptive slowdown | tests/Feature/Telegram/RateLimiterTest.php (Redis-Lua) | DONE (s7) |
 | FR-21 | Window expiry from DB-time inbound; calibration tightens | tests/Feature/Telegram/WindowCalibrationTest.php | DONE (s8) |
 | FR-22 | open/closing/expired states; 5-min sweep; two events | WindowSweepTest + HealthRollupTest (cadence, s11) | DONE (s8/s11; automation consumption → Doc 12) |
-| FR-23 | Expired composer contract: disabled, SMS/phone/wait options | WindowSweepTest (states) + SMS-gate seam | PARTIAL — rendering → Doc 07, SMS send → Doc 14 (pre-agreed buckets) |
+| FR-23 | Expired composer contract: disabled, SMS/phone/wait options | WindowSweepTest (states) + SMS-gate seam | **DONE — the SMS half FLIPPED at the S14 close:** the manual doors are real (`ManualDoorsTest`, S14 step 5) and the expired card queues end-to-end in the browser (`inbox-expired-sms.spec`, S14 step 12; rendering landed under P-EXPIRED-CARD, the countersigned Doc 07 packet) |
 | FR-24 | Inbound on expired → reopen, recompute, notify assignee | tests/Feature/Telegram/WindowReopenConsumerTest.php (C-09) | DONE (s8) |
 | FR-25 | Five fixed commands, localized, per-language registration | DirectSurfaceTest (behaviours, s9) + BotProvisioningTest (setMyCommands ×3 scopes, s12) | **DONE (s9 + s12 — the registration half was the audit's find #2)** |
 | FR-26 | Deep links: payload schema → acquisition metadata, graceful unknowns | DirectSurfaceTest FR-26/SEC-05 block + TelegramGrantPhysicsTest write-once | **DONE (s12 — the audit's find #1; was never built despite the step-5 plan row; AI first-turn use → Doc 09, pre-agreed)** |
@@ -5172,7 +5339,7 @@ partial and EC-06 undriven — those five rows below carry their s12 closure.
 | id | what it requires (short) | proof | status |
 |---|---|---|---|
 | BR-01 | One account ↔ one bot; topology in registry | schema + ConnectionLifecycleTest (EC-02 single row) | DONE (s1/s6) |
-| BR-02 | Never initiate first contact | structural — sends only ride Doc 04 lanes on existing conversations | DONE (structural; outreach is Doc 14's) |
+| BR-02 | Never initiate first contact | structural — sends only ride Doc 04 lanes on existing conversations | DONE (structural; outreach is Doc 14's) — **ANNOTATED at the S14 close:** Doc 14's outreach is the FIXED FR-01 catalog only (ten sendable events, a CHECK + enum) behind BR-01's structural wall (no free-text send path exists; `SmsNoFreeTextTest` + the `sms-no-free-text` gate) — first contact stays impossible by physics |
 | BR-03 | Owner replies first-class, attributed, reported | OwnerPhoneAttributionTest (A-27 gate = sabotage #20) | DONE (s5/s6) |
 | BR-04 | Single-check truth non-negotiable | conformance delivered-unsupported + FR-17 test | DONE (s3/s7; DOM half → Doc 07 via AC-07) |
 | BR-05 | Windows tighten, never extend past observed behavior | WindowCalibrationTest (extend REFUSED both ways) | DONE (s8) |
@@ -5229,7 +5396,7 @@ partial and EC-06 undriven — those five rows below carry their s12 closure.
 |---|---|---|---|
 | SS-01 | Two accounts, routing by connection, per-account reports | FR-08 registry dimension + routing tag | PARTIAL — report lines → Doc 15 (pre-agreed) |
 | SS-02 | Match-night 100/s × 5 min, zero drops | ACK budget held (TelegramBudgetsTest) | PARTIAL — sustained L1 burst → Doc 19 (pre-agreed) |
-| SS-03 | Expire → SMS → reply → reopen → notify, on timeline | WindowReopenConsumerTest (reopen + notify) | PARTIAL — SMS send → Doc 14 (pre-agreed) |
+| SS-03 | Expire → SMS → reply → reopen → notify, on timeline | WindowReopenConsumerTest (reopen + notify) | **DONE — the SMS half FLIPPED at the S14 close:** the loop's SMS leg renders truthful chips on the timeline (`inbox-sms-timeline.spec` US-02/SS-01, S14 step 12) |
 | SS-04 | Conformance suite passes unmodified | TelegramAdapterConformanceTest + zero-core-edits diff assertion | DONE (s3/s5) |
 
 | id | what it requires (short) | proof | status |
@@ -5237,7 +5404,7 @@ partial and EC-06 undriven — those five rows below carry their s12 closure.
 | AC-01 | Every allowed update type → exact NormalizedInbound | InboundMappingTest + fixture suite | DONE (s5) |
 | AC-02 | Mode matrix incl. misconfiguration alert + redirect | DirectSurfaceTest (ModePolicy) | DONE (s9) |
 | AC-03 | Live staged lifecycle walk | machinery proven (ConnectionLifecycleTest, EC-11 real captures) | PARTIAL — owner-assisted-BLOCKED (staging Business account, §21) |
-| AC-04 | Window timelines, composer contract, SMS gating, reopen, calibration | Window suites (s8) | PARTIAL — composer render → Doc 07, automations → Doc 12, SMS → Doc 14 |
+| AC-04 | Window timelines, composer contract, SMS gating, reopen, calibration | Window suites (s8) | PARTIAL — composer render → Doc 07, automations → Doc 12; **the SMS half FLIPPED at the S14 close** (the reengage door + the card, `ManualDoorsTest` + `inbox-expired-sms.spec`) |
 | AC-05 | Error fixture corpus lands specified states | ErrorClassificationTest | DONE (s7) |
 | AC-06 | Bucket conformance, adaptive slowdown, FIFO | RateLimiterTest | DONE (s7) |
 | AC-07 | UI never renders delivered for Telegram | capability-truth half (conformance) | PARTIAL — DOM half → Doc 07 (pre-agreed) |
@@ -5248,7 +5415,7 @@ partial and EC-06 undriven — those five rows below carry their s12 closure.
 |---|---|---|---|
 | R-01 | Business-API drift: isolation, calibration, changelog review | SS-04 + EC-14 proofs | DONE — quarterly changelog task → Doc 18 runbook handoff |
 | R-02 | Phones as infrastructure: dedicated devices, documented | step-6 incident + close-out risks record | DONE (recorded; device policy → owner/Doc 18 onboarding) |
-| R-03 | Missed SLAs from expiry: notifications, hooks, SMS, pause | FR-22 events proven | PARTIAL — SLA pause flag → Doc 12, SMS → Doc 14 (pre-agreed) |
+| R-03 | Missed SLAs from expiry: notifications, hooks, SMS, pause | FR-22 events proven | PARTIAL — SLA pause flag stays [D12] as filed; **the SMS half FLIPPED at the S14 close** (the window_reengagement pipeline, `ManualDoorsTest`, S14 step 5) |
 | R-04 | Hybrid confusion: grouping, warning, training | EC-04 mode handling | PARTIAL — grouping/warning → Doc 07 (pre-agreed); training copy → owner |
 | R-05 | Viral bursts: buckets degrade gracefully, queue not fail | RateLimiterTest | DONE (s7) |
 
@@ -7871,6 +8038,11 @@ ruling. `permissions`, `notifications`, `gates.yaml`, `EVENT-CATALOG`: unchanged
 seeded `webhook_credentials` rows from this step forward, or its telegram/DLR
 probes return 403 BY DESIGN** (fail-closed unconfigured keys). Doc 05's bot
 registration and Doc 14's gateway setup become the production write paths.
+**ANNOTATED at the S14 close (R-D14-4.12): Doc 14's half is REAL —
+`GatewayCredentials::mint` writes DLR credentials through Doc 02's own doors at
+gateway creation and on the rotate door (`sms:… dlr/rotate`, S14 steps 4/7;
+`DlrAuthTest` proves the minted key authenticates and an absent secret
+fail-closes).**
 
 ### ⚠ Doc 18 handoff, extended (rulings D-1 and D-5)
 
@@ -7895,7 +8067,16 @@ reference model, Doc 18's slot).
 - **Real Telegram webhook URL shape, bot records, secret registration at setup**
   — Doc 05; the probe's audit-exemption line is Doc 05's to delete.
 - **Gateway records, native-signature drivers, DLR processing** — Doc 14; its
-  drivers adapt native schemes onto the `body_hmac` contract.
+  drivers adapt native schemes onto the `body_hmac` contract. **DISCHARGED at the
+  S14 close (R-D14-4.11): P-DLR-AUTH landed at S14 step 7 (countersigned) —
+  `webhook.auth` grew the `url_secret` mechanism fail-closed, replay answers 202
+  `webhook.replay_ignored` (STOP-C amendment 1), the DLR probe route was REPLACED
+  on both auth surfaces and its exemption lines rewritten in the same commit;
+  gateway records (`GatewayWriter`), the config-mapped `http_generic` driver and
+  the full DLR pipeline (`SmsDlrController` → `ProcessDlrJob` → `DlrApplier`) are
+  live (`DlrAuthTest`, `DlrIngestionTest`). A-1 NOT triggered — GeezSMS's 403
+  retry semantics stay UNKNOWN (vendor notes §18 Q3); the revisit condition
+  below stands unchanged.**
 - **A timing measurement for constant-time comparison** — refused by ruling
   (noise-level signal, flaky-test hazard); the pin + always-true sabotage are
   the approved substitute, honestly labeled.

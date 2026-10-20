@@ -2701,9 +2701,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 1: the FR-03 truth table as a PURE unit — every branch, every order interaction, exact skip reasons, the ordered guard_log, the pre-guards (A-67), the RG × event and blocked × security exceptions, the 10-min duplicate window, quiet-hours × policy — RED first on absence (units-RED-01.txt), then green. PARTIAL: the live-guard legs against real Doc 08 facts and the registry land at steps 5/8 (LiveGuardsTest, OptOutAbsolutenessTest).
+      S14 close: the FR-03 truth table as a PURE unit (step 1, RED first) AND the live-guard halves landed — LiveGuardsTest (EC-02, step 5: guards re-run against real Doc 08 facts AT SEND) and OptOutAbsolutenessTest (step 8: the registry half). Every branch, order interaction, exact skip reason, the ordered guard_log, the A-67 pre-guards, RG x event and blocked x security exceptions, the 10-min duplicate window, quiet-hours x policy.
   - ac_ref: "Doc14 AC-02"
     suite_path: tests/Unit/Sms/StateMachineMatrixTest.php
     type: automated
@@ -2711,9 +2711,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 1: the full transition matrix (every legal and illegal edge), sent never rolls back, the FR-13 DLR precedence matrix incl. EC-04 (contradiction retained + flagged), duplicates and out-of-order idempotent, the GeezSMS `success` → acceptance only (R-D14-1.5), the 48 h expiry as a DB-time comparison — as a PURE unit. The owed halves all landed: the table half (step 2b), the wire-driven matrix (tests/Feature/Sms/DlrIngestionTest.php, step 7), and the zero-inferred-delivered DOM gate (tests/Browser/sms-no-inferred-delivered.spec.ts, step 12: a sent-only row never shows the double check or data-sms-state="delivered"; expired reads "Sent · unconfirmed"). Status stays for the close-out's self-audit flip.
+      S14 close: the full transition matrix (step 1, PURE unit — sent never rolls back, FR-13 DLR precedence incl. EC-04 contradiction retained+flagged, duplicates/out-of-order idempotent, success -> acceptance only R-D14-1.5, 48 h expiry on DB time) AND every owed half landed: the table half (step 2b), the wire-driven matrix (tests/Feature/Sms/DlrIngestionTest.php, step 7), the zero-inferred-delivered DOM gate (tests/Browser/sms-no-inferred-delivered.spec.ts, step 12: a sent-only row never shows the double check; expired reads Sent - unconfirmed).
   - ac_ref: "Doc14 AC-03"
     suite_path: tests/Feature/Sms/FailoverTest.php
     type: automated
@@ -2721,9 +2721,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 4: the routing trie (tests/Unit/Sms/RoutingTrieTest.php — longest prefix wins regardless of table order, EC-01 "+2519 shadows +251" overlap pairs), the seeded chain + the no-match ladder (default_gateway | skip) + the "test a number" door + the FS-01 auth-expiry ladder (real 401s from the mock reference profile → gateway-level → trip → out of every chain at the NEXT resolve, audited once) in FailoverTest; the breaker's trip / half-open (injected clock, ≤ 30 s) / close / re-open / probe sweep / manual reset with reason in tests/Feature/Sms/CircuitBreakerTest.php. PARTIAL: the per-message fallback walk (step 5, PipelineFailoverTest) and the queued-TTL expiry leg of the EC-12 ladder (step 7, ExpiredSweepTest).
+      S14 close: routing (RoutingTrieTest: longest prefix, shadowing/overlap warnings), failover once per fallback with the breaker fed (FailoverTest), the circuit cycle trip->half-open->recover on an injected clock (CircuitBreakerTest) and the EC-12 ladder — circuit open -> queued bounded by the 24 h TTL -> failed:no_route_available, drain on recovery (ExpiredSweepTest). Steps 4/7.
   - ac_ref: "Doc14 AC-04"
     suite_path: tests/Unit/Sms/SegmenterCorpusTest.php
     type: automated
@@ -2731,39 +2731,39 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 1: the encoding & segmentation corpus (fixtures/sms/encoding-corpus.json — GSM-7, GSM-7 extension, UCS-2, mixed, Amharic, rare script) under A-66 (160/153, 70/67); the sabotage (j) control (one Ethiopic character forces UCS-2). The owed halves all landed: editor-estimate vs accrual parity (EstimateVsAccrualParityTest step 3, CostAccrualTest step 11) and rate-card currency rendering (tests/Browser/sms-templates.spec.ts, step 13 — the per-gateway cost row with its card's own currency; the editor's live UCS-2 flip asserted in-browser). Status stays for the close-out's self-audit flip.
+      S14 close: the encoding & segmentation corpus (step 1, fixtures/sms/encoding-corpus.json — GSM-7, extension, UCS-2, mixed, Amharic, rare script; A-66 160/153, 70/67; sabotage j control) AND the owed halves: estimate-vs-accrual parity (EstimateVsAccrualParityTest step 3, CostAccrualTest step 11) and rate-card currency rendering (tests/Browser/sms-templates.spec.ts, step 13 — the per-gateway cost row in its card's own currency; the live UCS-2 flip asserted in-browser).
   - ac_ref: "Doc14 AC-05"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Sms/StopParsingTest.php
+    type: automated
     tier: integration
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14: NOT YET BUILT — STOP parsing per language (the ተወው byte-exact seed half is proven at step 1: tests/Unit/Sms/StopWordByteExactTest.php), absoluteness for every event, restoration audit and the mid-broadcast live-guard sequence land at steps 8 and 10 (StopParsingTest, OptOutAbsolutenessTest, OptOutRestorationAuditTest, BroadcastLiveGuardsTest).
+      S14 close (steps 8/10): STOP parsing per language with the configurable word list (StopParsingTest; the Amharic seed byte-exact at step 1, StopWordByteExactTest), absoluteness for EVERY event incl. security (OptOutAbsolutenessTest — the sabotage b control), restoration behind the audited reason door (OptOutRestorationAuditTest) and the mid-broadcast live-guard sequence (BroadcastLiveGuardsTest EC-07: a STOP after launch skips that member with timestamps ordered BEFORE the row).
   - ac_ref: "Doc14 AC-06"
-    suite_path: manual
-    type: manual
+    suite_path: tests/Feature/Sms/BroadcastLifecycleTest.php
+    type: automated
     tier: integration
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14: NOT YET BUILT — broadcasts land at step 10 (BroadcastLifecycleTest: preview = executed ± live skips, pinned version, cancel, typed-confirm threshold; SmsBroadcastRgExclusionTest; BroadcastQuotaPauseTest).
+      S14 close (step 10): preview = executed +/- live skips on the SAME query, the pinned version with the EC-06 republish notice, cancel stops the remainder cold, the >= 1,000 typed confirm, the monthly cap, A-64's key split (BroadcastLifecycleTest); the RG wall structural in the compiled SQL (SmsBroadcastRgExclusionTest, RED first); paused_quota -> resume (BroadcastQuotaPauseTest, re-proven on the REAL meter at step 11). The builder's browser leg is tests/Browser/sms-broadcasts.spec.ts (step 13).
   - ac_ref: "Doc14 AC-07"
-    suite_path: manual
+    suite_path: tests/Performance/SmsLaneIsolationDrillTest.php
     type: drill
     tier: integration
     cadence: every-push
-    environment: local
+    environment: ci
     owner: platform-engineering
     status: partial
     justification: >-
-      S14: NOT YET RUN — the SS-04 lane-isolation drill (transactional p95 delta ≤ 5 % during a broadcast) runs at step 10 at a stated dev-scale N (SmsLaneIsolationDrillTest; the 8,000-recipient scale is [D19]); a discharging run is labelled battery-run, indicative.
+      S14 close (step 10): the SS-04 lane-isolation drill at dev-scale N=40+12 — transactional p95 199 -> 190 ms under a broadcast, delta -4.7% WITHIN the 5% budget (make sms-lane-drill; a discharging run is labelled battery-run, indicative). PARTIAL [D19]: the 8,000-recipient scale and L2 figures are Doc 19's.
   - ac_ref: "Doc14 AC-08"
     suite_path: tests/Feature/Sms/HttpGenericOnboardingTest.php
     type: automated
@@ -2771,9 +2771,9 @@ entries:
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 4: the GeezSMS FIXTURE profile onboarded by its config MAPPING alone — the test asserts zero files under app/Domain/Sms/Gateways/Drivers/ (and GatewayConfig) name the vendor; a real send reaches the mock container through the egress proxy as a POST form (digits phone, msg, callback); `success` parses to ACCEPTED only (R-D14-1.5); the vendor cap and template marker refused before a byte leaves; FR-11 classification over the wire against the reference profile. The sidecar half — mTLS required at the handshake, /send, /health, restart transparency (retryable gap, next attempt lands) — in tests/Feature/Sms/SidecarContractTest.php against docker/mocks/smpp-sidecar; T-02's shape pinned in tests/Contract/Sms/DriverContractTest.php. PARTIAL: DLR ingress by the mapping over the wire (step 7, DlrIngestionTest). A fixture result is never proof of the [OA] live rows.
+      S14 close (step 4): the mock aggregator onboarded by its config MAPPING alone — zero new code files (the suite asserts no vendor-named file exists under Drivers/); the sidecar suite incl. the restart-transparency leg (SidecarContractTest: mTLS required at the handshake, retryable gap, next attempt lands).
   - ac_ref: "Doc14 AC-09"
     suite_path: tests/Browser/inbox-sms-timeline.spec.ts
     type: automated
@@ -2785,12 +2785,12 @@ entries:
     justification: >-
       S14 step 12 (P-TIMELINE-SMS): US-02 on the real Doc 07 timeline — sent renders the single check + masked phone, a REAL DLR (markDelivered) moves the chip to the delivered double check; the B12-S02 menu case (Copy text + the why-line, no Edit/Delete). The server control is tests/Feature/Inbox/TimelineSmsRowsTest.php (sms.* rows reach the door, class-only actor, no phone/body in detail) and the facts-shape pin is tests/Feature/Sms/SmsTimelineFactsShapeTest.php (EXACTLY {state, phone_masked, event, lane} — the countersign condition). The chip-truth unit half from step 1 stands (tests/Unit/Sms/ChipTruthTest.php); the zero-inferred-delivered DOM gate is tests/Browser/sms-no-inferred-delivered.spec.ts.
   - ac_ref: "Doc14 AC-10"
-    suite_path: tests/Unit/Sms/CredentialRefTest.php
+    suite_path: tests/Security/SmsCredentialWriteOnlyTest.php
     type: automated
-    tier: unit
+    tier: security
     cadence: every-push
     environment: ci
     owner: platform-engineering
-    status: partial
+    status: covered
     justification: >-
-      S14 step 1: the vault-ref-only value object (a plaintext or token-shaped credential is REFUSED; no reveal accessor) — the model half of SEC-01. Step 3: the {{link}} domain restriction (tests/Feature/Sms/TemplateValidationTest.php). Step 4: the credential write-only round-trip (tests/Security/SmsCredentialWriteOnlyTest.php — the value lands in the vault as a vault://sms/ ref only, never on the row, in the audit, the mapping or any response; the DLR credentials minted through Doc 02's own doors; replace = a new ref with the predecessor retired; a secret key inside the mapping refused before any row) and the driver's log discipline (tests/Security/SmsEgressGuardTest.php — plant → detect → remove: no body, token, full phone or callback URL). PARTIAL: phone masking across the pipeline's log lines (SmsPhoneMaskingTest, step 5).
+      S14 close (steps 3/4/5): the credential write-only round-trip (stored as a vault://sms/ ref only — never on the row, in the audit, the mapping or any response; replace = a new ref with the predecessor retired; the write-only line proven in-browser at step 13), phone masking across the pipeline's logs and events (SmsPhoneMaskingTest — the B4-S08 drawn form byte-exact; OutboxPayloadMinimizationTest) and the {{link}} restriction (TemplateValidationTest: an arbitrary URL never publishes, SEC-05 — the sabotage k control, RED capture on file).
