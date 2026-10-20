@@ -188,12 +188,13 @@ services:
       retries: 6
 
   minio:
-    # P-MINIO-REGISTRY (countersigned 2026-09-24; ci run #336 = 35916450403): Docker Hub DENIES the
-    # minio/minio repository as of 2026-09-23 (repo-wide, digest pulls included) — every ephemeral
-    # runner died at this pull while dev boxes coasted on cache. MinIO's own quay registry serves the
-    # IDENTICAL build (RELEASE.2025-09-07T16-13-09Z, same manifest digest), pinned here BY DIGEST.
-    # Doc 18 reopener: the deliberate re-pin (and the unpinned-externals class named in BUILD-STATUS).
-    image: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    # P-MINIO-REGISTRY follow-up (2026-10-20 ruling; CI #340 = 39479414887): Quay now returns
+    # 401 UNAUTHORIZED for the original pin; Docker Hub's upstream repository also denies access.
+    # Dappros mirrors RELEASE.2025-09-07T16-13-09Z. This linux/amd64 manifest is BYTE-IDENTICAL
+    # to the original cached platform manifest (config + all nine layers); fresh pull proven in
+    # docs/evidence/S14-close-look/. Pin the verified platform digest, never a mutable mirror tag.
+    # Doc 18 reopener: registry custody, other architectures, and the unpinned-externals class.
+    image: dappros/minio@sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2
     command: ["server", "/data", "--console-address", ":9001"]
     environment:
       MINIO_ROOT_USER: minio_local

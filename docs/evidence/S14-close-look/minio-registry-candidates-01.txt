@@ -1,0 +1,27 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      minio-registry-candidates
+# set:        S14-close-look
+# command:    python3 -
+# started:    2026-10-20T20:02:54Z
+# git:        d886553 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+
+CANDIDATE minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+ errors:
+denied: requested access to the resource is denied
+unauthorized: authentication required
+
+ EXIT 1
+
+CANDIDATE quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+ no such manifest: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+ EXIT 1
+
+CANDIDATE public.ecr.aws/minio/minio:RELEASE.2025-09-07T16-13-09Z
+ no such manifest: public.ecr.aws/minio/minio:RELEASE.2025-09-07T16-13-09Z
+ EXIT 1
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:03:06Z
+# duration:   12s
+# EXIT:       0

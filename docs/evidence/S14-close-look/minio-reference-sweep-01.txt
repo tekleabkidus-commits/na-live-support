@@ -1,0 +1,22 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      minio-reference-sweep
+# set:        S14-close-look
+# command:    python3 -
+# started:    2026-10-20T20:04:32Z
+# git:        d886553 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+docker/compose.yaml:196:     image: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+docs/BUILD-STATUS.md:299: **P-MINIO-REGISTRY, landed under the 2026-09-24 countersign:** the whole-repo sweep (compose overlays, .github/workflows, Makefile, docs run commands) found EXACTLY ONE reference — `docker/compose.yaml:191` (workflows and the Makefile drive the compose service, never the image name); it is now `quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e` — MinIO's own quay registry serving the IDENTICAL build (RELEASE.2025-09-07T16-13-09Z, same commit id, same manifest digest as the cached known-good), pinned BY DIGEST, with the reason and the Doc 18 reopener in the comment beside it. **The proof rode no cache:** every cached minio image removed first (`docker image rm` both tags → "NO minio image cached"), the stack brought up pulling FRESH from quay at the pinned digest (capture in the evidence file), the container inspected running the pinned reference, the media bucket provisioned with CI's own command; `docker compose config -q` green on all four overlay shapes (CI base, base+harness, dev pair, dev quad); Doc 04's MediaPipelineTest + the S0 StackSmokeTest **17 passed (95 assertions) EXIT 0**; the Doc 14 set **117 passed (1,275) EXIT 0**; lint EXIT 0; gates 17/17.
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:15: $ docker pull quay.io/minio/minio:latest
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:16: Status: Downloaded newer image for quay.io/minio/minio:latest — MinIO's own quay registry serves
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:19: minio/minio:latest (cached 2025-09-07) == quay.io/minio/minio:latest — the IDENTICAL build:
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:22:                 "quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e"]
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:23:   docker manifest inspect quay.io/minio/minio@sha256:14cea493... → served (the pin is pullable)
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:26:  Image quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e Pulling 
+docs/evidence/S14-look-2ce16d7/ci-run336-minio-RED-01.txt:28: container runs the PINNED reference: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+One runtime reference: docker/compose.yaml; all other matches are historical evidence/record.
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:04:33Z
+# duration:   1s
+# EXIT:       0

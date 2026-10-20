@@ -1,0 +1,27 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      minio-cache-removal
+# set:        S14-close-look
+# command:    bash -c set -eu
+docker image inspect quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e --format "ID={{.Id}} RepoDigests={{json .RepoDigests}}"
+docker save -o /tmp/s14-close-look-minio-recovery.tar quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml stop minio
+docker compose -f docker/compose.yaml -f docker/compose.dev.yaml rm -f minio
+docker image rm quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+docker image ls --digests --filter reference="*minio*"
+# started:    2026-10-20T20:02:32Z
+# git:        d886553 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+ID=sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e RepoDigests=["quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e"]
+ Container na-live-support-minio-1 Stopping 
+ Container na-live-support-minio-1 Stopped 
+Going to remove na-live-support-minio-1
+ Container na-live-support-minio-1 Removing 
+ Container na-live-support-minio-1 Removed 
+Untagged: quay.io/minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+Deleted: sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+REPOSITORY   TAG       DIGEST    IMAGE ID   CREATED   SIZE
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:02:36Z
+# duration:   4s
+# EXIT:       0

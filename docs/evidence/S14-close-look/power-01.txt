@@ -1,0 +1,13 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      power
+# set:        S14-close-look
+# command:    /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -Command Get-CimInstance Win32_Battery | Select-Object BatteryStatus,EstimatedChargeRemaining | ConvertTo-Json -Compress
+# started:    2026-10-20T20:12:28Z
+# git:        d886553 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+{"BatteryStatus":1,"EstimatedChargeRemaining":23}
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:12:31Z
+# duration:   3s
+# EXIT:       0

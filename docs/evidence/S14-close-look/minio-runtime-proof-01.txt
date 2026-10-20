@@ -1,0 +1,26 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      minio-runtime-proof
+# set:        S14-close-look
+# command:    bash -c set -eu
+docker inspect na-live-support-minio-1 --format "Reference={{.Config.Image}} Image={{.Image}} Health={{.State.Health.Status}}"
+docker compose -f docker/compose.yaml exec -T minio minio --version
+docker compose -f docker/compose.yaml exec -T minio mc --version
+docker compose -f docker/compose.yaml exec -T minio sh -c "mc alias set local http://localhost:9000 minio_local minio_local_secret >/dev/null && mc mb --ignore-existing local/na-live-support"
+# started:    2026-10-20T20:05:50Z
+# git:        d886553 (DIRTY working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+Reference=dappros/minio@sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2 Image=sha256:a1a8bd4ac40ad7881a245bab97323e18f971e4d4cba2c2007ec1bedd21cbaba2 Health=healthy
+minio version RELEASE.2025-09-07T16-13-09Z (commit-id=07c3a429bfed433e49018cb0f78a52145d4bedeb)
+Runtime: go1.24.6 linux/amd64
+License: GNU AGPLv3 - https://www.gnu.org/licenses/agpl-3.0.html
+Copyright: 2015-2025 MinIO, Inc.
+mc version RELEASE.2025-08-13T08-35-41Z (commit-id=7394ce0dd2a80935aded936b09fa12cbb3cb8096)
+Runtime: go1.24.6 linux/amd64
+Copyright (c) 2015-2025 MinIO, Inc.
+License GNU AGPLv3 <https://www.gnu.org/licenses/agpl-3.0.html>
+Bucket created successfully `local/na-live-support`.
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:05:51Z
+# duration:   1s
+# EXIT:       0

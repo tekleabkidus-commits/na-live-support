@@ -1,0 +1,181 @@
+# CAPTURED RUN — ci/capture.sh (RISK 0b capture-first protocol)
+# label:      ci-run340-stage3b-job118826049664
+# set:        S14-close-look
+# command:    gh api repos/tekleabkidus-commits/na-live-support/actions/jobs/118826049664/logs
+# started:    2026-10-20T20:01:59Z
+# git:        d886553 (clean working tree)
+# host:       Kidus
+# ---------------------------------------------------------------- 8< ----
+﻿2026-10-20T19:03:01.9141957Z Current runner version: '2.337.0'
+2026-10-20T19:03:01.9206899Z ##[group]Runner Image Provisioner
+2026-10-20T19:03:01.9208574Z Hosted Compute Agent
+2026-10-20T19:03:01.9209894Z Version: 20261015.610
+2026-10-20T19:03:01.9211004Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-20T19:03:01.9212936Z Build Date: 2026-10-14T17:06:54Z
+2026-10-20T19:03:01.9214156Z Worker ID: {d17dbf27-ff14-43d9-baca-f79b11e7f8be}
+2026-10-20T19:03:01.9215646Z Region: eastus
+2026-10-20T19:03:01.9216640Z Cloud: Azure
+2026-10-20T19:03:01.9217548Z ##[endgroup]
+2026-10-20T19:03:01.9228308Z ##[group]Operating System
+2026-10-20T19:03:01.9229844Z Ubuntu
+2026-10-20T19:03:01.9230894Z 24.04.5
+2026-10-20T19:03:01.9231813Z LTS
+2026-10-20T19:03:01.9232781Z ##[endgroup]
+2026-10-20T19:03:01.9233904Z ##[group]Runner Image
+2026-10-20T19:03:01.9234960Z Image: ubuntu-24.04
+2026-10-20T19:03:01.9236043Z Version: 20261018.339.1
+2026-10-20T19:03:01.9238348Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-20T19:03:01.9241780Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-20T19:03:01.9243665Z ##[endgroup]
+2026-10-20T19:03:01.9245948Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T19:03:01.9249072Z Contents: read
+2026-10-20T19:03:01.9250530Z Metadata: read
+2026-10-20T19:03:01.9251650Z Packages: read
+2026-10-20T19:03:01.9252649Z ##[endgroup]
+2026-10-20T19:03:01.9255665Z Secret source: Actions
+2026-10-20T19:03:01.9257420Z Cache mode: write
+2026-10-20T19:03:01.9258950Z Prepare workflow directory
+2026-10-20T19:03:01.9742368Z Prepare all required actions
+2026-10-20T19:03:01.9812857Z Getting action download info
+2026-10-20T19:03:02.2038042Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-20T19:03:02.3103601Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-20T19:03:02.5442574Z Complete job name: Stage 3b: AC-03 ordering evidence — 10k soak + backstep controls (alone)
+2026-10-20T19:03:02.6285150Z ##[group]Run actions/checkout@v4
+2026-10-20T19:03:02.6286076Z with:
+2026-10-20T19:03:02.6286618Z   repository: tekleabkidus-commits/na-live-support
+2026-10-20T19:03:02.6291059Z   token: ***
+2026-10-20T19:03:02.6291532Z   ssh-strict: true
+2026-10-20T19:03:02.6291995Z   ssh-user: git
+2026-10-20T19:03:02.6292464Z   persist-credentials: true
+2026-10-20T19:03:02.6292976Z   clean: true
+2026-10-20T19:03:02.6293443Z   sparse-checkout-cone-mode: true
+2026-10-20T19:03:02.6293995Z   fetch-depth: 1
+2026-10-20T19:03:02.6294449Z   fetch-tags: false
+2026-10-20T19:03:02.6294918Z   show-progress: true
+2026-10-20T19:03:02.6295396Z   lfs: false
+2026-10-20T19:03:02.6295831Z   submodules: false
+2026-10-20T19:03:02.6296306Z   set-safe-directory: true
+2026-10-20T19:03:02.6296853Z   allow-unsafe-pr-checkout: false
+2026-10-20T19:03:02.6297656Z ##[endgroup]
+2026-10-20T19:03:02.7533104Z Syncing repository: tekleabkidus-commits/na-live-support
+2026-10-20T19:03:02.7536749Z ##[group]Getting Git version info
+2026-10-20T19:03:02.7538978Z Working directory is '/home/runner/work/na-live-support/na-live-support'
+2026-10-20T19:03:02.7542353Z [command]/usr/bin/git version
+2026-10-20T19:03:02.7665880Z git version 2.55.0
+2026-10-20T19:03:02.7672554Z ##[endgroup]
+2026-10-20T19:03:02.7680601Z Temporarily overriding HOME='/home/runner/work/_temp/e6ec3edf-205b-45a6-9de1-aa91ea15e42a' before making global git config changes
+2026-10-20T19:03:02.7683606Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T19:03:02.7686722Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/na-live-support/na-live-support
+2026-10-20T19:03:02.7802990Z Deleting the contents of '/home/runner/work/na-live-support/na-live-support'
+2026-10-20T19:03:02.7805863Z ##[group]Initializing the repository
+2026-10-20T19:03:02.7808243Z [command]/usr/bin/git init /home/runner/work/na-live-support/na-live-support
+2026-10-20T19:03:02.8001362Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T19:03:02.8004636Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T19:03:02.8007228Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T19:03:02.8009123Z hint: call:
+2026-10-20T19:03:02.8011701Z hint:
+2026-10-20T19:03:02.8012992Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T19:03:02.8014602Z hint:
+2026-10-20T19:03:02.8017913Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T19:03:02.8019796Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T19:03:02.8021158Z hint:
+2026-10-20T19:03:02.8021916Z hint: 	git branch -m <name>
+2026-10-20T19:03:02.8022615Z hint:
+2026-10-20T19:03:02.8023719Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T19:03:02.8025601Z Initialized empty Git repository in /home/runner/work/na-live-support/na-live-support/.git/
+2026-10-20T19:03:02.8029299Z [command]/usr/bin/git remote add origin https://github.com/tekleabkidus-commits/na-live-support
+2026-10-20T19:03:02.8090412Z ##[endgroup]
+2026-10-20T19:03:02.8091974Z ##[group]Disabling automatic garbage collection
+2026-10-20T19:03:02.8096883Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-20T19:03:02.8183381Z ##[endgroup]
+2026-10-20T19:03:02.8201176Z ##[group]Setting up auth
+2026-10-20T19:03:02.8221111Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T19:03:02.8233945Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T19:03:02.8975827Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T19:03:02.9954974Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T19:03:02.9960099Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T19:03:02.9962937Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T19:03:02.9965268Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T19:03:02.9982271Z ##[endgroup]
+2026-10-20T19:03:02.9984217Z ##[group]Fetching the repository
+2026-10-20T19:03:02.9997208Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d886553587c606e48c08786d68474745312278fc:refs/remotes/origin/main
+2026-10-20T19:03:04.9459257Z From https://github.com/tekleabkidus-commits/na-live-support
+2026-10-20T19:03:04.9471046Z  * [new ref]         d886553587c606e48c08786d68474745312278fc -> origin/main
+2026-10-20T19:03:04.9476360Z ##[endgroup]
+2026-10-20T19:03:04.9478495Z ##[group]Determining the checkout info
+2026-10-20T19:03:04.9480871Z ##[endgroup]
+2026-10-20T19:03:04.9482159Z [command]/usr/bin/git sparse-checkout disable
+2026-10-20T19:03:04.9541064Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T19:03:04.9591962Z ##[group]Checking out the ref
+2026-10-20T19:03:04.9595751Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-20T19:03:05.5585635Z Switched to a new branch 'main'
+2026-10-20T19:03:05.5611783Z branch 'main' set up to track 'origin/main'.
+2026-10-20T19:03:05.5638029Z ##[endgroup]
+2026-10-20T19:03:05.5694904Z [command]/usr/bin/git log -1 --format=%H
+2026-10-20T19:03:05.5732524Z d886553587c606e48c08786d68474745312278fc
+2026-10-20T19:03:05.5975529Z ##[group]Run cp .env.example .env
+2026-10-20T19:03:05.5975942Z [36;1mcp .env.example .env[0m
+2026-10-20T19:03:05.5976348Z [36;1msed -i "s|^APP_KEY=$|APP_KEY=base64:$(openssl rand -base64 32)|" .env[0m
+2026-10-20T19:03:05.6162587Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:03:05.6162934Z ##[endgroup]
+2026-10-20T19:03:05.6383070Z ##[group]Run docker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600
+2026-10-20T19:03:05.6383769Z [36;1mdocker compose -f docker/compose.yaml up -d --build --wait --wait-timeout 600[0m
+2026-10-20T19:03:05.6434038Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:03:05.6434344Z ##[endgroup]
+2026-10-20T19:03:06.0935366Z  mailpit Pulling 
+2026-10-20T19:03:06.0936517Z  redis-volatile Pulling 
+2026-10-20T19:03:06.1003788Z  clamav Pulling 
+2026-10-20T19:03:06.1119127Z  postgres Pulling 
+2026-10-20T19:03:06.1170807Z  minio Pulling 
+2026-10-20T19:03:06.1171259Z  meilisearch Pulling 
+2026-10-20T19:03:06.1171828Z  redis-durable Pulling 
+2026-10-20T19:03:06.2569570Z  minio Error unauthorized: access to the requested resource is not authorized
+2026-10-20T19:03:06.2570778Z  redis-volatile  Interrupted
+2026-10-20T19:03:06.2571461Z  postgres  Interrupted
+2026-10-20T19:03:06.2574317Z  clamav  Interrupted
+2026-10-20T19:03:06.2575633Z  meilisearch  Interrupted
+2026-10-20T19:03:06.2576381Z  redis-durable  Interrupted
+2026-10-20T19:03:06.2576973Z  mailpit  Interrupted
+2026-10-20T19:03:06.2577847Z Error response from daemon: unauthorized: access to the requested resource is not authorized
+2026-10-20T19:03:06.2638881Z ##[error]Process completed with exit code 1.
+2026-10-20T19:03:06.2699037Z ##[group]Run docker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres
+2026-10-20T19:03:06.2700287Z [36;1mdocker compose -f docker/compose.yaml ps; docker compose -f docker/compose.yaml logs --tail=100 relay postgres[0m
+2026-10-20T19:03:06.2751237Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:03:06.2751525Z ##[endgroup]
+2026-10-20T19:03:06.4148530Z NAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS
+2026-10-20T19:03:06.7101711Z ##[group]Run actions/upload-artifact@v4
+2026-10-20T19:03:06.7102266Z with:
+2026-10-20T19:03:06.7102626Z   name: ac03-soak-capture-39479414887-1
+2026-10-20T19:03:06.7102936Z   path: docs/evidence/ci-soak/
+2026-10-20T19:03:06.7103525Z   if-no-files-found: error
+2026-10-20T19:03:06.7103798Z   compression-level: 6
+2026-10-20T19:03:06.7104041Z   overwrite: false
+2026-10-20T19:03:06.7104285Z   include-hidden-files: false
+2026-10-20T19:03:06.7104546Z ##[endgroup]
+2026-10-20T19:03:06.9390908Z (node:2158) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-20T19:03:06.9410567Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-20T19:03:06.9545227Z ##[error]No files were found with the provided path: docs/evidence/ci-soak/. No artifacts will be uploaded.
+2026-10-20T19:03:06.9733881Z ##[group]Run docker compose -f docker/compose.yaml down -v
+2026-10-20T19:03:06.9734615Z [36;1mdocker compose -f docker/compose.yaml down -v[0m
+2026-10-20T19:03:06.9800668Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:03:06.9801115Z ##[endgroup]
+2026-10-20T19:03:07.1283010Z Post job cleanup.
+2026-10-20T19:03:07.2302167Z [command]/usr/bin/git version
+2026-10-20T19:03:07.2378743Z git version 2.55.0
+2026-10-20T19:03:07.2469891Z Temporarily overriding HOME='/home/runner/work/_temp/71482590-5902-462e-8c97-aba5d6fabc82' before making global git config changes
+2026-10-20T19:03:07.2471498Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T19:03:07.2472879Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/na-live-support/na-live-support
+2026-10-20T19:03:07.2543576Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T19:03:07.2631743Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T19:03:07.2978380Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T19:03:07.3021736Z http.https://github.com/.extraheader
+2026-10-20T19:03:07.3050866Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-20T19:03:07.3113439Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T19:03:07.3494942Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T19:03:07.3592648Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T19:03:07.4642484Z Cleaning up orphan processes
+2026-10-20T19:03:07.4898547Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+# ---------------------------------------------------------------- >8 ----
+# ended:      2026-10-20T20:02:01Z
+# duration:   2s
+# EXIT:       0
