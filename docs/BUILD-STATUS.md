@@ -33,6 +33,18 @@ mixed-session Step 0 work, re-proven solo on 2026-08-04 (pest 437 passed / 4355 
 gates 11/11, lint clean, alone in the stack with a single Claude process confirmed) — see
 this note. All subsequent S19 work is single-session.
 
+## SESSION-14 (Doc 14) — BATCH D CHECKPOINT (D✓, R-D14-7 as amended by R-D14-8): Pest battery + Doc 14 browser set + gates + lint, then CONTINUE to the close-out (commit = this section's SHA)
+
+**Power (R-D13-6):** BAT1 at the Pest battery 2026-10-07: on AC 80% at the verdict; at the browser/gates/lint legs 2026-10-20: discharging 78% — figures indicative.
+
+**OWNER DIRECTIVE R-D14-8 (2026-10-20), recorded by name:** the FULL local Playwright battery is WAIVED for the rest of SESSION-14 — it repeatedly restarted the owner's PC (two D✓ attempts died mid-run with the machine, 2026-10-07/08 and 2026-10-09; a killed run is relaunched never salvaged, and the third relaunch was superseded by this directive). The full browser battery's verdict-bearer is **CI Stage 4 on the close-out SHA (the ONE look)**; the LOCAL browser proof at D✓ and the close is Doc 14's OWN specs only, single worker, fresh CI shape. **The local full-browser figure for D✓ is NOT TAKEN — R-D14-8** (never recorded as green). Any Stage 4 red at the close: fix-first at cause, re-run ONLY the failing spec locally, Option-A proof for other documents' files.
+
+**FULL Pest battery (`docs/evidence/S14-Dcheck/battery-pest.txt`, 2026-10-07 on THIS tree, post-9b509d4): 2087 passed / 1 failed / 14 skipped (54,319 assertions, 768 s), make EXIT 1 on the one red** — `Tests\Performance\RbacBudgetsTest` NFR-01 cached-map p99 1.616 ms vs the asserted 5× ceiling 1.500 ms, with **p50 0.238 ms WITHIN the 0.3 ms spec budget** (the test's own message names this the machine-load shape, and the leg ran on battery under full-suite load) — a Doc 03 perf-budget surface, zero Doc 14 files; the 0d disposition: **isolated re-run GREEN, twice** (on AC 2026-10-07, 1 passed/4 assertions; re-recorded 2026-10-20, `rbac-budgets-isolated-rerun.txt`) — the verdict of record. The 14 skips are the recorded classes incl. the wall-power timing legs (those PASSED on AC in the step-13 sitting, 161/0 on the Doc 14 set). No other red: a fully green battery on the 0d terms.
+
+**Doc 14 browser set (R-D14-8 shape: `migrate:fresh --database=pgsql_migrator` + BrowserFixtureSeeder, single worker, 2026-10-20): 36 passed / 0 failed (1.9 m)** (`doc14-browser.txt`) — the six [B14-batch] screen specs (28: light+dark, 375 on the phone-readable screens, an am leg each, axe every leg) + the three step-12 inbox specs (8: the expired card queued/EC-10/no-gateway/no-phone, US-02 DLR double-check, the zero-inferred-delivered DOM gate). **Gates 17/17 PASS** (`gates.txt`). **Lint EXIT 0** (`lint.txt`).
+
+**Batch D stands (steps 12 → 13):** 12 (3dda9fe) P-EXPIRED-CARD + P-TIMELINE-SMS + the three inbox specs · 13 (9b509d4) the six screens + P-NAV-SMS. Per R-D14-7 clause 2 this checkpoint CONTINUES without a stop and without a CI look — **proceeding to step 14, the CLOSE-OUT, which STOPS for the owner; its ONE CI look carries the full-browser verdict (R-D14-8).**
+
 ## SESSION-14 (Doc 14) — STEP 13: THE SIX [B14-batch] SCREENS + P-NAV-SMS LANDED (Batch D under R-D14-7; commit = this section's SHA)
 
 **Power (R-D13-6):** BAT1 2026-10-07: on AC 87% at the sitting's start; DISCHARGING 89% by the final set — the one skipped case in the final Doc 14 run is the wall-power-gated timing leg (it ran and PASSED in the on-AC run earlier this sitting, 161/0); figures indicative.
